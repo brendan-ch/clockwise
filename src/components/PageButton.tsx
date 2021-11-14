@@ -4,7 +4,7 @@ import TextStyles from '../styles/Text';
 
 interface Props {
   text: string,
-  onPress: () => any,
+  onPress?: () => any,
 }
 
 function PageButton({ text, onPress }: Props) {
@@ -19,6 +19,10 @@ function PageButton({ text, onPress }: Props) {
     </TouchableOpacity>
   );
 }
+
+PageButton.defaultProps = {
+  onPress: () => {},
+};
 
 const styles = StyleSheet.create({
   container: {
