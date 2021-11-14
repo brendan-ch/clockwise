@@ -6,7 +6,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "lint": "eslint --ext .ts,.tsx \"./\""
+    "lint": "eslint --ext .ts,.tsx \"./\"",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "expo": "~43.0.2",
