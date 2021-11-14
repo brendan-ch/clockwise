@@ -23,6 +23,7 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "import/no-unresolved": "off",
         "react/function-component-definition": "off",
         "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx", ".d.ts"] }],
         "no-use-before-define": "off",
