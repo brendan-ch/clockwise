@@ -10,6 +10,7 @@ import AppLoading from 'expo-app-loading';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import TextStyles from './src/styles/Text';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -25,7 +26,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
+      <Text style={TextStyles.textRegular}>Open up App.tsx to start working on your app!</Text>
       <StatusBar style="auto" />
     </View>
   );
