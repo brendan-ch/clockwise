@@ -1,10 +1,13 @@
 {
     "env": {
         "browser": true,
-        "es2021": true
+        "es2021": true,
+        "node": true,
+        "jest": true
     },
     "extends": [
         "plugin:react/recommended",
+        "plugin:import/typescript",
         "airbnb"
     ],
     "parser": "@typescript-eslint/parser",
@@ -20,5 +23,31 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "react/function-component-definition": "off",
+        "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx", ".d.ts"] }],
+        "no-use-before-define": "off",
+        "react/style-prop-object": [0],
+        "react/no-unescaped-entities": [0],
+        "no-underscore-dangle": "off",
+        "import/extensions": [
+            "error",
+            "ignorePackages",
+            {
+                "js": "never",
+                "jsx": "never",
+                "ts": "never",
+                "tsx": "never"
+            }
+        ]
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        },
+        "import/resolver": {
+            "node": {
+                "extensions": [".ts", ".tsx", ".d.ts"]
+            }
+        }
     }
 }
