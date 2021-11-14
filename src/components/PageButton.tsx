@@ -48,11 +48,11 @@ const styles = StyleSheet.create({
     backgroundColor: ColorValues.primary,
   },
   text: {
-    fontSize: 25,
+    fontSize: 20,
     color: ColorValues.primary,
   },
   textFilled: {
-    fontSize: 25,
+    fontSize: 20,
     color: ColorValues.background,
   },
 });
