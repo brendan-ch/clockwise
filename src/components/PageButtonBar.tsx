@@ -34,10 +34,12 @@ function PageButtonBar({
       <PageButton
         text="Focus"
         onPress={onPressFocus}
+        selected={selected === 'focus'}
       />
       <PageButton
         text="Break"
         onPress={onPressBreak}
+        selected={selected === 'break'}
       />
     </View>
   );
@@ -54,7 +56,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'stretch',
   },
 });
 
