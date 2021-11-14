@@ -32,12 +32,12 @@ function PageButtonBar({
   return (
     <View style={[style, styles.container]}>
       <PageButton
-        text="Focus"
+        text="focus"
         onPress={onPressFocus}
         selected={selected === 'focus'}
       />
       <PageButton
-        text="Break"
+        text="break"
         onPress={onPressBreak}
         selected={selected === 'break'}
       />
