@@ -1,19 +1,29 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import ColorValues from '../styles/Color';
 import TextStyles from '../styles/Text';
 
 interface Props {
   text: string,
   onPress?: () => any,
+  selected: boolean,
 }
 
-function PageButton({ text, onPress }: Props) {
+/**
+ * Component that displays a page button.
+ * @param props
+ * @returns
+ */
+function PageButton({ text, onPress, selected }: Props) {
   return (
     <TouchableOpacity
-      style={styles.container}
+      style={selected ? [styles.containerFilled, styles.container] : styles.container}
       onPress={onPress}
     >
-      <Text style={TextStyles.textRegular}>
+      <Text style={selected
+        ? [TextStyles.textRegular, styles.textFilled]
+        : [TextStyles.textRegular, styles.text]}
+      >
         {text}
       </Text>
     </TouchableOpacity>
@@ -31,6 +41,19 @@ const styles = StyleSheet.create({
     // Centering the text
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 0.3,
+    borderColor: ColorValues.primary,
+  },
+  containerFilled: {
+    backgroundColor: ColorValues.primary,
+  },
+  text: {
+    fontSize: 25,
+    color: ColorValues.primary,
+  },
+  textFilled: {
+    fontSize: 25,
+    color: ColorValues.background,
   },
 });
 
