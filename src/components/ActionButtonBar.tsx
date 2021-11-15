@@ -47,11 +47,18 @@ function ActionButtonBar({
           />
         ) : undefined}
         {state === 'paused' ? (
-          <ActionButton
-            style={styles.bigActionButton}
-            text="resume"
-            onPress={onResumePress}
-          />
+          <View style={styles.resumeResetContainer}>
+            <ActionButton
+              style={styles.bigActionButton}
+              text="resume"
+              onPress={onResumePress}
+            />
+            <ActionButton
+              style={styles.smallActionButton}
+              onPress={onResetPress}
+              isResetButton
+            />
+          </View>
         ) : undefined}
       </View>
     </View>
@@ -68,11 +75,19 @@ const styles = StyleSheet.create({
   buttonContainer: {
     height: 67,
     width: '100%',
+  },
+  resumeResetContainer: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   bigActionButton: {
     flex: 1,
+  },
+  smallActionButton: {
+    height: '100%',
+    width: 67,
+    marginLeft: 10,
   },
 });
 
