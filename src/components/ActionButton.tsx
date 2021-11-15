@@ -22,7 +22,7 @@ function ActionButton({ style, onPress, text }: Props) {
       style={[style, styles.container]}
       onPress={onPress}
     >
-      <Text style={[TextStyles.textRegular, styles.text]}>{text}</Text>
+      <Text style={[TextStyles.textBold, styles.text]}>{text}</Text>
     </TouchableOpacity>
   );
 }
@@ -30,9 +30,12 @@ function ActionButton({ style, onPress, text }: Props) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: ColorValues.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   text: {
     color: ColorValues.background,
+    fontSize: 30,
   },
 });
 
