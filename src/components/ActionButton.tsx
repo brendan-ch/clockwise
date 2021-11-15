@@ -27,7 +27,11 @@ function ActionButton({
       onPress={onPress}
     >
       {isResetButton ? (
-        <Ionicons name="refresh-outline" />
+        <Ionicons
+          name="refresh-outline"
+          color={ColorValues.background}
+          size={30}
+        />
       ) : (
         <Text style={[TextStyles.textBold, styles.text]}>{text}</Text>
       )}
