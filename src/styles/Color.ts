@@ -5,6 +5,7 @@
  */
 const ColorValues = {
   primary: '#000000',
+  gray3: '#828282',
   gray4: '#bdbdbd',
   gray5: '#e0e0e0',
   background: '#ffffff',
