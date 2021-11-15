@@ -43,7 +43,7 @@ export default function App() {
       />
       <ActionButtonBar
         style={styles.actionButtonBar}
-        text="some text"
+        text="The quick brown fox jumps over the lazy dog."
         state="stopped"
       />
       <StatusBar style="auto" />
