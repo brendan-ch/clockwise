@@ -2,6 +2,7 @@ import React from 'react';
 import {
   StyleProp, StyleSheet, Text, View, ViewStyle,
 } from 'react-native';
+import ColorValues from '../styles/Color';
 import TextStyles from '../styles/Text';
 import ActionButton from './ActionButton';
 
@@ -30,7 +31,7 @@ function ActionButtonBar({
 }: Props) {
   return (
     <View style={[style, styles.container]}>
-      <Text style={TextStyles.textItalic}>{text}</Text>
+      <Text style={[TextStyles.textItalic, styles.text]}>{text}</Text>
       <View style={styles.buttonContainer}>
         {state === 'stopped' ? (
           <ActionButton
@@ -71,6 +72,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-end',
     alignItems: 'center',
+  },
+  text: {
+    marginBottom: 15,
+    textAlign: 'center',
+    color: ColorValues.gray3,
   },
   buttonContainer: {
     height: 67,
