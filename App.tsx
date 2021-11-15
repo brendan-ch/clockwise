@@ -9,10 +9,10 @@ import {
 import AppLoading from 'expo-app-loading';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import ActionButtonBar from './src/components/ActionButtonBar';
 import PageButtonBar from './src/components/PageButtonBar';
-import TextStyles from './src/styles/Text';
+import Timer from './src/components/Timer';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -34,7 +34,10 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text style={TextStyles.textRegular}>Open up App.tsx to start working on your app!</Text>
+      <Timer
+        display="25:00"
+        style={styles.timer}
+      />
       <PageButtonBar
         selected="focus"
         style={styles.pageButtonBar}
@@ -57,6 +60,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  timer: {
+    marginBottom: 15,
   },
   pageButtonBar: {
     height: 31,
