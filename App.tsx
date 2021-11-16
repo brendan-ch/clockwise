@@ -71,25 +71,29 @@ export default function App() {
     return (
       <View style={styles.container}>
         <View style={styles.contentContainerLandscape}>
-          <View style={styles.landscapeContainer}>
-            <Timer
-              display="25:00"
-              style={styles.timer}
-            />
-            <PageButtonBar
-              selected="focus"
-              style={styles.pageButtonBar}
-              // onPressFocus={() => handleStateSwitch('focus')}
-              // onPressBreak={() => handleStateSwitch('break')}
-            />
-            <ActionButtonBar
-              style={styles.actionButtonBar}
-              text="The quick brown fox jumps over the lazy dog."
-              state="stopped"
-            />
+          <View style={[styles.landscapeContainer, styles.leftContainer]}>
+            <View style={styles.leftContentContainer}>
+              <Timer
+                display="25:00"
+                style={styles.timer}
+              />
+              <PageButtonBar
+                selected="focus"
+                style={styles.pageButtonBar}
+                // onPressFocus={() => handleStateSwitch('focus')}
+                // onPressBreak={() => handleStateSwitch('break')}
+              />
+              <ActionButtonBar
+                style={styles.actionButtonBar}
+                text="The quick brown fox jumps over the lazy dog."
+                state="stopped"
+              />
+            </View>
           </View>
           <View style={[styles.landscapeContainer, styles.rightContainer]}>
-            <Text>Hello there</Text>
+            <View style={styles.rightContentContainer}>
+              <Text>Hello there</Text>
+            </View>
           </View>
         </View>
         <StatusBar style="auto" />
@@ -140,6 +144,8 @@ const styles = StyleSheet.create({
   },
   contentContainerLandscape: {
     flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'center',
   },
   topContainer: {
     justifyContent: 'flex-end',
@@ -149,11 +155,23 @@ const styles = StyleSheet.create({
   },
   landscapeContainer: {
     flex: 1,
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  leftContentContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  leftContainer: {
+    justifyContent: 'flex-end',
+  },
+  rightContentContainer: {
     justifyContent: 'center',
     alignItems: 'center',
   },
   rightContainer: {
     marginLeft: 20,
+    justifyContent: 'flex-start',
   },
   timer: {
     marginBottom: 15,
