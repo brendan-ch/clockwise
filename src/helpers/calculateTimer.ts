@@ -4,7 +4,7 @@
  */
 function calculateTimerDisplay(ms: number) {
   const minutes = Math.floor(ms / 1000 / 60);
-  const seconds = Math.floor((ms - minutes * 60 * 1000) / 1000);
+  const seconds = Math.ceil((ms - minutes * 60 * 1000) / 1000);
 
   let secondsString = seconds.toString();
   if (secondsString.length === 1) {
