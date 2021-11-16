@@ -15,6 +15,7 @@ import {
 import ActionButtonBar from './src/components/ActionButtonBar';
 import PageButtonBar from './src/components/PageButtonBar';
 import Timer from './src/components/Timer';
+import TextStyles from './src/styles/Text';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -92,7 +93,9 @@ export default function App() {
           </View>
           <View style={[styles.landscapeContainer, styles.rightContainer]}>
             <View style={styles.rightContentContainer}>
-              <Text>Hello there</Text>
+              <Text style={TextStyles.textRegular}>
+                Placeholder text for task management component
+              </Text>
             </View>
           </View>
         </View>
