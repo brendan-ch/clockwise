@@ -123,7 +123,7 @@ export default function App() {
     return (
       <View style={styles.container}>
         <Timer
-          display="25:00"
+          display={calculateTimerDisplay(timeRemaining)}
           style={styles.timer}
         />
         <PageButtonBar
@@ -136,6 +136,10 @@ export default function App() {
           style={styles.actionButtonBar}
           text="The quick brown fox jumps over the lazy dog."
           state="stopped"
+          onStartPress={() => startTimer()}
+          onPausePress={() => pauseTimer()}
+          onResetPress={() => stopTimer()}
+          onResumePress={() => startTimer()}
         />
         <StatusBar style="auto" />
       </View>
@@ -164,6 +168,10 @@ export default function App() {
                 style={styles.actionButtonBar}
                 text="The quick brown fox jumps over the lazy dog."
                 state={timerState}
+                onStartPress={() => startTimer()}
+                onPausePress={() => pauseTimer()}
+                onResetPress={() => stopTimer()}
+                onResumePress={() => startTimer()}
               />
             </View>
           </View>
@@ -244,6 +252,7 @@ const styles = StyleSheet.create({
   leftContentContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    width: 280,
   },
   leftContainer: {
     justifyContent: 'flex-end',
