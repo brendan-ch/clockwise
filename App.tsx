@@ -8,7 +8,7 @@ import {
 } from '@expo-google-fonts/anonymous-pro';
 import AppLoading from 'expo-app-loading';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet, View, useWindowDimensions, Text,
 } from 'react-native';
@@ -17,6 +17,8 @@ import PageButtonBar from './src/components/PageButtonBar';
 import Timer from './src/components/Timer';
 import TextStyles from './src/styles/Text';
 
+type TimerState = 'running' | 'paused' | 'stopped';
+
 export default function App() {
   const [fontsLoaded] = useFonts({
     AnonymousPro_400Regular,
@@ -24,6 +26,10 @@ export default function App() {
     AnonymousPro_700Bold,
     AnonymousPro_700Bold_Italic,
   });
+
+  const [mode, setMode] = useState<'focus' | 'break'>('focus');
+  const [timerDisplay, setTimerDisplay] = useState('25:00');
+  const [timerState, setTimerState] = useState<TimerState>('stopped');
 
   const { height, width } = useWindowDimensions();
 
@@ -34,8 +40,9 @@ export default function App() {
   /**
    * Handle switching between break and focus modes.
    */
-  // function handleStateSwitch(mode: 'focus' | 'break') {
-  // }
+  function handleStateSwitch(newMode: 'focus' | 'break') {
+    setMode(newMode);
+  }
 
   // console.log(height);
   // console.log(width);
@@ -75,19 +82,19 @@ export default function App() {
           <View style={[styles.landscapeContainer, styles.leftContainer]}>
             <View style={styles.leftContentContainer}>
               <Timer
-                display="25:00"
+                display={timerDisplay}
                 style={styles.timer}
               />
               <PageButtonBar
-                selected="focus"
+                selected={mode}
                 style={styles.pageButtonBar}
-                // onPressFocus={() => handleStateSwitch('focus')}
-                // onPressBreak={() => handleStateSwitch('break')}
+                onPressFocus={() => handleStateSwitch('focus')}
+                onPressBreak={() => handleStateSwitch('break')}
               />
               <ActionButtonBar
                 style={styles.actionButtonBar}
                 text="The quick brown fox jumps over the lazy dog."
-                state="stopped"
+                state={timerState}
               />
             </View>
           </View>
@@ -110,21 +117,21 @@ export default function App() {
       <View style={styles.contentContainer}>
         <View style={styles.topContainer}>
           <Timer
-            display="25:00"
+            display={timerDisplay}
             style={styles.timer}
           />
           <PageButtonBar
-            selected="focus"
+            selected={mode}
             style={styles.pageButtonBar}
-            // onPressFocus={() => handleStateSwitch('focus')}
-            // onPressBreak={() => handleStateSwitch('break')}
+            onPressFocus={() => handleStateSwitch('focus')}
+            onPressBreak={() => handleStateSwitch('break')}
           />
         </View>
         <View style={styles.bottomContainer}>
           <ActionButtonBar
             style={styles.actionButtonBar}
             text="The quick brown fox jumps over the lazy dog."
-            state="stopped"
+            state={timerState}
           />
         </View>
       </View>
