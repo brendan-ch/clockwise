@@ -8,16 +8,20 @@ import {
 } from '@expo-google-fonts/anonymous-pro';
 import AppLoading from 'expo-app-loading';
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet, View, useWindowDimensions, Text,
 } from 'react-native';
 import ActionButtonBar from './src/components/ActionButtonBar';
 import PageButtonBar from './src/components/PageButtonBar';
 import Timer from './src/components/Timer';
+import calculateTimerDisplay from './src/helpers/calculateTimer';
 import TextStyles from './src/styles/Text';
 
 type TimerState = 'running' | 'paused' | 'stopped';
+
+const MIN_25 = 1500000;
+const MIN_5 = 300000;
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -28,20 +32,68 @@ export default function App() {
   });
 
   const [mode, setMode] = useState<'focus' | 'break'>('focus');
-  const [timerDisplay, setTimerDisplay] = useState('25:00');
+  const [timeRemaining, setTimeRemaining] = useState(MIN_25);
   const [timerState, setTimerState] = useState<TimerState>('stopped');
+  const [timeout, setTimeoutState] = useState<any>(null);
+
+  // let timeout: any = null;
 
   const { height, width } = useWindowDimensions();
 
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  }
+  useEffect(() => () => clearTimerInterval(), []);
 
   /**
    * Handle switching between break and focus modes.
    */
   function handleStateSwitch(newMode: 'focus' | 'break') {
+    clearTimerInterval();
+    setTimerState('stopped');
+    setTimeRemaining(newMode === 'break' ? MIN_5 : MIN_25);
     setMode(newMode);
+  }
+
+  /**
+   * Set an interval that updates the timer.
+   */
+  function startTimer() {
+    setTimerState('running');
+
+    const expected = Date.now() + 1000;
+    setTimeoutState(
+      setTimeout(() => updateTimeRemaining(expected, timeRemaining), 1000),
+    );
+  }
+
+  /**
+   * Clear the timer updating interval.
+   */
+  function clearTimerInterval() {
+    clearTimeout(timeout);
+    setTimeoutState(null);
+  }
+
+  /**
+   * Update the time remaining in the state.
+   * @param interval
+   */
+  function updateTimeRemaining(expected: number, timeRemainingActual: number) {
+    // Calculate drift
+    const dt = Date.now() - expected;
+
+    // Set time remaining
+    const updatedTimeRemaining = timeRemainingActual - (1000 + dt);
+    setTimeRemaining(updatedTimeRemaining);
+    // console.log(timeRemainingActual - (1000 + dt));
+
+    // Repeat timeout until cleared
+    setTimeoutState(setTimeout(
+      () => updateTimeRemaining(expected + 1000, updatedTimeRemaining),
+      Math.max(0, 1000 - dt),
+    ));
+  }
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
   }
 
   // console.log(height);
@@ -82,7 +134,7 @@ export default function App() {
           <View style={[styles.landscapeContainer, styles.leftContainer]}>
             <View style={styles.leftContentContainer}>
               <Timer
-                display={timerDisplay}
+                display={calculateTimerDisplay(timeRemaining)}
                 style={styles.timer}
               />
               <PageButtonBar
@@ -117,7 +169,7 @@ export default function App() {
       <View style={styles.contentContainer}>
         <View style={styles.topContainer}>
           <Timer
-            display={timerDisplay}
+            display={calculateTimerDisplay(timeRemaining)}
             style={styles.timer}
           />
           <PageButtonBar
@@ -132,6 +184,7 @@ export default function App() {
             style={styles.actionButtonBar}
             text="The quick brown fox jumps over the lazy dog."
             state={timerState}
+            onStartPress={() => startTimer()}
           />
         </View>
       </View>
