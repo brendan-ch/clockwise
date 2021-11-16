@@ -9,10 +9,13 @@ import {
 import AppLoading from 'expo-app-loading';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import {
+  StyleSheet, View, useWindowDimensions, Text,
+} from 'react-native';
 import ActionButtonBar from './src/components/ActionButtonBar';
 import PageButtonBar from './src/components/PageButtonBar';
 import Timer from './src/components/Timer';
+import TextStyles from './src/styles/Text';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -21,6 +24,8 @@ export default function App() {
     AnonymousPro_700Bold,
     AnonymousPro_700Bold_Italic,
   });
+
+  const { height, width } = useWindowDimensions();
 
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -32,23 +37,97 @@ export default function App() {
   // function handleStateSwitch(mode: 'focus' | 'break') {
   // }
 
+  // console.log(height);
+  // console.log(width);
+
+  // Set breakpoints
+  // Small window view
+  if (height < 400 && width < 700) {
+    // Center everything
+    return (
+      <View style={styles.container}>
+        <Timer
+          display="25:00"
+          style={styles.timer}
+        />
+        <PageButtonBar
+          selected="focus"
+          style={styles.pageButtonBar}
+          // onPressFocus={() => handleStateSwitch('focus')}
+          // onPressBreak={() => handleStateSwitch('break')}
+        />
+        <ActionButtonBar
+          style={styles.actionButtonBar}
+          text="The quick brown fox jumps over the lazy dog."
+          state="stopped"
+        />
+        <StatusBar style="auto" />
+      </View>
+    );
+  }
+
+  // Landscape view
+  if (width >= 700) {
+    // Display timer and tasks side by side
+    return (
+      <View style={styles.container}>
+        <View style={styles.contentContainerLandscape}>
+          <View style={[styles.landscapeContainer, styles.leftContainer]}>
+            <View style={styles.leftContentContainer}>
+              <Timer
+                display="25:00"
+                style={styles.timer}
+              />
+              <PageButtonBar
+                selected="focus"
+                style={styles.pageButtonBar}
+                // onPressFocus={() => handleStateSwitch('focus')}
+                // onPressBreak={() => handleStateSwitch('break')}
+              />
+              <ActionButtonBar
+                style={styles.actionButtonBar}
+                text="The quick brown fox jumps over the lazy dog."
+                state="stopped"
+              />
+            </View>
+          </View>
+          <View style={[styles.landscapeContainer, styles.rightContainer]}>
+            <View style={styles.rightContentContainer}>
+              <Text style={TextStyles.textRegular}>
+                Placeholder text for task management component
+              </Text>
+            </View>
+          </View>
+        </View>
+        <StatusBar style="auto" />
+      </View>
+    );
+  }
+
+  // Mobile view
   return (
     <View style={styles.container}>
-      <Timer
-        display="25:00"
-        style={styles.timer}
-      />
-      <PageButtonBar
-        selected="focus"
-        style={styles.pageButtonBar}
-        // onPressFocus={() => handleStateSwitch('focus')}
-        // onPressBreak={() => handleStateSwitch('break')}
-      />
-      <ActionButtonBar
-        style={styles.actionButtonBar}
-        text="The quick brown fox jumps over the lazy dog."
-        state="stopped"
-      />
+      <View style={styles.contentContainer}>
+        <View style={styles.topContainer}>
+          <Timer
+            display="25:00"
+            style={styles.timer}
+          />
+          <PageButtonBar
+            selected="focus"
+            style={styles.pageButtonBar}
+            // onPressFocus={() => handleStateSwitch('focus')}
+            // onPressBreak={() => handleStateSwitch('break')}
+          />
+        </View>
+        <View style={styles.bottomContainer}>
+          <ActionButtonBar
+            style={styles.actionButtonBar}
+            text="The quick brown fox jumps over the lazy dog."
+            state="stopped"
+          />
+        </View>
+      </View>
       <StatusBar style="auto" />
     </View>
   );
@@ -60,6 +139,42 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  contentContainer: {
+    height: '80%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  contentContainerLandscape: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'center',
+  },
+  topContainer: {
+    justifyContent: 'flex-end',
+  },
+  bottomContainer: {
+    justifyContent: 'flex-start',
+  },
+  landscapeContainer: {
+    flex: 1,
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  leftContentContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  leftContainer: {
+    justifyContent: 'flex-end',
+  },
+  rightContentContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  rightContainer: {
+    marginLeft: 20,
+    justifyContent: 'flex-start',
   },
   timer: {
     marginBottom: 15,
