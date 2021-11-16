@@ -65,6 +65,23 @@ export default function App() {
   }
 
   /**
+   * Pause the timer.
+   */
+  function pauseTimer() {
+    clearTimerInterval();
+    setTimerState('paused');
+  }
+
+  /**
+   * Stop the timer.
+   */
+  function stopTimer() {
+    clearTimerInterval();
+    setTimerState('stopped');
+    setTimeRemaining(mode === 'break' ? MIN_5 : MIN_25);
+  }
+
+  /**
    * Clear the timer updating interval.
    */
   function clearTimerInterval() {
@@ -185,6 +202,9 @@ export default function App() {
             text="The quick brown fox jumps over the lazy dog."
             state={timerState}
             onStartPress={() => startTimer()}
+            onPausePress={() => pauseTimer()}
+            onResetPress={() => stopTimer()}
+            onResumePress={() => startTimer()}
           />
         </View>
       </View>
