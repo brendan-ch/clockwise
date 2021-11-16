@@ -22,6 +22,7 @@ type TimerState = 'running' | 'paused' | 'stopped';
 
 const MIN_25 = 1500000;
 const MIN_5 = 300000;
+const INTERVAL = 1000;
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -58,9 +59,9 @@ export default function App() {
   function startTimer() {
     setTimerState('running');
 
-    const expected = Date.now() + 1000;
+    const expected = Date.now() + INTERVAL;
     setTimeoutState(
-      setTimeout(() => updateTimeRemaining(expected, timeRemaining), 1000),
+      setTimeout(() => updateTimeRemaining(expected, timeRemaining), INTERVAL),
     );
   }
 
@@ -98,7 +99,7 @@ export default function App() {
     const dt = Date.now() - expected;
 
     // Set time remaining
-    const updatedTimeRemaining = timeRemainingActual - (1000 + dt);
+    const updatedTimeRemaining = timeRemainingActual - (INTERVAL + dt);
     if (updatedTimeRemaining <= 0) {
       // Clear timer and change to other mode
       handleStateSwitch(mode === 'break' ? 'focus' : 'break');
@@ -106,12 +107,11 @@ export default function App() {
       return;
     }
     setTimeRemaining(updatedTimeRemaining);
-    // console.log(timeRemainingActual - (1000 + dt));
 
     // Repeat timeout until cleared
     setTimeoutState(setTimeout(
-      () => updateTimeRemaining(expected + 1000, updatedTimeRemaining),
-      Math.max(0, 1000 - dt),
+      () => updateTimeRemaining(expected + INTERVAL, updatedTimeRemaining),
+      Math.max(0, INTERVAL - dt),
     ));
   }
 
