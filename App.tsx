@@ -8,14 +8,21 @@ import {
 } from '@expo-google-fonts/anonymous-pro';
 import AppLoading from 'expo-app-loading';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet, View, useWindowDimensions, Text,
 } from 'react-native';
 import ActionButtonBar from './src/components/ActionButtonBar';
 import PageButtonBar from './src/components/PageButtonBar';
 import Timer from './src/components/Timer';
+import calculateTimerDisplay from './src/helpers/calculateTimer';
 import TextStyles from './src/styles/Text';
+
+type TimerState = 'running' | 'paused' | 'stopped';
+
+const MIN_25 = 1500000;
+const MIN_5 = 300000;
+const INTERVAL = 1000;
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -25,17 +32,92 @@ export default function App() {
     AnonymousPro_700Bold_Italic,
   });
 
+  const [mode, setMode] = useState<'focus' | 'break'>('focus');
+  const [timeRemaining, setTimeRemaining] = useState(MIN_25);
+  const [timerState, setTimerState] = useState<TimerState>('stopped');
+  const [timeout, setTimeoutState] = useState<any>(null);
+
+  // let timeout: any = null;
+
   const { height, width } = useWindowDimensions();
 
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  }
+  useEffect(() => () => clearTimerInterval(), []);
 
   /**
    * Handle switching between break and focus modes.
    */
-  // function handleStateSwitch(mode: 'focus' | 'break') {
-  // }
+  function handleStateSwitch(newMode: 'focus' | 'break') {
+    clearTimerInterval();
+    setTimerState('stopped');
+    setTimeRemaining(newMode === 'break' ? MIN_5 : MIN_25);
+    setMode(newMode);
+  }
+
+  /**
+   * Set an interval that updates the timer.
+   */
+  function startTimer() {
+    setTimerState('running');
+
+    const expected = Date.now() + INTERVAL;
+    setTimeoutState(
+      setTimeout(() => updateTimeRemaining(expected, timeRemaining), INTERVAL),
+    );
+  }
+
+  /**
+   * Pause the timer.
+   */
+  function pauseTimer() {
+    clearTimerInterval();
+    setTimerState('paused');
+  }
+
+  /**
+   * Stop the timer.
+   */
+  function stopTimer() {
+    clearTimerInterval();
+    setTimerState('stopped');
+    setTimeRemaining(mode === 'break' ? MIN_5 : MIN_25);
+  }
+
+  /**
+   * Clear the timer updating interval.
+   */
+  function clearTimerInterval() {
+    clearTimeout(timeout);
+    setTimeoutState(null);
+  }
+
+  /**
+   * Update the time remaining in the state.
+   * @param interval
+   */
+  function updateTimeRemaining(expected: number, timeRemainingActual: number) {
+    // Calculate drift
+    const dt = Date.now() - expected;
+
+    // Set time remaining
+    const updatedTimeRemaining = timeRemainingActual - (INTERVAL + dt);
+    if (updatedTimeRemaining <= 0) {
+      // Clear timer and change to other mode
+      handleStateSwitch(mode === 'break' ? 'focus' : 'break');
+
+      return;
+    }
+    setTimeRemaining(updatedTimeRemaining);
+
+    // Repeat timeout until cleared
+    setTimeoutState(setTimeout(
+      () => updateTimeRemaining(expected + INTERVAL, updatedTimeRemaining),
+      Math.max(0, INTERVAL - dt),
+    ));
+  }
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
 
   // console.log(height);
   // console.log(width);
@@ -47,7 +129,7 @@ export default function App() {
     return (
       <View style={styles.container}>
         <Timer
-          display="25:00"
+          display={calculateTimerDisplay(timeRemaining)}
           style={styles.timer}
         />
         <PageButtonBar
@@ -60,6 +142,10 @@ export default function App() {
           style={styles.actionButtonBar}
           text="The quick brown fox jumps over the lazy dog."
           state="stopped"
+          onStartPress={() => startTimer()}
+          onPausePress={() => pauseTimer()}
+          onResetPress={() => stopTimer()}
+          onResumePress={() => startTimer()}
         />
         <StatusBar style="auto" />
       </View>
@@ -75,19 +161,23 @@ export default function App() {
           <View style={[styles.landscapeContainer, styles.leftContainer]}>
             <View style={styles.leftContentContainer}>
               <Timer
-                display="25:00"
+                display={calculateTimerDisplay(timeRemaining)}
                 style={styles.timer}
               />
               <PageButtonBar
-                selected="focus"
+                selected={mode}
                 style={styles.pageButtonBar}
-                // onPressFocus={() => handleStateSwitch('focus')}
-                // onPressBreak={() => handleStateSwitch('break')}
+                onPressFocus={() => handleStateSwitch('focus')}
+                onPressBreak={() => handleStateSwitch('break')}
               />
               <ActionButtonBar
                 style={styles.actionButtonBar}
                 text="The quick brown fox jumps over the lazy dog."
-                state="stopped"
+                state={timerState}
+                onStartPress={() => startTimer()}
+                onPausePress={() => pauseTimer()}
+                onResetPress={() => stopTimer()}
+                onResumePress={() => startTimer()}
               />
             </View>
           </View>
@@ -110,21 +200,25 @@ export default function App() {
       <View style={styles.contentContainer}>
         <View style={styles.topContainer}>
           <Timer
-            display="25:00"
+            display={calculateTimerDisplay(timeRemaining)}
             style={styles.timer}
           />
           <PageButtonBar
-            selected="focus"
+            selected={mode}
             style={styles.pageButtonBar}
-            // onPressFocus={() => handleStateSwitch('focus')}
-            // onPressBreak={() => handleStateSwitch('break')}
+            onPressFocus={() => handleStateSwitch('focus')}
+            onPressBreak={() => handleStateSwitch('break')}
           />
         </View>
         <View style={styles.bottomContainer}>
           <ActionButtonBar
             style={styles.actionButtonBar}
             text="The quick brown fox jumps over the lazy dog."
-            state="stopped"
+            state={timerState}
+            onStartPress={() => startTimer()}
+            onPausePress={() => pauseTimer()}
+            onResetPress={() => stopTimer()}
+            onResumePress={() => startTimer()}
           />
         </View>
       </View>
@@ -164,6 +258,7 @@ const styles = StyleSheet.create({
   leftContentContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    width: 280,
   },
   leftContainer: {
     justifyContent: 'flex-end',
