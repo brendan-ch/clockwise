@@ -99,6 +99,12 @@ export default function App() {
 
     // Set time remaining
     const updatedTimeRemaining = timeRemainingActual - (1000 + dt);
+    if (updatedTimeRemaining <= 0) {
+      // Clear timer and change to other mode
+      handleStateSwitch(mode === 'break' ? 'focus' : 'break');
+
+      return;
+    }
     setTimeRemaining(updatedTimeRemaining);
     // console.log(timeRemainingActual - (1000 + dt));
 
