@@ -10,13 +10,13 @@ import AppLoading from 'expo-app-loading';
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import {
-  StyleSheet, View, useWindowDimensions, Text,
+  StyleSheet, View, useWindowDimensions,
 } from 'react-native';
 import ActionButtonBar from './src/components/ActionButtonBar';
+import Introduction from './src/components/Introduction';
 import PageButtonBar from './src/components/PageButtonBar';
 import Timer from './src/components/Timer';
 import calculateTimerDisplay from './src/helpers/calculateTimer';
-import TextStyles from './src/styles/Text';
 
 type TimerState = 'running' | 'paused' | 'stopped';
 
@@ -36,6 +36,7 @@ export default function App() {
   const [timeRemaining, setTimeRemaining] = useState(MIN_25);
   const [timerState, setTimerState] = useState<TimerState>('stopped');
   const [timeout, setTimeoutState] = useState<any>(null);
+  const [introDisplayed, setIntroDisplayed] = useState(true);
 
   // let timeout: any = null;
 
@@ -115,6 +116,13 @@ export default function App() {
     ));
   }
 
+  /**
+   * Dismiss the introduction component.
+   */
+  function handleIntroDismiss() {
+    setIntroDisplayed(false);
+  }
+
   if (!fontsLoaded) {
     return <AppLoading />;
   }
@@ -172,7 +180,6 @@ export default function App() {
               />
               <ActionButtonBar
                 style={styles.actionButtonBar}
-                text="The quick brown fox jumps over the lazy dog."
                 state={timerState}
                 onStartPress={() => startTimer()}
                 onPausePress={() => pauseTimer()}
@@ -183,9 +190,7 @@ export default function App() {
           </View>
           <View style={[styles.landscapeContainer, styles.rightContainer]}>
             <View style={styles.rightContentContainer}>
-              <Text style={TextStyles.textRegular}>
-                Placeholder text for task management component
-              </Text>
+              <Introduction />
             </View>
           </View>
         </View>
@@ -210,10 +215,14 @@ export default function App() {
             onPressBreak={() => handleStateSwitch('break')}
           />
         </View>
+        <View style={styles.middleContainer}>
+          {introDisplayed
+            ? <Introduction onDismiss={() => handleIntroDismiss()} />
+            : undefined}
+        </View>
         <View style={styles.bottomContainer}>
           <ActionButtonBar
             style={styles.actionButtonBar}
-            text="The quick brown fox jumps over the lazy dog."
             state={timerState}
             onStartPress={() => startTimer()}
             onPausePress={() => pauseTimer()}
@@ -236,6 +245,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     height: '80%',
+    width: 268,
     justifyContent: 'space-between',
     alignItems: 'center',
   },
@@ -245,10 +255,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   topContainer: {
+    width: '100%',
     justifyContent: 'flex-end',
   },
   bottomContainer: {
+    width: '100%',
     justifyContent: 'flex-start',
+  },
+  middleContainer: {
+    marginTop: 10,
+    flex: 1,
   },
   landscapeContainer: {
     flex: 1,
@@ -266,6 +282,8 @@ const styles = StyleSheet.create({
   rightContentContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    width: 280,
+    height: '100%',
   },
   rightContainer: {
     marginLeft: 20,
