@@ -10,13 +10,13 @@ import AppLoading from 'expo-app-loading';
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import {
-  StyleSheet, View, useWindowDimensions, Text,
+  StyleSheet, View, useWindowDimensions,
 } from 'react-native';
 import ActionButtonBar from './src/components/ActionButtonBar';
+import Introduction from './src/components/Introduction';
 import PageButtonBar from './src/components/PageButtonBar';
 import Timer from './src/components/Timer';
 import calculateTimerDisplay from './src/helpers/calculateTimer';
-import TextStyles from './src/styles/Text';
 
 type TimerState = 'running' | 'paused' | 'stopped';
 
@@ -183,9 +183,10 @@ export default function App() {
           </View>
           <View style={[styles.landscapeContainer, styles.rightContainer]}>
             <View style={styles.rightContentContainer}>
-              <Text style={TextStyles.textRegular}>
+              {/* <Text style={TextStyles.textRegular}>
                 Placeholder text for task management component
-              </Text>
+              </Text> */}
+              <Introduction />
             </View>
           </View>
         </View>
@@ -266,6 +267,8 @@ const styles = StyleSheet.create({
   rightContentContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    width: 280,
+    height: '100%',
   },
   rightContainer: {
     marginLeft: 20,
