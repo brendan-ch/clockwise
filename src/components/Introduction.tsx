@@ -54,9 +54,12 @@ function Introduction({ onDismiss, style }: Props) {
     <Animated.View
       style={[style, styles.container, {
         opacity: fadeAnimation,
+        paddingTop: onDismiss ? 0 : 10,
       }]}
     >
-      <DismissBar onDismiss={() => fadeOutAndDismiss()} />
+      {onDismiss
+        ? <DismissBar onDismiss={() => fadeOutAndDismiss()} />
+        : undefined}
       <Text
         style={[TextStyles.textBold, styles.text]}
       >
