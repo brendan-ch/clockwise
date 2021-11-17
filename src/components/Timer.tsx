@@ -17,7 +17,12 @@ interface Props {
 function Timer({ display, style, textStyle }: Props) {
   return (
     <View style={[style, styles.container]}>
-      <Text style={[TextStyles.textBold, textStyle, styles.text]}>{display}</Text>
+      <Text
+        style={[TextStyles.textBold, textStyle, styles.text]}
+        allowFontScaling={false}
+      >
+        {display}
+      </Text>
     </View>
   );
 }
