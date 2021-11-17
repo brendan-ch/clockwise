@@ -180,7 +180,6 @@ export default function App() {
               />
               <ActionButtonBar
                 style={styles.actionButtonBar}
-                text="The quick brown fox jumps over the lazy dog."
                 state={timerState}
                 onStartPress={() => startTimer()}
                 onPausePress={() => pauseTimer()}
@@ -224,7 +223,6 @@ export default function App() {
         <View style={styles.bottomContainer}>
           <ActionButtonBar
             style={styles.actionButtonBar}
-            text="The quick brown fox jumps over the lazy dog."
             state={timerState}
             onStartPress={() => startTimer()}
             onPausePress={() => pauseTimer()}
