@@ -9,5 +9,5 @@ const defaultAppState: DefaultAppState = {
   keyboardShortcutManager: undefined,
 };
 
-const DefaultAppContext = React.createContext(defaultAppState);
-export default DefaultAppContext;
+const AppContext = React.createContext(defaultAppState);
+export default AppContext;
