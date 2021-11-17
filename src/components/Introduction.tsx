@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useRef } from 'react';
 import {
-  View, Text, StyleProp, ViewStyle, StyleSheet, TouchableOpacity, Animated,
+  View, Text, StyleProp, ViewStyle, StyleSheet, TouchableOpacity, Animated, ScrollView,
 } from 'react-native';
 import ColorValues from '../styles/Color';
 import TextStyles from '../styles/Text';
@@ -60,22 +60,24 @@ function Introduction({ onDismiss, style }: Props) {
       {onDismiss
         ? <DismissBar onDismiss={() => fadeOutAndDismiss()} />
         : undefined}
-      <Text
-        style={[TextStyles.textBold, styles.text]}
-      >
-        session: an app designed to help you focus
-      </Text>
-      <Text
-        style={[TextStyles.textRegular, styles.text]}
-      >
-        This is a simple Pomodoro timer to help you get things done quicker.
-      </Text>
-      <Text
-        style={[TextStyles.textRegular, styles.text]}
-      >
-        Additional features,
-        such as timer customization, task management, and dark mode are coming soon™.
-      </Text>
+      <ScrollView>
+        <Text
+          style={[TextStyles.textBold, styles.text]}
+        >
+          session: an app designed to help you focus
+        </Text>
+        <Text
+          style={[TextStyles.textRegular, styles.text]}
+        >
+          This is a simple Pomodoro timer to help you get things done quicker.
+        </Text>
+        <Text
+          style={[TextStyles.textRegular, styles.text]}
+        >
+          Additional features,
+          such as timer customization, task management, and dark mode are coming soon™.
+        </Text>
+      </ScrollView>
     </Animated.View>
   );
 }
