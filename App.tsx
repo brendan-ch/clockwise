@@ -211,6 +211,9 @@ export default function App() {
             onPressBreak={() => handleStateSwitch('break')}
           />
         </View>
+        <View style={styles.middleContainer}>
+          <Introduction />
+        </View>
         <View style={styles.bottomContainer}>
           <ActionButtonBar
             style={styles.actionButtonBar}
@@ -237,6 +240,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     height: '80%',
+    width: 268,
     justifyContent: 'space-between',
     alignItems: 'center',
   },
@@ -246,10 +250,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   topContainer: {
+    width: '100%',
     justifyContent: 'flex-end',
   },
   bottomContainer: {
+    width: '100%',
     justifyContent: 'flex-start',
+  },
+  middleContainer: {
+    marginTop: 10,
+    flex: 1,
   },
   landscapeContainer: {
     flex: 1,
