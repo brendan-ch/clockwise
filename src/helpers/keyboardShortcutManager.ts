@@ -8,7 +8,7 @@ interface KeyboardEvent {
   /**
    * Action to run on the key combination
    */
-  action: () => {},
+  action: () => any,
 }
 
 /**
@@ -34,7 +34,7 @@ class KeyboardShortcutManager {
   /**
    * Register the event listeners and call the appropriate action.
    */
-  registerEventListeners() {
+  private registerEventListeners() {
     let keysBeingPressed: string[] = [];
 
     window.document.addEventListener('keydown', (e) => {
@@ -45,8 +45,13 @@ class KeyboardShortcutManager {
 
       keysBeingPressed.push(e.key);
 
+      console.log(keysBeingPressed);
       // Check if array matches pattern in events
-      const events = this._events.filter((value) => value.keys === keysBeingPressed);
+      const events = this._events.filter(
+        (value) => value.keys.toString() === keysBeingPressed.toString(),
+      );
+      console.log(events);
+      // console.log(this._events);
       if (events.length > 0) {
         e.preventDefault();
         // Execute the action
@@ -78,8 +83,9 @@ class KeyboardShortcutManager {
    * @returns Unsubscribe method to remove the event.
    */
   registerEvent(event: KeyboardEvent) {
+    console.log(event);
     // Check if key combination is already registered
-    if (this._events.filter((searchEvent) => event.keys === searchEvent.keys)) {
+    if (this._events.find((searchEvent) => event.keys === searchEvent.keys)) {
       throw new Error(`Key combination ${event.keys} is already registered.`);
     }
 
