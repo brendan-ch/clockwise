@@ -28,6 +28,7 @@ class KeyboardShortcutManager {
     this._events = [];
 
     // Register event listeners
+    this.registerEventListeners();
   }
 
   /**
@@ -47,18 +48,18 @@ class KeyboardShortcutManager {
       // Check if array matches pattern in events
       const events = this._events.filter((value) => value.keys === keysBeingPressed);
       if (events.length > 0) {
+        e.preventDefault();
         // Execute the action
         events[0].action();
       }
 
-      console.log(`Key down: ${e.key}`);
+      console.log(`Keys being pressed: ${keysBeingPressed}`);
     });
 
-    window.document.addEventListener('keyup', (e) => {
+    window.document.addEventListener('keyup', () => {
       // Clear the entire array
-      console.log(`Key up: ${e.key}`);
-
       keysBeingPressed = [];
+      console.log('Keys array cleared');
     });
   }
 
