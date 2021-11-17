@@ -36,6 +36,7 @@ export default function App() {
   const [timeRemaining, setTimeRemaining] = useState(MIN_25);
   const [timerState, setTimerState] = useState<TimerState>('stopped');
   const [timeout, setTimeoutState] = useState<any>(null);
+  const [introDisplayed, setIntroDisplayed] = useState(true);
 
   // let timeout: any = null;
 
@@ -115,6 +116,13 @@ export default function App() {
     ));
   }
 
+  /**
+   * Dismiss the introduction component.
+   */
+  function handleIntroDismiss() {
+    setIntroDisplayed(false);
+  }
+
   if (!fontsLoaded) {
     return <AppLoading />;
   }
@@ -183,9 +191,6 @@ export default function App() {
           </View>
           <View style={[styles.landscapeContainer, styles.rightContainer]}>
             <View style={styles.rightContentContainer}>
-              {/* <Text style={TextStyles.textRegular}>
-                Placeholder text for task management component
-              </Text> */}
               <Introduction />
             </View>
           </View>
@@ -212,7 +217,9 @@ export default function App() {
           />
         </View>
         <View style={styles.middleContainer}>
-          <Introduction />
+          {introDisplayed
+            ? <Introduction onDismiss={() => handleIntroDismiss()} />
+            : undefined}
         </View>
         <View style={styles.bottomContainer}>
           <ActionButtonBar
