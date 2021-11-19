@@ -48,23 +48,39 @@ export default function TimerPage() {
     () => {
       // Register some keyboard shortcuts
       try {
-        const unsubscribe = keyboardShortcutManager?.registerEvent({
+        const unsubMethods: ((() => any) | undefined)[] = [];
+        unsubMethods.push(keyboardShortcutManager?.registerEvent({
           keys: [' '],
           action: toggleTimerState,
-        });
+        }));
+
+        unsubMethods.push(keyboardShortcutManager?.registerEvent({
+          keys: ['1'],
+          action: () => handleStateSwitch('focus'),
+        }));
+
+        unsubMethods.push(keyboardShortcutManager?.registerEvent({
+          keys: ['2'],
+          action: () => handleStateSwitch('break'),
+        }));
 
         return () => {
-          if (unsubscribe) {
-            unsubscribe();
-          }
+          unsubMethods.forEach((method) => {
+            if (method) {
+              method();
+            }
+          });
         };
       } catch (e) {
         return () => {};
       }
     },
-    [timeout, timerState],
+    [timeout, timerState, mode],
   );
 
+  /**
+   * Toggle the timer state between pausing and starting.
+   */
   function toggleTimerState() {
     if (timerState === 'running') {
       pauseTimer();
