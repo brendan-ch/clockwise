@@ -8,17 +8,16 @@
 // } from '@expo-google-fonts/anonymous-pro';
 // import AppLoading from 'expo-app-loading';
 import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
-  StyleSheet, View, useWindowDimensions, Platform,
+  StyleSheet, View, useWindowDimensions,
 } from 'react-native';
+import AppContext from '../../AppContext';
 import ActionButtonBar from '../components/ActionButtonBar';
 import Introduction from '../components/Introduction';
 import PageButtonBar from '../components/PageButtonBar';
 import Timer from '../components/Timer';
 import calculateTimerDisplay from '../helpers/calculateTimer';
-
-type TimerState = 'running' | 'paused' | 'stopped';
 
 const MIN_25 = 1500000;
 const MIN_5 = 300000;
@@ -26,29 +25,52 @@ const INTERVAL = 1000;
 
 export default function TimerPage() {
   const [mode, setMode] = useState<'focus' | 'break'>('focus');
-  const [timeRemaining, setTimeRemaining] = useState(MIN_25);
-  const [timerState, setTimerState] = useState<TimerState>('stopped');
-  const [timeout, setTimeoutState] = useState<any>(null);
+  // const [timeRemaining, setTimeRemaining] = useState(MIN_25);
+  // const [timerState, setTimerState] = useState<TimerState>('stopped');
+  // const [timeout, setTimeoutState] = useState<any>(null);
   const [introDisplayed, setIntroDisplayed] = useState(true);
 
   // let timeout: any = null;
 
   const { height, width } = useWindowDimensions();
+  const {
+    timeRemaining,
+    timerState,
+    timeout,
+    setTimeRemaining,
+    setTimerState,
+    setTimeoutState,
+    keyboardShortcutManager,
+  } = useContext(AppContext);
 
-  useEffect(() => {
-    // Enable keyboard shortcuts on web
-    if (Platform.OS === 'web') {
-      window.document.addEventListener('keydown', (e) => {
-        console.log(`Key down: ${e.key}`);
-      });
+  useEffect(
+    () => {
+      // Register some keyboard shortcuts
+      try {
+        const unsubscribe = keyboardShortcutManager?.registerEvent({
+          keys: [' '],
+          action: toggleTimerState,
+        });
 
-      window.document.addEventListener('keyup', (e) => {
-        console.log(`Key up: ${e.key}`);
-      });
+        return () => {
+          if (unsubscribe) {
+            unsubscribe();
+          }
+        };
+      } catch (e) {
+        return () => {};
+      }
+    },
+    [timerState],
+  );
+
+  function toggleTimerState() {
+    if (timerState === 'running') {
+      pauseTimer();
+    } else {
+      startTimer();
     }
-
-    return () => clearTimerInterval();
-  }, []);
+  }
 
   /**
    * Handle switching between break and focus modes.
@@ -93,8 +115,9 @@ export default function TimerPage() {
    * Clear the timer updating interval.
    */
   function clearTimerInterval() {
+    // console.log('Clearing timeout');
     clearTimeout(timeout);
-    setTimeoutState(null);
+    setTimeoutState(undefined);
   }
 
   /**
@@ -157,7 +180,6 @@ export default function TimerPage() {
           onResetPress={() => stopTimer()}
           onResumePress={() => startTimer()}
         />
-        <StatusBar style="auto" />
       </View>
     );
   }
