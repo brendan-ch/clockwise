@@ -27,7 +27,15 @@ export default function App() {
   const [shortcutsInitialized, setShortcutsInitialized] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(MIN_25);
   const [timerState, setTimerState] = useState<TimerState>('stopped');
-  const [timeout, setTimeoutState] = useState<NodeJS.Timeout | undefined>(undefined);
+  const [timeout, setTimeoutState] = useState<any>(undefined);
+
+  /**
+   * Clear the timer and set timeout state to undefined.
+   */
+  function clearTimerInterval() {
+    clearTimeout(timeout);
+    setTimeoutState(undefined);
+  }
 
   // Load fonts
   const [fontsLoaded] = useFonts({
@@ -60,6 +68,7 @@ export default function App() {
       setTimerState,
       timeout,
       setTimeoutState,
+      clearTimerInterval,
     }}
     >
       <TimerPage />
