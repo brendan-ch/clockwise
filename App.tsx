@@ -9,7 +9,7 @@ import {
 import AppLoading from 'expo-app-loading';
 // import AppLoading from 'expo-app-loading';
 // import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 import AppContext from './AppContext';
 import KeyboardShortcutManager from './src/helpers/keyboardShortcutManager';
@@ -19,11 +19,12 @@ export default function App() {
   const [
     keyboardShortcutManager, setKeyboardShortcutManager,
   ] = useState<KeyboardShortcutManager | undefined>(undefined);
+  const [shortcutsInitialized, setShortcutsInitialized] = useState(false);
 
   // Memoized context
-  const memoized = useMemo(() => ({
-    keyboardShortcutManager,
-  }), []);
+  // const memoized = useMemo(() => ({
+  //   keyboardShortcutManager,
+  // }), []);
 
   const [fontsLoaded] = useFonts({
     AnonymousPro_400Regular,
@@ -38,14 +39,19 @@ export default function App() {
       const manager = new KeyboardShortcutManager();
       setKeyboardShortcutManager(manager);
     }
+
+    setShortcutsInitialized(true);
   }, []);
 
-  if (!fontsLoaded) {
+  if (!fontsLoaded || !shortcutsInitialized) {
     return <AppLoading />;
   }
 
   return (
-    <AppContext.Provider value={memoized}>
+    <AppContext.Provider value={{
+      keyboardShortcutManager,
+    }}
+    >
       <TimerPage />
     </AppContext.Provider>
   );
