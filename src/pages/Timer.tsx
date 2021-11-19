@@ -183,15 +183,14 @@ export default function TimerPage() {
           style={styles.timer}
         />
         <PageButtonBar
-          selected="focus"
+          selected={mode}
           style={styles.pageButtonBar}
           // onPressFocus={() => handleStateSwitch('focus')}
           // onPressBreak={() => handleStateSwitch('break')}
         />
         <ActionButtonBar
           style={styles.actionButtonBar}
-          text="The quick brown fox jumps over the lazy dog."
-          state="stopped"
+          state={timerState}
           onStartPress={() => startTimer()}
           onPausePress={() => pauseTimer()}
           onResetPress={() => stopTimer()}
