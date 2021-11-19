@@ -36,6 +36,7 @@ export default function TimerPage() {
   const {
     timeRemaining,
     timerState,
+    clearTimerInterval,
     timeout,
     setTimeRemaining,
     setTimerState,
@@ -61,7 +62,7 @@ export default function TimerPage() {
         return () => {};
       }
     },
-    [timerState],
+    [timeout, timerState],
   );
 
   function toggleTimerState() {
@@ -89,9 +90,9 @@ export default function TimerPage() {
     setTimerState('running');
 
     const expected = Date.now() + INTERVAL;
-    setTimeoutState(
-      setTimeout(() => updateTimeRemaining(expected, timeRemaining), INTERVAL),
-    );
+    const newTimeout = setTimeout(() => updateTimeRemaining(expected, timeRemaining), INTERVAL);
+
+    setTimeoutState(newTimeout);
   }
 
   /**
@@ -114,11 +115,11 @@ export default function TimerPage() {
   /**
    * Clear the timer updating interval.
    */
-  function clearTimerInterval() {
-    // console.log('Clearing timeout');
-    clearTimeout(timeout);
-    setTimeoutState(undefined);
-  }
+  // function clearTimerInterval() {
+  //   // console.log('Clearing timeout');
+  //   clearTimeout(timeout);
+  //   // setTimeoutState(undefined);
+  // }
 
   /**
    * Update the time remaining in the state.
