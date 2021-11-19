@@ -14,18 +14,22 @@ import { Platform } from 'react-native';
 import AppContext from './AppContext';
 import KeyboardShortcutManager from './src/helpers/keyboardShortcutManager';
 import TimerPage from './src/pages/Timer';
+import { TimerState } from './src/types';
+
+const MIN_25 = 1500000;
+// const MIN_5 = 300000;
+// const INTERVAL = 1000;
 
 export default function App() {
   const [
     keyboardShortcutManager, setKeyboardShortcutManager,
   ] = useState<KeyboardShortcutManager | undefined>(undefined);
   const [shortcutsInitialized, setShortcutsInitialized] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState(MIN_25);
+  const [timerState, setTimerState] = useState<TimerState>('stopped');
+  const [timeout, setTimeoutState] = useState<NodeJS.Timeout | undefined>(undefined);
 
-  // Memoized context
-  // const memoized = useMemo(() => ({
-  //   keyboardShortcutManager,
-  // }), []);
-
+  // Load fonts
   const [fontsLoaded] = useFonts({
     AnonymousPro_400Regular,
     AnonymousPro_400Regular_Italic,
@@ -50,6 +54,12 @@ export default function App() {
   return (
     <AppContext.Provider value={{
       keyboardShortcutManager,
+      timeRemaining,
+      setTimeRemaining,
+      timerState,
+      setTimerState,
+      timeout,
+      setTimeoutState,
     }}
     >
       <TimerPage />
