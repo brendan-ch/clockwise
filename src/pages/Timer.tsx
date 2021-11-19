@@ -64,6 +64,11 @@ export default function TimerPage() {
           action: () => handleStateSwitch('break'),
         }));
 
+        unsubMethods.push(keyboardShortcutManager?.registerEvent({
+          keys: ['r'],
+          action: () => stopTimer(),
+        }));
+
         return () => {
           unsubMethods.forEach((method) => {
             if (method) {
@@ -75,7 +80,7 @@ export default function TimerPage() {
         return () => {};
       }
     },
-    [timeout, timerState, mode],
+    [timeout, timerState, mode, timeRemaining],
   );
 
   /**
@@ -131,11 +136,6 @@ export default function TimerPage() {
   /**
    * Clear the timer updating interval.
    */
-  // function clearTimerInterval() {
-  //   // console.log('Clearing timeout');
-  //   clearTimeout(timeout);
-  //   // setTimeoutState(undefined);
-  // }
 
   /**
    * Update the time remaining in the state.
