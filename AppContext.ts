@@ -10,6 +10,7 @@ interface DefaultAppState {
   setTimerState: Dispatch<SetStateAction<TimerState>>,
   timeout?: number,
   setTimeoutState: Dispatch<SetStateAction<any>>,
+  clearTimerInterval: () => any,
 }
 
 const defaultAppState: DefaultAppState = {
@@ -20,6 +21,7 @@ const defaultAppState: DefaultAppState = {
   setTimerState: () => {},
   timeout: undefined,
   setTimeoutState: () => {},
+  clearTimerInterval: () => {},
 };
 
 const AppContext = React.createContext(defaultAppState);
