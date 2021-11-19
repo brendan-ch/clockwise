@@ -8,8 +8,8 @@ interface DefaultAppState {
   setTimeRemaining: Dispatch<SetStateAction<number>>,
   timerState: TimerState,
   setTimerState: Dispatch<SetStateAction<TimerState>>,
-  timeout?: NodeJS.Timeout,
-  setTimeoutState: Dispatch<SetStateAction<NodeJS.Timeout | undefined>>,
+  timeout?: number,
+  setTimeoutState: Dispatch<SetStateAction<any>>,
 }
 
 const defaultAppState: DefaultAppState = {
