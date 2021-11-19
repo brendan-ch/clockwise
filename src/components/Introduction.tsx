@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useRef } from 'react';
 import {
-  View, Text, StyleProp, ViewStyle, StyleSheet, TouchableOpacity, Animated, ScrollView,
+  View, Text, StyleProp, ViewStyle, StyleSheet, TouchableOpacity, Animated, ScrollView, Platform,
 } from 'react-native';
 import ColorValues from '../styles/Color';
 import TextStyles from '../styles/Text';
@@ -71,12 +71,36 @@ function Introduction({ onDismiss, style }: Props) {
         >
           This is a simple Pomodoro timer to help you get things done quicker.
         </Text>
-        <Text
-          style={[TextStyles.textRegular, styles.text]}
-        >
-          Additional features,
-          such as timer customization, task management, and dark mode are coming soon™.
-        </Text>
+        {Platform.OS === 'web' ? (
+          // Display keyboard shortcuts
+          <View>
+            <Text
+              style={[TextStyles.textBold, styles.text]}
+            >
+              Keyboard shortcuts:
+            </Text>
+            <Text
+              style={[TextStyles.textRegular, styles.text]}
+            >
+              1: switch to focus view
+            </Text>
+            <Text
+              style={[TextStyles.textRegular, styles.text]}
+            >
+              2: switch to break view
+            </Text>
+            <Text
+              style={[TextStyles.textRegular, styles.text]}
+            >
+              Space: start/pause the timer
+            </Text>
+            <Text
+              style={[TextStyles.textRegular, styles.text]}
+            >
+              R: reset the timer
+            </Text>
+          </View>
+        ) : undefined}
       </ScrollView>
     </Animated.View>
   );
