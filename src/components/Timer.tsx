@@ -2,6 +2,7 @@ import React from 'react';
 import {
   StyleProp, StyleSheet, Text, TextStyle, View, ViewStyle,
 } from 'react-native';
+import useTheme from '../helpers/useTheme';
 import TextStyles from '../styles/Text';
 
 interface Props {
@@ -15,10 +16,14 @@ interface Props {
  * @param param0
  */
 function Timer({ display, style, textStyle }: Props) {
+  const colorValues = useTheme();
+
   return (
     <View style={[style, styles.container]}>
       <Text
-        style={[TextStyles.textBold, textStyle, styles.text]}
+        style={[TextStyles.textBold, textStyle, styles.text, {
+          color: colorValues.primary,
+        }]}
         allowFontScaling={false}
       >
         {display}
