@@ -30,11 +30,6 @@ function useTheme(): Colors {
   }
 
   return ColorValues;
-  // const [appearance, setAppearance] = useState<'light' | 'dark'>('light');
-
-  // useEffect(() => {
-
-  // });
 }
 
 export default useTheme;
