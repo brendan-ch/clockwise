@@ -10,8 +10,9 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useContext } from 'react';
 import {
-  StyleSheet, View, useWindowDimensions,
+  StyleSheet, View, useWindowDimensions, Platform,
 } from 'react-native';
+import * as Haptics from 'expo-haptics';
 import AppContext from '../../AppContext';
 import ActionButtonBar from '../components/ActionButtonBar';
 import Introduction from '../components/Introduction';
@@ -21,6 +22,7 @@ import calculateTimerDisplay from '../helpers/calculateTimer';
 
 const MIN_25 = 1500000;
 const MIN_5 = 300000;
+// const MIN_5 = 10000; // for testing purposes
 const INTERVAL = 1000;
 
 export default function TimerPage() {
@@ -150,6 +152,11 @@ export default function TimerPage() {
     if (updatedTimeRemaining <= 0) {
       // Clear timer and change to other mode
       handleStateSwitch(mode === 'break' ? 'focus' : 'break');
+
+      // Haptic feedback
+      if (Platform.OS === 'ios' || Platform.OS === 'android') {
+        Haptics.notificationAsync();
+      }
 
       return;
     }
