@@ -1,5 +1,5 @@
 /**
- * Color values for the app.
+ * Default color values for the app.
  * Components should rely on these values to support
  * dark mode and future theming.
  */
