@@ -58,6 +58,7 @@ function Introduction({ onDismiss, style }: Props) {
       style={[style, styles.container, {
         opacity: fadeAnimation,
         paddingTop: onDismiss ? 0 : 10,
+        borderColor: colorValues.gray5,
       }]}
     >
       {onDismiss
