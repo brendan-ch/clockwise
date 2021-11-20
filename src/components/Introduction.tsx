@@ -3,6 +3,7 @@ import React, { useRef } from 'react';
 import {
   View, Text, StyleProp, ViewStyle, StyleSheet, TouchableOpacity, Animated, ScrollView, Platform,
 } from 'react-native';
+import useTheme from '../helpers/useTheme';
 import ColorValues from '../styles/Color';
 import TextStyles from '../styles/Text';
 
@@ -35,6 +36,8 @@ DismissBar.defaultProps = {
 function Introduction({ onDismiss, style }: Props) {
   const fadeAnimation = useRef(new Animated.Value(1)).current;
 
+  const colorValues = useTheme();
+
   /**
    * Fade out the component, and call onDismiss.
    */
@@ -62,12 +65,16 @@ function Introduction({ onDismiss, style }: Props) {
         : undefined}
       <ScrollView>
         <Text
-          style={[TextStyles.textBold, styles.text]}
+          style={[TextStyles.textBold, styles.text, {
+            color: colorValues.primary,
+          }]}
         >
           session: an app designed to help you focus
         </Text>
         <Text
-          style={[TextStyles.textRegular, styles.text]}
+          style={[TextStyles.textRegular, styles.text, {
+            color: colorValues.primary,
+          }]}
         >
           This is a simple Pomodoro timer to help you get things done quicker.
         </Text>
@@ -75,27 +82,37 @@ function Introduction({ onDismiss, style }: Props) {
           // Display keyboard shortcuts
           <View>
             <Text
-              style={[TextStyles.textBold, styles.text]}
+              style={[TextStyles.textBold, styles.text, {
+                color: colorValues.primary,
+              }]}
             >
               Keyboard shortcuts:
             </Text>
             <Text
-              style={[TextStyles.textRegular, styles.text]}
+              style={[TextStyles.textRegular, styles.text, {
+                color: colorValues.primary,
+              }]}
             >
               1: switch to focus view
             </Text>
             <Text
-              style={[TextStyles.textRegular, styles.text]}
+              style={[TextStyles.textRegular, styles.text, {
+                color: colorValues.primary,
+              }]}
             >
               2: switch to break view
             </Text>
             <Text
-              style={[TextStyles.textRegular, styles.text]}
+              style={[TextStyles.textRegular, styles.text, {
+                color: colorValues.primary,
+              }]}
             >
               Space: start/pause the timer
             </Text>
             <Text
-              style={[TextStyles.textRegular, styles.text]}
+              style={[TextStyles.textRegular, styles.text, {
+                color: colorValues.primary,
+              }]}
             >
               R: reset the timer
             </Text>
