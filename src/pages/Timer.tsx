@@ -12,6 +12,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import {
   StyleSheet, View, useWindowDimensions,
 } from 'react-native';
+import * as Haptics from 'expo-haptics';
 import AppContext from '../../AppContext';
 import ActionButtonBar from '../components/ActionButtonBar';
 import Introduction from '../components/Introduction';
@@ -150,6 +151,9 @@ export default function TimerPage() {
     if (updatedTimeRemaining <= 0) {
       // Clear timer and change to other mode
       handleStateSwitch(mode === 'break' ? 'focus' : 'break');
+
+      // Haptic feedback
+      Haptics.notificationAsync();
 
       return;
     }
