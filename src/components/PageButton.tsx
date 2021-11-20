@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import useTheme from '../helpers/useTheme';
 import ColorValues from '../styles/Color';
 import TextStyles from '../styles/Text';
 
@@ -15,14 +16,27 @@ interface Props {
  * @returns
  */
 function PageButton({ text, onPress, selected }: Props) {
+  const colorValues = useTheme();
+
   return (
     <TouchableOpacity
-      style={selected ? [styles.containerFilled, styles.container] : styles.container}
+      style={selected ? [
+        styles.container, {
+          backgroundColor: colorValues.primary,
+          borderColor: colorValues.primary,
+        },
+      ] : [styles.container, {
+        borderColor: colorValues.primary,
+      }]}
       onPress={onPress}
     >
       <Text style={selected
-        ? [TextStyles.textRegular, styles.textFilled]
-        : [TextStyles.textRegular, styles.text]}
+        ? [TextStyles.textRegular, styles.textFilled, {
+          color: colorValues.background,
+        }]
+        : [TextStyles.textRegular, styles.text, {
+          color: colorValues.primary,
+        }]}
       >
         {text}
       </Text>

@@ -1,12 +1,3 @@
-// import {
-//   useFonts,
-//   /* eslint-disable camelcase */
-//   AnonymousPro_400Regular,
-//   AnonymousPro_400Regular_Italic,
-//   AnonymousPro_700Bold,
-//   AnonymousPro_700Bold_Italic,
-// } from '@expo-google-fonts/anonymous-pro';
-// import AppLoading from 'expo-app-loading';
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useContext } from 'react';
 import {
@@ -19,6 +10,7 @@ import Introduction from '../components/Introduction';
 import PageButtonBar from '../components/PageButtonBar';
 import Timer from '../components/Timer';
 import calculateTimerDisplay from '../helpers/calculateTimer';
+import useTheme from '../helpers/useTheme';
 
 const MIN_25 = 1500000;
 const MIN_5 = 300000;
@@ -32,7 +24,7 @@ export default function TimerPage() {
   // const [timeout, setTimeoutState] = useState<any>(null);
   const [introDisplayed, setIntroDisplayed] = useState(true);
 
-  // let timeout: any = null;
+  const colorValues = useTheme();
 
   const { height, width } = useWindowDimensions();
   const {
@@ -184,7 +176,10 @@ export default function TimerPage() {
   if (height < 400 && width < 700) {
     // Center everything
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, {
+        backgroundColor: colorValues.background,
+      }]}
+      >
         <Timer
           display={calculateTimerDisplay(timeRemaining)}
           style={styles.timer}
@@ -211,7 +206,10 @@ export default function TimerPage() {
   if (width >= 700) {
     // Display timer and tasks side by side
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, {
+        backgroundColor: colorValues.background,
+      }]}
+      >
         <View style={styles.contentContainerLandscape}>
           <View style={[styles.landscapeContainer, styles.leftContainer]}>
             <View style={styles.leftContentContainer}>
@@ -248,7 +246,10 @@ export default function TimerPage() {
 
   // Mobile view
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {
+      backgroundColor: colorValues.background,
+    }]}
+    >
       <View style={styles.contentContainer}>
         <View style={styles.topContainer}>
           <Timer
