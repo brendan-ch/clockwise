@@ -11,6 +11,7 @@ import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
 import ColorValues from '../styles/Color';
 import TextStyles from '../styles/Text';
+import useTheme from '../helpers/useTheme';
 
 interface Props {
   style?: StyleProp<ViewStyle>,
@@ -29,6 +30,8 @@ function ActionButton({
   style, onPress, text, isResetButton, haptics,
 }: Props) {
   const [pressed, setPressed] = useState(false);
+
+  const colorValues = useTheme();
 
   const fadeAnimation = useRef(new Animated.Value(0)).current;
   // const fadeInvertAnimation = useRef(new Animated.Value(1)).current;
@@ -63,25 +66,29 @@ function ActionButton({
 
   return (
     <Pressable
-      style={[style, styles.container]}
+      style={[style, styles.container, {
+        backgroundColor: colorValues.primary,
+      }]}
       onPress={onPress}
       onPressIn={() => onPressIn()}
       onPressOut={() => onPressOut()}
     >
       {/* Overlay component and set default opacity to 0 */}
       <Animated.View style={[styles.animatedContainer, {
+        backgroundColor: colorValues.background,
+        borderColor: colorValues.primary,
         opacity: fadeAnimation,
       }]}
       >
         {isResetButton ? (
           <Ionicons
             name="refresh-outline"
-            color={ColorValues.primary}
+            color={colorValues.primary}
             size={30}
           />
         ) : (
           <Text style={[TextStyles.textBold, styles.text, {
-            color: ColorValues.primary,
+            color: colorValues.primary,
           }]}
           >
             {text}
@@ -93,7 +100,7 @@ function ActionButton({
       {isResetButton ? (
         <Ionicons
           name="refresh-outline"
-          color={ColorValues.background}
+          color={colorValues.background}
           size={30}
           style={{
             opacity: pressed ? 0 : 1,
@@ -105,6 +112,7 @@ function ActionButton({
           styles.text,
           {
             opacity: pressed ? 0 : 1,
+            color: colorValues.background,
           },
         ]}
         >
