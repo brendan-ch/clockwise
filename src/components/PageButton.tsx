@@ -20,12 +20,7 @@ function PageButton({ text, onPress, selected }: Props) {
 
   return (
     <TouchableOpacity
-      style={selected ? [
-        styles.container, {
-          backgroundColor: colorValues.primary,
-          borderColor: colorValues.primary,
-        },
-      ] : [styles.container, {
+      style={[styles.container, {
         borderColor: colorValues.primary,
       }]}
       onPress={onPress}
