@@ -7,6 +7,7 @@ import {
   Text,
   ViewStyle,
 } from 'react-native';
+import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
 import ColorValues from '../styles/Color';
 import TextStyles from '../styles/Text';
@@ -16,6 +17,7 @@ interface Props {
   onPress?: () => any,
   isResetButton?: boolean,
   text?: string,
+  haptics?: boolean,
 }
 
 /**
@@ -24,7 +26,7 @@ interface Props {
  * @returns
  */
 function ActionButton({
-  style, onPress, text, isResetButton,
+  style, onPress, text, isResetButton, haptics,
 }: Props) {
   const [pressed, setPressed] = useState(false);
 
@@ -33,6 +35,10 @@ function ActionButton({
 
   function onPressOut() {
     setPressed(false);
+
+    if (haptics) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+    }
 
     Animated.timing(fadeAnimation, {
       toValue: 0,
@@ -43,6 +49,10 @@ function ActionButton({
 
   function onPressIn() {
     setPressed(true);
+
+    if (haptics) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }
 
     Animated.timing(fadeAnimation, {
       toValue: 1,
@@ -134,6 +144,7 @@ ActionButton.defaultProps = {
   onPress: () => {},
   text: '',
   isResetButton: false,
+  haptics: false,
 };
 
 export default ActionButton;
