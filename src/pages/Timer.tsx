@@ -4,7 +4,7 @@ import {
   StyleSheet, View, Platform,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
-import { useNavigation } from '@react-navigation/native';
+// import { useNavigation } from '@react-navigation/native';
 import AppContext from '../../AppContext';
 import ActionButtonBar from '../components/ActionButtonBar';
 import Introduction from '../components/Introduction';
@@ -13,7 +13,7 @@ import Timer from '../components/Timer';
 import calculateTimerDisplay from '../helpers/calculateTimer';
 import useTheme from '../helpers/useTheme';
 import useWindowSize from '../helpers/useWindowSize';
-import HeaderButton from '../components/HeaderButton';
+// import HeaderButton from '../components/HeaderButton';
 
 const MIN_25 = 1500000;
 const MIN_5 = 300000;
@@ -23,8 +23,6 @@ const INTERVAL = 1000;
 // type Props = NativeStackScreenProps<RootStackParamList, 'Timer'>;
 
 export default function TimerPage() {
-  const navigation = useNavigation();
-
   const [mode, setMode] = useState<'focus' | 'break'>('focus');
   const [introDisplayed, setIntroDisplayed] = useState(true);
 
@@ -45,16 +43,6 @@ export default function TimerPage() {
 
   useEffect(
     () => {
-      // Set header right button
-      navigation.setOptions({
-        headerRight: () => HeaderButton({
-          iconName: 'ellipsis-vertical',
-          onPress: () => navigation.navigate({
-            key: 'Settings',
-          }),
-        }),
-      });
-
       // Register some keyboard shortcuts
       try {
         const unsubMethods: ((() => any) | undefined)[] = [];
