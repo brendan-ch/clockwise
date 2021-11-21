@@ -134,6 +134,10 @@ export default function App() {
               headerTitle: '',
               headerRight: () => HeaderButton({
                 iconName: 'ellipsis-vertical',
+                to: {
+                  screen: 'Settings',
+                  params: {},
+                },
               }),
             }}
           />
