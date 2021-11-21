@@ -10,7 +10,7 @@ function useWindowSize() {
   const { height, width } = useWindowDimensions();
 
   // Return a size
-  if (height < 400 && width < 700) {
+  if (height < 600 && width < 700) {
     return 'small';
   }
 
