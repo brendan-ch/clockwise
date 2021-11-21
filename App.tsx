@@ -9,9 +9,10 @@ import {
 import AppLoading from 'expo-app-loading';
 import * as Linking from 'expo-linking';
 import React, { useEffect, useState } from 'react';
-import { Platform } from 'react-native';
+import { Platform, TouchableOpacity, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Ionicons } from '@expo/vector-icons';
 import AppContext from './AppContext';
 import KeyboardShortcutManager from './src/helpers/keyboardShortcutManager';
 import TimerPage from './src/pages/Timer';
@@ -27,6 +28,31 @@ const Stack = createNativeStackNavigator();
 
 // Create prefix link
 const prefix = Linking.createURL('/');
+
+/**
+ * Component representing a left or right header button.
+ * @param props
+ */
+function HeaderButton({ iconName }: { iconName: string }) {
+  return (
+    <TouchableOpacity
+      style={headerButtonStyles.container}
+    >
+      <Ionicons
+        // @ts-ignore
+        name={iconName}
+        size={22}
+      />
+    </TouchableOpacity>
+  );
+}
+
+const headerButtonStyles = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 export default function App() {
   const [
@@ -130,6 +156,7 @@ export default function App() {
               headerShown: true,
               headerShadowVisible: false,
               headerTitle: '',
+              headerRight: () => HeaderButton({ iconName: 'ellipsis-vertical' }),
             }}
           />
           <Stack.Screen
