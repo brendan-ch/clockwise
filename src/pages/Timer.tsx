@@ -294,10 +294,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   contentContainer: {
-    height: '80%',
+    height: '85%',
     width: 268,
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 30,
   },
   contentContainerLandscape: {
     flexDirection: 'row',
