@@ -21,6 +21,7 @@ import SettingsPage from './src/pages/SettingsPage';
 import TextStyles from './src/styles/Text';
 import useWindowSize from './src/helpers/useWindowSize';
 import HeaderButton from './src/components/HeaderButton';
+import useTheme from './src/helpers/useTheme';
 
 const MIN_25 = 1500000;
 
@@ -49,6 +50,9 @@ export default function App() {
   }
 
   // Hooks
+  // Get theme
+  const colorValues = useTheme();
+
   // Get window size
   const windowSize = useWindowSize();
 
@@ -84,6 +88,17 @@ export default function App() {
   };
 
   // Rendering
+  // Header options
+  // These apply to all headers in the app
+  const headerOptions = {
+    headerShadowVisible: false,
+    headerTintColor: colorValues.primary,
+    headerStyle: {
+      backgroundColor: colorValues.background,
+    },
+    headerTitleStyle: TextStyles.textBold,
+  };
+
   if (!fontsLoaded || !shortcutsInitialized) {
     return <AppLoading />;
   }
@@ -129,8 +144,7 @@ export default function App() {
             name="Timer"
             component={TimerPage}
             options={{
-              headerShown: true,
-              headerShadowVisible: false,
+              ...headerOptions,
               headerTitle: '',
               headerRight: () => HeaderButton({
                 iconName: 'ellipsis-vertical',
@@ -145,8 +159,7 @@ export default function App() {
             name="Settings"
             component={SettingsPage}
             options={{
-              headerShown: true,
-              headerTitleStyle: TextStyles.textBold,
+              ...headerOptions,
             }}
           />
         </Stack.Navigator>
