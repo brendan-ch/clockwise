@@ -1,4 +1,11 @@
 type TimerState = 'running' | 'paused' | 'stopped';
 
-/* eslint-disable-next-line */
-export { TimerState };
+/**
+ * Provides typings for React Navigation route parameters.
+ */
+type RootStackParamList = {
+  Timer: undefined,
+  Settings: undefined,
+}
+
+export { TimerState, RootStackParamList };
