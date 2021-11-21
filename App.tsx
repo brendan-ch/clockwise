@@ -7,18 +7,19 @@ import {
   AnonymousPro_700Bold_Italic,
 } from '@expo-google-fonts/anonymous-pro';
 import AppLoading from 'expo-app-loading';
-// import AppLoading from 'expo-app-loading';
-// import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AppContext from './AppContext';
 import KeyboardShortcutManager from './src/helpers/keyboardShortcutManager';
 import TimerPage from './src/pages/Timer';
 import { TimerState } from './src/types';
 
 const MIN_25 = 1500000;
-// const MIN_5 = 300000;
-// const INTERVAL = 1000;
+
+// Create the stack navigator
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [
@@ -71,7 +72,17 @@ export default function App() {
       clearTimerInterval,
     }}
     >
-      <TimerPage />
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Timer"
+            component={TimerPage}
+            options={{
+              headerShown: false,
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
     </AppContext.Provider>
   );
 }
