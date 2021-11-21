@@ -1,4 +1,5 @@
 type TimerState = 'running' | 'paused' | 'stopped';
+type Overlay = 'none' | 'settings' | 'command';
 
 /**
  * Provides typings for React Navigation route parameters.
@@ -8,4 +9,4 @@ type RootStackParamList = {
   Settings: undefined,
 }
 
-export { TimerState, RootStackParamList };
+export { TimerState, RootStackParamList, Overlay };
