@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useContext } from 'react';
 import {
-  StyleSheet, View, useWindowDimensions, Platform,
+  StyleSheet, View, Platform,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import AppContext from '../../AppContext';
@@ -11,6 +11,7 @@ import PageButtonBar from '../components/PageButtonBar';
 import Timer from '../components/Timer';
 import calculateTimerDisplay from '../helpers/calculateTimer';
 import useTheme from '../helpers/useTheme';
+import useWindowSize from '../helpers/useWindowSize';
 
 const MIN_25 = 1500000;
 const MIN_5 = 300000;
@@ -26,7 +27,8 @@ export default function TimerPage() {
 
   const colorValues = useTheme();
 
-  const { height, width } = useWindowDimensions();
+  // const { height, width } = useWindowDimensions();
+  const size = useWindowSize();
   const {
     timeRemaining,
     timerState,
@@ -173,7 +175,7 @@ export default function TimerPage() {
 
   // Set breakpoints
   // Small window view
-  if (height < 400 && width < 700) {
+  if (size === 'small') {
     // Center everything
     return (
       <View style={[styles.container, {
@@ -203,7 +205,7 @@ export default function TimerPage() {
   }
 
   // Landscape view
-  if (width >= 700) {
+  if (size === 'landscape') {
     // Display timer and tasks side by side
     return (
       <View style={[styles.container, {
