@@ -1,9 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect, useContext } from 'react';
 import {
-  StyleSheet, View, useWindowDimensions, Platform,
+  StyleSheet, View, Platform,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
+// import { useNavigation } from '@react-navigation/native';
 import AppContext from '../../AppContext';
 import ActionButtonBar from '../components/ActionButtonBar';
 import Introduction from '../components/Introduction';
@@ -11,22 +12,24 @@ import PageButtonBar from '../components/PageButtonBar';
 import Timer from '../components/Timer';
 import calculateTimerDisplay from '../helpers/calculateTimer';
 import useTheme from '../helpers/useTheme';
+import useWindowSize from '../helpers/useWindowSize';
+// import HeaderButton from '../components/HeaderButton';
 
 const MIN_25 = 1500000;
 const MIN_5 = 300000;
 // const MIN_5 = 10000; // for testing purposes
 const INTERVAL = 1000;
 
+// type Props = NativeStackScreenProps<RootStackParamList, 'Timer'>;
+
 export default function TimerPage() {
   const [mode, setMode] = useState<'focus' | 'break'>('focus');
-  // const [timeRemaining, setTimeRemaining] = useState(MIN_25);
-  // const [timerState, setTimerState] = useState<TimerState>('stopped');
-  // const [timeout, setTimeoutState] = useState<any>(null);
   const [introDisplayed, setIntroDisplayed] = useState(true);
 
   const colorValues = useTheme();
 
-  const { height, width } = useWindowDimensions();
+  // const { height, width } = useWindowDimensions();
+  const size = useWindowSize();
   const {
     timeRemaining,
     timerState,
@@ -173,7 +176,7 @@ export default function TimerPage() {
 
   // Set breakpoints
   // Small window view
-  if (height < 400 && width < 700) {
+  if (size === 'small') {
     // Center everything
     return (
       <View style={[styles.container, {
@@ -203,7 +206,7 @@ export default function TimerPage() {
   }
 
   // Landscape view
-  if (width >= 700) {
+  if (size === 'landscape') {
     // Display timer and tasks side by side
     return (
       <View style={[styles.container, {
@@ -292,10 +295,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   contentContainer: {
-    height: '80%',
+    height: '85%',
     width: 268,
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 30,
   },
   contentContainerLandscape: {
     flexDirection: 'row',

@@ -2,6 +2,7 @@
   "expo": {
     "name": "session",
     "slug": "session",
+    "scheme": "session",
     "userInterfaceStyle": "automatic",
     "version": "1.0.0",
     "orientation": "portrait",
