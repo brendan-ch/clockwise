@@ -63,8 +63,15 @@ export default function App() {
   }, []);
 
   // Links
+  const config = {
+    screens: {
+      Timer: '',
+    },
+  };
+
   const linking = {
     prefixes: [prefix],
+    config,
   };
 
   // Rendering
@@ -89,7 +96,7 @@ export default function App() {
       >
         <Stack.Navigator>
           <Stack.Screen
-            name="timer"
+            name="Timer"
             component={TimerPage}
             options={{
               headerShown: false,
