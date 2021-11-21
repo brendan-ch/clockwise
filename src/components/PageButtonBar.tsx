@@ -4,6 +4,7 @@ import {
   Easing,
   StyleProp, StyleSheet, View, ViewStyle,
 } from 'react-native';
+import useTheme from '../helpers/useTheme';
 import ColorValues from '../styles/Color';
 import PageButton from './PageButton';
 
@@ -33,6 +34,7 @@ function PageButtonBar({
   style, selected, onPressFocus, onPressBreak,
 }: Props) {
   const widthAnimation = useRef(new Animated.Value(0)).current;
+  const colorValues = useTheme();
 
   useEffect(() => {
     if (selected === 'focus') {
@@ -60,13 +62,14 @@ function PageButtonBar({
     <View style={[style, styles.container]}>
       <View style={styles.backgroundContainer}>
         <Animated.View style={{
-          // width: `${widthAnimation}%`,
-          // width: widthAnimation,
           flex: widthAnimation,
           height: '100%',
         }}
         />
-        <View style={styles.backgroundRectangle} />
+        <View style={[styles.backgroundRectangle, {
+          backgroundColor: colorValues.primary,
+        }]}
+        />
       </View>
       <PageButton
         text="focus"
