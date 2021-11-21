@@ -16,6 +16,9 @@ import AppContext from './AppContext';
 import KeyboardShortcutManager from './src/helpers/keyboardShortcutManager';
 import TimerPage from './src/pages/Timer';
 import { TimerState } from './src/types';
+import SettingsPage from './src/pages/SettingsPage';
+import TextStyles from './src/styles/Text';
+import useWindowSize from './src/helpers/useWindowSize';
 
 const MIN_25 = 1500000;
 
@@ -44,6 +47,9 @@ export default function App() {
   }
 
   // Hooks
+  // Get window size
+  const windowSize = useWindowSize();
+
   // Load fonts
   const [fontsLoaded] = useFonts({
     AnonymousPro_400Regular,
@@ -66,6 +72,7 @@ export default function App() {
   const config = {
     screens: {
       Timer: '',
+      Settings: 'settings',
     },
   };
 
@@ -79,6 +86,27 @@ export default function App() {
     return <AppLoading />;
   }
 
+  // Do conditional rendering based on window size
+  if (windowSize === 'small' || windowSize === 'landscape') {
+    // Return just the timer (with context provider)
+    return (
+      <AppContext.Provider value={{
+        keyboardShortcutManager,
+        timeRemaining,
+        setTimeRemaining,
+        timerState,
+        setTimerState,
+        timeout,
+        setTimeoutState,
+        clearTimerInterval,
+      }}
+      >
+        <TimerPage />
+      </AppContext.Provider>
+    );
+  }
+
+  // Otherwise return stack navigator
   return (
     <AppContext.Provider value={{
       keyboardShortcutManager,
@@ -99,7 +127,17 @@ export default function App() {
             name="Timer"
             component={TimerPage}
             options={{
-              headerShown: false,
+              headerShown: true,
+              headerShadowVisible: false,
+              headerTitle: '',
+            }}
+          />
+          <Stack.Screen
+            name="Settings"
+            component={SettingsPage}
+            options={{
+              headerShown: true,
+              headerTitleStyle: TextStyles.textBold,
             }}
           />
         </Stack.Navigator>
