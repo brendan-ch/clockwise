@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
 import {
   StyleProp, ViewStyle, View, StyleSheet, Text,
 } from 'react-native';
+import AppContext from '../../AppContext';
 import useTheme from '../helpers/useTheme';
 
 interface Props {
@@ -13,6 +14,26 @@ interface Props {
  */
 function SettingsOverlay({ containerStyle }: Props) {
   const { background } = useTheme();
+  const {
+    keyboardShortcutManager,
+    setOverlay,
+  } = useContext(AppContext);
+
+  useEffect(() => {
+    const unsubMethods: ((() => any) | undefined)[] = [];
+    unsubMethods.push(keyboardShortcutManager?.registerEvent({
+      keys: ['Escape'],
+      action: () => setOverlay('none'),
+    }));
+
+    return () => {
+      unsubMethods.forEach((method) => {
+        if (method) {
+          method();
+        }
+      });
+    };
+  }, [keyboardShortcutManager]);
 
   return (
     <View style={[styles.container, {
