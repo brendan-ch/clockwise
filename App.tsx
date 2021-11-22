@@ -16,7 +16,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AppContext from './AppContext';
 import KeyboardShortcutManager from './src/helpers/keyboardShortcutManager';
 import TimerPage from './src/pages/Timer';
-import { TimerState } from './src/types';
+import { Overlay, TimerState } from './src/types';
 import SettingsPage from './src/pages/SettingsPage';
 import TextStyles from './src/styles/Text';
 import useWindowSize from './src/helpers/useWindowSize';
@@ -39,6 +39,7 @@ export default function App() {
   const [timeRemaining, setTimeRemaining] = useState(MIN_25);
   const [timerState, setTimerState] = useState<TimerState>('stopped');
   const [timeout, setTimeoutState] = useState<any>(undefined);
+  const [overlay, setOverlay] = useState<Overlay>('none');
 
   // Helper methods
   /**
@@ -116,6 +117,8 @@ export default function App() {
         timeout,
         setTimeoutState,
         clearTimerInterval,
+        overlay,
+        setOverlay,
       }}
       >
         <TimerPage />
@@ -134,6 +137,8 @@ export default function App() {
       timeout,
       setTimeoutState,
       clearTimerInterval,
+      overlay,
+      setOverlay,
     }}
     >
       <NavigationContainer
