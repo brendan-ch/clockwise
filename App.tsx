@@ -136,6 +136,7 @@ export default function App() {
           isVisible={overlay === 'settings'}
           onBackdropPress={() => setOverlay('none')}
           backdropOpacity={0.3}
+          backdropColor={colorValues.primary}
           animationIn="fadeIn"
           animationInTiming={20}
           animationOut="fadeOut"
