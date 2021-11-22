@@ -10,6 +10,7 @@ import AppLoading from 'expo-app-loading';
 import * as Linking from 'expo-linking';
 import React, { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
+import Modal from 'react-native-modal';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // import { Ionicons } from '@expo/vector-icons';
@@ -22,6 +23,7 @@ import TextStyles from './src/styles/Text';
 import useWindowSize from './src/helpers/useWindowSize';
 import HeaderButton from './src/components/HeaderButton';
 import useTheme from './src/helpers/useTheme';
+import SettingsOverlay from './src/overlays/SettingsOverlay';
 
 const MIN_25 = 1500000;
 
@@ -70,6 +72,14 @@ export default function App() {
     if (Platform.OS === 'web') {
       const manager = new KeyboardShortcutManager();
       setKeyboardShortcutManager(manager);
+
+      // Initialize overlay shortcuts
+      manager.registerEvent({
+        keys: ['Meta', ','],
+        action: () => {
+          setOverlay('settings');
+        },
+      });
     }
 
     setShortcutsInitialized(true);
@@ -122,6 +132,20 @@ export default function App() {
       }}
       >
         <TimerPage />
+        <Modal
+          isVisible={overlay === 'settings'}
+          onBackdropPress={() => setOverlay('none')}
+          backdropOpacity={0.3}
+          animationIn="fadeIn"
+          animationInTiming={20}
+          animationOut="fadeOut"
+          animationOutTiming={20}
+          style={{
+            alignSelf: 'center',
+          }}
+        >
+          <SettingsOverlay />
+        </Modal>
       </AppContext.Provider>
     );
   }
