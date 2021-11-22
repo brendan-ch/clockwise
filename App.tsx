@@ -10,18 +10,20 @@ import AppLoading from 'expo-app-loading';
 import * as Linking from 'expo-linking';
 import React, { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
+import Modal from 'react-native-modal';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // import { Ionicons } from '@expo/vector-icons';
 import AppContext from './AppContext';
 import KeyboardShortcutManager from './src/helpers/keyboardShortcutManager';
 import TimerPage from './src/pages/Timer';
-import { TimerState } from './src/types';
+import { Overlay, TimerState } from './src/types';
 import SettingsPage from './src/pages/SettingsPage';
 import TextStyles from './src/styles/Text';
 import useWindowSize from './src/helpers/useWindowSize';
 import HeaderButton from './src/components/HeaderButton';
 import useTheme from './src/helpers/useTheme';
+import SettingsOverlay from './src/overlays/SettingsOverlay';
 
 const MIN_25 = 1500000;
 
@@ -39,6 +41,7 @@ export default function App() {
   const [timeRemaining, setTimeRemaining] = useState(MIN_25);
   const [timerState, setTimerState] = useState<TimerState>('stopped');
   const [timeout, setTimeoutState] = useState<any>(undefined);
+  const [overlay, setOverlay] = useState<Overlay>('none');
 
   // Helper methods
   /**
@@ -69,6 +72,14 @@ export default function App() {
     if (Platform.OS === 'web') {
       const manager = new KeyboardShortcutManager();
       setKeyboardShortcutManager(manager);
+
+      // Initialize overlay shortcuts
+      manager.registerEvent({
+        keys: ['Meta', ','],
+        action: () => {
+          setOverlay('settings');
+        },
+      });
     }
 
     setShortcutsInitialized(true);
@@ -116,9 +127,32 @@ export default function App() {
         timeout,
         setTimeoutState,
         clearTimerInterval,
+        overlay,
+        setOverlay,
       }}
       >
         <TimerPage />
+        {windowSize === 'landscape' ? (
+          <Modal
+            isVisible={overlay === 'settings'}
+            onBackdropPress={() => setOverlay('none')}
+            backdropOpacity={0.3}
+            backdropColor={colorValues.primary}
+            animationIn="fadeIn"
+            animationInTiming={20}
+            animationOut="fadeOut"
+            backdropTransitionInTiming={20}
+            backdropTransitionOutTiming={20}
+            animationOutTiming={20}
+            style={{
+              // alignSelf: 'center',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <SettingsOverlay />
+          </Modal>
+        ) : undefined}
       </AppContext.Provider>
     );
   }
@@ -134,6 +168,8 @@ export default function App() {
       timeout,
       setTimeoutState,
       clearTimerInterval,
+      overlay,
+      setOverlay,
     }}
     >
       <NavigationContainer
