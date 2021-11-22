@@ -12,6 +12,7 @@ interface DefaultAppState {
   setTimeoutState: Dispatch<SetStateAction<any>>,
   clearTimerInterval: () => any,
   overlay: Overlay,
+  setOverlay: Dispatch<SetStateAction<any>>,
 }
 
 const defaultAppState: DefaultAppState = {
@@ -24,6 +25,7 @@ const defaultAppState: DefaultAppState = {
   setTimeoutState: () => {},
   clearTimerInterval: () => {},
   overlay: 'none',
+  setOverlay: () => {},
 };
 
 const AppContext = React.createContext(defaultAppState);
