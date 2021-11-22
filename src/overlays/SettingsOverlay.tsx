@@ -1,9 +1,10 @@
 import React, { useEffect, useContext } from 'react';
 import {
-  StyleProp, ViewStyle, View, StyleSheet, Text,
+  StyleProp, ViewStyle, View, StyleSheet, Text, ScrollView,
 } from 'react-native';
 import AppContext from '../../AppContext';
 import useTheme from '../helpers/useTheme';
+import TextStyles from '../styles/Text';
 
 interface Props {
   containerStyle?: StyleProp<ViewStyle>,
@@ -18,6 +19,8 @@ function SettingsOverlay({ containerStyle }: Props) {
     keyboardShortcutManager,
     setOverlay,
   } = useContext(AppContext);
+
+  const colorValues = useTheme();
 
   useEffect(() => {
     const unsubMethods: ((() => any) | undefined)[] = [];
@@ -41,15 +44,30 @@ function SettingsOverlay({ containerStyle }: Props) {
     }, containerStyle]}
     >
       {/* Navigation bar on left, use custom React Navigation navigator */}
-      <View style={styles.navigationBar}>
-        <Text>Navigation bar</Text>
+      <View style={[styles.navigationBar, {
+        borderRightColor: colorValues.gray5,
+      }]}
+      >
+        {/* <Text>Navigation bar</Text> */}
       </View>
       {/* See more here: https://reactnavigation.org/docs/custom-navigators/ */}
-      {/* Add divider in middle */}
       {/* Settings content */}
-      <View style={styles.settingsContent}>
-        <Text>Settings content</Text>
-      </View>
+      <ScrollView
+        style={{
+          flex: 3,
+        }}
+        contentContainerStyle={[styles.settingsContent, {
+          backgroundColor: colorValues.background,
+        }]}
+      >
+        <Text style={[TextStyles.textRegular, {
+          color: colorValues.primary,
+        }]}
+        >
+          Settings content
+
+        </Text>
+      </ScrollView>
     </View>
   );
 }
@@ -67,10 +85,11 @@ const styles = StyleSheet.create({
   },
   navigationBar: {
     flex: 1,
+    borderRightWidth: 0.5,
   },
   settingsContent: {
-    flex: 3,
     flexDirection: 'column',
+    padding: 10,
   },
 });
 
