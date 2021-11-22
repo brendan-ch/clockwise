@@ -64,7 +64,7 @@ function SettingsOverlay({ containerStyle }: Props) {
           color: colorValues.primary,
         }]}
         >
-          Settings content
+          You've found the settings page! Timer customization and account linking are coming soon.
 
         </Text>
       </ScrollView>
