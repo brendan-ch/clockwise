@@ -140,6 +140,8 @@ export default function App() {
           animationIn="fadeIn"
           animationInTiming={20}
           animationOut="fadeOut"
+          backdropTransitionInTiming={20}
+          backdropTransitionOutTiming={20}
           animationOutTiming={20}
           style={{
             alignSelf: 'center',
