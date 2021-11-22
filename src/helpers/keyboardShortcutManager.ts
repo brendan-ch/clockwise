@@ -44,6 +44,7 @@ class KeyboardShortcutManager {
       }
 
       keysBeingPressed.push(e.key);
+      // console.log(keysBeingPressed);
 
       // Check if array matches pattern in events
       const events = this._events.filter(
