@@ -132,23 +132,27 @@ export default function App() {
       }}
       >
         <TimerPage />
-        <Modal
-          isVisible={overlay === 'settings'}
-          onBackdropPress={() => setOverlay('none')}
-          backdropOpacity={0.3}
-          backdropColor={colorValues.primary}
-          animationIn="fadeIn"
-          animationInTiming={20}
-          animationOut="fadeOut"
-          backdropTransitionInTiming={20}
-          backdropTransitionOutTiming={20}
-          animationOutTiming={20}
-          style={{
-            alignSelf: 'center',
-          }}
-        >
-          <SettingsOverlay />
-        </Modal>
+        {windowSize === 'landscape' ? (
+          <Modal
+            isVisible={overlay === 'settings'}
+            onBackdropPress={() => setOverlay('none')}
+            backdropOpacity={0.3}
+            backdropColor={colorValues.primary}
+            animationIn="fadeIn"
+            animationInTiming={20}
+            animationOut="fadeOut"
+            backdropTransitionInTiming={20}
+            backdropTransitionOutTiming={20}
+            animationOutTiming={20}
+            style={{
+              // alignSelf: 'center',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <SettingsOverlay />
+          </Modal>
+        ) : undefined}
       </AppContext.Provider>
     );
   }
