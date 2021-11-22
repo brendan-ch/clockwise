@@ -80,8 +80,8 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flexDirection: 'row',
-    height: 400,
-    width: 600,
+    flex: 1,
+    maxHeight: 500,
   },
   navigationBar: {
     flex: 1,
