@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
   Animated,
   Pressable,
@@ -19,6 +19,7 @@ interface Props {
   isResetButton?: boolean,
   text?: string,
   haptics?: boolean,
+  background?: boolean,
 }
 
 /**
@@ -27,7 +28,7 @@ interface Props {
  * @returns
  */
 function ActionButton({
-  style, onPress, text, isResetButton, haptics,
+  style, onPress, text, isResetButton, haptics, background,
 }: Props) {
   const [pressed, setPressed] = useState(false);
 
@@ -63,6 +64,23 @@ function ActionButton({
       useNativeDriver: true,
     }).start();
   }
+
+  useEffect(() => {
+    if (background) {
+      // Start animation timing
+      Animated.timing(fadeAnimation, {
+        toValue: 1,
+        duration: 1,
+        useNativeDriver: true,
+      }).start();
+    } else {
+      Animated.timing(fadeAnimation, {
+        toValue: 0,
+        duration: 1,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [background]);
 
   return (
     <Pressable
@@ -153,6 +171,7 @@ ActionButton.defaultProps = {
   text: '',
   isResetButton: false,
   haptics: false,
+  background: false,
 };
 
 export default ActionButton;
