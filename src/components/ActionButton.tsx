@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import {
   Animated,
   Platform,
@@ -45,29 +45,26 @@ interface Props {
 function ActionButton({
   style, onPress, text, isResetButton, haptics, background,
 }: Props) {
-  const [pressed, setPressed] = useState(false);
+  // const [pressed, setPressed] = useState(false);
 
   const colorValues = useTheme();
 
   const fadeAnimation = useRef(new Animated.Value(0)).current;
+  const AnimatedIonicons = Animated.createAnimatedComponent(Ionicons);
   // const fadeInvertAnimation = useRef(new Animated.Value(1)).current;
 
   function onPressOut() {
-    setPressed(false);
-
     if (haptics && Platform.OS !== 'web') {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     }
 
-    Animated.timing(fadeAnimation, {
-      toValue: 0,
-      duration: 1,
-      useNativeDriver: true,
-    }).start();
+    if (onPress) {
+      onPress();
+    }
   }
 
   function onPressIn() {
-    setPressed(true);
+    // setPressed(true);
 
     Animated.timing(fadeAnimation, {
       toValue: 1,
@@ -85,6 +82,7 @@ function ActionButton({
         useNativeDriver: true,
       }).start();
     } else {
+      // Remove background
       Animated.timing(fadeAnimation, {
         toValue: 0,
         duration: 1,
@@ -98,7 +96,7 @@ function ActionButton({
       style={[style, styles.container, {
         backgroundColor: colorValues.primary,
       }]}
-      onPress={onPress}
+      // onPress={() => onPressButton()}
       onPressIn={() => onPressIn()}
       onPressOut={() => onPressOut()}
     >
@@ -127,26 +125,32 @@ function ActionButton({
       </Animated.View>
       {/* if not being pressed */}
       {isResetButton ? (
-        <Ionicons
+        <AnimatedIonicons
           name="refresh-outline"
           color={colorValues.background}
-          size={30}
           style={{
-            opacity: pressed ? 0 : 1,
+            opacity: fadeAnimation.interpolate({
+              inputRange: [0, 1],
+              outputRange: [1, 0],
+            }),
+            fontSize: 30,
           }}
         />
       ) : (
-        <Text style={[
+        <Animated.Text style={[
           TextStyles.textBold,
           styles.text,
           {
-            opacity: pressed || background ? 0 : 1,
+            opacity: fadeAnimation.interpolate({
+              inputRange: [0, 1],
+              outputRange: [1, 0],
+            }),
             color: colorValues.background,
           },
         ]}
         >
           {text}
-        </Text>
+        </Animated.Text>
       )}
     </Pressable>
   );
