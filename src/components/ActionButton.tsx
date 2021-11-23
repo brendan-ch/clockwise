@@ -17,9 +17,23 @@ interface Props {
   style?: StyleProp<ViewStyle>,
   onPress?: () => any,
   isResetButton?: boolean,
+  /**
+   * Text displayed on the button.
+   */
   text?: string,
+  /**
+   * Determines whether haptic feedback is enabled.
+   */
   haptics?: boolean,
+  /**
+   * Determines whether the background should be visible at all times.
+   */
   background?: boolean,
+  /**
+   * Prevents component flickering by choosing whether to enable
+   * background updating on press out.
+   */
+  willUpdateBackground?: boolean,
 }
 
 /**
@@ -28,7 +42,7 @@ interface Props {
  * @returns
  */
 function ActionButton({
-  style, onPress, text, isResetButton, haptics, background,
+  style, onPress, text, isResetButton, haptics, background, willUpdateBackground,
 }: Props) {
   const [pressed, setPressed] = useState(false);
 
@@ -44,11 +58,13 @@ function ActionButton({
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     }
 
-    Animated.timing(fadeAnimation, {
-      toValue: 0,
-      duration: 1,
-      useNativeDriver: true,
-    }).start();
+    if (!willUpdateBackground) {
+      Animated.timing(fadeAnimation, {
+        toValue: 0,
+        duration: 1,
+        useNativeDriver: true,
+      }).start();
+    }
   }
 
   function onPressIn() {
@@ -129,7 +145,7 @@ function ActionButton({
           TextStyles.textBold,
           styles.text,
           {
-            opacity: pressed ? 0 : 1,
+            opacity: pressed || background ? 0 : 1,
             color: colorValues.background,
           },
         ]}
@@ -172,6 +188,7 @@ ActionButton.defaultProps = {
   isResetButton: false,
   haptics: false,
   background: false,
+  willUpdateBackground: false,
 };
 
 export default ActionButton;
