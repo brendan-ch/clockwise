@@ -50,7 +50,7 @@ function ActionButtonBar({
             text={displayText}
             onPress={method}
             background={state === 'running'}
-            willUpdateBackground={state === 'stopped' || state === 'paused'}
+            haptics={state === 'stopped' || state === 'paused'}
           />
           {/* <ActionButton
             style={styles.bigActionButton}
