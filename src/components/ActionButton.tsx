@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import {
   Animated,
+  Platform,
   Pressable,
   StyleProp,
   StyleSheet,
@@ -33,7 +34,7 @@ interface Props {
    * Prevents component flickering by choosing whether to enable
    * background updating on press out.
    */
-  willUpdateBackground?: boolean,
+  // willUpdateBackground?: boolean,
 }
 
 /**
@@ -42,7 +43,7 @@ interface Props {
  * @returns
  */
 function ActionButton({
-  style, onPress, text, isResetButton, haptics, background, willUpdateBackground,
+  style, onPress, text, isResetButton, haptics, background,
 }: Props) {
   const [pressed, setPressed] = useState(false);
 
@@ -54,25 +55,19 @@ function ActionButton({
   function onPressOut() {
     setPressed(false);
 
-    if (haptics) {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+    if (haptics && Platform.OS !== 'web') {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     }
 
-    if (!willUpdateBackground) {
-      Animated.timing(fadeAnimation, {
-        toValue: 0,
-        duration: 1,
-        useNativeDriver: true,
-      }).start();
-    }
+    Animated.timing(fadeAnimation, {
+      toValue: 0,
+      duration: 1,
+      useNativeDriver: true,
+    }).start();
   }
 
   function onPressIn() {
     setPressed(true);
-
-    if (haptics) {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    }
 
     Animated.timing(fadeAnimation, {
       toValue: 1,
@@ -188,7 +183,7 @@ ActionButton.defaultProps = {
   isResetButton: false,
   haptics: false,
   background: false,
-  willUpdateBackground: false,
+  // willUpdateBackground: false,
 };
 
 export default ActionButton;
