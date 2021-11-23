@@ -1,6 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import {
   Animated,
+  Platform,
   Pressable,
   StyleProp,
   StyleSheet,
@@ -17,8 +18,23 @@ interface Props {
   style?: StyleProp<ViewStyle>,
   onPress?: () => any,
   isResetButton?: boolean,
+  /**
+   * Text displayed on the button.
+   */
   text?: string,
+  /**
+   * Determines whether haptic feedback is enabled.
+   */
   haptics?: boolean,
+  /**
+   * Determines whether the background should be visible at all times.
+   */
+  background?: boolean,
+  /**
+   * Prevents component flickering by choosing whether to enable
+   * background updating on press out.
+   */
+  // willUpdateBackground?: boolean,
 }
 
 /**
@@ -27,35 +43,28 @@ interface Props {
  * @returns
  */
 function ActionButton({
-  style, onPress, text, isResetButton, haptics,
+  style, onPress, text, isResetButton, haptics, background,
 }: Props) {
-  const [pressed, setPressed] = useState(false);
+  // const [pressed, setPressed] = useState(false);
 
   const colorValues = useTheme();
 
   const fadeAnimation = useRef(new Animated.Value(0)).current;
+  const AnimatedIonicons = Animated.createAnimatedComponent(Ionicons);
   // const fadeInvertAnimation = useRef(new Animated.Value(1)).current;
 
   function onPressOut() {
-    setPressed(false);
-
-    if (haptics) {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+    if (haptics && Platform.OS !== 'web') {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     }
 
-    Animated.timing(fadeAnimation, {
-      toValue: 0,
-      duration: 1,
-      useNativeDriver: true,
-    }).start();
+    if (onPress) {
+      onPress();
+    }
   }
 
   function onPressIn() {
-    setPressed(true);
-
-    if (haptics) {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    }
+    // setPressed(true);
 
     Animated.timing(fadeAnimation, {
       toValue: 1,
@@ -64,12 +73,30 @@ function ActionButton({
     }).start();
   }
 
+  useEffect(() => {
+    if (background) {
+      // Start animation timing
+      Animated.timing(fadeAnimation, {
+        toValue: 1,
+        duration: 1,
+        useNativeDriver: true,
+      }).start();
+    } else {
+      // Remove background
+      Animated.timing(fadeAnimation, {
+        toValue: 0,
+        duration: 1,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [background]);
+
   return (
     <Pressable
       style={[style, styles.container, {
         backgroundColor: colorValues.primary,
       }]}
-      onPress={onPress}
+      // onPress={() => onPressButton()}
       onPressIn={() => onPressIn()}
       onPressOut={() => onPressOut()}
     >
@@ -98,26 +125,32 @@ function ActionButton({
       </Animated.View>
       {/* if not being pressed */}
       {isResetButton ? (
-        <Ionicons
+        <AnimatedIonicons
           name="refresh-outline"
           color={colorValues.background}
-          size={30}
           style={{
-            opacity: pressed ? 0 : 1,
+            opacity: fadeAnimation.interpolate({
+              inputRange: [0, 1],
+              outputRange: [1, 0],
+            }),
+            fontSize: 30,
           }}
         />
       ) : (
-        <Text style={[
+        <Animated.Text style={[
           TextStyles.textBold,
           styles.text,
           {
-            opacity: pressed ? 0 : 1,
+            opacity: fadeAnimation.interpolate({
+              inputRange: [0, 1],
+              outputRange: [1, 0],
+            }),
             color: colorValues.background,
           },
         ]}
         >
           {text}
-        </Text>
+        </Animated.Text>
       )}
     </Pressable>
   );
@@ -153,6 +186,8 @@ ActionButton.defaultProps = {
   text: '',
   isResetButton: false,
   haptics: false,
+  background: false,
+  // willUpdateBackground: false,
 };
 
 export default ActionButton;

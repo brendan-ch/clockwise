@@ -29,38 +29,44 @@ function ActionButtonBar({
   onResumePress,
   style,
 }: Props) {
+  let displayText = 'start';
+  let method = onStartPress;
+
+  if (state === 'running') {
+    displayText = 'pause';
+    method = onPausePress;
+  } else if (state === 'paused') {
+    displayText = 'resume';
+    method = onResumePress;
+  }
+
   return (
     <View style={[style, styles.container]}>
       <Text style={[TextStyles.textItalic, styles.text]}>{text}</Text>
       <View style={styles.buttonContainer}>
-        {state === 'stopped' ? (
+        <View style={styles.resumeResetContainer}>
           <ActionButton
             style={styles.bigActionButton}
-            text="start"
-            onPress={onStartPress}
+            text={displayText}
+            onPress={method}
+            background={state === 'running'}
+            haptics={state === 'stopped' || state === 'paused'}
           />
-        ) : undefined}
-        {state === 'running' ? (
-          <ActionButton
+          {/* <ActionButton
             style={styles.bigActionButton}
-            text="pause"
-            onPress={onPausePress}
-          />
-        ) : undefined}
-        {state === 'paused' ? (
-          <View style={styles.resumeResetContainer}>
-            <ActionButton
-              style={styles.bigActionButton}
-              text="resume"
-              onPress={onResumePress}
-            />
+            text="resume"
+            onPress={onResumePress}
+          /> */}
+          {state === 'paused' ? (
             <ActionButton
               style={styles.smallActionButton}
               onPress={onResetPress}
               isResetButton
             />
-          </View>
-        ) : undefined}
+          ) : undefined}
+        </View>
+        {/* {state === 'paused' ? (
+        ) : undefined} */}
       </View>
     </View>
   );
