@@ -38,6 +38,7 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
           packager: yarn
           expo-cache: true
+          expo-version: 4.11.0
           
       # Install dependencies
       - name: Install dependencies
