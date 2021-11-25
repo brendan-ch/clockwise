@@ -55,3 +55,4 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-name: ${{ secrets.VERCEL_PROJECT_NAME }}
           working-directory: ./web-build
+          github-comment: true

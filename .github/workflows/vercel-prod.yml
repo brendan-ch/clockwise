@@ -58,3 +58,4 @@ jobs:
           vercel-args: --prod
           vercel-project-name: ${{ secrets.VERCEL_PROJECT_NAME }}
           working-directory: ./web-build
+          github-comment: false
