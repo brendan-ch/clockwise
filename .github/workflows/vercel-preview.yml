@@ -56,3 +56,4 @@ jobs:
           vercel-project-name: ${{ secrets.VERCEL_PROJECT_NAME }}
           working-directory: ./web-build
           github-comment: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
