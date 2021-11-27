@@ -45,15 +45,23 @@ interface Props {
 function ActionButton({
   style, onPress, text, isResetButton, haptics, background,
 }: Props) {
-  // const [pressed, setPressed] = useState(false);
-
   const colorValues = useTheme();
 
-  const fadeAnimation = useRef(new Animated.Value(0)).current;
+  const mouseHoverAnimation = useRef(new Animated.Value(0)).current;
+  const fadeAnimation = useRef(new Animated.Value(background ? 1 : 0)).current;
   const AnimatedIonicons = Animated.createAnimatedComponent(Ionicons);
-  // const fadeInvertAnimation = useRef(new Animated.Value(1)).current;
 
   function onPressOut() {
+    if (!background) {
+      Animated.timing(fadeAnimation, {
+        toValue: 0,
+        duration: 1,
+        useNativeDriver: true,
+      }).start();
+    }
+  }
+
+  function onPressButton() {
     if (haptics && Platform.OS !== 'web') {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     }
@@ -64,8 +72,6 @@ function ActionButton({
   }
 
   function onPressIn() {
-    // setPressed(true);
-
     Animated.timing(fadeAnimation, {
       toValue: 1,
       duration: 1,
@@ -73,91 +79,126 @@ function ActionButton({
     }).start();
   }
 
+  function onMouseEnter() {
+    Animated.timing(mouseHoverAnimation, {
+      toValue: 1,
+      duration: 200,
+      useNativeDriver: false,
+    }).start();
+  }
+
+  function onMouseLeave() {
+    Animated.timing(mouseHoverAnimation, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: false,
+    }).start();
+  }
+
   useEffect(() => {
+    let timing: Animated.CompositeAnimation;
+
     if (background) {
       // Start animation timing
-      Animated.timing(fadeAnimation, {
+      timing = Animated.timing(fadeAnimation, {
         toValue: 1,
         duration: 1,
         useNativeDriver: true,
-      }).start();
+      });
     } else {
       // Remove background
-      Animated.timing(fadeAnimation, {
+      timing = Animated.timing(fadeAnimation, {
         toValue: 0,
         duration: 1,
         useNativeDriver: true,
-      }).start();
+      });
     }
+
+    timing.start();
+
+    return () => timing.stop();
   }, [background]);
 
   return (
-    <Pressable
-      style={[style, styles.container, {
-        backgroundColor: colorValues.primary,
+    <Animated.View
+      style={[style, {
+        opacity: mouseHoverAnimation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [1, 0.8],
+        }),
       }]}
-      // onPress={() => onPressButton()}
-      onPressIn={() => onPressIn()}
-      onPressOut={() => onPressOut()}
+      // @ts-ignore
+      onMouseEnter={() => onMouseEnter()}
+      onMouseLeave={() => onMouseLeave()}
     >
-      {/* Overlay component and set default opacity to 0 */}
-      <Animated.View style={[styles.animatedContainer, {
-        backgroundColor: colorValues.background,
-        borderColor: colorValues.primary,
-        opacity: fadeAnimation,
-      }]}
+      <Pressable
+        style={[styles.container, {
+          backgroundColor: colorValues.primary,
+        }]}
+        onPressIn={() => onPressIn()}
+        onPressOut={() => onPressOut()}
+        onPress={() => onPressButton()}
       >
+        {/* Overlay component and set default opacity to 0 */}
+        <Animated.View style={[styles.animatedContainer, {
+          backgroundColor: colorValues.background,
+          borderColor: colorValues.primary,
+          opacity: fadeAnimation,
+        }]}
+        >
+          {isResetButton ? (
+            <Ionicons
+              name="refresh-outline"
+              color={colorValues.primary}
+              size={30}
+            />
+          ) : (
+            <Text style={[TextStyles.textBold, styles.text, {
+              color: colorValues.primary,
+            }]}
+            >
+              {text}
+
+            </Text>
+          )}
+        </Animated.View>
+        {/* if not being pressed */}
         {isResetButton ? (
-          <Ionicons
+          <AnimatedIonicons
             name="refresh-outline"
-            color={colorValues.primary}
-            size={30}
+            color={colorValues.background}
+            style={{
+              opacity: fadeAnimation.interpolate({
+                inputRange: [0, 1],
+                outputRange: [1, 0],
+              }),
+              fontSize: 30,
+            }}
           />
         ) : (
-          <Text style={[TextStyles.textBold, styles.text, {
-            color: colorValues.primary,
-          }]}
+          <Animated.Text style={[
+            TextStyles.textBold,
+            styles.text,
+            {
+              opacity: fadeAnimation.interpolate({
+                inputRange: [0, 1],
+                outputRange: [1, 0],
+              }),
+              color: colorValues.background,
+            },
+          ]}
           >
             {text}
-
-          </Text>
+          </Animated.Text>
         )}
-      </Animated.View>
-      {/* if not being pressed */}
-      {isResetButton ? (
-        <AnimatedIonicons
-          name="refresh-outline"
-          color={colorValues.background}
-          style={{
-            opacity: fadeAnimation.interpolate({
-              inputRange: [0, 1],
-              outputRange: [1, 0],
-            }),
-            fontSize: 30,
-          }}
-        />
-      ) : (
-        <Animated.Text style={[
-          TextStyles.textBold,
-          styles.text,
-          {
-            opacity: fadeAnimation.interpolate({
-              inputRange: [0, 1],
-              outputRange: [1, 0],
-            }),
-            color: colorValues.background,
-          },
-        ]}
-        >
-          {text}
-        </Animated.Text>
-      )}
-    </Pressable>
+      </Pressable>
+    </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    height: '100%',
     backgroundColor: ColorValues.primary,
     justifyContent: 'center',
     alignItems: 'center',
