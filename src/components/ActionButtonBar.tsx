@@ -45,18 +45,22 @@ function ActionButtonBar({
       <Text style={[TextStyles.textItalic, styles.text]}>{text}</Text>
       <View style={styles.buttonContainer}>
         <View style={styles.resumeResetContainer}>
-          <ActionButton
-            style={styles.bigActionButton}
-            text={displayText}
-            onPress={method}
-            background={state === 'running'}
-            haptics={state === 'stopped' || state === 'paused'}
-          />
-          {/* <ActionButton
-            style={styles.bigActionButton}
-            text="resume"
-            onPress={onResumePress}
-          /> */}
+          {state === 'stopped' || state === 'paused' ? (
+            <ActionButton
+              style={styles.bigActionButton}
+              text={displayText}
+              onPress={method}
+              haptics
+            />
+          ) : undefined}
+          {state === 'running' ? (
+            <ActionButton
+              style={styles.bigActionButton}
+              text={displayText}
+              onPress={method}
+              background
+            />
+          ) : undefined}
           {state === 'paused' ? (
             <ActionButton
               style={styles.smallActionButton}
