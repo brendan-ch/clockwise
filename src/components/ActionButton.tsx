@@ -48,10 +48,20 @@ function ActionButton({
   const colorValues = useTheme();
 
   const mouseHoverAnimation = useRef(new Animated.Value(0)).current;
-  const fadeAnimation = useRef(new Animated.Value(0)).current;
+  const fadeAnimation = useRef(new Animated.Value(background ? 1 : 0)).current;
   const AnimatedIonicons = Animated.createAnimatedComponent(Ionicons);
 
   function onPressOut() {
+    if (!background) {
+      Animated.timing(fadeAnimation, {
+        toValue: 0,
+        duration: 1,
+        useNativeDriver: true,
+      }).start();
+    }
+  }
+
+  function onPressButton() {
     if (haptics && Platform.OS !== 'web') {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     }
@@ -127,6 +137,7 @@ function ActionButton({
         }]}
         onPressIn={() => onPressIn()}
         onPressOut={() => onPressOut()}
+        onPress={() => onPressButton()}
       >
         {/* Overlay component and set default opacity to 0 */}
         <Animated.View style={[styles.animatedContainer, {
