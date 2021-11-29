@@ -13,6 +13,7 @@ import Timer from '../components/Timer';
 import calculateTimerDisplay from '../helpers/calculateTimer';
 import useTheme from '../helpers/useTheme';
 import useWindowSize from '../helpers/useWindowSize';
+import { getTimerValue } from '../helpers/storage';
 // import HeaderButton from '../components/HeaderButton';
 
 const MIN_25 = 1500000;
@@ -28,7 +29,6 @@ export default function TimerPage() {
 
   const colorValues = useTheme();
 
-  // const { height, width } = useWindowDimensions();
   const size = useWindowSize();
   const {
     timeRemaining,
@@ -40,6 +40,11 @@ export default function TimerPage() {
     setTimeoutState,
     keyboardShortcutManager,
   } = useContext(AppContext);
+
+  useEffect(() => {
+    // Read value in storage and set in context
+    getAndSetTimerValue(mode);
+  }, []);
 
   useEffect(
     () => {
@@ -94,11 +99,26 @@ export default function TimerPage() {
   /**
    * Handle switching between break and focus modes.
    */
-  function handleStateSwitch(newMode: 'focus' | 'break') {
+  async function handleStateSwitch(newMode: 'focus' | 'break') {
     clearTimerInterval();
     setTimerState('stopped');
-    setTimeRemaining(newMode === 'break' ? MIN_5 : MIN_25);
     setMode(newMode);
+
+    await getAndSetTimerValue(newMode);
+  }
+
+  /**
+   * Set the time remaining based on AsyncStorage value.
+   * @param mode
+   */
+  async function getAndSetTimerValue(newMode: 'focus' | 'break') {
+    const timerValueMinutes = await getTimerValue(newMode);
+
+    if (timerValueMinutes && !Number.isNaN(Number(timerValueMinutes))) {
+      setTimeRemaining(Number(timerValueMinutes) * 60 * 1000);
+    } else {
+      setTimeRemaining(newMode === 'break' ? MIN_5 : MIN_25);
+    }
   }
 
   /**
@@ -124,10 +144,11 @@ export default function TimerPage() {
   /**
    * Stop the timer.
    */
-  function stopTimer() {
+  async function stopTimer() {
     clearTimerInterval();
     setTimerState('stopped');
-    setTimeRemaining(mode === 'break' ? MIN_5 : MIN_25);
+    // setTimeRemaining(mode === 'break' ? MIN_5 : MIN_25);
+    await getAndSetTimerValue(mode);
   }
 
   /**
