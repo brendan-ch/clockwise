@@ -1,6 +1,7 @@
 import React from 'react';
 import {
-  StyleSheet, ViewStyle, Animated,
+  Platform,
+  StyleSheet, ViewStyle, Animated, TouchableOpacity, Text,
 } from 'react-native';
 import useMouseAnimations from '../helpers/useMouseAnimations';
 import useTheme from '../helpers/useTheme';
@@ -28,28 +29,44 @@ function SettingsSelector({
 
   const { mouseHoverAnimation, onMouseEnter, onMouseLeave } = useMouseAnimations();
 
+  const children = (
+    <Text style={[selected ? TextStyles.textBold : TextStyles.textRegular, {
+      color: selected ? colors.background : colors.primary,
+    }]}
+    >
+      {text}
+
+    </Text>
+  );
+
+  if (Platform.OS === 'web') {
+    return (
+      <Animated.View
+        style={[style, styles.container, {
+          backgroundColor: selected ? colors.primary : colors.background,
+          opacity: mouseHoverAnimation.interpolate({
+            inputRange: [0, 1],
+            outputRange: [1, 0.8],
+          }),
+        }]}
+        // @ts-ignore
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        onClick={onPress}
+      >
+        {children}
+      </Animated.View>
+    );
+  }
+
   return (
-    <Animated.View
+    <TouchableOpacity
       style={[style, styles.container, {
         backgroundColor: selected ? colors.primary : colors.background,
-        opacity: mouseHoverAnimation.interpolate({
-          inputRange: [0, 1],
-          outputRange: [1, 0.8],
-        }),
       }]}
-      // @ts-ignore
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-      onClick={onPress}
     >
-      <Animated.Text style={[selected ? TextStyles.textBold : TextStyles.textRegular, {
-        color: selected ? colors.background : colors.primary,
-      }]}
-      >
-        {text}
-
-      </Animated.Text>
-    </Animated.View>
+      {children}
+    </TouchableOpacity>
   );
 }
 
