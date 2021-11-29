@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  StyleSheet, Text, ViewStyle, Animated,
+  StyleSheet, ViewStyle, Animated,
 } from 'react-native';
 import useMouseAnimations from '../helpers/useMouseAnimations';
 import useTheme from '../helpers/useTheme';
@@ -42,13 +42,17 @@ function SettingsSelector({
       onMouseLeave={onMouseLeave}
       onClick={onPress}
     >
-      <Text style={[selected ? TextStyles.textBold : TextStyles.textRegular, {
+      <Animated.Text style={[selected ? TextStyles.textBold : TextStyles.textRegular, {
         color: colors.primary,
+        opacity: mouseHoverAnimation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [1, 0.8],
+        }),
       }]}
       >
         {text}
 
-      </Text>
+      </Animated.Text>
     </Animated.View>
   );
 }
