@@ -5,7 +5,7 @@ import {
 import AppContext from '../../AppContext';
 import SettingsSelector from '../components/SettingSelector';
 import useTheme from '../helpers/useTheme';
-import ConnectedAppsPane from './settings/ConnectedApps';
+// import ConnectedAppsPane from './settings/ConnectedApps';
 // import TextStyles from '../styles/Text';
 
 import TimerSettingsPane from './settings/TimerSettings';
@@ -33,10 +33,10 @@ const navigator: SettingsNavigatorObject[] = [
     title: 'Timer',
     renderer: TimerSettingsPane,
   },
-  {
-    title: 'Connected apps',
-    renderer: ConnectedAppsPane,
-  },
+  // {
+  //   title: 'Connected apps',
+  //   renderer: ConnectedAppsPane,
+  // },
 ];
 
 interface Props {
