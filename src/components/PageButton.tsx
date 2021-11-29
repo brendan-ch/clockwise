@@ -1,7 +1,8 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import {
   Animated, Platform, StyleSheet, Text, TouchableOpacity,
 } from 'react-native';
+import useMouseAnimations from '../helpers/useMouseAnimations';
 import useTheme from '../helpers/useTheme';
 import ColorValues from '../styles/Color';
 import TextStyles from '../styles/Text';
@@ -20,23 +21,7 @@ interface Props {
 function PageButton({ text, onPress, selected }: Props) {
   const colorValues = useTheme();
 
-  const mouseHoverAnimation = useRef(new Animated.Value(0)).current;
-
-  function onMouseEnter() {
-    Animated.timing(mouseHoverAnimation, {
-      toValue: 1,
-      duration: 200,
-      useNativeDriver: false,
-    }).start();
-  }
-
-  function onMouseLeave() {
-    Animated.timing(mouseHoverAnimation, {
-      toValue: 0,
-      duration: 200,
-      useNativeDriver: false,
-    }).start();
-  }
+  const { mouseHoverAnimation, onMouseEnter, onMouseLeave } = useMouseAnimations();
 
   const children = (
     <Text style={selected

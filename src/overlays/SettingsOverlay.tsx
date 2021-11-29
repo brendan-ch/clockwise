@@ -1,10 +1,43 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import {
-  StyleProp, ViewStyle, View, StyleSheet, Text, ScrollView,
+  StyleProp, ViewStyle, View, StyleSheet,
 } from 'react-native';
 import AppContext from '../../AppContext';
+import SettingsSelector from '../components/SettingSelector';
 import useTheme from '../helpers/useTheme';
-import TextStyles from '../styles/Text';
+// import ConnectedAppsPane from './settings/ConnectedApps';
+// import TextStyles from '../styles/Text';
+
+import TimerSettingsPane from './settings/TimerSettings';
+
+/* eslint-disable react/no-array-index-key */
+
+interface SettingsNavigatorObject {
+  /**
+   * Title of the page; will be displayed in the navigation bar.
+   * This property should be unique.
+   */
+  title: string,
+  /**
+   * Content that is rendered when selected.
+   */
+  /* eslint-disable-next-line */
+  renderer: () => JSX.Element,
+}
+
+/**
+ * Settings pane navigator.
+ */
+const navigator: SettingsNavigatorObject[] = [
+  {
+    title: 'Timer',
+    renderer: TimerSettingsPane,
+  },
+  // {
+  //   title: 'Connected apps',
+  //   renderer: ConnectedAppsPane,
+  // },
+];
 
 interface Props {
   containerStyle?: StyleProp<ViewStyle>,
@@ -19,6 +52,9 @@ function SettingsOverlay({ containerStyle }: Props) {
     keyboardShortcutManager,
     setOverlay,
   } = useContext(AppContext);
+
+  // Title of the selected settings navigator object.
+  const [selected, setSelected] = useState('Timer');
 
   const colorValues = useTheme();
 
@@ -43,31 +79,23 @@ function SettingsOverlay({ containerStyle }: Props) {
       backgroundColor: background,
     }, containerStyle]}
     >
-      {/* Navigation bar on left, use custom React Navigation navigator */}
       <View style={[styles.navigationBar, {
         borderRightColor: colorValues.gray5,
       }]}
       >
-        {/* <Text>Navigation bar</Text> */}
+        {navigator.map((value, index) => (
+          <SettingsSelector
+            key={index}
+            text={value.title}
+            selected={value.title === selected}
+            style={styles.settingsSelector}
+            onPress={() => setSelected(value.title)}
+          />
+        ))}
       </View>
-      {/* See more here: https://reactnavigation.org/docs/custom-navigators/ */}
-      {/* Settings content */}
-      <ScrollView
-        style={{
-          flex: 3,
-        }}
-        contentContainerStyle={[styles.settingsContent, {
-          backgroundColor: colorValues.background,
-        }]}
-      >
-        <Text style={[TextStyles.textRegular, {
-          color: colorValues.primary,
-        }]}
-        >
-          You've found the settings page! Timer customization and account linking are coming soon.
-
-        </Text>
-      </ScrollView>
+      <View style={styles.settingsContent}>
+        {navigator.find((value) => value.title === selected)?.renderer()}
+      </View>
     </View>
   );
 }
@@ -82,6 +110,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
     maxHeight: 500,
+    width: 700,
   },
   navigationBar: {
     flex: 1,
@@ -90,6 +119,10 @@ const styles = StyleSheet.create({
   settingsContent: {
     flexDirection: 'column',
     padding: 10,
+    flex: 3,
+  },
+  settingsSelector: {
+    height: 50,
   },
 });
 
