@@ -30,24 +30,20 @@ function SettingsSelector({
 
   return (
     <Animated.View
-      style={[style, styles.container, selected ? {
-        backgroundColor: colors.gray5,
+      style={[style, styles.container, {
+        backgroundColor: selected ? colors.primary : colors.background,
         opacity: mouseHoverAnimation.interpolate({
           inputRange: [0, 1],
           outputRange: [1, 0.8],
         }),
-      } : undefined]}
+      }]}
       // @ts-ignore
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       onClick={onPress}
     >
       <Animated.Text style={[selected ? TextStyles.textBold : TextStyles.textRegular, {
-        color: colors.primary,
-        opacity: mouseHoverAnimation.interpolate({
-          inputRange: [0, 1],
-          outputRange: [1, 0.8],
-        }),
+        color: selected ? colors.background : colors.primary,
       }]}
       >
         {text}
