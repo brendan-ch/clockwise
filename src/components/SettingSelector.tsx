@@ -48,6 +48,8 @@ function SettingsSelector({
             inputRange: [0, 1],
             outputRange: [1, 0.8],
           }),
+          // @ts-ignore
+          cursor: 'pointer',
         }]}
         // @ts-ignore
         onMouseEnter={onMouseEnter}
@@ -81,7 +83,6 @@ const styles = StyleSheet.create({
   container: {
     paddingLeft: 10,
     justifyContent: 'center',
-    cursor: 'pointer',
   },
 });
 
