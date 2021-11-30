@@ -55,6 +55,8 @@ function NumberBox({
           onSelect();
         }
       }}
+      maxLength={3}
+      selectTextOnFocus
     />
   );
 }
