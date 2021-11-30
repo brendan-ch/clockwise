@@ -30,7 +30,7 @@ function SettingsOption({
       }]}
       onClick={Platform.OS === 'web' ? onPress : undefined}
     >
-      <Text style={[TextStyles.textBold, {
+      <Text style={[TextStyles.textRegular, {
         color: colors.primary,
       }]}
       >
