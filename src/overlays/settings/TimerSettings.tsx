@@ -64,6 +64,7 @@ function TimerSettingsPane() {
           handleSelect();
         }
       }}
+      onSelect={() => handleSelect(item.storageKey)}
     />
   );
 
