@@ -17,7 +17,10 @@ function SettingsHeader({ title, icon }: Props) {
   const colors = useTheme();
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {
+      borderBottomColor: colors.gray4,
+    }]}
+    >
       <Ionicons
         // @ts-ignore
         name={icon}
@@ -42,6 +45,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 50,
     alignItems: 'center',
+    borderBottomWidth: 1,
   },
 });
 
