@@ -68,14 +68,12 @@ function TimerSettingsPane() {
   );
 
   return (
-    <ScrollView>
-      <SectionList
-        keyExtractor={(item) => item.storageKey}
-        sections={sections}
-        renderItem={renderItem}
-        renderSectionHeader={renderHeader}
-      />
-    </ScrollView>
+    <SectionList
+      keyExtractor={(item) => item.storageKey}
+      sections={sections}
+      renderItem={renderItem}
+      renderSectionHeader={renderHeader}
+    />
   );
 }
 
