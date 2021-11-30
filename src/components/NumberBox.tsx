@@ -1,5 +1,8 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import {
+  Platform,
+  StyleSheet, TextInput,
+} from 'react-native';
 import useTheme from '../helpers/useTheme';
 import TextStyles from '../styles/Text';
 
@@ -11,21 +14,31 @@ interface Props {
 function NumberBox({ text, selected }: Props) {
   const colors = useTheme();
 
-  return (
-    <View style={[styles.container, {
-      backgroundColor: colors.gray5,
-      borderWidth: selected ? 1 : 0,
-      borderColor: selected ? colors.primary : undefined,
-    }]}
-    >
-      <Text style={[TextStyles.textRegular, {
-        color: colors.primary,
-      }]}
-      >
-        {text}
+  const ref = useRef<TextInput>();
 
-      </Text>
-    </View>
+  useEffect(() => {
+    if (selected) {
+      ref.current?.focus();
+    }
+  }, [selected]);
+
+  return (
+    // @ts-ignore
+    <TextInput
+      caretHidden
+      style={[styles.container, TextStyles.textRegular, {
+        backgroundColor: colors.gray5,
+        borderWidth: selected ? 1 : 0,
+        borderColor: selected ? colors.primary : undefined,
+        color: colors.primary,
+      }, Platform.OS === 'web' ? {
+        // @ts-ignore
+        outline: 'none',
+      } : undefined]}
+      value={`${text}`}
+      keyboardType="numeric"
+      ref={ref}
+    />
   );
 }
 
