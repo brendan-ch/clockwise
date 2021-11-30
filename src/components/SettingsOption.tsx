@@ -28,6 +28,7 @@ function SettingsOption({
         // @ts-ignore
         cursor: Platform.OS === 'web' ? 'pointer' : undefined,
       }]}
+      onClick={Platform.OS === 'web' ? onPress : undefined}
     >
       <Text style={[TextStyles.textBold, {
         color: colors.primary,
@@ -55,7 +56,9 @@ function SettingsOption({
   }
 
   return (
-    <TouchableOpacity>
+    <TouchableOpacity
+      onPress={onPress}
+    >
       {children}
     </TouchableOpacity>
   );
