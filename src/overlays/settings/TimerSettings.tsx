@@ -38,22 +38,28 @@ const sections: Section[] = [
  */
 function TimerSettingsPane() {
   const colors = useTheme();
-  // const [settingsData, setSettingsData] = useState<SettingsData[]>([]);
 
-  const { settingsData, handleChange } = useSettingsData(options);
+  const { settingsData, handleChange, handleSelect } = useSettingsData(options);
 
   const renderItem = ({ item }: { item: SettingsOptionProps }) => (
     <SettingsOption
       value={settingsData.find((value) => value.storageKey === item.storageKey)?.value}
+      selected={settingsData.find((value) => value.storageKey === item.storageKey)?.selected}
       type={item.type}
       title={item.title}
       onChange={(data) => handleChange(item.storageKey, data)}
+      onPress={() => {
+        if (item.type === 'number') {
+          handleSelect(item.storageKey);
+        }
+      }}
     />
   );
 
   return (
     <ScrollView>
       <SectionList
+        keyExtractor={(item) => item.storageKey}
         sections={sections}
         renderItem={renderItem}
       />
