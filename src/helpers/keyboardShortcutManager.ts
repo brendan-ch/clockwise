@@ -101,6 +101,8 @@ class KeyboardShortcutManager {
 
   /**
    * Deregister a keyboard event.
+   * Note that if calling the re-register method later, deregistration should
+   * only happen within the component where initialized.
    * @param keys Key combination to remove.
    * @returns Method that re-registers the event.
    */
