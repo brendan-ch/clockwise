@@ -5,8 +5,6 @@ import {
 import AppContext from '../../AppContext';
 import SettingsSelector from '../components/SettingSelector';
 import useTheme from '../helpers/useTheme';
-// import ConnectedAppsPane from './settings/ConnectedApps';
-// import TextStyles from '../styles/Text';
 
 import TimerSettingsPane from './settings/TimerSettings';
 
@@ -118,7 +116,7 @@ const styles = StyleSheet.create({
   },
   settingsContent: {
     flexDirection: 'column',
-    padding: 10,
+    paddingHorizontal: 10,
     flex: 3,
   },
   settingsSelector: {
