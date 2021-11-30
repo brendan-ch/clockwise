@@ -4,30 +4,7 @@ import SettingsOption from '../../components/SettingsOption';
 import { getData, storeData } from '../../helpers/storage';
 import useTheme from '../../helpers/useTheme';
 import { AUTO_START_TIMERS, BREAK_TIME_MINUTES, FOCUS_TIME_MINUTES } from '../../StorageKeys';
-
-/**
- * Represents data for a settings button.
- */
-interface SettingsData {
-  storageKey: string,
-  value: number | boolean,
-}
-
-interface SettingsOptionProps {
-  title: string,
-  /* eslint-disable-next-line */
-  // onChange: (data: any) => any,
-  type: 'number' | 'toggle',
-  /**
-   * Used for getting and saving data, as well as for identifying different options.
-   */
-  storageKey: string,
-}
-
-interface Section {
-  title: string,
-  data: SettingsOptionProps[],
-}
+import { SettingsOptionProps, SettingsData, Section } from '../../types';
 
 // Store all static option data in here
 // Make it easier to find and filter settings
