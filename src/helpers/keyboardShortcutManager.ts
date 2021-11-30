@@ -81,7 +81,8 @@ class KeyboardShortcutManager {
   registerEvent(event: KeyboardEvent) {
     // Check if key combination is already registered
     if (this._events.find((searchEvent) => event.keys === searchEvent.keys)) {
-      throw new Error(`Key combination ${event.keys} is already registered.`);
+      // throw new Error(`Key combination ${event.keys} is already registered.`);
+      return () => {};
     }
 
     this._events.push(event);
@@ -96,6 +97,51 @@ class KeyboardShortcutManager {
         this._events.splice(index, 1);
       }
     };
+  }
+
+  /**
+   * Deregister a keyboard event.
+   * @param keys Key combination to remove.
+   * @returns Method that re-registers the event.
+   */
+  deregisterEvent(keys: string[]) {
+    const index = this._events.findIndex((event) => event.keys === keys);
+
+    // Remove the event
+    if (index > -1) {
+      const eventAction = this._events[index].action;
+      this._events.splice(index, 1);
+
+      // Re-register if method called
+      return () => {
+        this._events.push({
+          action: eventAction,
+          keys,
+        });
+      };
+    }
+
+    return () => {};
+  }
+
+  /**
+   * Deregister all registered events.
+   * @returns Method that re-registers all events.
+   */
+  deregisterAll() {
+    if (this._events.length > 0) {
+      const events = this._events.slice();
+      this._events = [];
+
+      return () => {
+        // Re-register all events
+        events.forEach((event) => {
+          this.registerEvent(event);
+        });
+      };
+    }
+
+    return () => {};
   }
 }
 
