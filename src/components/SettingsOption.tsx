@@ -18,7 +18,7 @@ interface Props {
 }
 
 function SettingsOption({
-  type, onChange, onPress, title, value, selected,
+  type, onPress, title, value, selected,
 }: Props) {
   const colors = useTheme();
 
