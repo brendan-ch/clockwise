@@ -1,6 +1,8 @@
 type TimerState = 'running' | 'paused' | 'stopped';
 type Overlay = 'none' | 'settings' | 'command';
 
+type KeyboardShortcutGroup = 'timer' | 'settings' | 'input' | 'none';
+
 /**
  * Provides typings for React Navigation route parameters.
  */
@@ -45,4 +47,5 @@ export {
   Section,
   SettingsData,
   SettingsOptionProps,
+  KeyboardShortcutGroup,
 };
