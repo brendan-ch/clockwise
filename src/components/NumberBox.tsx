@@ -9,9 +9,14 @@ import TextStyles from '../styles/Text';
 interface Props {
   text: string | number | boolean,
   selected?: boolean,
+  /* eslint-disable-next-line */
+  onChange?: (number: number) => any,
+  onSelect?: () => any,
 }
 
-function NumberBox({ text, selected }: Props) {
+function NumberBox({
+  text, selected, onChange, onSelect,
+}: Props) {
   const colors = useTheme();
 
   const ref = useRef<TextInput>();
@@ -31,6 +36,7 @@ function NumberBox({ text, selected }: Props) {
         borderWidth: selected ? 1 : 0,
         borderColor: selected ? colors.primary : undefined,
         color: colors.primary,
+        textAlign: 'center',
       }, Platform.OS === 'web' ? {
         // @ts-ignore
         outline: 'none',
@@ -38,12 +44,25 @@ function NumberBox({ text, selected }: Props) {
       value={`${text}`}
       keyboardType="numeric"
       ref={ref}
+      textAlign="center"
+      onChangeText={(newText) => {
+        if (onChange && !Number.isNaN(Number(newText))) {
+          onChange(Number(newText));
+        }
+      }}
+      onBlur={() => {
+        if (selected && onSelect) {
+          onSelect();
+        }
+      }}
     />
   );
 }
 
 NumberBox.defaultProps = {
   selected: false,
+  onChange: () => {},
+  onSelect: () => {},
 };
 
 const styles = StyleSheet.create({
