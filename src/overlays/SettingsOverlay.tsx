@@ -49,6 +49,7 @@ function SettingsOverlay({ containerStyle }: Props) {
   const {
     keyboardShortcutManager,
     setOverlay,
+    keyboardGroup,
   } = useContext(AppContext);
 
   // Title of the selected settings navigator object.
@@ -57,26 +58,26 @@ function SettingsOverlay({ containerStyle }: Props) {
   const colorValues = useTheme();
 
   useEffect(() => {
-    const resubscribe = keyboardShortcutManager?.deregisterAll();
+    if (keyboardGroup === 'settings') {
+      const unsubMethods: ((() => any) | undefined)[] = [];
+      unsubMethods.push(keyboardShortcutManager?.registerEvent({
+        keys: ['Escape'],
+        action: () => {
+          setOverlay('none');
+        },
+      }));
 
-    const unsubMethods: ((() => any) | undefined)[] = [];
-    unsubMethods.push(keyboardShortcutManager?.registerEvent({
-      keys: ['Escape'],
-      action: () => setOverlay('none'),
-    }));
+      return () => {
+        unsubMethods.forEach((method) => {
+          if (method) {
+            method();
+          }
+        });
+      };
+    }
 
-    return () => {
-      unsubMethods.forEach((method) => {
-        if (method) {
-          method();
-        }
-      });
-
-      if (resubscribe) {
-        resubscribe();
-      }
-    };
-  }, [keyboardShortcutManager]);
+    return () => {};
+  }, [keyboardShortcutManager, keyboardGroup]);
 
   return (
     <View style={[styles.container, {
