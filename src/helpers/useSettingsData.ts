@@ -12,16 +12,20 @@ function useSettingsData(options: SettingsOptionProps[]) {
 
   /**
    * Handle the selection of an option.
-   * @param key
+   * @param key Key of the option to select. If not provided, deselects all options.
    */
-  function handleSelect(key: string) {
+  function handleSelect(key?: string) {
     const modifiedSettingsDataArray = settingsData.slice();
 
     // If option is already selected, deselect option
     const optionIndex = settingsData.findIndex((value) => value.storageKey === key);
-    if (optionIndex > -1) return;
-
-    if (modifiedSettingsDataArray[optionIndex].selected) {
+    if (optionIndex === -1) {
+      // Deselect all
+      const selectedOptionIndex = settingsData.findIndex((value) => value.selected);
+      if (selectedOptionIndex > -1) {
+        modifiedSettingsDataArray[selectedOptionIndex].selected = false;
+      }
+    } else if (modifiedSettingsDataArray[optionIndex].selected) {
       // Deselect option
       modifiedSettingsDataArray[optionIndex].selected = false;
     } else {
