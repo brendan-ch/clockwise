@@ -57,6 +57,8 @@ function SettingsOverlay({ containerStyle }: Props) {
   const colorValues = useTheme();
 
   useEffect(() => {
+    const resubscribe = keyboardShortcutManager?.deregisterAll();
+
     const unsubMethods: ((() => any) | undefined)[] = [];
     unsubMethods.push(keyboardShortcutManager?.registerEvent({
       keys: ['Escape'],
@@ -69,6 +71,10 @@ function SettingsOverlay({ containerStyle }: Props) {
           method();
         }
       });
+
+      if (resubscribe) {
+        resubscribe();
+      }
     };
   }, [keyboardShortcutManager]);
 
