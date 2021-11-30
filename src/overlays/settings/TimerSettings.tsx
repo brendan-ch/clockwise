@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView, SectionList } from 'react-native';
 import SettingsOption from '../../components/SettingsOption';
-import { getData } from '../../helpers/storage';
+import { getData, storeData } from '../../helpers/storage';
 import useTheme from '../../helpers/useTheme';
 import { AUTO_START_TIMERS, BREAK_TIME_MINUTES, FOCUS_TIME_MINUTES } from '../../StorageKeys';
 
@@ -65,12 +65,36 @@ function TimerSettingsPane() {
 
   /**
    * Handle storing data and changing state.
-   * @param key
+   * @param key The storage key.
    * @param data
    */
-  function handleChange(key: string, data: any) {
+  async function handleChange(key: string, data: number | boolean) {
     // Attempt to serialize data
-    // JSON.stringify(data);
+    let convertedData: string;
+
+    if (typeof data === 'number') {
+      convertedData = `${data}`;
+    } else if (typeof data === 'boolean') {
+      convertedData = data ? '1' : '0';
+    } else {
+      return;
+    }
+
+    // Set in state
+    const settingsIndex = settingsData.findIndex((value) => value.storageKey === key);
+    if (settingsIndex > -1) {
+      const modifiedSetting: SettingsData = {
+        ...settingsData[settingsIndex],
+        value: data,
+      };
+
+      const modifiedSettingsData = settingsData.slice();
+      modifiedSettingsData[settingsIndex] = modifiedSetting;
+      setSettingsData(modifiedSettingsData);
+
+      // Update in storage
+      await storeData(key, convertedData);
+    }
   }
 
   /**
