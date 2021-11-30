@@ -14,11 +14,12 @@ interface Props {
   onChange?: (data: any) => any,
   title?: string,
   onPress?: () => any,
+  onSelect?: () => any,
   selected?: boolean,
 }
 
 function SettingsOption({
-  type, onPress, title, value, selected,
+  type, onPress, title, value, selected, onChange, onSelect,
 }: Props) {
   const colors = useTheme();
 
@@ -46,6 +47,8 @@ function SettingsOption({
         <NumberBox
           text={value || 0}
           selected={selected}
+          onChange={onChange}
+          onSelect={onSelect}
         />
       ) : undefined}
     </View>
@@ -76,6 +79,7 @@ const styles = StyleSheet.create({
 SettingsOption.defaultProps = {
   onChange: () => {},
   onPress: () => {},
+  onSelect: () => {},
   title: '',
   value: false,
   selected: false,
