@@ -34,6 +34,7 @@ interface SettingsOptionProps {
 
 interface Section {
   title: string,
+  icon?: string,
   data: SettingsOptionProps[],
 }
 
