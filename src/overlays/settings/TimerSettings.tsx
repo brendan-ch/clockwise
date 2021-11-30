@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, SectionList } from 'react-native';
+import { SectionList } from 'react-native';
 import SettingsHeader from '../../components/SettingsHeader';
 import SettingsOption from '../../components/SettingsOption';
 import useSettingsData from '../../helpers/useSettingsData';
