@@ -57,6 +57,7 @@ function NumberBox({
       }}
       maxLength={3}
       selectTextOnFocus
+      selectionColor={colors.primary}
     />
   );
 }
