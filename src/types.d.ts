@@ -15,6 +15,7 @@ type RootStackParamList = {
 interface SettingsData {
   storageKey: string,
   value: number | boolean,
+  selected: boolean,
 }
 
 /**

@@ -11,6 +11,35 @@ function useSettingsData(options: SettingsOptionProps[]) {
   // Initialize using static options
 
   /**
+   * Handle the selection of an option.
+   * @param key
+   */
+  function handleSelect(key: string) {
+    const modifiedSettingsDataArray = settingsData.slice();
+
+    // If option is already selected, deselect option
+    const optionIndex = settingsData.findIndex((value) => value.storageKey === key);
+    if (optionIndex > -1) return;
+
+    if (modifiedSettingsDataArray[optionIndex].selected) {
+      // Deselect option
+      modifiedSettingsDataArray[optionIndex].selected = false;
+    } else {
+      // Check if any other options are selected
+      const selectedOptionIndex = settingsData.findIndex((value) => value.selected);
+      if (selectedOptionIndex > -1) {
+        modifiedSettingsDataArray[selectedOptionIndex].selected = false;
+      }
+
+      // Select the option
+      modifiedSettingsDataArray[optionIndex].selected = true;
+    }
+
+    // Set the state
+    setSettingsData(modifiedSettingsDataArray);
+  }
+
+  /**
    * Handle storing data and changing state.
    * @param key The storage key.
    * @param data
@@ -77,6 +106,7 @@ function useSettingsData(options: SettingsOptionProps[]) {
       settingsDataTemp.push({
         storageKey: option.storageKey,
         value: convertedData,
+        selected: false,
       });
     }));
 
@@ -87,7 +117,7 @@ function useSettingsData(options: SettingsOptionProps[]) {
     initializeSettingsData();
   }, [options]);
 
-  return { settingsData, handleChange };
+  return { settingsData, handleChange, handleSelect };
 }
 
 export default useSettingsData;
