@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import useTheme from '../helpers/useTheme';
 import TextStyles from '../styles/Text';
+import Checkbox from './Checkbox';
 import NumberBox from './NumberBox';
 
 interface Props {
@@ -27,7 +28,9 @@ function SettingsOption({
 
       </Text>
       {type === 'toggle' ? (
-        <Text>{value === true ? 'true' : 'false'}</Text>
+        <Checkbox
+          selected={value === true}
+        />
       ) : undefined}
       {type === 'number' ? (
         <NumberBox
