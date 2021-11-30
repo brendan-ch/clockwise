@@ -23,13 +23,21 @@ function SettingsOption({
 }: Props) {
   const colors = useTheme();
 
+  function handlePress() {
+    if (type === 'toggle' && onChange) {
+      onChange(!value);
+    } else if (onPress) {
+      onPress();
+    }
+  }
+
   const children = (
     <View
       style={[styles.container, {
         // @ts-ignore
         cursor: Platform.OS === 'web' ? 'pointer' : undefined,
       }]}
-      onClick={Platform.OS === 'web' ? onPress : undefined}
+      onClick={Platform.OS === 'web' ? handlePress : undefined}
     >
       <Text style={[TextStyles.textRegular, {
         color: colors.primary,
@@ -60,7 +68,7 @@ function SettingsOption({
 
   return (
     <TouchableOpacity
-      onPress={onPress}
+      onPress={() => handlePress()}
     >
       {children}
     </TouchableOpacity>
