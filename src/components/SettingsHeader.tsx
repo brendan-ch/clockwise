@@ -19,6 +19,7 @@ function SettingsHeader({ title, icon }: Props) {
   return (
     <View style={[styles.container, {
       borderBottomColor: colors.gray4,
+      backgroundColor: colors.background,
     }]}
     >
       <Ionicons
