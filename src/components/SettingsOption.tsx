@@ -1,5 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {
+  Platform, StyleSheet, Text, TouchableOpacity, View,
+} from 'react-native';
 import useTheme from '../helpers/useTheme';
 import TextStyles from '../styles/Text';
 import Checkbox from './Checkbox';
@@ -11,15 +13,22 @@ interface Props {
   /* eslint-disable-next-line */
   onChange?: (data: any) => any,
   title?: string,
+  onPress?: () => any,
+  selected?: boolean,
 }
 
 function SettingsOption({
-  type, onChange, title, value,
+  type, onChange, onPress, title, value, selected,
 }: Props) {
   const colors = useTheme();
 
-  return (
-    <View style={styles.container}>
+  const children = (
+    <View
+      style={[styles.container, {
+        // @ts-ignore
+        cursor: Platform.OS === 'web' ? 'pointer' : undefined,
+      }]}
+    >
       <Text style={[TextStyles.textBold, {
         color: colors.primary,
       }]}
@@ -35,9 +44,20 @@ function SettingsOption({
       {type === 'number' ? (
         <NumberBox
           text={value || 0}
+          selected={selected}
         />
       ) : undefined}
     </View>
+  );
+
+  if (Platform.OS === 'web') {
+    return children;
+  }
+
+  return (
+    <TouchableOpacity>
+      {children}
+    </TouchableOpacity>
   );
 }
 
@@ -52,8 +72,10 @@ const styles = StyleSheet.create({
 
 SettingsOption.defaultProps = {
   onChange: () => {},
+  onPress: () => {},
   title: '',
   value: false,
+  selected: false,
 };
 
 export default SettingsOption;
