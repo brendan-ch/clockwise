@@ -14,13 +14,22 @@ interface Props {
   onChange?: (data: any) => any,
   title?: string,
   onPress?: () => any,
+  onSelect?: () => any,
   selected?: boolean,
 }
 
 function SettingsOption({
-  type, onPress, title, value, selected,
+  type, onPress, title, value, selected, onChange, onSelect,
 }: Props) {
   const colors = useTheme();
+
+  function handlePress() {
+    if (type === 'toggle' && onChange) {
+      onChange(!value);
+    } else if (onPress) {
+      onPress();
+    }
+  }
 
   const children = (
     <View
@@ -28,7 +37,7 @@ function SettingsOption({
         // @ts-ignore
         cursor: Platform.OS === 'web' ? 'pointer' : undefined,
       }]}
-      onClick={Platform.OS === 'web' ? onPress : undefined}
+      onClick={Platform.OS === 'web' ? handlePress : undefined}
     >
       <Text style={[TextStyles.textRegular, {
         color: colors.primary,
@@ -46,6 +55,8 @@ function SettingsOption({
         <NumberBox
           text={value || 0}
           selected={selected}
+          onChange={onChange}
+          onSelect={onSelect}
         />
       ) : undefined}
     </View>
@@ -57,7 +68,7 @@ function SettingsOption({
 
   return (
     <TouchableOpacity
-      onPress={onPress}
+      onPress={() => handlePress()}
     >
       {children}
     </TouchableOpacity>
@@ -76,6 +87,7 @@ const styles = StyleSheet.create({
 SettingsOption.defaultProps = {
   onChange: () => {},
   onPress: () => {},
+  onSelect: () => {},
   title: '',
   value: false,
   selected: false,

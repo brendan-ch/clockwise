@@ -39,50 +39,58 @@ export default function TimerPage() {
     setTimerState,
     setTimeoutState,
     keyboardShortcutManager,
+    keyboardGroup,
+    setKeyboardGroup,
   } = useContext(AppContext);
 
   useEffect(() => {
     // Read value in storage and set in context
     getAndSetTimerValue(mode);
+
+    setKeyboardGroup('timer');
   }, []);
 
   useEffect(
     () => {
-      // Register some keyboard shortcuts
-      try {
-        const unsubMethods: ((() => any) | undefined)[] = [];
-        unsubMethods.push(keyboardShortcutManager?.registerEvent({
-          keys: [' '],
-          action: toggleTimerState,
-        }));
+      if (keyboardGroup === 'timer') {
+        // Register some keyboard shortcuts
+        try {
+          const unsubMethods: ((() => any) | undefined)[] = [];
+          unsubMethods.push(keyboardShortcutManager?.registerEvent({
+            keys: [' '],
+            action: toggleTimerState,
+          }));
 
-        unsubMethods.push(keyboardShortcutManager?.registerEvent({
-          keys: ['1'],
-          action: () => handleStateSwitch('focus'),
-        }));
+          unsubMethods.push(keyboardShortcutManager?.registerEvent({
+            keys: ['1'],
+            action: () => handleStateSwitch('focus'),
+          }));
 
-        unsubMethods.push(keyboardShortcutManager?.registerEvent({
-          keys: ['2'],
-          action: () => handleStateSwitch('break'),
-        }));
+          unsubMethods.push(keyboardShortcutManager?.registerEvent({
+            keys: ['2'],
+            action: () => handleStateSwitch('break'),
+          }));
 
-        unsubMethods.push(keyboardShortcutManager?.registerEvent({
-          keys: ['r'],
-          action: () => stopTimer(),
-        }));
+          unsubMethods.push(keyboardShortcutManager?.registerEvent({
+            keys: ['r'],
+            action: () => stopTimer(),
+          }));
 
-        return () => {
-          unsubMethods.forEach((method) => {
-            if (method) {
-              method();
-            }
-          });
-        };
-      } catch (e) {
-        return () => {};
+          return () => {
+            unsubMethods.forEach((method) => {
+              if (method) {
+                method();
+              }
+            });
+          };
+        } catch (e) {
+          return () => {};
+        }
       }
+
+      return () => {};
     },
-    [timeout, timerState, mode, timeRemaining],
+    [timeout, timerState, mode, timeRemaining, keyboardGroup],
   );
 
   /**
