@@ -1,5 +1,6 @@
 import React from 'react';
 import { ScrollView, SectionList } from 'react-native';
+import SettingsHeader from '../../components/SettingsHeader';
 import SettingsOption from '../../components/SettingsOption';
 import useSettingsData from '../../helpers/useSettingsData';
 import useTheme from '../../helpers/useTheme';
@@ -29,6 +30,7 @@ const options: SettingsOptionProps[] = [
 const sections: Section[] = [
   {
     title: 'Timer',
+    icon: 'timer-outline',
     data: options.slice(0, 3),
   },
 ];
@@ -37,9 +39,16 @@ const sections: Section[] = [
  * Timer settings content in the settings overlay.
  */
 function TimerSettingsPane() {
-  const colors = useTheme();
+  useTheme();
 
   const { settingsData, handleChange, handleSelect } = useSettingsData(options);
+
+  const renderHeader = ({ section }: { section: Section }) => (
+    <SettingsHeader
+      title={section.title}
+      icon={section.icon}
+    />
+  );
 
   const renderItem = ({ item }: { item: SettingsOptionProps }) => (
     <SettingsOption
@@ -64,6 +73,7 @@ function TimerSettingsPane() {
         keyExtractor={(item) => item.storageKey}
         sections={sections}
         renderItem={renderItem}
+        renderSectionHeader={renderHeader}
       />
     </ScrollView>
   );
