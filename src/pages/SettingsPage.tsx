@@ -67,6 +67,7 @@ function SettingsPage() {
           handleSelect();
         }
       }}
+      onSelect={() => handleSelect(item.storageKey)}
     />
   );
 
