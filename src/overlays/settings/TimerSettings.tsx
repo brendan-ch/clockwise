@@ -51,6 +51,8 @@ function TimerSettingsPane() {
       onPress={() => {
         if (item.type === 'number') {
           handleSelect(item.storageKey);
+        } else {
+          handleSelect();
         }
       }}
     />
