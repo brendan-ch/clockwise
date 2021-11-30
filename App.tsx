@@ -17,7 +17,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AppContext from './AppContext';
 import KeyboardShortcutManager from './src/helpers/keyboardShortcutManager';
 import TimerPage from './src/pages/Timer';
-import { Overlay, TimerState } from './src/types';
+import { KeyboardShortcutGroup, Overlay, TimerState } from './src/types';
 import SettingsPage from './src/pages/SettingsPage';
 import TextStyles from './src/styles/Text';
 import useWindowSize from './src/helpers/useWindowSize';
@@ -41,9 +41,24 @@ export default function App() {
   const [timeRemaining, setTimeRemaining] = useState(MIN_25);
   const [timerState, setTimerState] = useState<TimerState>('stopped');
   const [timeout, setTimeoutState] = useState<any>(undefined);
-  const [overlay, setOverlay] = useState<Overlay>('none');
+  const [overlay, setOverlayState] = useState<Overlay>('none');
+
+  const [keyboardGroup, setKeyboardGroup] = useState<KeyboardShortcutGroup>('none');
 
   // Helper methods
+  /**
+   * Set the overlay state and keyboard group.
+   * @param newOverlay
+   */
+  function setOverlay(newOverlay: Overlay) {
+    if (newOverlay === 'none') {
+      setKeyboardGroup('timer');
+    } else if (newOverlay === 'settings') {
+      setKeyboardGroup('settings');
+    }
+
+    setOverlayState(newOverlay);
+  }
   /**
    * Clear the timer and set timeout state to undefined.
    */
@@ -129,6 +144,8 @@ export default function App() {
         clearTimerInterval,
         overlay,
         setOverlay,
+        keyboardGroup,
+        setKeyboardGroup,
       }}
       >
         <TimerPage />
@@ -170,6 +187,8 @@ export default function App() {
       clearTimerInterval,
       overlay,
       setOverlay,
+      keyboardGroup,
+      setKeyboardGroup,
     }}
     >
       <NavigationContainer
