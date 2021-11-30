@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import useTheme from '../helpers/useTheme';
 import TextStyles from '../styles/Text';
+import NumberBox from './NumberBox';
 
 interface Props {
   type: 'number' | 'toggle',
@@ -29,7 +30,9 @@ function SettingsOption({
         <Text>{value === true ? 'true' : 'false'}</Text>
       ) : undefined}
       {type === 'number' ? (
-        <Text>{value}</Text>
+        <NumberBox
+          text={value || 0}
+        />
       ) : undefined}
     </View>
   );
