@@ -83,18 +83,26 @@ export default function App() {
   });
 
   useEffect(() => {
-    // Initialize keyboard shortcuts on web
-    if (Platform.OS === 'web') {
-      const manager = new KeyboardShortcutManager();
-      setKeyboardShortcutManager(manager);
+    let unsubscribe = () => {};
 
+    if (keyboardShortcutManager && windowSize === 'landscape') {
       // Initialize overlay shortcuts
-      manager.registerEvent({
+      unsubscribe = keyboardShortcutManager.registerEvent({
         keys: ['Meta', ','],
         action: () => {
           setOverlay('settings');
         },
       });
+    }
+
+    return unsubscribe;
+  }, [windowSize, keyboardShortcutManager]);
+
+  useEffect(() => {
+    // Initialize keyboard shortcuts on web
+    if (Platform.OS === 'web') {
+      const manager = new KeyboardShortcutManager();
+      setKeyboardShortcutManager(manager);
     }
 
     setShortcutsInitialized(true);
