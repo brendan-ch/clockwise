@@ -95,6 +95,13 @@ export default function App() {
           setOverlay('settings');
         },
       });
+
+      manager.registerEvent({
+        keys: ['Control', ','],
+        action: () => {
+          setOverlay('settings');
+        },
+      });
     }
 
     setShortcutsInitialized(true);
