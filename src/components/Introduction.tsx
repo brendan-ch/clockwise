@@ -117,6 +117,13 @@ function Introduction({ onDismiss, style }: Props) {
             >
               R: reset the timer
             </Text>
+            <Text
+              style={[TextStyles.textRegular, styles.text, {
+                color: colorValues.primary,
+              }]}
+            >
+              ⌘/Ctrl + ,: open settings
+            </Text>
           </View>
         ) : undefined}
       </ScrollView>
