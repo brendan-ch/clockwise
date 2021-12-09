@@ -8,8 +8,8 @@ import {
 } from '@expo-google-fonts/anonymous-pro';
 import AppLoading from 'expo-app-loading';
 import * as Linking from 'expo-linking';
-import React, { useEffect, useState } from 'react';
-import { Platform } from 'react-native';
+import React, { Suspense, useEffect, useState } from 'react';
+import { Platform, View } from 'react-native';
 import Modal from 'react-native-modal';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -23,7 +23,7 @@ import TextStyles from './src/styles/Text';
 import useWindowSize from './src/helpers/useWindowSize';
 import HeaderButton from './src/components/HeaderButton';
 import useTheme from './src/helpers/useTheme';
-import SettingsOverlay from './src/overlays/SettingsOverlay';
+// import SettingsOverlay from './src/overlays/SettingsOverlay';
 
 const MIN_25 = 1500000;
 
@@ -138,6 +138,8 @@ export default function App() {
 
   // Do conditional rendering based on window size
   if (windowSize === 'small' || windowSize === 'landscape') {
+    const SettingsOverlay = React.lazy(() => import('./src/overlays/SettingsOverlay'));
+
     // Return just the timer (with context provider)
     return (
       <AppContext.Provider value={{
@@ -174,7 +176,9 @@ export default function App() {
               alignItems: 'center',
             }}
           >
-            <SettingsOverlay />
+            <Suspense fallback={<View />}>
+              <SettingsOverlay />
+            </Suspense>
           </Modal>
         ) : undefined}
       </AppContext.Provider>
