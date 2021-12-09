@@ -1,4 +1,6 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, {
+  useEffect, useContext, useState, Suspense,
+} from 'react';
 import {
   StyleProp, ViewStyle, View, StyleSheet,
 } from 'react-native';
@@ -6,9 +8,11 @@ import AppContext from '../../AppContext';
 import SettingsSelector from '../components/SettingSelector';
 import useTheme from '../helpers/useTheme';
 
-import TimerSettingsPane from './settings/TimerSettings';
+// import TimerSettingsPane from './settings/TimerSettings';
 
 /* eslint-disable react/no-array-index-key */
+
+const TimerSettings = React.lazy(() => import('./settings/TimerSettings'));
 
 interface SettingsNavigatorObject {
   /**
@@ -20,7 +24,7 @@ interface SettingsNavigatorObject {
    * Content that is rendered when selected.
    */
   /* eslint-disable-next-line */
-  renderer: () => JSX.Element,
+  renderer: JSX.Element,
 }
 
 /**
@@ -29,7 +33,7 @@ interface SettingsNavigatorObject {
 const navigator: SettingsNavigatorObject[] = [
   {
     title: 'Timer',
-    renderer: TimerSettingsPane,
+    renderer: <TimerSettings />,
   },
   // {
   //   title: 'Connected apps',
@@ -79,6 +83,8 @@ function SettingsOverlay({ containerStyle }: Props) {
     return () => {};
   }, [keyboardShortcutManager, keyboardGroup]);
 
+  // const TimerSettings = React.lazy(() => import('./settings/TimerSettings'));
+
   return (
     <View style={[styles.container, {
       backgroundColor: background,
@@ -99,7 +105,9 @@ function SettingsOverlay({ containerStyle }: Props) {
         ))}
       </View>
       <View style={styles.settingsContent}>
-        {navigator.find((value) => value.title === selected)?.renderer()}
+        <Suspense fallback={<View />}>
+          {navigator.find((value) => value.title === selected)?.renderer}
+        </Suspense>
       </View>
     </View>
   );
