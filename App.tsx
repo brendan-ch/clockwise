@@ -25,6 +25,7 @@ import HeaderButton from './src/components/HeaderButton';
 import useTheme from './src/helpers/useTheme';
 import SettingsOverlay from './src/overlays/SettingsOverlay';
 import LandscapeHeader from './src/components/LandscapeHeader';
+import LandscapeFooter from './src/components/LandscapeFooter';
 
 const MIN_25 = 1500000;
 
@@ -166,6 +167,9 @@ export default function App() {
             <LandscapeHeader />
           ) : undefined}
           <TimerPage />
+          {windowSize === 'landscape' ? (
+            <LandscapeFooter />
+          ) : undefined}
         </View>
         {windowSize === 'landscape' ? (
           <Modal
