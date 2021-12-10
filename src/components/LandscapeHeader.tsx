@@ -1,7 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
-import React, { useContext, useState } from 'react';
+import React, {
+  useContext, useState, useRef, useEffect,
+} from 'react';
 import {
-  Platform, Pressable, StyleSheet, Text, View,
+  Platform, Pressable, StyleSheet, Text, View, Animated,
 } from 'react-native';
 import AppContext from '../../AppContext';
 import useTheme from '../helpers/useTheme';
@@ -60,13 +62,40 @@ HeaderButton.defaultProps = {
  * Render a landscape view header.
  */
 function LandscapeHeader() {
+  const [hovering, setHovering] = useState(false);
+
   const context = useContext(AppContext);
+  const opacityAnimation = useRef(new Animated.Value(0)).current;
 
   const colorValues = useTheme();
 
+  useEffect(() => {
+    if (context.timerState === 'running' && !hovering) {
+      Animated.timing(opacityAnimation, {
+        toValue: 0,
+        duration: 100,
+        useNativeDriver: false,
+      }).start();
+    } else {
+      Animated.timing(opacityAnimation, {
+        toValue: 1,
+        duration: 100,
+        useNativeDriver: false,
+      }).start();
+    }
+  }, [context.timerState, hovering]);
+
   return (
-    <View style={styles.container}>
-      <View style={styles.headerTitle}>
+    <View
+      style={styles.container}
+      // @ts-ignore
+      onMouseEnter={Platform.OS === 'web' ? () => setHovering(true) : undefined}
+      onMouseLeave={Platform.OS === 'web' ? () => setHovering(false) : undefined}
+    >
+      <Animated.View style={[styles.headerTitle, {
+        opacity: opacityAnimation,
+      }]}
+      >
         <Text style={[TextStyles.textBold, {
           color: colorValues.primary,
           fontSize: 50,
@@ -82,17 +111,16 @@ function LandscapeHeader() {
           an app designed to help you focus.
 
         </Text>
-      </View>
-      <View style={styles.buttonContainer}>
-        {/* <HeaderButton
-          iconName="logo-github"
-          onPress={() => Linking.openURL('https://github.com/unnameduser95/session')}
-        /> */}
+      </Animated.View>
+      <Animated.View style={[styles.buttonContainer, {
+        opacity: opacityAnimation,
+      }]}
+      >
         <HeaderButton
           iconName="settings-outline"
           onPress={() => context.setOverlay('settings')}
         />
-      </View>
+      </Animated.View>
     </View>
   );
 }
