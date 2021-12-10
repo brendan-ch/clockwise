@@ -9,7 +9,7 @@ import {
 import AppLoading from 'expo-app-loading';
 import * as Linking from 'expo-linking';
 import React, { useEffect, useState } from 'react';
-import { Platform } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import Modal from 'react-native-modal';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -24,6 +24,8 @@ import useWindowSize from './src/helpers/useWindowSize';
 import HeaderButton from './src/components/HeaderButton';
 import useTheme from './src/helpers/useTheme';
 import SettingsOverlay from './src/overlays/SettingsOverlay';
+import LandscapeHeader from './src/components/LandscapeHeader';
+import LandscapeFooter from './src/components/LandscapeFooter';
 
 const MIN_25 = 1500000;
 
@@ -157,7 +159,18 @@ export default function App() {
         setKeyboardGroup,
       }}
       >
-        <TimerPage />
+        <View style={[styles.landscapeContainer, {
+          backgroundColor: colorValues.background,
+        }]}
+        >
+          {windowSize === 'landscape' ? (
+            <LandscapeHeader />
+          ) : undefined}
+          <TimerPage />
+          {windowSize === 'landscape' ? (
+            <LandscapeFooter />
+          ) : undefined}
+        </View>
         {windowSize === 'landscape' ? (
           <Modal
             isVisible={overlay === 'settings'}
@@ -231,3 +244,12 @@ export default function App() {
     </AppContext.Provider>
   );
 }
+
+const styles = StyleSheet.create({
+  landscapeContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+});
