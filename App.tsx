@@ -138,6 +138,8 @@ export default function App() {
 
   // Do conditional rendering based on window size
   if (windowSize === 'small' || windowSize === 'landscape') {
+    // const SettingsOverlay = React.lazy(() => import('./src/overlays/SettingsOverlay'));
+
     // Return just the timer (with context provider)
     return (
       <AppContext.Provider value={{
