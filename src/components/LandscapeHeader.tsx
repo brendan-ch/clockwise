@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useContext, useState } from 'react';
 import {
-  Linking, Platform, Pressable, StyleSheet, Text, View,
+  Platform, Pressable, StyleSheet, Text, View,
 } from 'react-native';
 import AppContext from '../../AppContext';
 import useTheme from '../helpers/useTheme';
@@ -84,10 +84,10 @@ function LandscapeHeader() {
         </Text>
       </View>
       <View style={styles.buttonContainer}>
-        <HeaderButton
+        {/* <HeaderButton
           iconName="logo-github"
           onPress={() => Linking.openURL('https://github.com/unnameduser95/session')}
-        />
+        /> */}
         <HeaderButton
           iconName="settings-outline"
           onPress={() => context.setOverlay('settings')}
