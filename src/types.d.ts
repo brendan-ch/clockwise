@@ -40,6 +40,18 @@ interface Section {
   data: SettingsOptionProps[],
 }
 
+interface Task {
+  title: string,
+  estPomodoros: number,
+  id: number,
+  syncData: {
+    notion?: {
+      id: string,
+      completionProp: string,
+    },
+  },
+}
+
 export {
   TimerState,
   RootStackParamList,
@@ -48,4 +60,5 @@ export {
   SettingsData,
   SettingsOptionProps,
   KeyboardShortcutGroup,
+  Task,
 };
