@@ -35,6 +35,9 @@ function Selector({
     <Pressable
       onPress={onPress}
       style={[styles.container, style]}
+      // @ts-ignore
+      onMouseEnter={Platform.OS === 'web' ? () => setHovering('text') : undefined}
+      onMouseLeave={Platform.OS === 'web' ? () => setHovering('none') : undefined}
     >
       {iconLeft ? (
         <Pressable
@@ -42,6 +45,9 @@ function Selector({
           style={[styles.iconContainer, {
             marginRight: 5,
           }]}
+          // @ts-ignore
+          onMouseEnter={Platform.OS === 'web' ? () => setHovering('leftIcon') : undefined}
+          onMouseLeave={Platform.OS === 'web' ? () => setHovering('text') : undefined}
         >
           {/* @ts-ignore */}
           <Ionicons name={iconLeft} size={20} color={colorValues.primary} />
@@ -49,9 +55,6 @@ function Selector({
       ) : undefined}
       <View
         style={[styles.textContainer]}
-        // @ts-ignore
-        onMouseEnter={Platform.OS === 'web' ? () => setHovering('text') : undefined}
-        onMouseLeave={Platform.OS === 'web' ? () => setHovering('none') : undefined}
       >
         <Text style={[TextStyles.textRegular, textStyle, {
           color: colorValues.primary,
@@ -64,12 +67,9 @@ function Selector({
           <Text>{subtitle}</Text>
         ) : undefined}
       </View>
-      {iconRight && Platform.OS === 'web' ? (
-        <View
-          // @ts-ignore
-          onClick={onPressRight}
-          onMouseEnter={() => setHovering('rightIcon')}
-          onMouseLeave={() => setHovering('none')}
+      {iconRight ? (
+        <Pressable
+          onPress={onPressRight}
           style={[styles.iconContainer, {
             marginLeft: 5,
           }]}
@@ -78,19 +78,8 @@ function Selector({
             // @ts-ignore
             name={iconRight}
             size={20}
-            color={hovering === 'rightIcon' || hovering === 'text' ? colorValues.gray3 : colorValues.gray4}
+            color={hovering === 'text' ? colorValues.gray3 : colorValues.gray4}
           />
-        </View>
-      ) : undefined}
-      {iconRight && Platform.OS !== 'web' ? (
-        <Pressable
-          onPress={onPressRight}
-          style={[styles.iconContainer, {
-            marginLeft: 5,
-          }]}
-        >
-          {/* @ts-ignore */}
-          <Ionicons name={iconRight} size={20} color={colorValues.gray4} />
         </Pressable>
       ) : undefined}
     </Pressable>
