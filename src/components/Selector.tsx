@@ -27,7 +27,7 @@ interface Props {
 function Selector({
   text, iconRight, iconLeft, onPressLeft, onPressRight, onPress, subtitle, textStyle, style,
 }: Props) {
-  const [hovering, setHovering] = useState<'none' | 'leftIcon' | 'rightIcon'>('none');
+  const [hovering, setHovering] = useState<'none' | 'text' | 'leftIcon' | 'rightIcon'>('none');
 
   const colorValues = useTheme();
 
@@ -47,7 +47,12 @@ function Selector({
           <Ionicons name={iconLeft} size={20} />
         </Pressable>
       ) : undefined}
-      <View style={[styles.textContainer]}>
+      <View
+        style={[styles.textContainer]}
+        // @ts-ignore
+        onMouseEnter={Platform.OS === 'web' ? () => setHovering('text') : undefined}
+        onMouseLeave={Platform.OS === 'web' ? () => setHovering('none') : undefined}
+      >
         <Text style={[TextStyles.textRegular, textStyle]}>{text}</Text>
         {subtitle ? (
           <Text>{subtitle}</Text>
@@ -67,7 +72,7 @@ function Selector({
             // @ts-ignore
             name={iconRight}
             size={20}
-            color={hovering === 'rightIcon' ? colorValues.gray3 : colorValues.gray4}
+            color={hovering === 'rightIcon' || hovering === 'text' ? colorValues.gray3 : colorValues.gray4}
           />
         </View>
       ) : undefined}
