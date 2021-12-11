@@ -44,7 +44,7 @@ function Selector({
           }]}
         >
           {/* @ts-ignore */}
-          <Ionicons name={iconLeft} size={20} />
+          <Ionicons name={iconLeft} size={20} color={colorValues.primary} />
         </Pressable>
       ) : undefined}
       <View
@@ -53,7 +53,13 @@ function Selector({
         onMouseEnter={Platform.OS === 'web' ? () => setHovering('text') : undefined}
         onMouseLeave={Platform.OS === 'web' ? () => setHovering('none') : undefined}
       >
-        <Text style={[TextStyles.textRegular, textStyle]}>{text}</Text>
+        <Text style={[TextStyles.textRegular, textStyle, {
+          color: colorValues.primary,
+        }]}
+        >
+          {text}
+
+        </Text>
         {subtitle ? (
           <Text>{subtitle}</Text>
         ) : undefined}
