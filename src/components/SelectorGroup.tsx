@@ -38,7 +38,7 @@ function SelectorGroup({
     if (fadeInOnMount) {
       Animated.timing(opacityAnimation, {
         toValue: 1,
-        duration: 20,
+        duration: 50,
         useNativeDriver: true,
       }).start();
     }
@@ -61,29 +61,55 @@ function SelectorGroup({
   }, [expanded]);
 
   const renderSelector = ({ item }: { item: SelectorProps }) => (
-    <Selector
-      text={item.text}
-      iconRight={item.iconRight}
-    />
+    <View style={styles.headerContainer}>
+      <Animated.View style={{
+        // width: expandedAnimation.interpolate({
+        //   inputRange: [0, 1],
+        //   outputRange: [0, 9],
+        // }),
+        width: expanded ? 9 : 0,
+      }}
+      />
+      <Selector
+        text={item.text}
+        iconRight={item.iconRight}
+      />
+    </View>
   );
 
   return (
     <Animated.View style={[styles.container, {
       borderRadius: 2,
-      borderWidth: expandedAnimation,
+      borderWidth: expanded ? 1 : 0,
       borderColor: colorValues.gray5,
       opacity: fadeInOnMount ? opacityAnimation : 1,
+      height: expandedAnimation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [52, 52 + (50 * data.length)],
+      }),
+      overflow: 'hidden',
     }]}
     >
-      <Selector
-        text={header.text}
-        subtitle={header.subtitle}
-        iconRight={header.iconRight}
-        iconLeft={header.iconLeft}
-        onPressLeft={header.onPressLeft}
-        onPressRight={header.onPressRight}
-        onPress={header.onPress}
-      />
+      <View style={styles.headerContainer}>
+        <Animated.View style={{
+          // width: expandedAnimation.interpolate({
+          //   inputRange: [0, 1],
+          //   outputRange: [0, 9],
+          // }),
+          width: expanded ? 9 : 0,
+        }}
+        />
+        <Selector
+          style={{ flex: 1 }}
+          text={header.text}
+          subtitle={header.subtitle}
+          iconRight={header.iconRight}
+          iconLeft={header.iconLeft}
+          onPressLeft={header.onPressLeft}
+          onPressRight={header.onPressRight}
+          onPress={header.onPress}
+        />
+      </View>
       {expanded ? (
         <View style={[styles.line, {
           backgroundColor: colorValues.gray5,
@@ -107,6 +133,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'center',
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    width: '100%',
   },
   line: {
     width: '100%',
