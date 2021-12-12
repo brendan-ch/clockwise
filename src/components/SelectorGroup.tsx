@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import useTheme from '../helpers/useTheme';
 import Selector from './Selector';
+import SettingsOption from './SettingsOption';
 
 interface SelectorProps {
   index: string,
@@ -16,8 +17,20 @@ interface SelectorProps {
   onPress?: () => any,
 }
 
+interface SettingsOptionProps {
+  index: string,
+  type: 'number' | 'toggle',
+  value?: boolean | number,
+  /* eslint-disable-next-line */
+  onChange?: (data: any) => any,
+  title?: string,
+  onPress?: () => any,
+  onSelect?: () => any,
+  selected?: boolean,
+}
+
 interface Props {
-  data: SelectorProps[],
+  data: SettingsOptionProps[],
   header: SelectorProps,
   expanded: boolean,
   fadeInOnMount?: boolean,
@@ -39,7 +52,7 @@ function SelectorGroup({
       Animated.timing(opacityAnimation, {
         toValue: 1,
         duration: 50,
-        useNativeDriver: true,
+        useNativeDriver: false,
       }).start();
     }
   }, [fadeInOnMount]);
@@ -49,30 +62,27 @@ function SelectorGroup({
       Animated.timing(expandedAnimation, {
         toValue: 1,
         duration: 100,
-        useNativeDriver: true,
+        useNativeDriver: false,
       }).start();
     } else {
       Animated.timing(expandedAnimation, {
         toValue: 0,
         duration: 100,
-        useNativeDriver: true,
+        useNativeDriver: false,
       }).start();
     }
   }, [expanded]);
 
-  const renderSelector = ({ item }: { item: SelectorProps }) => (
+  const renderSelector = ({ item }: { item: SettingsOptionProps }) => (
     <View style={styles.headerContainer}>
-      <Animated.View style={{
-        // width: expandedAnimation.interpolate({
-        //   inputRange: [0, 1],
-        //   outputRange: [0, 9],
-        // }),
+      <View style={{
         width: expanded ? 9 : 0,
       }}
       />
-      <Selector
-        text={item.text}
-        iconRight={item.iconRight}
+      <SettingsOption
+        type={item.type}
+        value={item.value}
+        title={item.title}
       />
     </View>
   );
