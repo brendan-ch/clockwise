@@ -83,6 +83,10 @@ function SelectorGroup({
       }}
       />
       <SettingsOption
+        onChange={item.onChange}
+        selected={item.selected}
+        onSelect={item.onSelect}
+        onPress={item.onPress}
         type={item.type}
         value={item.value}
         title={item.title}
