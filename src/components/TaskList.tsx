@@ -37,6 +37,21 @@ function TaskList() {
     ]);
   }
 
+  /**
+   * Handle changing a task in the state.
+   */
+  function handleChangeTask(key: string, value: any, id: number) {
+    const tasksCopy = tasks.slice();
+    const index = tasksCopy.findIndex((existingTask) => id === existingTask.id);
+
+    tasksCopy[index] = {
+      ...tasksCopy[index],
+      [key]: value,
+    };
+
+    setTasks(tasksCopy);
+  }
+
   const colorValues = useTheme();
 
   // Load tasks on start
@@ -53,6 +68,8 @@ function TaskList() {
           type: 'number',
           title: 'est. pomodoros',
           index: '0',
+          value: item.estPomodoros,
+          onChange: (data) => handleChangeTask('estPomodoros', data, item.id),
         },
       ]}
       header={{
