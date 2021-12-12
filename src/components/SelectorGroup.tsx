@@ -3,6 +3,7 @@ import {
   StyleSheet, View, Animated, FlatList,
 } from 'react-native';
 import useTheme from '../helpers/useTheme';
+import useWindowSize from '../helpers/useWindowSize';
 import Selector from './Selector';
 import SettingsOption from './SettingsOption';
 
@@ -47,6 +48,8 @@ function SelectorGroup({
 
   const colorValues = useTheme();
 
+  const windowSize = useWindowSize();
+
   useEffect(() => {
     if (fadeInOnMount) {
       Animated.timing(opacityAnimation, {
@@ -83,6 +86,9 @@ function SelectorGroup({
         type={item.type}
         value={item.value}
         title={item.title}
+        style={{
+          width: windowSize === 'portrait' ? 250 : 260,
+        }}
       />
     </View>
   );
