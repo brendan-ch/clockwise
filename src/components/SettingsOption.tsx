@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Platform, StyleSheet, Text, TouchableOpacity, View,
+  Platform, StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle,
 } from 'react-native';
 import useTheme from '../helpers/useTheme';
 import TextStyles from '../styles/Text';
@@ -16,10 +16,11 @@ interface Props {
   onPress?: () => any,
   onSelect?: () => any,
   selected?: boolean,
+  style?: StyleProp<ViewStyle>,
 }
 
 function SettingsOption({
-  type, onPress, title, value, selected, onChange, onSelect,
+  type, onPress, title, value, selected, onChange, onSelect, style,
 }: Props) {
   const colors = useTheme();
 
@@ -36,7 +37,7 @@ function SettingsOption({
       style={[styles.container, {
         // @ts-ignore
         cursor: Platform.OS === 'web' ? 'pointer' : undefined,
-      }]}
+      }, style]}
       onClick={Platform.OS === 'web' ? handlePress : undefined}
     >
       <Text style={[TextStyles.textRegular, {
@@ -91,6 +92,7 @@ SettingsOption.defaultProps = {
   title: '',
   value: false,
   selected: false,
+  style: {},
 };
 
 export default SettingsOption;
