@@ -50,7 +50,8 @@ function TaskList() {
       expanded={expandedTask === item.id}
       data={[
         {
-          text: 'est. pomodoros',
+          type: 'number',
+          title: 'est. pomodoros',
           index: '0',
         },
       ]}
