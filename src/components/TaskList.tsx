@@ -59,6 +59,7 @@ function TaskList() {
         text: item.title,
         index: `${item.id}`,
         onPress: () => setExpandedTask(expandedTask === item.id ? -1 : item.id),
+        iconRight: expandedTask === item.id ? 'chevron-down' : 'chevron-forward',
       }}
     />
   );
