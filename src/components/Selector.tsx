@@ -25,7 +25,12 @@ interface Props {
  * Selector component that is displayed in task list.
  */
 function Selector({
-  text, iconRight, iconLeft, onPressLeft, onPressRight, onPress, subtitle, textStyle, style,
+  text,
+  iconRight,
+  iconLeft,
+  onPressLeft,
+  onPressRight,
+  onPress, subtitle, textStyle, style,
 }: Props) {
   const [hovering, setHovering] = useState<'none' | 'text' | 'leftIcon' | 'rightIcon'>('none');
 
