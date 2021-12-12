@@ -4,6 +4,7 @@ import useTheme from '../helpers/useTheme';
 import TextStyles from '../styles/Text';
 import { Task } from '../types';
 import Selector from './Selector';
+import SelectorGroup from './SelectorGroup';
 
 /**
  * Task list component that displays selector components and an "Add task" button.
@@ -15,6 +16,9 @@ function TaskList() {
     syncData: {},
     id: 0,
   }]);
+
+  // ID of expanded task
+  const [expandedTask, setExpandedTask] = useState(-1);
 
   /**
    * Add a new task to state.
@@ -41,7 +45,21 @@ function TaskList() {
   }, []);
 
   const taskRenderer = ({ item }: { item: Task }) => (
-    <Selector text={item.title} />
+    <SelectorGroup
+      fadeInOnMount
+      expanded={expandedTask === item.id}
+      data={[
+        {
+          text: 'est. pomodoros',
+          index: '0',
+        },
+      ]}
+      header={{
+        text: item.title,
+        index: `${item.id}`,
+        onPress: () => setExpandedTask(expandedTask === item.id ? -1 : item.id),
+      }}
+    />
   );
 
   return (
