@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   StyleSheet, View, Animated, FlatList,
 } from 'react-native';
@@ -26,8 +26,6 @@ interface SettingsOptionProps {
   onChange?: (data: any) => any,
   title?: string,
   onPress?: () => any,
-  onSelect?: () => any,
-  selected?: boolean,
 }
 
 interface Props {
@@ -43,6 +41,8 @@ interface Props {
 function SelectorGroup({
   data, header, expanded, fadeInOnMount,
 }: Props) {
+  const [selected, setSelected] = useState<string | undefined>(undefined);
+
   const expandedAnimation = useRef(new Animated.Value(0)).current;
   const opacityAnimation = useRef(new Animated.Value(0)).current;
 
@@ -84,9 +84,15 @@ function SelectorGroup({
       />
       <SettingsOption
         onChange={item.onChange}
-        selected={item.selected}
-        onSelect={item.onSelect}
-        onPress={item.onPress}
+        selected={selected === item.index}
+        onSelect={() => setSelected(item.index)}
+        onPress={() => {
+          if (item.type === 'number') {
+            setSelected(item.index);
+          } else {
+            setSelected(undefined);
+          }
+        }}
         type={item.type}
         value={item.value}
         title={item.title}
