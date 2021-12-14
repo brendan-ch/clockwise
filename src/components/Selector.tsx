@@ -64,6 +64,8 @@ function Selector({
         <TextInput
           style={[TextStyles.textRegular, textStyle, {
             color: colorValues.primary,
+            width: '100%',
+            borderWidth: 0,
           }]}
           value={text}
           onChangeText={(newText) => onChangeText(newText)}
