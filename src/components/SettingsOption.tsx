@@ -1,6 +1,7 @@
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import {
-  Platform, StyleSheet, Text, TouchableOpacity, View,
+  Platform, StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle,
 } from 'react-native';
 import useTheme from '../helpers/useTheme';
 import TextStyles from '../styles/Text';
@@ -8,25 +9,27 @@ import Checkbox from './Checkbox';
 import NumberBox from './NumberBox';
 
 interface Props {
-  type: 'number' | 'toggle',
-  value?: boolean | number,
+  type: 'number' | 'toggle' | 'icon',
+  value?: boolean | number | string,
   /* eslint-disable-next-line */
   onChange?: (data: any) => any,
   title?: string,
   onPress?: () => any,
   onSelect?: () => any,
   selected?: boolean,
+  style?: StyleProp<ViewStyle>,
+  disabled?: boolean,
 }
 
 function SettingsOption({
-  type, onPress, title, value, selected, onChange, onSelect,
+  type, onPress, title, value, selected, onChange, onSelect, style, disabled,
 }: Props) {
   const colors = useTheme();
 
   function handlePress() {
-    if (type === 'toggle' && onChange) {
+    if (type === 'toggle' && onChange && !disabled) {
       onChange(!value);
-    } else if (onPress) {
+    } else if (onPress && !disabled) {
       onPress();
     }
   }
@@ -36,7 +39,7 @@ function SettingsOption({
       style={[styles.container, {
         // @ts-ignore
         cursor: Platform.OS === 'web' ? 'pointer' : undefined,
-      }]}
+      }, style]}
       onClick={Platform.OS === 'web' ? handlePress : undefined}
     >
       <Text style={[TextStyles.textRegular, {
@@ -51,12 +54,29 @@ function SettingsOption({
           selected={value === true}
         />
       ) : undefined}
-      {type === 'number' ? (
+      {type === 'number' && !disabled ? (
         <NumberBox
           text={value || 0}
           selected={selected}
           onChange={onChange}
           onSelect={onSelect}
+        />
+      ) : undefined}
+      {type === 'number' && disabled ? (
+        <Text style={[TextStyles.textRegular, {
+          color: colors.primary,
+        }]}
+        >
+          {value}
+
+        </Text>
+      ) : undefined}
+      {type === 'icon' && typeof value === 'string' ? (
+        <Ionicons
+          // @ts-ignore
+          name={value}
+          size={20}
+          color={colors.gray4}
         />
       ) : undefined}
     </View>
@@ -91,6 +111,8 @@ SettingsOption.defaultProps = {
   title: '',
   value: false,
   selected: false,
+  style: {},
+  disabled: false,
 };
 
 export default SettingsOption;

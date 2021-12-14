@@ -4,7 +4,7 @@ import {
   Platform,
   ViewStyle,
   StyleProp, TextStyle,
-  StyleSheet, Pressable, Text, View,
+  StyleSheet, Pressable, Text, View, TextInput,
 } from 'react-native';
 import useTheme from '../helpers/useTheme';
 import TextStyles from '../styles/Text';
@@ -19,13 +19,20 @@ interface Props {
   onPressLeft?: () => any,
   onPressRight?: () => any,
   onPress?: () => any,
+  /* eslint-disable-next-line */
+  onChangeText?: (text: string) => any,
 }
 
 /**
  * Selector component that is displayed in task list.
  */
 function Selector({
-  text, iconRight, iconLeft, onPressLeft, onPressRight, onPress, subtitle, textStyle, style,
+  text,
+  iconRight,
+  iconLeft,
+  onPressLeft,
+  onPressRight,
+  onPress, subtitle, textStyle, style, onChangeText,
 }: Props) {
   const [hovering, setHovering] = useState<'none' | 'text' | 'leftIcon' | 'rightIcon'>('none');
 
@@ -53,20 +60,32 @@ function Selector({
           <Ionicons name={iconLeft} size={20} color={colorValues.primary} />
         </Pressable>
       ) : undefined}
-      <View
-        style={[styles.textContainer]}
-      >
-        <Text style={[TextStyles.textRegular, textStyle, {
-          color: colorValues.primary,
-        }]}
+      {onChangeText ? (
+        <TextInput
+          style={[TextStyles.textRegular, textStyle, {
+            color: colorValues.primary,
+            width: '100%',
+            borderWidth: 0,
+          }]}
+          value={text}
+          onChangeText={(newText) => onChangeText(newText)}
+        />
+      ) : (
+        <View
+          style={[styles.textContainer]}
         >
-          {text}
+          <Text style={[TextStyles.textRegular, textStyle, {
+            color: colorValues.primary,
+          }]}
+          >
+            {text}
 
-        </Text>
-        {subtitle ? (
-          <Text>{subtitle}</Text>
-        ) : undefined}
-      </View>
+          </Text>
+          {subtitle ? (
+            <Text>{subtitle}</Text>
+          ) : undefined}
+        </View>
+      )}
       {iconRight ? (
         <Pressable
           onPress={onPressRight}
@@ -114,6 +133,7 @@ Selector.defaultProps = {
   onPress: () => {},
   textStyle: {},
   style: {},
+  onChangeText: undefined,
 };
 
 export default Selector;

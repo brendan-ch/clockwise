@@ -7,13 +7,13 @@ import * as Haptics from 'expo-haptics';
 // import { useNavigation } from '@react-navigation/native';
 import AppContext from '../../AppContext';
 import ActionButtonBar from '../components/ActionButtonBar';
-import Introduction from '../components/Introduction';
 import PageButtonBar from '../components/PageButtonBar';
 import Timer from '../components/Timer';
 import calculateTimerDisplay from '../helpers/calculateTimer';
 import useTheme from '../helpers/useTheme';
 import useWindowSize from '../helpers/useWindowSize';
 import { getTimerValue } from '../helpers/storage';
+import TaskList from '../components/TaskList';
 // import HeaderButton from '../components/HeaderButton';
 
 const MIN_25 = 1500000;
@@ -25,7 +25,7 @@ const INTERVAL = 1000;
 
 export default function TimerPage() {
   const [mode, setMode] = useState<'focus' | 'break'>('focus');
-  const [introDisplayed, setIntroDisplayed] = useState(true);
+  // const [introDisplayed, setIntroDisplayed] = useState(true);
 
   const colorValues = useTheme();
 
@@ -193,12 +193,12 @@ export default function TimerPage() {
     ));
   }
 
-  /**
-   * Dismiss the introduction component.
-   */
-  function handleIntroDismiss() {
-    setIntroDisplayed(false);
-  }
+  // /**
+  //  * Dismiss the introduction component.
+  //  */
+  // function handleIntroDismiss() {
+  //   setIntroDisplayed(false);
+  // }
 
   // console.log(height);
   // console.log(width);
@@ -267,7 +267,7 @@ export default function TimerPage() {
           </View>
           <View style={[styles.landscapeContainer, styles.rightContainer]}>
             <View style={styles.rightContentContainer}>
-              <Introduction />
+              <TaskList />
             </View>
           </View>
         </View>
@@ -296,9 +296,7 @@ export default function TimerPage() {
           />
         </View>
         <View style={styles.middleContainer}>
-          {introDisplayed
-            ? <Introduction onDismiss={() => handleIntroDismiss()} />
-            : undefined}
+          <TaskList />
         </View>
         <View style={styles.bottomContainer}>
           <ActionButtonBar
@@ -346,6 +344,7 @@ const styles = StyleSheet.create({
   middleContainer: {
     marginTop: 10,
     flex: 1,
+    width: '100%',
   },
   landscapeContainer: {
     flex: 1,
@@ -356,6 +355,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: 280,
+    height: 280,
   },
   leftContainer: {
     justifyContent: 'flex-end',
@@ -364,7 +364,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: 280,
-    height: '100%',
+    height: 280,
   },
   rightContainer: {
     marginLeft: 20,

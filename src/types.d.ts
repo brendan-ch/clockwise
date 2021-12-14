@@ -27,7 +27,7 @@ interface SettingsOptionProps {
   title: string,
   /* eslint-disable-next-line */
   // onChange: (data: any) => any,
-  type: 'number' | 'toggle',
+  type: 'number' | 'toggle' | 'icon',
   /**
    * Used for getting and saving data, as well as for identifying different options.
    */
@@ -40,6 +40,18 @@ interface Section {
   data: SettingsOptionProps[],
 }
 
+interface Task {
+  title: string,
+  estPomodoros: number,
+  id: number,
+  syncData: {
+    notion?: {
+      id: string,
+      completionProp: string,
+    },
+  },
+}
+
 export {
   TimerState,
   RootStackParamList,
@@ -48,4 +60,5 @@ export {
   SettingsData,
   SettingsOptionProps,
   KeyboardShortcutGroup,
+  Task,
 };
