@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import {
   Platform, StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle,
@@ -8,8 +9,8 @@ import Checkbox from './Checkbox';
 import NumberBox from './NumberBox';
 
 interface Props {
-  type: 'number' | 'toggle',
-  value?: boolean | number,
+  type: 'number' | 'toggle' | 'icon',
+  value?: boolean | number | string,
   /* eslint-disable-next-line */
   onChange?: (data: any) => any,
   title?: string,
@@ -58,6 +59,14 @@ function SettingsOption({
           selected={selected}
           onChange={onChange}
           onSelect={onSelect}
+        />
+      ) : undefined}
+      {type === 'icon' && typeof value === 'string' ? (
+        <Ionicons
+          // @ts-ignore
+          name={value}
+          size={20}
+          color={colors.gray4}
         />
       ) : undefined}
     </View>
