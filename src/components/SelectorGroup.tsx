@@ -28,6 +28,7 @@ interface SettingsOptionProps {
   onChange?: (data: any) => any,
   title?: string,
   onPress?: () => any,
+  disabled?: boolean,
 }
 
 interface Props {
@@ -103,6 +104,7 @@ function SelectorGroup({
         style={{
           width: windowSize === 'portrait' ? 250 : 260,
         }}
+        disabled={item.disabled}
       />
     </View>
   );

@@ -18,17 +18,18 @@ interface Props {
   onSelect?: () => any,
   selected?: boolean,
   style?: StyleProp<ViewStyle>,
+  disabled?: boolean,
 }
 
 function SettingsOption({
-  type, onPress, title, value, selected, onChange, onSelect, style,
+  type, onPress, title, value, selected, onChange, onSelect, style, disabled,
 }: Props) {
   const colors = useTheme();
 
   function handlePress() {
-    if (type === 'toggle' && onChange) {
+    if (type === 'toggle' && onChange && !disabled) {
       onChange(!value);
-    } else if (onPress) {
+    } else if (onPress && !disabled) {
       onPress();
     }
   }
@@ -53,13 +54,22 @@ function SettingsOption({
           selected={value === true}
         />
       ) : undefined}
-      {type === 'number' ? (
+      {type === 'number' && !disabled ? (
         <NumberBox
           text={value || 0}
           selected={selected}
           onChange={onChange}
           onSelect={onSelect}
         />
+      ) : undefined}
+      {type === 'number' && disabled ? (
+        <Text style={[TextStyles.textRegular, {
+          color: colors.primary,
+        }]}
+        >
+          {value}
+
+        </Text>
       ) : undefined}
       {type === 'icon' && typeof value === 'string' ? (
         <Ionicons
@@ -102,6 +112,7 @@ SettingsOption.defaultProps = {
   value: false,
   selected: false,
   style: {},
+  disabled: false,
 };
 
 export default SettingsOption;
