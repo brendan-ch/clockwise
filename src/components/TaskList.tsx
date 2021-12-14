@@ -165,7 +165,8 @@ function TaskList() {
       )}
       {context.timerState === 'stopped' ? (
         <View style={[styles.line, {
-          backgroundColor: colorValues.gray5,
+          borderTopColor: colorValues.gray5,
+          borderTopWidth: 1,
         }]}
         />
       ) : undefined}
@@ -199,7 +200,7 @@ const styles = StyleSheet.create({
   },
   line: {
     width: '100%',
-    height: 1,
+    height: 5,
   },
   taskList: {
     height: '100%',
