@@ -20,8 +20,8 @@ interface SelectorProps {
 
 interface SettingsOptionProps {
   index: string,
-  type: 'number' | 'toggle',
-  value?: boolean | number,
+  type: 'number' | 'toggle' | 'icon',
+  value?: boolean | number | string,
   /* eslint-disable-next-line */
   onChange?: (data: any) => any,
   title?: string,
