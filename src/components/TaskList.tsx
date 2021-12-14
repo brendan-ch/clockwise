@@ -26,7 +26,7 @@ function TaskList() {
   function handleAddTask() {
     const newTask: Task = {
       title: 'New task',
-      id: tasks.length + 1,
+      id: tasks.length,
       estPomodoros: 1,
       syncData: {},
     };
@@ -52,6 +52,28 @@ function TaskList() {
     setTasks(tasksCopy);
   }
 
+  /**
+   * Remove a task from state.
+   * @param id
+   */
+  function handleDeleteTask(id: number) {
+    const tasksCopy = tasks.slice();
+    const index = tasksCopy.findIndex((existingTask) => id === existingTask.id);
+
+    if (id === expandedTask) {
+      setExpandedTask(-1);
+    }
+
+    tasksCopy.splice(index, 1);
+    tasksCopy.forEach((task, i) => {
+      if (task.id > id) {
+        tasksCopy[i].id = task.id - 1;
+      }
+    });
+
+    setTasks(tasksCopy);
+  }
+
   const colorValues = useTheme();
 
   // Load tasks on start
@@ -70,6 +92,13 @@ function TaskList() {
           index: '0',
           value: item.estPomodoros,
           onChange: (data) => handleChangeTask('estPomodoros', data, item.id),
+        },
+        {
+          type: 'icon',
+          value: 'trash-outline',
+          title: 'delete',
+          index: '1',
+          onPress: () => handleDeleteTask(item.id),
         },
       ]}
       header={{
