@@ -89,10 +89,12 @@ function SelectorGroup({
         selected={selected === item.index}
         onSelect={() => setSelected(item.index)}
         onPress={() => {
-          if (item.type === 'number') {
-            setSelected(item.index);
-          } else {
+          if (item.type === 'number' && selected === item.index) {
             setSelected(undefined);
+          } else if (item.type === 'number') {
+            setSelected(item.index);
+          } else if (item.onPress) {
+            item.onPress();
           }
         }}
         type={item.type}
