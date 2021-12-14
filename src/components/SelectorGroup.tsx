@@ -16,6 +16,8 @@ interface SelectorProps {
   onPressLeft?: () => any,
   onPressRight?: () => any,
   onPress?: () => any,
+  /* eslint-disable-next-line */
+  onChangeText?: (text: string) => any,
 }
 
 interface SettingsOptionProps {
@@ -134,6 +136,7 @@ function SelectorGroup({
           onPressLeft={header.onPressLeft}
           onPressRight={header.onPressRight}
           onPress={header.onPress}
+          onChangeText={expanded ? header.onChangeText : undefined}
         />
       </View>
       {expanded ? (
