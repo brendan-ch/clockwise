@@ -104,8 +104,10 @@ function TaskList() {
       header={{
         text: item.title,
         index: `${item.id}`,
-        onPress: () => setExpandedTask(expandedTask === item.id ? -1 : item.id),
+        onPress: expandedTask === item.id ? undefined : () => setExpandedTask(item.id),
+        onPressRight: () => setExpandedTask(expandedTask === item.id ? -1 : item.id),
         iconRight: expandedTask === item.id ? 'chevron-down' : 'chevron-forward',
+        onChangeText: (text) => handleChangeTask('title', text, item.id),
       }}
     />
   );
