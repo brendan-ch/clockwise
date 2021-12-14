@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
+import AppContext from '../../AppContext';
 import useTheme from '../helpers/useTheme';
 import TextStyles from '../styles/Text';
 import { Task } from '../types';
@@ -19,6 +20,8 @@ function TaskList() {
 
   // ID of expanded task
   const [expandedTask, setExpandedTask] = useState(-1);
+
+  const context = useContext(AppContext);
 
   /**
    * Add a new task to state.
@@ -92,6 +95,7 @@ function TaskList() {
           index: '0',
           value: item.estPomodoros,
           onChange: (data) => handleChangeTask('estPomodoros', data, item.id),
+          disabled: context.timerState === 'running' || context.timerState === 'paused',
         },
         {
           type: 'icon',
@@ -107,23 +111,29 @@ function TaskList() {
         onPress: expandedTask === item.id ? undefined : () => setExpandedTask(item.id),
         onPressRight: () => setExpandedTask(expandedTask === item.id ? -1 : item.id),
         iconRight: expandedTask === item.id ? 'chevron-down' : 'chevron-forward',
-        onChangeText: (text) => handleChangeTask('title', text, item.id),
+        onChangeText: context.timerState === 'stopped' ? (text) => handleChangeTask('title', text, item.id) : undefined,
       }}
     />
   );
 
   return (
     <View style={[styles.container]}>
-      <Selector
-        text="add a task"
-        iconRight="add"
-        textStyle={TextStyles.textBold}
-        onPress={() => handleAddTask()}
-      />
-      <View style={[styles.line, {
-        backgroundColor: colorValues.gray5,
-      }]}
-      />
+      {context.timerState === 'running' || context.timerState === 'paused' ? (
+        undefined
+      ) : (
+        <Selector
+          text="add a task"
+          iconRight="add"
+          textStyle={TextStyles.textBold}
+          onPress={() => handleAddTask()}
+        />
+      )}
+      {context.timerState === 'stopped' ? (
+        <View style={[styles.line, {
+          backgroundColor: colorValues.gray5,
+        }]}
+        />
+      ) : undefined}
       <FlatList
         style={styles.taskList}
         data={tasks}
