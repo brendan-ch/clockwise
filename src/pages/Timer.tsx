@@ -296,9 +296,6 @@ export default function TimerPage() {
           />
         </View>
         <View style={styles.middleContainer}>
-          {/* {introDisplayed
-            ? <Introduction onDismiss={() => handleIntroDismiss()} />
-            : undefined} */}
           <TaskList />
         </View>
         <View style={styles.bottomContainer}>
@@ -347,6 +344,7 @@ const styles = StyleSheet.create({
   middleContainer: {
     marginTop: 10,
     flex: 1,
+    width: '100%',
   },
   landscapeContainer: {
     flex: 1,
