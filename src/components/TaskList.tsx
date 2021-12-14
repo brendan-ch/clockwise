@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import {
+  FlatList, StyleSheet, View, Text,
+} from 'react-native';
 import AppContext from '../../AppContext';
+import { getData, storeData } from '../helpers/storage';
 import useTheme from '../helpers/useTheme';
+import { TASKS } from '../StorageKeys';
 import TextStyles from '../styles/Text';
 import { Task } from '../types';
 import Selector from './Selector';
@@ -11,15 +15,11 @@ import SelectorGroup from './SelectorGroup';
  * Task list component that displays selector components and an "Add task" button.
  */
 function TaskList() {
-  const [tasks, setTasks] = useState<Task[]>([{
-    title: 'New task',
-    estPomodoros: 1,
-    syncData: {},
-    id: 0,
-  }]);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   // ID of expanded task
   const [expandedTask, setExpandedTask] = useState(-1);
+  const [error, setError] = useState<string | undefined>(undefined);
 
   const context = useContext(AppContext);
 
@@ -38,6 +38,11 @@ function TaskList() {
       ...tasks,
       newTask,
     ]);
+
+    setTasksInStorage([
+      ...tasks,
+      newTask,
+    ]);
   }
 
   /**
@@ -53,6 +58,7 @@ function TaskList() {
     };
 
     setTasks(tasksCopy);
+    setTasksInStorage(tasksCopy);
   }
 
   /**
@@ -75,13 +81,42 @@ function TaskList() {
     });
 
     setTasks(tasksCopy);
+    setTasksInStorage(tasksCopy);
   }
 
   const colorValues = useTheme();
 
+  /**
+   * Save tasks to local storage.
+   * @param tasks
+   */
+  async function setTasksInStorage(newTasks: Task[]) {
+    const stringified = JSON.stringify(newTasks);
+
+    await storeData(TASKS, stringified);
+  }
+
+  /**
+   * Populate tasks data from storage.
+   */
+  async function populateTasksData() {
+    const loadedTasks = await getData(TASKS);
+    if (!loadedTasks) {
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(loadedTasks);
+
+      setTasks(parsed);
+    } catch (e) {
+      setError('Unable to load tasks. Please reset your browser\'s cache and try again.');
+    }
+  }
+
   // Load tasks on start
   useEffect(() => {
-
+    populateTasksData();
   }, []);
 
   const taskRenderer = ({ item }: { item: Task }) => (
@@ -134,12 +169,22 @@ function TaskList() {
         }]}
         />
       ) : undefined}
-      <FlatList
-        style={styles.taskList}
-        data={tasks}
-        renderItem={taskRenderer}
-        maxToRenderPerBatch={10}
-      />
+      {error ? (
+        <Text style={[TextStyles.textRegular, {
+          color: colorValues.primary,
+        }]}
+        >
+          {error}
+
+        </Text>
+      ) : (
+        <FlatList
+          style={styles.taskList}
+          data={tasks}
+          renderItem={taskRenderer}
+          maxToRenderPerBatch={10}
+        />
+      )}
     </View>
   );
 }
