@@ -123,11 +123,7 @@ function SelectorGroup({
     }]}
     >
       <View style={styles.headerContainer}>
-        <Animated.View style={{
-          // width: expandedAnimation.interpolate({
-          //   inputRange: [0, 1],
-          //   outputRange: [0, 9],
-          // }),
+        <View style={{
           width: expanded ? 9 : 0,
         }}
         />
