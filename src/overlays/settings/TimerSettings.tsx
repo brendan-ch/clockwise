@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { SectionList } from 'react-native';
+import AppContext from '../../../AppContext';
 import SettingsHeader from '../../components/SettingsHeader';
 import SettingsOption from '../../components/SettingsOption';
 import useSettingsData from '../../helpers/useSettingsData';
-import useTheme from '../../helpers/useTheme';
 import { BREAK_TIME_MINUTES, FOCUS_TIME_MINUTES } from '../../StorageKeys';
 import { SettingsOptionProps, Section } from '../../types';
 
@@ -39,9 +39,46 @@ const sections: Section[] = [
  * Timer settings content in the settings overlay.
  */
 function TimerSettingsPane() {
-  useTheme();
-
   const { settingsData, handleChange, handleSelect } = useSettingsData(options);
+
+  // Set keyboard selected by storage key
+  const [keyboardSelected, setKeyboardSelected] = useState<string | undefined>(undefined);
+
+  const {
+    keyboardShortcutManager,
+    keyboardGroup,
+  } = useContext(AppContext);
+
+  useEffect(() => {
+    if (keyboardGroup === 'settingsPage' && !keyboardSelected) {
+      setKeyboardSelected(options[0].storageKey);
+    }
+  }, [keyboardShortcutManager, keyboardGroup]);
+
+  useEffect(() => {
+    if (keyboardGroup === 'settingsPage' && keyboardSelected) {
+      const unsubMethods: ((() => any) | undefined)[] = [];
+
+      const indexOfCurrent = options.findIndex((value) => value.storageKey === keyboardSelected);
+      unsubMethods.push(keyboardShortcutManager?.registerEvent({
+        keys: ['ArrowDown'],
+        action: () => setKeyboardSelected(
+          options.length - 1 <= indexOfCurrent
+            ? keyboardSelected
+            : options[indexOfCurrent + 1].storageKey,
+        ),
+      }));
+      return () => {
+        unsubMethods.forEach((method) => {
+          if (method) {
+            method();
+          }
+        });
+      };
+    }
+
+    return () => {};
+  }, [keyboardShortcutManager, keyboardGroup, keyboardSelected]);
 
   const renderHeader = ({ section }: { section: Section }) => (
     <SettingsHeader
@@ -65,6 +102,7 @@ function TimerSettingsPane() {
         }
       }}
       onSelect={() => handleSelect(item.storageKey)}
+      keyboardSelected={keyboardSelected === item.storageKey}
     />
   );
 
