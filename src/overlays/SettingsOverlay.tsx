@@ -7,6 +7,7 @@ import {
 import AppContext from '../../AppContext';
 import SettingsSelector from '../components/SettingSelector';
 import useTheme from '../helpers/useTheme';
+import ConnectedAppsPane from './settings/ConnectedApps';
 
 // import TimerSettingsPane from './settings/TimerSettings';
 
@@ -35,10 +36,10 @@ const navigator: SettingsNavigatorObject[] = [
     title: 'Timer',
     renderer: <TimerSettings />,
   },
-  // {
-  //   title: 'Connected apps',
-  //   renderer: ConnectedAppsPane,
-  // },
+  {
+    title: 'Connected apps',
+    renderer: <ConnectedAppsPane />,
+  },
 ];
 
 interface Props {
@@ -71,6 +72,17 @@ function SettingsOverlay({ containerStyle }: Props) {
         },
       }));
 
+      const indexOfCurrent = navigator.findIndex((value) => value.title === selected);
+
+      unsubMethods.push(keyboardShortcutManager?.registerEvent({
+        keys: ['ArrowDown'],
+        action: () => setSelected(
+          navigator.length - 1 <= indexOfCurrent
+            ? selected
+            : navigator[indexOfCurrent + 1].title,
+        ),
+      }));
+
       return () => {
         unsubMethods.forEach((method) => {
           if (method) {
@@ -81,7 +93,7 @@ function SettingsOverlay({ containerStyle }: Props) {
     }
 
     return () => {};
-  }, [keyboardShortcutManager, keyboardGroup]);
+  }, [keyboardShortcutManager, keyboardGroup, selected]);
 
   // const TimerSettings = React.lazy(() => import('./settings/TimerSettings'));
 
