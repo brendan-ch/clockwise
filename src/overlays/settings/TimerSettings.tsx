@@ -52,6 +52,8 @@ function TimerSettingsPane() {
   useEffect(() => {
     if (keyboardGroup === 'settingsPage' && !keyboardSelected) {
       setKeyboardSelected(options[0].storageKey);
+    } else if (keyboardGroup === 'settings') {
+      setKeyboardSelected(undefined);
     }
   }, [keyboardShortcutManager, keyboardGroup]);
 
