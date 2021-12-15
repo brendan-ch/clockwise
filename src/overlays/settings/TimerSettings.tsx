@@ -70,6 +70,15 @@ function TimerSettingsPane() {
             : options[indexOfCurrent + 1].storageKey,
         ),
       }));
+
+      unsubMethods.push(keyboardShortcutManager?.registerEvent({
+        keys: ['ArrowUp'],
+        action: () => setKeyboardSelected(
+          indexOfCurrent <= 0
+            ? keyboardSelected
+            : options[indexOfCurrent - 1].storageKey,
+        ),
+      }));
       return () => {
         unsubMethods.forEach((method) => {
           if (method) {
