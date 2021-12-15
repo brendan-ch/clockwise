@@ -64,6 +64,10 @@ function SettingsOverlay({ containerStyle }: Props) {
   const colorValues = useTheme();
 
   useEffect(() => {
+    setKeyboardGroup('settings');
+  }, [selected]);
+
+  useEffect(() => {
     if (keyboardGroup === 'settings' || keyboardGroup === 'settingsPage') {
       const unsubMethods: ((() => any) | undefined)[] = [];
       unsubMethods.push(keyboardShortcutManager?.registerEvent({
