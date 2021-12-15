@@ -55,6 +55,7 @@ function SettingsOverlay({ containerStyle }: Props) {
     keyboardShortcutManager,
     setOverlay,
     keyboardGroup,
+    setKeyboardGroup,
   } = useContext(AppContext);
 
   // Title of the selected settings navigator object.
@@ -92,6 +93,16 @@ function SettingsOverlay({ containerStyle }: Props) {
               : navigator[indexOfCurrent - 1].title,
           ),
         }));
+
+        unsubMethods.push(keyboardShortcutManager?.registerEvent({
+          keys: ['ArrowRight'],
+          action: () => setKeyboardGroup('settingsPage'),
+        }));
+      } else if (keyboardGroup === 'settingsPage') {
+        unsubMethods.push(keyboardShortcutManager?.registerEvent({
+          keys: ['ArrowLeft'],
+          action: () => setKeyboardGroup('settings'),
+        }));
       }
 
       return () => {
@@ -105,8 +116,6 @@ function SettingsOverlay({ containerStyle }: Props) {
 
     return () => {};
   }, [keyboardShortcutManager, keyboardGroup, selected]);
-
-  // const TimerSettings = React.lazy(() => import('./settings/TimerSettings'));
 
   return (
     <View style={[styles.container, {
