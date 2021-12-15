@@ -12,10 +12,14 @@ interface Props {
   /* eslint-disable-next-line */
   onChange?: (number: number) => any,
   onSelect?: () => any,
+  /**
+   * Enables the darker border but does not focus the text.
+   */
+  keyboardSelected?: boolean,
 }
 
 function NumberBox({
-  text, selected, onChange, onSelect,
+  text, selected, onChange, onSelect, keyboardSelected,
 }: Props) {
   const colors = useTheme();
 
@@ -33,8 +37,8 @@ function NumberBox({
       caretHidden
       style={[styles.container, TextStyles.textRegular, {
         backgroundColor: colors.gray5,
-        borderWidth: selected ? 1 : 0,
-        borderColor: selected ? colors.primary : undefined,
+        borderWidth: selected || keyboardSelected ? 1 : 0,
+        borderColor: selected || keyboardSelected ? colors.primary : undefined,
         color: colors.primary,
         textAlign: 'center',
       }, Platform.OS === 'web' ? {
@@ -64,6 +68,7 @@ function NumberBox({
 
 NumberBox.defaultProps = {
   selected: false,
+  keyboardSelected: false,
   onChange: () => {},
   onSelect: () => {},
 };
