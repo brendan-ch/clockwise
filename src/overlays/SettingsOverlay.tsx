@@ -83,6 +83,15 @@ function SettingsOverlay({ containerStyle }: Props) {
         ),
       }));
 
+      unsubMethods.push(keyboardShortcutManager?.registerEvent({
+        keys: ['ArrowUp'],
+        action: () => setSelected(
+          indexOfCurrent <= 0
+            ? selected
+            : navigator[indexOfCurrent - 1].title,
+        ),
+      }));
+
       return () => {
         unsubMethods.forEach((method) => {
           if (method) {
