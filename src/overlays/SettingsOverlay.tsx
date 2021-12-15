@@ -63,7 +63,7 @@ function SettingsOverlay({ containerStyle }: Props) {
   const colorValues = useTheme();
 
   useEffect(() => {
-    if (keyboardGroup === 'settings') {
+    if (keyboardGroup === 'settings' || keyboardGroup === 'settingsPage') {
       const unsubMethods: ((() => any) | undefined)[] = [];
       unsubMethods.push(keyboardShortcutManager?.registerEvent({
         keys: ['Escape'],
@@ -72,25 +72,27 @@ function SettingsOverlay({ containerStyle }: Props) {
         },
       }));
 
-      const indexOfCurrent = navigator.findIndex((value) => value.title === selected);
+      if (keyboardGroup === 'settings') {
+        const indexOfCurrent = navigator.findIndex((value) => value.title === selected);
 
-      unsubMethods.push(keyboardShortcutManager?.registerEvent({
-        keys: ['ArrowDown'],
-        action: () => setSelected(
-          navigator.length - 1 <= indexOfCurrent
-            ? selected
-            : navigator[indexOfCurrent + 1].title,
-        ),
-      }));
+        unsubMethods.push(keyboardShortcutManager?.registerEvent({
+          keys: ['ArrowDown'],
+          action: () => setSelected(
+            navigator.length - 1 <= indexOfCurrent
+              ? selected
+              : navigator[indexOfCurrent + 1].title,
+          ),
+        }));
 
-      unsubMethods.push(keyboardShortcutManager?.registerEvent({
-        keys: ['ArrowUp'],
-        action: () => setSelected(
-          indexOfCurrent <= 0
-            ? selected
-            : navigator[indexOfCurrent - 1].title,
-        ),
-      }));
+        unsubMethods.push(keyboardShortcutManager?.registerEvent({
+          keys: ['ArrowUp'],
+          action: () => setSelected(
+            indexOfCurrent <= 0
+              ? selected
+              : navigator[indexOfCurrent - 1].title,
+          ),
+        }));
+      }
 
       return () => {
         unsubMethods.forEach((method) => {
