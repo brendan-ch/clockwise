@@ -69,9 +69,8 @@ function TimerSettingsPane() {
   }, [keyboardShortcutManager, keyboardGroup]);
 
   useEffect(() => {
+    const unsubMethods: ((() => any) | undefined)[] = [];
     if (keyboardGroup === 'settingsPage' && keyboardSelected) {
-      const unsubMethods: ((() => any) | undefined)[] = [];
-
       const indexOfCurrent = options.findIndex((value) => value.storageKey === keyboardSelected);
       unsubMethods.push(keyboardShortcutManager?.registerEvent({
         keys: ['ArrowDown'],
@@ -90,16 +89,20 @@ function TimerSettingsPane() {
             : options[indexOfCurrent - 1].storageKey,
         ),
       }));
-      return () => {
-        unsubMethods.forEach((method) => {
-          if (method) {
-            method();
-          }
-        });
-      };
+    } else if (keyboardGroup === 'settingsPage' && !keyboardSelected) {
+      unsubMethods.push(keyboardShortcutManager?.registerEvent({
+        keys: ['ArrowDown'],
+        action: () => setKeyboardSelected(options[0].storageKey),
+      }));
     }
 
-    return () => {};
+    return () => {
+      unsubMethods.forEach((method) => {
+        if (method) {
+          method();
+        }
+      });
+    };
   }, [keyboardShortcutManager, keyboardGroup, keyboardSelected]);
 
   const renderHeader = ({ section }: { section: Section }) => (
