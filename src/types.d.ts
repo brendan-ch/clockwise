@@ -1,7 +1,7 @@
 type TimerState = 'running' | 'paused' | 'stopped';
 type Overlay = 'none' | 'settings' | 'command';
 
-type KeyboardShortcutGroup = 'timer' | 'settings' | 'input' | 'none';
+type KeyboardShortcutGroup = 'timer' | 'settings' | 'input' | 'settingsPage' | 'none';
 
 /**
  * Provides typings for React Navigation route parameters.

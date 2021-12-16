@@ -1,8 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   Platform, StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle,
 } from 'react-native';
+import AppContext from '../../AppContext';
 import useTheme from '../helpers/useTheme';
 import TextStyles from '../styles/Text';
 import Checkbox from './Checkbox';
@@ -19,12 +20,17 @@ interface Props {
   selected?: boolean,
   style?: StyleProp<ViewStyle>,
   disabled?: boolean,
+  keyboardSelected?: boolean,
 }
 
 function SettingsOption({
-  type, onPress, title, value, selected, onChange, onSelect, style, disabled,
+  type, onPress, title, value, selected, onChange, onSelect, style, disabled, keyboardSelected,
 }: Props) {
   const colors = useTheme();
+  const {
+    keyboardGroup,
+    keyboardShortcutManager,
+  } = useContext(AppContext);
 
   function handlePress() {
     if (type === 'toggle' && onChange && !disabled) {
@@ -33,6 +39,30 @@ function SettingsOption({
       onPress();
     }
   }
+
+  useEffect(() => {
+    if (keyboardSelected && keyboardGroup === 'settingsPage') {
+      // Register keyboard shortcut to select item
+      const unsubMethods: ((() => any) | undefined)[] = [];
+
+      if (onSelect) {
+        unsubMethods.push(keyboardShortcutManager?.registerEvent({
+          keys: ['ArrowRight'],
+          action: () => onSelect(),
+        }));
+      }
+
+      return () => {
+        unsubMethods.forEach((method) => {
+          if (method) {
+            method();
+          }
+        });
+      };
+    }
+
+    return () => {};
+  }, [keyboardShortcutManager, keyboardGroup, keyboardSelected]);
 
   const children = (
     <View
@@ -60,6 +90,7 @@ function SettingsOption({
           selected={selected}
           onChange={onChange}
           onSelect={onSelect}
+          keyboardSelected={keyboardSelected}
         />
       ) : undefined}
       {type === 'number' && disabled ? (
@@ -113,6 +144,7 @@ SettingsOption.defaultProps = {
   selected: false,
   style: {},
   disabled: false,
+  keyboardSelected: false,
 };
 
 export default SettingsOption;

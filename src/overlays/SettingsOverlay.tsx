@@ -7,6 +7,7 @@ import {
 import AppContext from '../../AppContext';
 import SettingsSelector from '../components/SettingSelector';
 import useTheme from '../helpers/useTheme';
+// import ConnectedAppsPane from './settings/ConnectedApps';
 
 // import TimerSettingsPane from './settings/TimerSettings';
 
@@ -37,7 +38,7 @@ const navigator: SettingsNavigatorObject[] = [
   },
   // {
   //   title: 'Connected apps',
-  //   renderer: ConnectedAppsPane,
+  //   renderer: <ConnectedAppsPane />,
   // },
 ];
 
@@ -54,6 +55,7 @@ function SettingsOverlay({ containerStyle }: Props) {
     keyboardShortcutManager,
     setOverlay,
     keyboardGroup,
+    setKeyboardGroup,
   } = useContext(AppContext);
 
   // Title of the selected settings navigator object.
@@ -62,7 +64,11 @@ function SettingsOverlay({ containerStyle }: Props) {
   const colorValues = useTheme();
 
   useEffect(() => {
-    if (keyboardGroup === 'settings') {
+    setKeyboardGroup('settings');
+  }, [selected]);
+
+  useEffect(() => {
+    if (keyboardGroup === 'settings' || keyboardGroup === 'settingsPage') {
       const unsubMethods: ((() => any) | undefined)[] = [];
       unsubMethods.push(keyboardShortcutManager?.registerEvent({
         keys: ['Escape'],
@@ -70,6 +76,38 @@ function SettingsOverlay({ containerStyle }: Props) {
           setOverlay('none');
         },
       }));
+
+      if (keyboardGroup === 'settings') {
+        const indexOfCurrent = navigator.findIndex((value) => value.title === selected);
+
+        unsubMethods.push(keyboardShortcutManager?.registerEvent({
+          keys: ['ArrowDown'],
+          action: () => setSelected(
+            navigator.length - 1 <= indexOfCurrent
+              ? selected
+              : navigator[indexOfCurrent + 1].title,
+          ),
+        }));
+
+        unsubMethods.push(keyboardShortcutManager?.registerEvent({
+          keys: ['ArrowUp'],
+          action: () => setSelected(
+            indexOfCurrent <= 0
+              ? selected
+              : navigator[indexOfCurrent - 1].title,
+          ),
+        }));
+
+        unsubMethods.push(keyboardShortcutManager?.registerEvent({
+          keys: ['ArrowRight'],
+          action: () => setKeyboardGroup('settingsPage'),
+        }));
+      } else if (keyboardGroup === 'settingsPage') {
+        unsubMethods.push(keyboardShortcutManager?.registerEvent({
+          keys: ['ArrowLeft'],
+          action: () => setKeyboardGroup('settings'),
+        }));
+      }
 
       return () => {
         unsubMethods.forEach((method) => {
@@ -81,9 +119,7 @@ function SettingsOverlay({ containerStyle }: Props) {
     }
 
     return () => {};
-  }, [keyboardShortcutManager, keyboardGroup]);
-
-  // const TimerSettings = React.lazy(() => import('./settings/TimerSettings'));
+  }, [keyboardShortcutManager, keyboardGroup, selected]);
 
   return (
     <View style={[styles.container, {
