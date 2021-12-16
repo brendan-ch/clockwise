@@ -47,7 +47,7 @@ function SettingsOption({
 
       if (onSelect) {
         unsubMethods.push(keyboardShortcutManager?.registerEvent({
-          keys: ['Enter'],
+          keys: ['ArrowRight'],
           action: () => onSelect(),
         }));
       }
