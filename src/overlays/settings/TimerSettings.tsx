@@ -49,6 +49,17 @@ function TimerSettingsPane() {
     keyboardGroup,
   } = useContext(AppContext);
 
+  /**
+   * Call the handleSelect method, and clear the keyboardSelected string
+   */
+  function handleSelectAndResetKeyboard(key?: string) {
+    if (keyboardSelected !== key) {
+      setKeyboardSelected(undefined);
+    }
+
+    handleSelect(key);
+  }
+
   useEffect(() => {
     if (keyboardGroup === 'settingsPage' && !keyboardSelected) {
       setKeyboardSelected(options[0].storageKey);
@@ -107,12 +118,12 @@ function TimerSettingsPane() {
       onChange={(data) => handleChange(item.storageKey, data)}
       onPress={() => {
         if (item.type === 'number') {
-          handleSelect(item.storageKey);
+          handleSelectAndResetKeyboard(item.storageKey);
         } else {
-          handleSelect();
+          handleSelectAndResetKeyboard();
         }
       }}
-      onSelect={() => handleSelect(item.storageKey)}
+      onSelect={() => handleSelectAndResetKeyboard(item.storageKey)}
       keyboardSelected={keyboardSelected === item.storageKey}
     />
   );
