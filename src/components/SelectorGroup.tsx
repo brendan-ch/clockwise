@@ -121,9 +121,7 @@ function SelectorGroup({
           }}
           title={header.title}
           type={header.type}
-          // subtitle={header.subtitle}
           value={header.value}
-          // onPressLeft={header.onPressLeft}
           onPressRight={header.onPressRight}
           onPress={header.onPress}
           onChangeText={expanded ? header.onChangeText : undefined}
