@@ -4,21 +4,21 @@ import {
 } from 'react-native';
 import useTheme from '../helpers/useTheme';
 import useWindowSize from '../helpers/useWindowSize';
-import Selector from './Selector';
+// import Selector from './Selector';
 import SettingsOption from './SettingsOption';
 
-interface SelectorProps {
-  index: string,
-  text?: string,
-  subtitle?: string,
-  iconRight?: string,
-  iconLeft?: string,
-  onPressLeft?: () => any,
-  onPressRight?: () => any,
-  onPress?: () => any,
-  /* eslint-disable-next-line */
-  onChangeText?: (text: string) => any,
-}
+// interface SelectorProps {
+//   index: string,
+//   text?: string,
+//   subtitle?: string,
+//   iconRight?: string,
+//   iconLeft?: string,
+//   onPressLeft?: () => any,
+//   onPressRight?: () => any,
+//   onPress?: () => any,
+//   /* eslint-disable-next-line */
+//   onChangeText?: (text: string) => any,
+// }
 
 interface SettingsOptionProps {
   index: string,
@@ -29,11 +29,13 @@ interface SettingsOptionProps {
   title?: string,
   onPress?: () => any,
   disabled?: boolean,
+  /* eslint-disable-next-line */
+  onChangeText?: (text: string) => any,
 }
 
 interface Props {
   data: SettingsOptionProps[],
-  header: SelectorProps,
+  header: SettingsOptionProps,
   expanded: boolean,
   fadeInOnMount?: boolean,
 }
@@ -123,18 +125,20 @@ function SelectorGroup({
     }]}
     >
       <View style={styles.headerContainer}>
+        {/* Line separating header from settings */}
         <View style={{
           width: expanded ? 9 : 0,
         }}
         />
-        <Selector
+        <SettingsOption
           style={{ flex: 1 }}
-          text={header.text}
-          subtitle={header.subtitle}
-          iconRight={header.iconRight}
-          iconLeft={header.iconLeft}
-          onPressLeft={header.onPressLeft}
-          onPressRight={header.onPressRight}
+          title={header.title}
+          type={header.type}
+          // subtitle={header.subtitle}
+          value={header.value}
+          // iconLeft={header.iconLeft}
+          // onPressLeft={header.onPressLeft}
+          // onPressRight={header.onPressRight}
           onPress={header.onPress}
           onChangeText={expanded ? header.onChangeText : undefined}
         />
