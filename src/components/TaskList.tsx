@@ -172,6 +172,17 @@ function TaskList() {
         }]}
         />
       ) : undefined}
+      {tasks.length === 0 ? (
+        <Text style={[TextStyles.textRegular, {
+          color: colorValues.gray3,
+          marginTop: 10,
+        }]}
+        >
+          {!['running', 'paused'].includes(context.timerState)
+            ? 'Add some tasks to keep track of them during your session.'
+            : 'No tasks to display.'}
+        </Text>
+      ) : undefined}
       {error ? (
         <Text style={[TextStyles.textRegular, {
           color: colorValues.primary,
