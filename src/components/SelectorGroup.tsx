@@ -3,8 +3,6 @@ import {
   StyleSheet, View, Animated, FlatList,
 } from 'react-native';
 import useTheme from '../helpers/useTheme';
-import useWindowSize from '../helpers/useWindowSize';
-// import Selector from './Selector';
 import SettingsOption from './SettingsOption';
 
 interface SettingsOptionProps {
@@ -29,7 +27,7 @@ interface Props {
 }
 
 /**
- * Component that can expand with additional Selector components.
+ * Component that can expand with additional SettingOption components.
  */
 function SelectorGroup({
   data, header, expanded, fadeInOnMount,
@@ -40,8 +38,6 @@ function SelectorGroup({
   const opacityAnimation = useRef(new Animated.Value(0)).current;
 
   const colorValues = useTheme();
-
-  const windowSize = useWindowSize();
 
   useEffect(() => {
     if (fadeInOnMount) {
@@ -70,33 +66,27 @@ function SelectorGroup({
   }, [expanded]);
 
   const renderSelector = ({ item }: { item: SettingsOptionProps }) => (
-    <View style={styles.headerContainer}>
-      <View style={{
-        width: expanded ? '3%' : '0%',
+    <SettingsOption
+      onChange={item.onChange}
+      selected={selected === item.index}
+      onSelect={() => setSelected(item.index)}
+      onPress={() => {
+        if (item.type === 'number' && selected === item.index) {
+          setSelected(undefined);
+        } else if (item.type === 'number') {
+          setSelected(item.index);
+        } else if (item.onPress) {
+          item.onPress();
+        }
       }}
-      />
-      <SettingsOption
-        onChange={item.onChange}
-        selected={selected === item.index}
-        onSelect={() => setSelected(item.index)}
-        onPress={() => {
-          if (item.type === 'number' && selected === item.index) {
-            setSelected(undefined);
-          } else if (item.type === 'number') {
-            setSelected(item.index);
-          } else if (item.onPress) {
-            item.onPress();
-          }
-        }}
-        type={item.type}
-        value={item.value}
-        title={item.title}
-        style={{
-          width: windowSize === 'portrait' ? 250 : 260,
-        }}
-        disabled={item.disabled}
-      />
-    </View>
+      type={item.type}
+      value={item.value}
+      title={item.title}
+      disabled={item.disabled}
+      style={{
+        marginHorizontal: 5,
+      }}
+    />
   );
 
   return (
@@ -113,20 +103,17 @@ function SelectorGroup({
       width: '100%',
     }]}
     >
-      <View style={styles.headerContainer}>
-        <SettingsOption
-          style={{
-            width: expanded ? '97%' : '100%',
-            marginLeft: expanded ? '3%' : '0%',
-          }}
-          title={header.title}
-          type={header.type}
-          value={header.value}
-          onPressRight={header.onPressRight}
-          onPress={header.onPress}
-          onChangeText={expanded ? header.onChangeText : undefined}
-        />
-      </View>
+      <SettingsOption
+        title={header.title}
+        type={header.type}
+        value={header.value}
+        onPressRight={header.onPressRight}
+        onPress={header.onPress}
+        onChangeText={expanded ? header.onChangeText : undefined}
+        style={{
+          marginLeft: expanded ? 5 : 0,
+        }}
+      />
       {expanded ? (
         <View style={[styles.line, {
           backgroundColor: colorValues.gray5,
@@ -149,10 +136,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
-  headerContainer: {
-    flexDirection: 'row',
+    alignItems: 'stretch',
     width: '100%',
   },
   line: {
