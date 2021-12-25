@@ -141,11 +141,12 @@ function TaskList() {
         },
       ]}
       header={{
-        text: item.title,
+        title: item.title,
+        type: 'icon',
         index: `${item.id}`,
         onPress: expandedTask === item.id ? undefined : () => setExpandedTask(item.id),
-        onPressRight: () => setExpandedTask(expandedTask === item.id ? -1 : item.id),
-        iconRight: expandedTask === item.id ? 'chevron-down' : 'chevron-forward',
+        // onPressRight: () => setExpandedTask(expandedTask === item.id ? -1 : item.id),
+        value: expandedTask === item.id ? 'chevron-down' : 'chevron-forward',
         onChangeText: context.timerState === 'stopped' ? (text) => handleChangeTask('title', text, item.id) : undefined,
       }}
     />
