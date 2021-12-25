@@ -4,21 +4,8 @@ import {
 } from 'react-native';
 import useTheme from '../helpers/useTheme';
 import useWindowSize from '../helpers/useWindowSize';
-import Selector from './Selector';
+// import Selector from './Selector';
 import SettingsOption from './SettingsOption';
-
-interface SelectorProps {
-  index: string,
-  text?: string,
-  subtitle?: string,
-  iconRight?: string,
-  iconLeft?: string,
-  onPressLeft?: () => any,
-  onPressRight?: () => any,
-  onPress?: () => any,
-  /* eslint-disable-next-line */
-  onChangeText?: (text: string) => any,
-}
 
 interface SettingsOptionProps {
   index: string,
@@ -28,12 +15,15 @@ interface SettingsOptionProps {
   onChange?: (data: any) => any,
   title?: string,
   onPress?: () => any,
+  onPressRight?: () => any,
   disabled?: boolean,
+  /* eslint-disable-next-line */
+  onChangeText?: (text: string) => any,
 }
 
 interface Props {
   data: SettingsOptionProps[],
-  header: SelectorProps,
+  header: SettingsOptionProps,
   expanded: boolean,
   fadeInOnMount?: boolean,
 }
@@ -82,7 +72,7 @@ function SelectorGroup({
   const renderSelector = ({ item }: { item: SettingsOptionProps }) => (
     <View style={styles.headerContainer}>
       <View style={{
-        width: expanded ? 9 : 0,
+        width: expanded ? '3%' : '0%',
       }}
       />
       <SettingsOption
@@ -120,20 +110,18 @@ function SelectorGroup({
         outputRange: [52, 52 + (50 * data.length)],
       }),
       overflow: 'hidden',
+      width: '100%',
     }]}
     >
       <View style={styles.headerContainer}>
-        <View style={{
-          width: expanded ? 9 : 0,
-        }}
-        />
-        <Selector
-          style={{ flex: 1 }}
-          text={header.text}
-          subtitle={header.subtitle}
-          iconRight={header.iconRight}
-          iconLeft={header.iconLeft}
-          onPressLeft={header.onPressLeft}
+        <SettingsOption
+          style={{
+            width: expanded ? '97%' : '100%',
+            marginLeft: expanded ? '3%' : '0%',
+          }}
+          title={header.title}
+          type={header.type}
+          value={header.value}
           onPressRight={header.onPressRight}
           onPress={header.onPress}
           onChangeText={expanded ? header.onChangeText : undefined}

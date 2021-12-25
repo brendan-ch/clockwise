@@ -8,8 +8,8 @@ import useTheme from '../helpers/useTheme';
 import { TASKS } from '../StorageKeys';
 import TextStyles from '../styles/Text';
 import { Task } from '../types';
-import Selector from './Selector';
 import SelectorGroup from './SelectorGroup';
+import SettingsOption from './SettingsOption';
 
 /**
  * Task list component that displays selector components and an "Add task" button.
@@ -141,11 +141,12 @@ function TaskList() {
         },
       ]}
       header={{
-        text: item.title,
+        title: item.title,
+        type: 'icon',
         index: `${item.id}`,
         onPress: expandedTask === item.id ? undefined : () => setExpandedTask(item.id),
         onPressRight: () => setExpandedTask(expandedTask === item.id ? -1 : item.id),
-        iconRight: expandedTask === item.id ? 'chevron-down' : 'chevron-forward',
+        value: expandedTask === item.id ? 'chevron-down' : 'chevron-forward',
         onChangeText: context.timerState === 'stopped' ? (text) => handleChangeTask('title', text, item.id) : undefined,
       }}
     />
@@ -156,10 +157,11 @@ function TaskList() {
       {context.timerState === 'running' || context.timerState === 'paused' ? (
         undefined
       ) : (
-        <Selector
-          text="add a task"
-          iconRight="add"
-          textStyle={TextStyles.textBold}
+        <SettingsOption
+          title="add a task"
+          type="icon"
+          value="add"
+          titleStyle={TextStyles.textBold}
           onPress={() => handleAddTask()}
         />
       )}
