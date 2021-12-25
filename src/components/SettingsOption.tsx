@@ -14,6 +14,9 @@ interface Props {
    * Indicates type of option displayed and value passed.
    */
   type: 'number' | 'toggle' | 'icon',
+  /**
+   * Value for the provided `type`.
+   */
   value?: boolean | number | string,
   /**
    * Run when the setting is changed.
@@ -29,6 +32,9 @@ interface Props {
    * Run when the component is pressed.
    */
   onPress?: () => any,
+  /**
+   * If `value` is `icon`, runs when the icon on the right is pressed.
+   */
   onPressRight?: () => any,
   /**
    * Run when the component is selected.
