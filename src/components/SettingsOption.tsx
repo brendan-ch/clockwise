@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useContext, useEffect } from 'react';
 import {
-  Platform, StyleProp, StyleSheet, Text, TouchableOpacity, View, ViewStyle,
+  Platform, StyleProp, StyleSheet, Text, TextInput, TouchableOpacity, View, ViewStyle,
 } from 'react-native';
 import AppContext from '../../AppContext';
 import useTheme from '../helpers/useTheme';
@@ -10,21 +10,58 @@ import Checkbox from './Checkbox';
 import NumberBox from './NumberBox';
 
 interface Props {
+  /**
+   * Indicates type of option displayed and value passed.
+   */
   type: 'number' | 'toggle' | 'icon',
   value?: boolean | number | string,
+  /**
+   * Run when the setting is changed.
+   */
   /* eslint-disable-next-line */
   onChange?: (data: any) => any,
+  /**
+   * Title to display for the settings component. If `onChangeText` is provided,
+   * this acts as the value for the input component.
+   */
   title?: string,
+  /**
+   * Run when the component is pressed.
+   */
   onPress?: () => any,
+  /**
+   * Run when the component is selected.
+   */
   onSelect?: () => any,
+  /**
+   * Marks the component as selected. Only supported for type `number`.
+   */
   selected?: boolean,
   style?: StyleProp<ViewStyle>,
+  /**
+   * Marks the component as view-only.
+   */
   disabled?: boolean,
+  /**
+   * Indicates whether the component should display a keyboard
+   * selected indicator.
+   */
   keyboardSelected?: boolean,
+  /**
+   * Changes the title to an input field.
+   */
+  /* eslint-disable-next-line */
+  onChangeText?: (text: string) => any,
 }
 
 function SettingsOption({
-  type, onPress, title, value, selected, onChange, onSelect, style, disabled, keyboardSelected,
+  type,
+  onPress,
+  title,
+  value,
+  selected,
+  onChange,
+  onSelect, style, disabled, keyboardSelected, onChangeText,
 }: Props) {
   const colors = useTheme();
   const {
@@ -72,13 +109,25 @@ function SettingsOption({
       }, style]}
       onClick={Platform.OS === 'web' ? handlePress : undefined}
     >
-      <Text style={[TextStyles.textRegular, {
-        color: colors.primary,
-      }]}
-      >
-        {title}
+      {onChangeText ? (
+        <TextInput
+          style={[TextStyles.textRegular, {
+            color: colors.primary,
+            width: '100%',
+            borderWidth: 0,
+          }]}
+          value={title}
+          onChangeText={(text) => onChangeText(text)}
+        />
+      ) : (
+        <Text style={[TextStyles.textRegular, {
+          color: colors.primary,
+        }]}
+        >
+          {title}
 
-      </Text>
+        </Text>
+      )}
       {type === 'toggle' ? (
         <Checkbox
           selected={value === true}
@@ -145,6 +194,7 @@ SettingsOption.defaultProps = {
   style: {},
   disabled: false,
   keyboardSelected: false,
+  onChangeText: undefined,
 };
 
 export default SettingsOption;
