@@ -25,6 +25,7 @@ interface Props {
 
 /**
  * Selector component that is displayed in task list.
+ * @deprecated Deprecated in favor of `SettingsOption` component.
  */
 function Selector({
   text,
