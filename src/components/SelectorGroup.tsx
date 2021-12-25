@@ -72,7 +72,7 @@ function SelectorGroup({
   const renderSelector = ({ item }: { item: SettingsOptionProps }) => (
     <View style={styles.headerContainer}>
       <View style={{
-        width: expanded ? 9 : 0,
+        width: expanded ? '3%' : '0%',
       }}
       />
       <SettingsOption
@@ -110,16 +110,15 @@ function SelectorGroup({
         outputRange: [52, 52 + (50 * data.length)],
       }),
       overflow: 'hidden',
+      width: '100%',
     }]}
     >
       <View style={styles.headerContainer}>
-        {/* Line separating header from settings */}
-        <View style={{
-          width: expanded ? 9 : 0,
-        }}
-        />
         <SettingsOption
-          style={{ flex: 1 }}
+          style={{
+            width: expanded ? '97%' : '100%',
+            marginLeft: expanded ? '3%' : '0%',
+          }}
           title={header.title}
           type={header.type}
           // subtitle={header.subtitle}
