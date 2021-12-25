@@ -1,7 +1,16 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useContext, useEffect } from 'react';
 import {
-  Platform, Pressable, StyleProp, StyleSheet, Text, TextInput, TouchableOpacity, View, ViewStyle,
+  Platform,
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  Text,
+  TextInput,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
 } from 'react-native';
 import AppContext from '../../AppContext';
 import useTheme from '../helpers/useTheme';
@@ -45,6 +54,7 @@ interface Props {
    */
   selected?: boolean,
   style?: StyleProp<ViewStyle>,
+  titleStyle?: StyleProp<TextStyle>,
   /**
    * Marks the component as view-only.
    */
@@ -69,7 +79,7 @@ function SettingsOption({
   value,
   selected,
   onChange,
-  onSelect, style, disabled, keyboardSelected, onChangeText,
+  onSelect, style, titleStyle, disabled, keyboardSelected, onChangeText,
 }: Props) {
   const colors = useTheme();
   const {
@@ -123,14 +133,14 @@ function SettingsOption({
             color: colors.primary,
             width: '100%',
             borderWidth: 0,
-          }]}
+          }, titleStyle]}
           value={title}
           onChangeText={(text) => onChangeText(text)}
         />
       ) : (
         <Text style={[TextStyles.textRegular, {
           color: colors.primary,
-        }]}
+        }, titleStyle]}
         >
           {title}
 
@@ -203,6 +213,7 @@ SettingsOption.defaultProps = {
   value: false,
   selected: false,
   style: {},
+  titleStyle: {},
   disabled: false,
   keyboardSelected: false,
   onChangeText: undefined,

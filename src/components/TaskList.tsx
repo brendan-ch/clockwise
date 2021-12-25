@@ -161,7 +161,7 @@ function TaskList() {
           title="add a task"
           type="icon"
           value="add"
-          // textStyle={TextStyles.textBold}
+          titleStyle={TextStyles.textBold}
           onPress={() => handleAddTask()}
         />
       )}
