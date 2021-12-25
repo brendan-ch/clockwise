@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useContext, useEffect } from 'react';
 import {
-  Platform, StyleProp, StyleSheet, Text, TextInput, TouchableOpacity, View, ViewStyle,
+  Platform, Pressable, StyleProp, StyleSheet, Text, TextInput, TouchableOpacity, View, ViewStyle,
 } from 'react-native';
 import AppContext from '../../AppContext';
 import useTheme from '../helpers/useTheme';
@@ -29,6 +29,7 @@ interface Props {
    * Run when the component is pressed.
    */
   onPress?: () => any,
+  onPressRight?: () => any,
   /**
    * Run when the component is selected.
    */
@@ -57,6 +58,7 @@ interface Props {
 function SettingsOption({
   type,
   onPress,
+  onPressRight,
   title,
   value,
   selected,
@@ -152,12 +154,14 @@ function SettingsOption({
         </Text>
       ) : undefined}
       {type === 'icon' && typeof value === 'string' ? (
-        <Ionicons
-          // @ts-ignore
-          name={value}
-          size={20}
-          color={colors.gray4}
-        />
+        <Pressable onPress={onPressRight}>
+          <Ionicons
+            // @ts-ignore
+            name={value}
+            size={20}
+            color={colors.gray4}
+          />
+        </Pressable>
       ) : undefined}
     </View>
   );
@@ -187,6 +191,7 @@ const styles = StyleSheet.create({
 SettingsOption.defaultProps = {
   onChange: () => {},
   onPress: () => {},
+  onPressRight: () => {},
   onSelect: () => {},
   title: '',
   value: false,
