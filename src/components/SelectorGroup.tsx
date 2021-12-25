@@ -7,19 +7,6 @@ import useWindowSize from '../helpers/useWindowSize';
 // import Selector from './Selector';
 import SettingsOption from './SettingsOption';
 
-// interface SelectorProps {
-//   index: string,
-//   text?: string,
-//   subtitle?: string,
-//   iconRight?: string,
-//   iconLeft?: string,
-//   onPressLeft?: () => any,
-//   onPressRight?: () => any,
-//   onPress?: () => any,
-//   /* eslint-disable-next-line */
-//   onChangeText?: (text: string) => any,
-// }
-
 interface SettingsOptionProps {
   index: string,
   type: 'number' | 'toggle' | 'icon',
@@ -28,6 +15,7 @@ interface SettingsOptionProps {
   onChange?: (data: any) => any,
   title?: string,
   onPress?: () => any,
+  onPressRight?: () => any,
   disabled?: boolean,
   /* eslint-disable-next-line */
   onChangeText?: (text: string) => any,
@@ -136,9 +124,8 @@ function SelectorGroup({
           type={header.type}
           // subtitle={header.subtitle}
           value={header.value}
-          // iconLeft={header.iconLeft}
           // onPressLeft={header.onPressLeft}
-          // onPressRight={header.onPressRight}
+          onPressRight={header.onPressRight}
           onPress={header.onPress}
           onChangeText={expanded ? header.onChangeText : undefined}
         />
