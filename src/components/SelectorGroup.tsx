@@ -83,6 +83,9 @@ function SelectorGroup({
       value={item.value}
       title={item.title}
       disabled={item.disabled}
+      style={{
+        marginHorizontal: 5,
+      }}
     />
   );
 
@@ -107,6 +110,9 @@ function SelectorGroup({
         onPressRight={header.onPressRight}
         onPress={header.onPress}
         onChangeText={expanded ? header.onChangeText : undefined}
+        style={{
+          marginLeft: expanded ? 5 : 0,
+        }}
       />
       {expanded ? (
         <View style={[styles.line, {
