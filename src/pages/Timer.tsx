@@ -1,9 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import {
-  StyleSheet, View, Platform,
+  StyleSheet, View,
 } from 'react-native';
-import * as Haptics from 'expo-haptics';
+// import * as Haptics from 'expo-haptics';
 // import { useNavigation } from '@react-navigation/native';
 import AppContext from '../../AppContext';
 import ActionButtonBar from '../components/ActionButtonBar';
@@ -12,17 +12,14 @@ import Timer from '../components/Timer';
 import calculateTimerDisplay from '../helpers/calculateTimer';
 import useTheme from '../helpers/useTheme';
 import useWindowSize from '../helpers/useWindowSize';
-import { getTimerValue } from '../helpers/storage';
+// import { getTimerValue } from '../helpers/storage';
 import TaskList from '../components/TaskList';
 // import HeaderButton from '../components/HeaderButton';
 
-const MIN_25 = 1500000;
-const MIN_5 = 300000;
 // const MIN_5 = 10000; // for testing purposes
 // const INTERVAL = 1000;
 
 export default function TimerPage() {
-  const [mode, setMode] = useState<'focus' | 'break'>('focus');
   // const [introDisplayed, setIntroDisplayed] = useState(true);
 
   const colorValues = useTheme();
@@ -31,20 +28,23 @@ export default function TimerPage() {
   const {
     timeRemaining,
     timerState,
-    clearTimerInterval,
+    // clearTimerInterval,
     timeout,
-    setTimeRemaining,
-    setTimerState,
-    setTimeoutState,
+    // setTimeRemaining,
+    // setTimerState,
+    // setTimeoutState,
     keyboardShortcutManager,
     keyboardGroup,
     setKeyboardGroup,
+    mode,
+    handleStateSwitch,
+    startTimer,
+    stopTimer,
+    pauseTimer,
   } = useContext(AppContext);
 
   useEffect(() => {
     // Read value in storage and set in context
-    getAndSetTimerValue(mode);
-
     setKeyboardGroup('timer');
   }, []);
 
@@ -100,93 +100,6 @@ export default function TimerPage() {
     } else {
       startTimer();
     }
-  }
-
-  /**
-   * Handle switching between break and focus modes.
-   */
-  async function handleStateSwitch(newMode: 'focus' | 'break') {
-    clearTimerInterval(timeout);
-    setTimerState('stopped');
-    setMode(newMode);
-
-    await getAndSetTimerValue(newMode);
-  }
-
-  /**
-   * Set the time remaining based on AsyncStorage value.
-   * @param mode
-   */
-  async function getAndSetTimerValue(newMode: 'focus' | 'break') {
-    const timerValueMinutes = await getTimerValue(newMode);
-
-    if (timerValueMinutes && !Number.isNaN(Number(timerValueMinutes))) {
-      setTimeRemaining(Number(timerValueMinutes) * 60 * 1000);
-    } else {
-      setTimeRemaining(newMode === 'break' ? MIN_5 : MIN_25);
-    }
-  }
-
-  /**
-   * Set an interval that updates the timer.
-   */
-  function startTimer() {
-    setTimerState('running');
-
-    const start = Date.now();
-    // const expected = Date.now() + INTERVAL;
-    // const newTimeout = setTimeout(() => updateTimeRemaining(expected, timeRemaining), INTERVAL);
-    const newTimeout = setInterval(() => updateTimeRemaining(start), 100);
-
-    setTimeoutState(newTimeout);
-  }
-
-  /**
-   * Pause the timer.
-   */
-  function pauseTimer() {
-    clearTimerInterval(timeout);
-    setTimerState('paused');
-  }
-
-  /**
-   * Stop the timer.
-   */
-  async function stopTimer() {
-    clearTimerInterval(timeout);
-    setTimerState('stopped');
-    // setTimeRemaining(mode === 'break' ? MIN_5 : MIN_25);
-    await getAndSetTimerValue(mode);
-  }
-
-  /**
-   * Clear the timer updating interval.
-   */
-
-  /**
-   * Update the time remaining in the state.
-   * @param interval
-   */
-  function updateTimeRemaining(start: number) {
-    // Set actual time based on delta
-    const delta = Date.now() - start;
-
-    // if (Platform.OS === 'web') {
-    //   window.document.title = `${calculateTimerDisplay(timeRemaining - delta)} | Session`;
-    // }
-    if (timeRemaining - delta <= 0) {
-      // Clear timer and change to other mode
-      handleStateSwitch(mode === 'break' ? 'focus' : 'break');
-
-      // Haptic feedback
-      if (Platform.OS === 'ios' || Platform.OS === 'android') {
-        Haptics.notificationAsync();
-      }
-
-      return;
-    }
-
-    setTimeRemaining(timeRemaining - delta);
   }
 
   // Set breakpoints

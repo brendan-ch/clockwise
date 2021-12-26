@@ -5,32 +5,41 @@ import { KeyboardShortcutGroup, Overlay, TimerState } from './src/types';
 interface DefaultAppState {
   keyboardShortcutManager?: KeyboardShortcutManager,
   timeRemaining: number,
-  setTimeRemaining: Dispatch<SetStateAction<number>>,
+  // setTimeRemaining: Dispatch<SetStateAction<number>>,
   timerState: TimerState,
-  setTimerState: Dispatch<SetStateAction<TimerState>>,
+  // setTimerState: Dispatch<SetStateAction<TimerState>>,
   timeout?: number,
-  setTimeoutState: Dispatch<SetStateAction<any>>,
+  // setTimeoutState: Dispatch<SetStateAction<any>>,
+  mode: 'focus' | 'break',
   /* eslint-disable-next-line */
-  clearTimerInterval: (interval: any) => any,
+  handleStateSwitch: (newMode: 'focus' | 'break') => any,
+  /* eslint-disable-next-line */
   overlay: Overlay,
   setOverlay: Dispatch<SetStateAction<any>>,
   keyboardGroup: KeyboardShortcutGroup,
   setKeyboardGroup: Dispatch<SetStateAction<KeyboardShortcutGroup>>,
+  startTimer: () => any,
+  stopTimer: () => any,
+  pauseTimer: () => any,
 }
 
 const defaultAppState: DefaultAppState = {
   keyboardShortcutManager: undefined,
   timeRemaining: 0,
-  setTimeRemaining: () => {},
+  // setTimeRemaining: () => {},
   timerState: 'stopped',
-  setTimerState: () => {},
+  // setTimerState: () => {},
   timeout: undefined,
-  setTimeoutState: () => {},
-  clearTimerInterval: () => {},
+  // setTimeoutState: () => {},
   overlay: 'none',
   setOverlay: () => {},
   keyboardGroup: 'none',
   setKeyboardGroup: () => {},
+  mode: 'focus',
+  handleStateSwitch: () => {},
+  startTimer: () => {},
+  stopTimer: () => {},
+  pauseTimer: () => {},
 };
 
 const AppContext = React.createContext(defaultAppState);
