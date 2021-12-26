@@ -176,8 +176,8 @@ export default function App() {
 
   useEffect(() => {
     if (timeRemaining < 0) {
-      // Clear interval
-      clearTimerInterval(timeout);
+      // Clear interval and set new state
+      handleStateSwitch(mode === 'focus' ? 'break' : 'focus');
 
       // Set timer state
       setTimerState('stopped');
