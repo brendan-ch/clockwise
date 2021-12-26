@@ -44,6 +44,7 @@ function TaskList() {
       id: newId,
       estPomodoros: 1,
       syncData: {},
+      completed: false,
     };
 
     setTasks([
@@ -139,6 +140,24 @@ function TaskList() {
     setTasksInStorage(tasksCopy);
   }
 
+  /**
+   * Handle task completion undo. Cancels the deletion timeout and marks
+   * `completed` as false for task.
+   */
+  function handleUndoComplete() {
+    if (deletionTimeout) {
+      clearTimeout(deletionTimeout.timeout);
+
+      const tasksCopy = tasks.slice();
+      const index = tasksCopy.findIndex((existing) => existing.id === deletionTimeout.id);
+      tasksCopy[index].completed = false;
+
+      setDeletionTimeout(undefined);
+      setTasks(tasksCopy);
+      setTasksInStorage(tasksCopy);
+    }
+  }
+
   const colorValues = useTheme();
 
   /**
@@ -228,13 +247,14 @@ function TaskList() {
         }),
       ]}
       header={item.completed ? ({
-        title: 'completed',
+        title: 'completed (press to undo)',
         type: 'icon',
         index: `${item.id}`,
         value: 'arrow-undo-outline',
         titleStyle: {
           color: colorValues.gray4,
         },
+        onPress: () => handleUndoComplete(),
       }) : ({
         title: item.title,
         type: 'icon',
