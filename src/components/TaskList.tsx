@@ -3,6 +3,7 @@ import {
   FlatList, StyleSheet, View, Text,
 } from 'react-native';
 import AppContext from '../../AppContext';
+import generateTaskId from '../helpers/generateId';
 import { getData, storeData } from '../helpers/storage';
 import useTheme from '../helpers/useTheme';
 import { TASKS } from '../StorageKeys';
@@ -35,10 +36,12 @@ function TaskList() {
   /**
    * Add a new task to state.
    */
-  function handleAddTask() {
+  async function handleAddTask() {
+    const newId = await generateTaskId();
+
     const newTask: Task = {
       title: 'New task',
-      id: tasks.length,
+      id: newId,
       estPomodoros: 1,
       syncData: {},
     };
