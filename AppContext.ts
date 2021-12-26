@@ -18,6 +18,7 @@ interface DefaultAppState {
   startTimer: () => any,
   stopTimer: () => any,
   pauseTimer: () => any,
+  setPageTitle: Dispatch<SetStateAction<string>>,
 }
 
 const defaultAppState: DefaultAppState = {
@@ -34,6 +35,7 @@ const defaultAppState: DefaultAppState = {
   startTimer: () => {},
   stopTimer: () => {},
   pauseTimer: () => {},
+  setPageTitle: () => {},
 };
 
 const AppContext = React.createContext(defaultAppState);
