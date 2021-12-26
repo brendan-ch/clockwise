@@ -110,8 +110,10 @@ function TaskList() {
 
     // Set timeout for deletion
     const timeout = setTimeout(() => {
+      const deletedIndex = tasksCopy.findIndex((existing) => existing.id === id);
+
       // handleDeleteTask(id);
-      tasksCopy.splice(index, 1);
+      tasksCopy.splice(deletedIndex, 1);
       setTasks(tasksCopy);
       setTasksInStorage(tasksCopy);
 
