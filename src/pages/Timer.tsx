@@ -19,9 +19,7 @@ import TaskList from '../components/TaskList';
 const MIN_25 = 1500000;
 const MIN_5 = 300000;
 // const MIN_5 = 10000; // for testing purposes
-const INTERVAL = 1000;
-
-// type Props = NativeStackScreenProps<RootStackParamList, 'Timer'>;
+// const INTERVAL = 1000;
 
 export default function TimerPage() {
   const [mode, setMode] = useState<'focus' | 'break'>('focus');
@@ -135,8 +133,10 @@ export default function TimerPage() {
   function startTimer() {
     setTimerState('running');
 
-    const expected = Date.now() + INTERVAL;
-    const newTimeout = setTimeout(() => updateTimeRemaining(expected, timeRemaining), INTERVAL);
+    const start = Date.now();
+    // const expected = Date.now() + INTERVAL;
+    // const newTimeout = setTimeout(() => updateTimeRemaining(expected, timeRemaining), INTERVAL);
+    const newTimeout = setInterval(() => updateTimeRemaining(start), 100);
 
     setTimeoutState(newTimeout);
   }
@@ -167,13 +167,24 @@ export default function TimerPage() {
    * Update the time remaining in the state.
    * @param interval
    */
-  function updateTimeRemaining(expected: number, timeRemainingActual: number) {
+  function updateTimeRemaining(start: number) {
+    // Set actual time based on delta
+    const delta = Date.now() - start;
+
+    // if (Platform.OS === 'web') {
+    //   window.document.title = `${calculateTimerDisplay(timeRemaining - delta)} | Session`;
+    // }
+    setTimeRemaining(timeRemaining - delta);
+
     // Calculate drift
-    const dt = Date.now() - expected;
+    // const dt = Date.now() - expected;
 
     // Set time remaining
-    const updatedTimeRemaining = timeRemainingActual - (INTERVAL + dt);
-    if (updatedTimeRemaining <= 0) {
+    // const updatedTimeRemaining = timeRemainingActual - (INTERVAL + dt);
+
+    // // Set time in browser window
+
+    if (timeRemaining - delta <= 0) {
       // Clear timer and change to other mode
       handleStateSwitch(mode === 'break' ? 'focus' : 'break');
 
@@ -181,27 +192,15 @@ export default function TimerPage() {
       if (Platform.OS === 'ios' || Platform.OS === 'android') {
         Haptics.notificationAsync();
       }
-
-      return;
     }
-    setTimeRemaining(updatedTimeRemaining);
+    // setTimeRemaining(updatedTimeRemaining);
 
-    // Repeat timeout until cleared
-    setTimeoutState(setTimeout(
-      () => updateTimeRemaining(expected + INTERVAL, updatedTimeRemaining),
-      Math.max(0, INTERVAL - dt),
-    ));
+    // // Repeat timeout until cleared
+    // setTimeoutState(setTimeout(
+    //   () => updateTimeRemaining(expected + INTERVAL, updatedTimeRemaining),
+    //   Math.max(0, INTERVAL - dt),
+    // ));
   }
-
-  // /**
-  //  * Dismiss the introduction component.
-  //  */
-  // function handleIntroDismiss() {
-  //   setIntroDisplayed(false);
-  // }
-
-  // console.log(height);
-  // console.log(width);
 
   // Set breakpoints
   // Small window view

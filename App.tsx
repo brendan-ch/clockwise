@@ -65,7 +65,8 @@ export default function App() {
    * Clear the timer and set timeout state to undefined.
    */
   function clearTimerInterval() {
-    clearTimeout(timeout);
+    // clearTimeout(timeout);
+    clearInterval(timeout);
     setTimeoutState(undefined);
   }
 
