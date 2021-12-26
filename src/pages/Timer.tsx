@@ -106,7 +106,7 @@ export default function TimerPage() {
    * Handle switching between break and focus modes.
    */
   async function handleStateSwitch(newMode: 'focus' | 'break') {
-    clearTimerInterval();
+    clearTimerInterval(timeout);
     setTimerState('stopped');
     setMode(newMode);
 
@@ -145,7 +145,7 @@ export default function TimerPage() {
    * Pause the timer.
    */
   function pauseTimer() {
-    clearTimerInterval();
+    clearTimerInterval(timeout);
     setTimerState('paused');
   }
 
@@ -153,7 +153,7 @@ export default function TimerPage() {
    * Stop the timer.
    */
   async function stopTimer() {
-    clearTimerInterval();
+    clearTimerInterval(timeout);
     setTimerState('stopped');
     // setTimeRemaining(mode === 'break' ? MIN_5 : MIN_25);
     await getAndSetTimerValue(mode);
@@ -174,16 +174,6 @@ export default function TimerPage() {
     // if (Platform.OS === 'web') {
     //   window.document.title = `${calculateTimerDisplay(timeRemaining - delta)} | Session`;
     // }
-    setTimeRemaining(timeRemaining - delta);
-
-    // Calculate drift
-    // const dt = Date.now() - expected;
-
-    // Set time remaining
-    // const updatedTimeRemaining = timeRemainingActual - (INTERVAL + dt);
-
-    // // Set time in browser window
-
     if (timeRemaining - delta <= 0) {
       // Clear timer and change to other mode
       handleStateSwitch(mode === 'break' ? 'focus' : 'break');
@@ -192,14 +182,11 @@ export default function TimerPage() {
       if (Platform.OS === 'ios' || Platform.OS === 'android') {
         Haptics.notificationAsync();
       }
-    }
-    // setTimeRemaining(updatedTimeRemaining);
 
-    // // Repeat timeout until cleared
-    // setTimeoutState(setTimeout(
-    //   () => updateTimeRemaining(expected + INTERVAL, updatedTimeRemaining),
-    //   Math.max(0, INTERVAL - dt),
-    // ));
+      return;
+    }
+
+    setTimeRemaining(timeRemaining - delta);
   }
 
   // Set breakpoints
