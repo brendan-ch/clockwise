@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
-  StyleSheet, View, Animated, FlatList,
+  StyleSheet, View, Animated, FlatList, StyleProp, TextStyle,
 } from 'react-native';
 import useTheme from '../helpers/useTheme';
 import SettingsOption from './SettingsOption';
@@ -17,6 +17,7 @@ interface SettingsOptionProps {
   disabled?: boolean,
   /* eslint-disable-next-line */
   onChangeText?: (text: string) => any,
+  titleStyle?: StyleProp<TextStyle>,
 }
 
 interface Props {
@@ -86,6 +87,7 @@ function SelectorGroup({
       style={{
         marginHorizontal: 5,
       }}
+      titleStyle={item.titleStyle}
     />
   );
 
@@ -113,6 +115,7 @@ function SelectorGroup({
         style={{
           marginLeft: expanded ? 5 : 0,
         }}
+        titleStyle={header.titleStyle}
       />
       {expanded ? (
         <View style={[styles.line, {

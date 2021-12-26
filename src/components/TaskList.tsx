@@ -232,6 +232,9 @@ function TaskList() {
         type: 'icon',
         index: `${item.id}`,
         value: 'arrow-undo-outline',
+        titleStyle: {
+          color: colorValues.gray4,
+        },
       }) : ({
         title: item.title,
         type: 'icon',
