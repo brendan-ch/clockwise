@@ -36,11 +36,13 @@ export default function TimerPage() {
     startTimer,
     stopTimer,
     pauseTimer,
+    setPageTitle,
   } = useContext(AppContext);
 
   useEffect(() => {
     // Read value in storage and set in context
     setKeyboardGroup('timer');
+    setPageTitle('Timer');
   }, []);
 
   useEffect(
