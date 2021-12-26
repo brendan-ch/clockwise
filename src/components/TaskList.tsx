@@ -11,6 +11,14 @@ import { Task } from '../types';
 import SelectorGroup from './SelectorGroup';
 import SettingsOption from './SettingsOption';
 
+interface TimeoutTracker {
+  /**
+   * Task ID that the timeout corresponds to.
+   */
+  id: number,
+  timeout: any,
+}
+
 /**
  * Task list component that displays selector components and an "Add task" button.
  */
@@ -20,6 +28,7 @@ function TaskList() {
   // ID of expanded task
   const [expandedTask, setExpandedTask] = useState(-1);
   const [error, setError] = useState<string | undefined>(undefined);
+  const [deletionTimeout, setDeletionTimeout] = useState<TimeoutTracker | undefined>(undefined);
 
   const context = useContext(AppContext);
 
@@ -84,6 +93,45 @@ function TaskList() {
     setTasksInStorage(tasksCopy);
   }
 
+  /**
+   * Handle task completion. Marks `completion` key as true, and sets
+   * a timeout for deletion.
+   * @param id
+   */
+  function handleCompleteTask(id: number) {
+    const tasksCopy = tasks.slice();
+    const index = tasksCopy.findIndex((existingTask) => id === existingTask.id);
+
+    // Set completion to true
+    tasksCopy[index].completed = true;
+
+    // Set timeout for deletion
+    const timeout = setTimeout(() => {
+      // handleDeleteTask(id);
+      tasksCopy.splice(index, 1);
+      setTasks(tasksCopy);
+
+      setDeletionTimeout(undefined);
+    }, 3000);
+
+    // Check if timeout already exists
+    if (deletionTimeout) {
+      // Delete the task in the timeout tracker
+      const deletedIndex = tasksCopy.findIndex((existing) => existing.id === deletionTimeout.id);
+      tasksCopy.splice(deletedIndex, 1);
+
+      // Cancel the timeout
+      clearTimeout(deletionTimeout.timeout);
+    }
+
+    setDeletionTimeout({
+      timeout,
+      id,
+    });
+
+    setTasks(tasksCopy);
+  }
+
   const colorValues = useTheme();
 
   /**
@@ -132,13 +180,19 @@ function TaskList() {
           onChange: (data) => handleChangeTask('estPomodoros', data, item.id),
           disabled: context.timerState === 'running' || context.timerState === 'paused',
         },
-        {
+        ['running', 'paused'].includes(context.timerState) ? ({
+          type: 'icon',
+          value: 'checkmark',
+          title: 'complete',
+          index: '1',
+          onPress: () => handleCompleteTask(item.id),
+        }) : ({
           type: 'icon',
           value: 'trash-outline',
           title: 'delete',
           index: '1',
           onPress: () => handleDeleteTask(item.id),
-        },
+        }),
       ]}
       header={{
         title: item.title,
