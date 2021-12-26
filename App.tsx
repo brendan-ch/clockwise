@@ -63,11 +63,12 @@ export default function App() {
   }
   /**
    * Clear the timer and set timeout state to undefined.
+   * @param passedInterval The interval to clear.
    */
-  function clearTimerInterval() {
+  function clearTimerInterval(passedInterval: any) {
     // clearTimeout(timeout);
-    clearInterval(timeout);
-    setTimeoutState(undefined);
+    clearInterval(passedInterval);
+    // setTimeoutState(undefined);
   }
 
   // Hooks
