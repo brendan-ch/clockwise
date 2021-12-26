@@ -50,6 +50,7 @@ interface Task {
       completionProp: string,
     },
   },
+  completed?: boolean,
 }
 
 export {

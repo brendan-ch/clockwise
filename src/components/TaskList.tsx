@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {
-  FlatList, StyleSheet, View, Text,
+  FlatList, StyleSheet, View, Text, Platform,
 } from 'react-native';
+import * as Haptics from 'expo-haptics';
 import AppContext from '../../AppContext';
+import generateTaskId from '../helpers/generateId';
 import { getData, storeData } from '../helpers/storage';
 import useTheme from '../helpers/useTheme';
 import { TASKS } from '../StorageKeys';
@@ -10,6 +12,14 @@ import TextStyles from '../styles/Text';
 import { Task } from '../types';
 import SelectorGroup from './SelectorGroup';
 import SettingsOption from './SettingsOption';
+
+interface TimeoutTracker {
+  /**
+   * Task ID that the timeout corresponds to.
+   */
+  id: number,
+  timeout: any,
+}
 
 /**
  * Task list component that displays selector components and an "Add task" button.
@@ -20,18 +30,22 @@ function TaskList() {
   // ID of expanded task
   const [expandedTask, setExpandedTask] = useState(-1);
   const [error, setError] = useState<string | undefined>(undefined);
+  const [deletionTimeout, setDeletionTimeout] = useState<TimeoutTracker | undefined>(undefined);
 
   const context = useContext(AppContext);
 
   /**
    * Add a new task to state.
    */
-  function handleAddTask() {
+  async function handleAddTask() {
+    const newId = await generateTaskId();
+
     const newTask: Task = {
       title: 'New task',
-      id: tasks.length,
+      id: newId,
       estPomodoros: 1,
       syncData: {},
+      completed: false,
     };
 
     setTasks([
@@ -84,6 +98,71 @@ function TaskList() {
     setTasksInStorage(tasksCopy);
   }
 
+  /**
+   * Handle task completion. Marks `completion` key as true, and sets
+   * a timeout for deletion.
+   * @param id
+   */
+  function handleCompleteTask(id: number) {
+    const tasksCopy = tasks.slice();
+    const index = tasksCopy.findIndex((existingTask) => id === existingTask.id);
+
+    // Set completion to true
+    tasksCopy[index].completed = true;
+
+    // Set timeout for deletion
+    const timeout = setTimeout(() => {
+      const deletedIndex = tasksCopy.findIndex((existing) => existing.id === id);
+
+      // handleDeleteTask(id);
+      tasksCopy.splice(deletedIndex, 1);
+      setTasks(tasksCopy);
+      setTasksInStorage(tasksCopy);
+
+      setDeletionTimeout(undefined);
+    }, 3000);
+
+    // Check if timeout already exists
+    if (deletionTimeout) {
+      // Delete the task in the timeout tracker
+      const deletedIndex = tasksCopy.findIndex((existing) => existing.id === deletionTimeout.id);
+      tasksCopy.splice(deletedIndex, 1);
+
+      // Cancel the timeout
+      clearTimeout(deletionTimeout.timeout);
+    }
+
+    setDeletionTimeout({
+      timeout,
+      id,
+    });
+
+    setTasks(tasksCopy);
+    setTasksInStorage(tasksCopy);
+
+    if (Platform.OS === 'android' || Platform.OS === 'ios') {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    }
+  }
+
+  /**
+   * Handle task completion undo. Cancels the deletion timeout and marks
+   * `completed` as false for task.
+   */
+  function handleUndoComplete() {
+    if (deletionTimeout) {
+      clearTimeout(deletionTimeout.timeout);
+
+      const tasksCopy = tasks.slice();
+      const index = tasksCopy.findIndex((existing) => existing.id === deletionTimeout.id);
+      tasksCopy[index].completed = false;
+
+      setDeletionTimeout(undefined);
+      setTasks(tasksCopy);
+      setTasksInStorage(tasksCopy);
+    }
+  }
+
   const colorValues = useTheme();
 
   /**
@@ -114,6 +193,32 @@ function TaskList() {
     }
   }
 
+  useEffect(() => {
+    if (context.timerState === 'stopped' && tasks.length > 0) {
+      // Check for completed tasks
+      const completed = tasks.filter((task) => task.completed);
+      if (completed.length === 0) {
+        return;
+      }
+
+      if (deletionTimeout) {
+        clearTimeout(deletionTimeout.timeout);
+        setDeletionTimeout(undefined);
+      }
+
+      const tasksCopy = tasks.slice();
+
+      completed.forEach((task) => {
+        // Remove completed tasks from list and storage
+        const index = tasksCopy.findIndex((existing) => existing.id === task.id);
+        tasksCopy.splice(index, 1);
+      });
+
+      setTasks(tasksCopy);
+      setTasksInStorage(tasksCopy);
+    }
+  }, [context.timerState, tasks, deletionTimeout]);
+
   // Load tasks on start
   useEffect(() => {
     populateTasksData();
@@ -122,7 +227,7 @@ function TaskList() {
   const taskRenderer = ({ item }: { item: Task }) => (
     <SelectorGroup
       fadeInOnMount
-      expanded={expandedTask === item.id}
+      expanded={expandedTask === item.id && !item.completed}
       data={[
         {
           type: 'number',
@@ -132,15 +237,30 @@ function TaskList() {
           onChange: (data) => handleChangeTask('estPomodoros', data, item.id),
           disabled: context.timerState === 'running' || context.timerState === 'paused',
         },
-        {
+        ['running', 'paused'].includes(context.timerState) ? ({
+          type: 'icon',
+          value: 'checkmark',
+          title: 'complete',
+          index: '1',
+          onPress: () => handleCompleteTask(item.id),
+        }) : ({
           type: 'icon',
           value: 'trash-outline',
           title: 'delete',
           index: '1',
           onPress: () => handleDeleteTask(item.id),
-        },
+        }),
       ]}
-      header={{
+      header={item.completed ? ({
+        title: 'completed (press to undo)',
+        type: 'icon',
+        index: `${item.id}`,
+        value: 'arrow-undo-outline',
+        titleStyle: {
+          color: colorValues.gray4,
+        },
+        onPress: () => handleUndoComplete(),
+      }) : ({
         title: item.title,
         type: 'icon',
         index: `${item.id}`,
@@ -148,7 +268,7 @@ function TaskList() {
         onPressRight: () => setExpandedTask(expandedTask === item.id ? -1 : item.id),
         value: expandedTask === item.id ? 'chevron-down' : 'chevron-forward',
         onChangeText: context.timerState === 'stopped' ? (text) => handleChangeTask('title', text, item.id) : undefined,
-      }}
+      })}
     />
   );
 
