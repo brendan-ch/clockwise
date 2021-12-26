@@ -113,6 +113,7 @@ function TaskList() {
       // handleDeleteTask(id);
       tasksCopy.splice(index, 1);
       setTasks(tasksCopy);
+      setTasksInStorage(tasksCopy);
 
       setDeletionTimeout(undefined);
     }, 3000);
@@ -133,6 +134,7 @@ function TaskList() {
     });
 
     setTasks(tasksCopy);
+    setTasksInStorage(tasksCopy);
   }
 
   const colorValues = useTheme();
@@ -173,7 +175,7 @@ function TaskList() {
   const taskRenderer = ({ item }: { item: Task }) => (
     <SelectorGroup
       fadeInOnMount
-      expanded={expandedTask === item.id}
+      expanded={expandedTask === item.id && !item.completed}
       data={[
         {
           type: 'number',
@@ -197,7 +199,12 @@ function TaskList() {
           onPress: () => handleDeleteTask(item.id),
         }),
       ]}
-      header={{
+      header={item.completed ? ({
+        title: 'completed',
+        type: 'icon',
+        index: `${item.id}`,
+        value: 'arrow-undo-outline',
+      }) : ({
         title: item.title,
         type: 'icon',
         index: `${item.id}`,
@@ -205,7 +212,7 @@ function TaskList() {
         onPressRight: () => setExpandedTask(expandedTask === item.id ? -1 : item.id),
         value: expandedTask === item.id ? 'chevron-down' : 'chevron-forward',
         onChangeText: context.timerState === 'stopped' ? (text) => handleChangeTask('title', text, item.id) : undefined,
-      }}
+      })}
     />
   );
 
