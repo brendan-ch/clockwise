@@ -169,6 +169,32 @@ function TaskList() {
     }
   }
 
+  useEffect(() => {
+    if (context.timerState === 'stopped' && tasks.length > 0) {
+      // Check for completed tasks
+      const completed = tasks.filter((task) => task.completed);
+      if (completed.length === 0) {
+        return;
+      }
+
+      if (deletionTimeout) {
+        clearTimeout(deletionTimeout.timeout);
+        setDeletionTimeout(undefined);
+      }
+
+      const tasksCopy = tasks.slice();
+
+      completed.forEach((task) => {
+        // Remove completed tasks from list and storage
+        const index = tasksCopy.findIndex((existing) => existing.id === task.id);
+        tasksCopy.splice(index, 1);
+      });
+
+      setTasks(tasksCopy);
+      setTasksInStorage(tasksCopy);
+    }
+  }, [context.timerState, tasks, deletionTimeout]);
+
   // Load tasks on start
   useEffect(() => {
     populateTasksData();
