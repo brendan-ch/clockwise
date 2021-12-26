@@ -10,7 +10,8 @@ interface DefaultAppState {
   setTimerState: Dispatch<SetStateAction<TimerState>>,
   timeout?: number,
   setTimeoutState: Dispatch<SetStateAction<any>>,
-  clearTimerInterval: () => any,
+  /* eslint-disable-next-line */
+  clearTimerInterval: (interval: any) => any,
   overlay: Overlay,
   setOverlay: Dispatch<SetStateAction<any>>,
   keyboardGroup: KeyboardShortcutGroup,
