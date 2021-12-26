@@ -16,23 +16,18 @@ import useWindowSize from '../helpers/useWindowSize';
 import TaskList from '../components/TaskList';
 // import HeaderButton from '../components/HeaderButton';
 
-// const MIN_5 = 10000; // for testing purposes
-// const INTERVAL = 1000;
-
+/**
+ * Component that displays information about the timer.
+ * @returns
+ */
 export default function TimerPage() {
-  // const [introDisplayed, setIntroDisplayed] = useState(true);
-
   const colorValues = useTheme();
 
   const size = useWindowSize();
   const {
     timeRemaining,
     timerState,
-    // clearTimerInterval,
     timeout,
-    // setTimeRemaining,
-    // setTimerState,
-    // setTimeoutState,
     keyboardShortcutManager,
     keyboardGroup,
     setKeyboardGroup,
