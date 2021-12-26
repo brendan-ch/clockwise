@@ -26,8 +26,10 @@ import useTheme from './src/helpers/useTheme';
 import SettingsOverlay from './src/overlays/SettingsOverlay';
 import LandscapeHeader from './src/components/LandscapeHeader';
 import LandscapeFooter from './src/components/LandscapeFooter';
+import { getTimerValue } from './src/helpers/storage';
 
 const MIN_25 = 1500000;
+const MIN_5 = 300000;
 
 // Create the stack navigator
 const Stack = createNativeStackNavigator();
@@ -44,6 +46,7 @@ export default function App() {
   const [timerState, setTimerState] = useState<TimerState>('stopped');
   const [timeout, setTimeoutState] = useState<any>(undefined);
   const [overlay, setOverlayState] = useState<Overlay>('none');
+  const [mode, setMode] = useState<'focus' | 'break'>('focus');
 
   const [keyboardGroup, setKeyboardGroup] = useState<KeyboardShortcutGroup>('none');
 
@@ -63,10 +66,97 @@ export default function App() {
   }
   /**
    * Clear the timer and set timeout state to undefined.
+   * @param passedInterval The interval to clear.
    */
-  function clearTimerInterval() {
-    clearTimeout(timeout);
-    setTimeoutState(undefined);
+  function clearTimerInterval(passedInterval: any) {
+    clearInterval(passedInterval);
+    // setTimeoutState(undefined);
+  }
+
+  /**
+   * Handle switching between break and focus modes.
+   */
+  async function handleStateSwitch(newMode: 'focus' | 'break') {
+    clearTimerInterval(timeout);
+    setTimerState('stopped');
+    setMode(newMode);
+
+    await getAndSetTimerValue(newMode);
+  }
+
+  /**
+   * Set the time remaining based on AsyncStorage value.
+   * @param mode
+   */
+  async function getAndSetTimerValue(newMode: 'focus' | 'break') {
+    const timerValueMinutes = await getTimerValue(newMode);
+
+    if (timerValueMinutes && !Number.isNaN(Number(timerValueMinutes))) {
+      setTimeRemaining(Number(timerValueMinutes) * 60 * 1000);
+    } else {
+      setTimeRemaining(newMode === 'break' ? MIN_5 : MIN_25);
+    }
+  }
+
+  /**
+   * Set an interval that updates the timer.
+   */
+  function startTimer() {
+    setTimerState('running');
+
+    const start = Date.now();
+    // const expected = Date.now() + INTERVAL;
+    // const newTimeout = setTimeout(() => updateTimeRemaining(expected, timeRemaining), INTERVAL);
+    const newTimeout = setInterval(() => updateTimeRemaining(start), 100);
+
+    setTimeoutState(newTimeout);
+  }
+
+  /**
+   * Pause the timer.
+   */
+  function pauseTimer() {
+    clearTimerInterval(timeout);
+    setTimerState('paused');
+  }
+
+  /**
+   * Stop the timer.
+   */
+  async function stopTimer() {
+    clearTimerInterval(timeout);
+    setTimerState('stopped');
+    await getAndSetTimerValue(mode);
+  }
+
+  /**
+   * Clear the timer updating interval.
+   */
+
+  /**
+   * Update the time remaining in the state.
+   * @param interval
+   */
+  function updateTimeRemaining(start: number) {
+    // Set actual time based on delta
+    const delta = Date.now() - start;
+
+    // if (Platform.OS === 'web') {
+    //   window.document.title = `${calculateTimerDisplay(timeRemaining - delta)} | Session`;
+    // }
+    // if (timeRemaining - delta <= 0) {
+    //   // Clear timer and change to other mode
+    //   handleStateSwitch(mode === 'break' ? 'focus' : 'break');
+
+    //   // Haptic feedback
+    //   if (Platform.OS === 'ios' || Platform.OS === 'android') {
+    //     Haptics.notificationAsync();
+    //   }
+
+    //   return;
+    // }
+
+    setTimeRemaining(timeRemaining - delta);
   }
 
   // Hooks
@@ -83,6 +173,16 @@ export default function App() {
     AnonymousPro_700Bold,
     AnonymousPro_700Bold_Italic,
   });
+
+  useEffect(() => {
+    if (timeRemaining < 0) {
+      // Clear interval and set new state
+      handleStateSwitch(mode === 'focus' ? 'break' : 'focus');
+
+      // Set timer state
+      setTimerState('stopped');
+    }
+  }, [timeRemaining]);
 
   useEffect(() => {
     // Initialize keyboard shortcuts on web
@@ -107,6 +207,10 @@ export default function App() {
     }
 
     setShortcutsInitialized(true);
+  }, []);
+
+  useEffect(() => {
+    getAndSetTimerValue(mode);
   }, []);
 
   // Links
@@ -147,16 +251,21 @@ export default function App() {
       <AppContext.Provider value={{
         keyboardShortcutManager,
         timeRemaining,
-        setTimeRemaining,
+        // setTimeRemaining,
         timerState,
-        setTimerState,
+        // setTimerState,
         timeout,
-        setTimeoutState,
-        clearTimerInterval,
+        // setTimeoutState,
+        // clearTimerInterval,
         overlay,
         setOverlay,
         keyboardGroup,
         setKeyboardGroup,
+        mode,
+        handleStateSwitch,
+        startTimer,
+        stopTimer,
+        pauseTimer,
       }}
       >
         <View style={[styles.landscapeContainer, {
@@ -201,16 +310,20 @@ export default function App() {
     <AppContext.Provider value={{
       keyboardShortcutManager,
       timeRemaining,
-      setTimeRemaining,
+      // setTimeRemaining,
       timerState,
-      setTimerState,
+      // setTimerState,
       timeout,
-      setTimeoutState,
-      clearTimerInterval,
+      // setTimeoutState,
       overlay,
       setOverlay,
       keyboardGroup,
       setKeyboardGroup,
+      mode,
+      handleStateSwitch,
+      startTimer,
+      stopTimer,
+      pauseTimer,
     }}
     >
       <NavigationContainer
