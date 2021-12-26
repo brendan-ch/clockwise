@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {
-  FlatList, StyleSheet, View, Text,
+  FlatList, StyleSheet, View, Text, Platform,
 } from 'react-native';
+import * as Haptics from 'expo-haptics';
 import AppContext from '../../AppContext';
 import generateTaskId from '../helpers/generateId';
 import { getData, storeData } from '../helpers/storage';
@@ -138,6 +139,10 @@ function TaskList() {
 
     setTasks(tasksCopy);
     setTasksInStorage(tasksCopy);
+
+    if (Platform.OS === 'android' || Platform.OS === 'ios') {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    }
   }
 
   /**
