@@ -27,6 +27,7 @@ import SettingsOverlay from './src/overlays/SettingsOverlay';
 import LandscapeHeader from './src/components/LandscapeHeader';
 import LandscapeFooter from './src/components/LandscapeFooter';
 import { getTimerValue } from './src/helpers/storage';
+import usePageTitle from './src/helpers/usePageTitle';
 
 const MIN_25 = 1500000;
 const MIN_5 = 300000;
@@ -49,6 +50,8 @@ export default function App() {
   const [mode, setMode] = useState<'focus' | 'break'>('focus');
 
   const [keyboardGroup, setKeyboardGroup] = useState<KeyboardShortcutGroup>('none');
+
+  const setPageTitle = usePageTitle('Session', timeRemaining, timerState);
 
   // Helper methods
   /**
@@ -140,21 +143,6 @@ export default function App() {
   function updateTimeRemaining(start: number) {
     // Set actual time based on delta
     const delta = Date.now() - start;
-
-    // if (Platform.OS === 'web') {
-    //   window.document.title = `${calculateTimerDisplay(timeRemaining - delta)} | Session`;
-    // }
-    // if (timeRemaining - delta <= 0) {
-    //   // Clear timer and change to other mode
-    //   handleStateSwitch(mode === 'break' ? 'focus' : 'break');
-
-    //   // Haptic feedback
-    //   if (Platform.OS === 'ios' || Platform.OS === 'android') {
-    //     Haptics.notificationAsync();
-    //   }
-
-    //   return;
-    // }
 
     setTimeRemaining(timeRemaining - delta);
   }
@@ -266,6 +254,7 @@ export default function App() {
         startTimer,
         stopTimer,
         pauseTimer,
+        setPageTitle,
       }}
       >
         <View style={[styles.landscapeContainer, {
@@ -324,6 +313,7 @@ export default function App() {
       startTimer,
       stopTimer,
       pauseTimer,
+      setPageTitle,
     }}
     >
       <NavigationContainer

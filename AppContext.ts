@@ -5,11 +5,8 @@ import { KeyboardShortcutGroup, Overlay, TimerState } from './src/types';
 interface DefaultAppState {
   keyboardShortcutManager?: KeyboardShortcutManager,
   timeRemaining: number,
-  // setTimeRemaining: Dispatch<SetStateAction<number>>,
   timerState: TimerState,
-  // setTimerState: Dispatch<SetStateAction<TimerState>>,
   timeout?: number,
-  // setTimeoutState: Dispatch<SetStateAction<any>>,
   mode: 'focus' | 'break',
   /* eslint-disable-next-line */
   handleStateSwitch: (newMode: 'focus' | 'break') => any,
@@ -21,16 +18,14 @@ interface DefaultAppState {
   startTimer: () => any,
   stopTimer: () => any,
   pauseTimer: () => any,
+  setPageTitle: Dispatch<SetStateAction<string>>,
 }
 
 const defaultAppState: DefaultAppState = {
   keyboardShortcutManager: undefined,
   timeRemaining: 0,
-  // setTimeRemaining: () => {},
   timerState: 'stopped',
-  // setTimerState: () => {},
   timeout: undefined,
-  // setTimeoutState: () => {},
   overlay: 'none',
   setOverlay: () => {},
   keyboardGroup: 'none',
@@ -40,6 +35,7 @@ const defaultAppState: DefaultAppState = {
   startTimer: () => {},
   stopTimer: () => {},
   pauseTimer: () => {},
+  setPageTitle: () => {},
 };
 
 const AppContext = React.createContext(defaultAppState);

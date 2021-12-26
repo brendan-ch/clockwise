@@ -56,12 +56,19 @@ function SettingsOverlay({ containerStyle }: Props) {
     setOverlay,
     keyboardGroup,
     setKeyboardGroup,
+    setPageTitle,
   } = useContext(AppContext);
 
   // Title of the selected settings navigator object.
   const [selected, setSelected] = useState('Timer');
 
   const colorValues = useTheme();
+
+  useEffect(() => {
+    setPageTitle('Settings');
+
+    return () => setPageTitle('Timer');
+  }, []);
 
   useEffect(() => {
     setKeyboardGroup('settings');
