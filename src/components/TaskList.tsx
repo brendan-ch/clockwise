@@ -121,6 +121,10 @@ function TaskList() {
       }
     });
 
+    if (selected.includes(id)) {
+      handleDeselect(id);
+    }
+
     setTasks(tasksCopy);
     setTasksInStorage(tasksCopy);
   }
