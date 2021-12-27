@@ -289,6 +289,7 @@ function TaskList() {
             title: 'delete',
             index: '1',
             onPress: () => handleDeleteTask(item.id),
+            onPressRight: () => handleDeleteTask(item.id),
           }),
         ]}
         header={item.completed ? ({
@@ -328,6 +329,7 @@ function TaskList() {
           value="add"
           titleStyle={TextStyles.textBold}
           onPress={() => handleAddTask()}
+          onPressRight={() => handleAddTask()}
         />
       )}
       {!timerStopped && context.mode === 'focus' ? undefined : (
