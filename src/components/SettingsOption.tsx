@@ -38,6 +38,10 @@ interface Props {
    */
   title?: string,
   /**
+   * Icon to display to the left of the title.
+   */
+  iconLeft?: string,
+  /**
    * Run when the component is pressed.
    */
   onPress?: () => any,
@@ -45,6 +49,10 @@ interface Props {
    * If `value` is `icon`, runs when the icon on the right is pressed.
    */
   onPressRight?: () => any,
+  /**
+   * If `iconLeft` is populated, runs when the icon on the left is pressed.
+   */
+  onPressLeft?: () => any,
   /**
    * Run when the component is selected.
    */
@@ -79,6 +87,8 @@ function SettingsOption({
   value,
   selected,
   onChange,
+  iconLeft,
+  onPressLeft,
   onSelect, style, titleStyle, disabled, keyboardSelected, onChangeText,
 }: Props) {
   const colors = useTheme();
@@ -127,11 +137,24 @@ function SettingsOption({
       }, style]}
       onClick={Platform.OS === 'web' ? handlePress : undefined}
     >
+      {iconLeft ? (
+        <Pressable onPress={onPressLeft}>
+          <Ionicons
+            // @ts-ignore
+            name={iconLeft}
+            size={20}
+            color={colors.gray1}
+            style={{
+              marginRight: 10,
+            }}
+          />
+        </Pressable>
+      ) : undefined}
       {onChangeText ? (
         <TextInput
           style={[TextStyles.textRegular, {
             color: colors.primary,
-            width: '90%',
+            width: '92%',
             borderWidth: 0,
           }, titleStyle]}
           value={title}
@@ -140,6 +163,7 @@ function SettingsOption({
       ) : (
         <Text style={[TextStyles.textRegular, {
           color: colors.primary,
+          width: '92%',
         }, titleStyle]}
         >
           {title}
@@ -208,6 +232,7 @@ SettingsOption.defaultProps = {
   onChange: () => {},
   onPress: () => {},
   onPressRight: () => {},
+  onPressLeft: () => {},
   onSelect: () => {},
   title: '',
   value: false,
@@ -217,6 +242,7 @@ SettingsOption.defaultProps = {
   disabled: false,
   keyboardSelected: false,
   onChangeText: undefined,
+  iconLeft: undefined,
 };
 
 export default SettingsOption;
