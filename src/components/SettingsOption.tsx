@@ -159,7 +159,8 @@ function SettingsOption({
           <TextInput
             style={[TextStyles.textRegular, {
               color: colors.primary,
-              width: '90%',
+              width: '80%',
+              height: 30,
               borderWidth: 0,
             }, titleStyle]}
             value={title}
