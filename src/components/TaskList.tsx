@@ -255,57 +255,67 @@ function TaskList() {
     populateTasksData();
   }, []);
 
-  const taskRenderer = ({ item }: { item: Task }) => (
-    <SelectorGroup
-      fadeInOnMount
-      expanded={expandedTask === item.id && !item.completed}
-      data={[
-        {
-          type: 'number',
-          title: 'est. pomodoros',
-          index: '0',
-          value: item.estPomodoros,
-          onChange: (data) => handleChangeTask('estPomodoros', data, item.id),
-          disabled: !timerStopped,
-        },
-        ['running', 'paused'].includes(context.timerState) ? ({
+  const taskRenderer = ({ item }: { item: Task }) => {
+    let iconLeftDisplay;
+
+    if (timerStopped && selected.includes(item.id)) {
+      iconLeftDisplay = 'checkbox';
+    } else if (timerStopped) {
+      iconLeftDisplay = 'checkbox-outline';
+    }
+
+    return (
+      <SelectorGroup
+        fadeInOnMount
+        expanded={expandedTask === item.id && !item.completed}
+        data={[
+          {
+            type: 'number',
+            title: 'est. pomodoros',
+            index: '0',
+            value: item.estPomodoros,
+            onChange: (data) => handleChangeTask('estPomodoros', data, item.id),
+            disabled: !timerStopped,
+          },
+          ['running', 'paused'].includes(context.timerState) ? ({
+            type: 'icon',
+            value: 'checkmark',
+            title: 'complete',
+            index: '1',
+            onPress: () => handleCompleteTask(item.id),
+          }) : ({
+            type: 'icon',
+            value: 'trash-outline',
+            title: 'delete',
+            index: '1',
+            onPress: () => handleDeleteTask(item.id),
+          }),
+        ]}
+        header={item.completed ? ({
+          title: 'completed (press to undo)',
           type: 'icon',
-          value: 'checkmark',
-          title: 'complete',
-          index: '1',
-          onPress: () => handleCompleteTask(item.id),
+          index: `${item.id}`,
+          value: 'arrow-undo-outline',
+          titleStyle: {
+            color: colorValues.gray4,
+          },
+          onPress: () => handleUndoComplete(),
         }) : ({
+          title: item.title,
+          iconLeft: iconLeftDisplay,
+          onPressLeft: selected.includes(item.id)
+            ? () => handleDeselect(item.id)
+            : () => handleSelect(item.id),
           type: 'icon',
-          value: 'trash-outline',
-          title: 'delete',
-          index: '1',
-          onPress: () => handleDeleteTask(item.id),
-        }),
-      ]}
-      header={item.completed ? ({
-        title: 'completed (press to undo)',
-        type: 'icon',
-        index: `${item.id}`,
-        value: 'arrow-undo-outline',
-        titleStyle: {
-          color: colorValues.gray4,
-        },
-        onPress: () => handleUndoComplete(),
-      }) : ({
-        title: item.title,
-        iconLeft: selected.includes(item.id) ? 'checkbox' : 'checkbox-outline',
-        onPressLeft: selected.includes(item.id)
-          ? () => handleDeselect(item.id)
-          : () => handleSelect(item.id),
-        type: 'icon',
-        index: `${item.id}`,
-        onPress: expandedTask === item.id ? undefined : () => setExpandedTask(item.id),
-        onPressRight: () => setExpandedTask(expandedTask === item.id ? -1 : item.id),
-        value: expandedTask === item.id ? 'chevron-down' : 'chevron-forward',
-        onChangeText: context.timerState === 'stopped' ? (text) => handleChangeTask('title', text, item.id) : undefined,
-      })}
-    />
-  );
+          index: `${item.id}`,
+          onPress: expandedTask === item.id ? undefined : () => setExpandedTask(item.id),
+          onPressRight: () => setExpandedTask(expandedTask === item.id ? -1 : item.id),
+          value: expandedTask === item.id ? 'chevron-down' : 'chevron-forward',
+          onChangeText: context.timerState === 'stopped' ? (text) => handleChangeTask('title', text, item.id) : undefined,
+        })}
+      />
+    );
+  };
 
   return (
     <View style={[styles.container]}>
