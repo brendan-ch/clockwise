@@ -137,39 +137,44 @@ function SettingsOption({
       }, style]}
       onClick={Platform.OS === 'web' ? handlePress : undefined}
     >
-      {iconLeft ? (
-        <Pressable onPress={onPressLeft}>
-          <Ionicons
-            // @ts-ignore
-            name={iconLeft}
-            size={20}
-            color={colors.gray1}
-            style={{
-              marginRight: 10,
-            }}
+      <View style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+      }}
+      >
+        {iconLeft ? (
+          <Pressable onPress={onPressLeft}>
+            <Ionicons
+              // @ts-ignore
+              name={iconLeft}
+              size={20}
+              color={colors.gray1}
+              style={{
+                marginRight: 10,
+              }}
+            />
+          </Pressable>
+        ) : undefined}
+        {onChangeText ? (
+          <TextInput
+            style={[TextStyles.textRegular, {
+              color: colors.primary,
+              width: '90%',
+              borderWidth: 0,
+            }, titleStyle]}
+            value={title}
+            onChangeText={(text) => onChangeText(text)}
           />
-        </Pressable>
-      ) : undefined}
-      {onChangeText ? (
-        <TextInput
-          style={[TextStyles.textRegular, {
+        ) : (
+          <Text style={[TextStyles.textRegular, {
             color: colors.primary,
-            width: '92%',
-            borderWidth: 0,
           }, titleStyle]}
-          value={title}
-          onChangeText={(text) => onChangeText(text)}
-        />
-      ) : (
-        <Text style={[TextStyles.textRegular, {
-          color: colors.primary,
-          width: '92%',
-        }, titleStyle]}
-        >
-          {title}
+          >
+            {title}
 
-        </Text>
-      )}
+          </Text>
+        )}
+      </View>
       {type === 'toggle' ? (
         <Checkbox
           selected={value === true}
