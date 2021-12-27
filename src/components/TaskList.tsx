@@ -258,9 +258,9 @@ function TaskList() {
   const taskRenderer = ({ item }: { item: Task }) => {
     let iconLeftDisplay;
 
-    if (timerStopped && selected.includes(item.id)) {
+    if (timerStopped && selected.includes(item.id) && context.mode === 'focus') {
       iconLeftDisplay = 'checkbox';
-    } else if (timerStopped) {
+    } else if (timerStopped && context.mode === 'focus') {
       iconLeftDisplay = 'checkbox-outline';
     }
 
@@ -275,9 +275,9 @@ function TaskList() {
             index: '0',
             value: item.estPomodoros,
             onChange: (data) => handleChangeTask('estPomodoros', data, item.id),
-            disabled: !timerStopped,
+            disabled: !timerStopped && context.mode === 'focus',
           },
-          ['running', 'paused'].includes(context.timerState) ? ({
+          !timerStopped && context.mode === 'focus' ? ({
             type: 'icon',
             value: 'checkmark',
             title: 'complete',
@@ -359,7 +359,7 @@ function TaskList() {
       ) : (
         <FlatList
           style={styles.taskList}
-          data={!timerStopped
+          data={!timerStopped && context.mode === 'focus'
             ? selectedTasks
             : tasks}
           renderItem={taskRenderer}
