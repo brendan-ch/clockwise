@@ -20,4 +20,10 @@ async function getData(key: string) {
   return data;
 }
 
-export { storeData, getData, getTimerValue };
+async function removeData(key: string) {
+  await AsyncStorage.removeItem(key);
+}
+
+export {
+  storeData, getData, getTimerValue, removeData,
+};
