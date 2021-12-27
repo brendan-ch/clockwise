@@ -38,6 +38,10 @@ interface Props {
    */
   title?: string,
   /**
+   * Icon to display to the left of the title.
+   */
+  iconLeft?: string,
+  /**
    * Run when the component is pressed.
    */
   onPress?: () => any,
@@ -45,6 +49,10 @@ interface Props {
    * If `value` is `icon`, runs when the icon on the right is pressed.
    */
   onPressRight?: () => any,
+  /**
+   * If `iconLeft` is populated, runs when the icon on the left is pressed.
+   */
+  onPressLeft?: () => any,
   /**
    * Run when the component is selected.
    */
@@ -79,6 +87,8 @@ function SettingsOption({
   value,
   selected,
   onChange,
+  iconLeft,
+  onPressLeft,
   onSelect, style, titleStyle, disabled, keyboardSelected, onChangeText,
 }: Props) {
   const colors = useTheme();
@@ -127,25 +137,45 @@ function SettingsOption({
       }, style]}
       onClick={Platform.OS === 'web' ? handlePress : undefined}
     >
-      {onChangeText ? (
-        <TextInput
-          style={[TextStyles.textRegular, {
+      <View style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+      }}
+      >
+        {iconLeft ? (
+          <Pressable onPress={onPressLeft}>
+            <Ionicons
+              // @ts-ignore
+              name={iconLeft}
+              size={20}
+              color={colors.gray1}
+              style={{
+                marginRight: 10,
+              }}
+            />
+          </Pressable>
+        ) : undefined}
+        {onChangeText ? (
+          <TextInput
+            style={[TextStyles.textRegular, {
+              color: colors.primary,
+              width: '80%',
+              height: 30,
+              borderWidth: 0,
+            }, titleStyle]}
+            value={title}
+            onChangeText={(text) => onChangeText(text)}
+          />
+        ) : (
+          <Text style={[TextStyles.textRegular, {
             color: colors.primary,
-            width: '90%',
-            borderWidth: 0,
           }, titleStyle]}
-          value={title}
-          onChangeText={(text) => onChangeText(text)}
-        />
-      ) : (
-        <Text style={[TextStyles.textRegular, {
-          color: colors.primary,
-        }, titleStyle]}
-        >
-          {title}
+          >
+            {title}
 
-        </Text>
-      )}
+          </Text>
+        )}
+      </View>
       {type === 'toggle' ? (
         <Checkbox
           selected={value === true}
@@ -208,6 +238,7 @@ SettingsOption.defaultProps = {
   onChange: () => {},
   onPress: () => {},
   onPressRight: () => {},
+  onPressLeft: () => {},
   onSelect: () => {},
   title: '',
   value: false,
@@ -217,6 +248,7 @@ SettingsOption.defaultProps = {
   disabled: false,
   keyboardSelected: false,
   onChangeText: undefined,
+  iconLeft: undefined,
 };
 
 export default SettingsOption;

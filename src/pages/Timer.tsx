@@ -39,6 +39,13 @@ export default function TimerPage() {
     setPageTitle,
   } = useContext(AppContext);
 
+  let actionBarText;
+  if (timerState !== 'running' && timerState !== 'paused' && mode === 'focus') {
+    actionBarText = `Select some tasks ${size === 'portrait' ? 'above' : 'on the right'} to work on during your session.`;
+  } else if (mode === 'break') {
+    actionBarText = 'Use this time to plan tasks for the next session.';
+  }
+
   useEffect(() => {
     // Read value in storage and set in context
     setKeyboardGroup('timer');
@@ -158,6 +165,7 @@ export default function TimerPage() {
                 onPausePress={() => pauseTimer()}
                 onResetPress={() => stopTimer()}
                 onResumePress={() => startTimer()}
+                text={actionBarText}
               />
             </View>
           </View>
@@ -202,6 +210,7 @@ export default function TimerPage() {
             onPausePress={() => pauseTimer()}
             onResetPress={() => stopTimer()}
             onResumePress={() => startTimer()}
+            text={actionBarText}
           />
         </View>
       </View>

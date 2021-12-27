@@ -9,11 +9,13 @@ interface SettingsOptionProps {
   index: string,
   type: 'number' | 'toggle' | 'icon',
   value?: boolean | number | string,
+  iconLeft?: string,
   /* eslint-disable-next-line */
   onChange?: (data: any) => any,
   title?: string,
   onPress?: () => any,
   onPressRight?: () => any,
+  onPressLeft?: () => any,
   disabled?: boolean,
   /* eslint-disable-next-line */
   onChangeText?: (text: string) => any,
@@ -80,8 +82,11 @@ function SelectorGroup({
           item.onPress();
         }
       }}
+      onPressRight={item.onPressRight}
+      onPressLeft={item.onPressLeft}
       type={item.type}
       value={item.value}
+      iconLeft={item.iconLeft}
       title={item.title}
       disabled={item.disabled}
       style={{
@@ -109,7 +114,9 @@ function SelectorGroup({
         title={header.title}
         type={header.type}
         value={header.value}
+        iconLeft={header.iconLeft}
         onPressRight={header.onPressRight}
+        onPressLeft={header.onPressLeft}
         onPress={header.onPress}
         onChangeText={expanded ? header.onChangeText : undefined}
         style={{

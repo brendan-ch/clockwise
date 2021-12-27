@@ -32,7 +32,34 @@ function TaskList() {
   const [error, setError] = useState<string | undefined>(undefined);
   const [deletionTimeout, setDeletionTimeout] = useState<TimeoutTracker | undefined>(undefined);
 
+  // Track selected task IDs
+  const [selected, setSelected] = useState<number[]>([]);
+
+  const selectedTasks = tasks.filter(((task) => selected.includes(task.id)));
+
   const context = useContext(AppContext);
+  const timerStopped = !['running', 'paused'].includes(context.timerState);
+
+  /**
+   * Handle selection of a task.
+   * @param id
+   */
+  function handleSelect(id: number) {
+    const newSelected = selected.slice();
+    newSelected.push(id);
+    setSelected(newSelected);
+  }
+
+  /**
+   * Handle deselection of a task.
+   * @param id
+   */
+  function handleDeselect(id: number) {
+    const newSelected = selected.slice();
+    const index = newSelected.indexOf(id);
+    newSelected.splice(index, 1);
+    setSelected(newSelected);
+  }
 
   /**
    * Add a new task to state.
@@ -93,6 +120,10 @@ function TaskList() {
         tasksCopy[i].id = task.id - 1;
       }
     });
+
+    if (selected.includes(id)) {
+      handleDeselect(id);
+    }
 
     setTasks(tasksCopy);
     setTasksInStorage(tasksCopy);
@@ -224,57 +255,72 @@ function TaskList() {
     populateTasksData();
   }, []);
 
-  const taskRenderer = ({ item }: { item: Task }) => (
-    <SelectorGroup
-      fadeInOnMount
-      expanded={expandedTask === item.id && !item.completed}
-      data={[
-        {
-          type: 'number',
-          title: 'est. pomodoros',
-          index: '0',
-          value: item.estPomodoros,
-          onChange: (data) => handleChangeTask('estPomodoros', data, item.id),
-          disabled: context.timerState === 'running' || context.timerState === 'paused',
-        },
-        ['running', 'paused'].includes(context.timerState) ? ({
+  const taskRenderer = ({ item }: { item: Task }) => {
+    let iconLeftDisplay;
+
+    if (timerStopped && selected.includes(item.id) && context.mode === 'focus') {
+      iconLeftDisplay = 'checkbox';
+    } else if (timerStopped && context.mode === 'focus') {
+      iconLeftDisplay = 'checkbox-outline';
+    }
+
+    return (
+      <SelectorGroup
+        fadeInOnMount
+        expanded={expandedTask === item.id && !item.completed}
+        data={[
+          {
+            type: 'number',
+            title: 'est. pomodoros',
+            index: '0',
+            value: item.estPomodoros,
+            onChange: (data) => handleChangeTask('estPomodoros', data, item.id),
+            disabled: !timerStopped && context.mode === 'focus',
+          },
+          !timerStopped && context.mode === 'focus' ? ({
+            type: 'icon',
+            value: 'checkmark',
+            title: 'complete',
+            index: '1',
+            onPress: () => handleCompleteTask(item.id),
+          }) : ({
+            type: 'icon',
+            value: 'trash-outline',
+            title: 'delete',
+            index: '1',
+            onPress: () => handleDeleteTask(item.id),
+            onPressRight: () => handleDeleteTask(item.id),
+          }),
+        ]}
+        header={item.completed ? ({
+          title: 'completed (press to undo)',
           type: 'icon',
-          value: 'checkmark',
-          title: 'complete',
-          index: '1',
-          onPress: () => handleCompleteTask(item.id),
+          index: `${item.id}`,
+          value: 'arrow-undo-outline',
+          titleStyle: {
+            color: colorValues.gray4,
+          },
+          onPress: () => handleUndoComplete(),
         }) : ({
+          title: item.title,
+          iconLeft: iconLeftDisplay,
+          onPressLeft: selected.includes(item.id)
+            ? () => handleDeselect(item.id)
+            : () => handleSelect(item.id),
           type: 'icon',
-          value: 'trash-outline',
-          title: 'delete',
-          index: '1',
-          onPress: () => handleDeleteTask(item.id),
-        }),
-      ]}
-      header={item.completed ? ({
-        title: 'completed (press to undo)',
-        type: 'icon',
-        index: `${item.id}`,
-        value: 'arrow-undo-outline',
-        titleStyle: {
-          color: colorValues.gray4,
-        },
-        onPress: () => handleUndoComplete(),
-      }) : ({
-        title: item.title,
-        type: 'icon',
-        index: `${item.id}`,
-        onPress: expandedTask === item.id ? undefined : () => setExpandedTask(item.id),
-        onPressRight: () => setExpandedTask(expandedTask === item.id ? -1 : item.id),
-        value: expandedTask === item.id ? 'chevron-down' : 'chevron-forward',
-        onChangeText: context.timerState === 'stopped' ? (text) => handleChangeTask('title', text, item.id) : undefined,
-      })}
-    />
-  );
+          index: `${item.id}`,
+          onPress: expandedTask === item.id ? undefined : () => setExpandedTask(item.id),
+          onPressRight: () => setExpandedTask(expandedTask === item.id ? -1 : item.id),
+          value: expandedTask === item.id ? 'chevron-down' : 'chevron-forward',
+          onChangeText: timerStopped || context.mode === 'break' ? (text) => handleChangeTask('title', text, item.id) : undefined,
+        })}
+      />
+    );
+  };
 
   return (
     <View style={[styles.container]}>
-      {context.timerState === 'running' || context.timerState === 'paused' ? (
+      {!timerStopped && context.mode === 'focus' ? (
         undefined
       ) : (
         <SettingsOption
@@ -283,26 +329,30 @@ function TaskList() {
           value="add"
           titleStyle={TextStyles.textBold}
           onPress={() => handleAddTask()}
+          onPressRight={() => handleAddTask()}
         />
       )}
-      {context.timerState === 'stopped' ? (
+      {!timerStopped && context.mode === 'focus' ? undefined : (
         <View style={[styles.line, {
           borderTopColor: colorValues.gray5,
           borderTopWidth: 1,
         }]}
         />
-      ) : undefined}
-      {tasks.length === 0 ? (
+      )}
+      {
+      (timerStopped && tasks.length === 0)
+      || (!timerStopped && selectedTasks.length === 0 && context.mode === 'focus') ? (
         <Text style={[TextStyles.textRegular, {
           color: colorValues.gray3,
           marginTop: 10,
         }]}
         >
-          {!['running', 'paused'].includes(context.timerState)
+          {timerStopped
             ? 'Add some tasks to keep track of them during your session.'
             : 'No tasks to display.'}
         </Text>
-      ) : undefined}
+        ) : undefined
+}
       {error ? (
         <Text style={[TextStyles.textRegular, {
           color: colorValues.primary,
@@ -314,7 +364,9 @@ function TaskList() {
       ) : (
         <FlatList
           style={styles.taskList}
-          data={tasks}
+          data={!timerStopped && context.mode === 'focus'
+            ? selectedTasks
+            : tasks}
           renderItem={taskRenderer}
           maxToRenderPerBatch={10}
         />
