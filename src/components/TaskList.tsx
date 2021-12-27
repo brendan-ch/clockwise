@@ -319,7 +319,7 @@ function TaskList() {
 
   return (
     <View style={[styles.container]}>
-      {context.timerState === 'running' || context.timerState === 'paused' ? (
+      {!timerStopped && context.mode === 'focus' ? (
         undefined
       ) : (
         <SettingsOption
@@ -330,13 +330,13 @@ function TaskList() {
           onPress={() => handleAddTask()}
         />
       )}
-      {context.timerState === 'stopped' ? (
+      {!timerStopped && context.mode === 'focus' ? undefined : (
         <View style={[styles.line, {
           borderTopColor: colorValues.gray5,
           borderTopWidth: 1,
         }]}
         />
-      ) : undefined}
+      )}
       {
       (timerStopped && tasks.length === 0)
       || (!timerStopped && selectedTasks.length === 0 && context.mode === 'focus') ? (
