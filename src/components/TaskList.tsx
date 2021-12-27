@@ -262,6 +262,7 @@ function TaskList() {
         onPress: () => handleUndoComplete(),
       }) : ({
         title: item.title,
+        iconLeft: 'checkbox-outline',
         type: 'icon',
         index: `${item.id}`,
         onPress: expandedTask === item.id ? undefined : () => setExpandedTask(item.id),
