@@ -32,7 +32,34 @@ function TaskList() {
   const [error, setError] = useState<string | undefined>(undefined);
   const [deletionTimeout, setDeletionTimeout] = useState<TimeoutTracker | undefined>(undefined);
 
+  // Track selected task IDs
+  const [selected, setSelected] = useState<number[]>([]);
+
+  const selectedTasks = tasks.filter(((task) => selected.includes(task.id)));
+
   const context = useContext(AppContext);
+  const timerStopped = !['running', 'paused'].includes(context.timerState);
+
+  /**
+   * Handle selection of a task.
+   * @param id
+   */
+  function handleSelect(id: number) {
+    const newSelected = selected.slice();
+    newSelected.push(id);
+    setSelected(newSelected);
+  }
+
+  /**
+   * Handle deselection of a task.
+   * @param id
+   */
+  function handleDeselect(id: number) {
+    const newSelected = selected.slice();
+    const index = newSelected.indexOf(id);
+    newSelected.splice(index, 1);
+    setSelected(newSelected);
+  }
 
   /**
    * Add a new task to state.
@@ -235,7 +262,7 @@ function TaskList() {
           index: '0',
           value: item.estPomodoros,
           onChange: (data) => handleChangeTask('estPomodoros', data, item.id),
-          disabled: context.timerState === 'running' || context.timerState === 'paused',
+          disabled: !timerStopped,
         },
         ['running', 'paused'].includes(context.timerState) ? ({
           type: 'icon',
@@ -262,7 +289,10 @@ function TaskList() {
         onPress: () => handleUndoComplete(),
       }) : ({
         title: item.title,
-        iconLeft: 'checkbox-outline',
+        iconLeft: selected.includes(item.id) ? 'checkbox' : 'checkbox-outline',
+        onPressLeft: selected.includes(item.id)
+          ? () => handleDeselect(item.id)
+          : () => handleSelect(item.id),
         type: 'icon',
         index: `${item.id}`,
         onPress: expandedTask === item.id ? undefined : () => setExpandedTask(item.id),
@@ -293,7 +323,7 @@ function TaskList() {
         }]}
         />
       ) : undefined}
-      {tasks.length === 0 ? (
+      { tasks.length === 0 ? (
         <Text style={[TextStyles.textRegular, {
           color: colorValues.gray3,
           marginTop: 10,
@@ -315,7 +345,9 @@ function TaskList() {
       ) : (
         <FlatList
           style={styles.taskList}
-          data={tasks}
+          data={!timerStopped
+            ? selectedTasks
+            : tasks}
           renderItem={taskRenderer}
           maxToRenderPerBatch={10}
         />
