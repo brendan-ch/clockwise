@@ -271,7 +271,7 @@ function TaskList() {
         data={[
           {
             type: 'number',
-            title: 'est. pomodoros',
+            title: 'est. sessions',
             index: '0',
             value: item.estPomodoros,
             onChange: (data) => handleChangeTask('estPomodoros', data, item.id),
@@ -298,7 +298,7 @@ function TaskList() {
           index: `${item.id}`,
           value: 'arrow-undo-outline',
           titleStyle: {
-            color: colorValues.gray4,
+            color: colorValues.gray3,
           },
           onPress: () => handleUndoComplete(),
         }) : ({
@@ -343,7 +343,7 @@ function TaskList() {
       (timerStopped && tasks.length === 0)
       || (!timerStopped && selectedTasks.length === 0 && context.mode === 'focus') ? (
         <Text style={[TextStyles.textRegular, {
-          color: colorValues.gray3,
+          color: colorValues.gray2,
           marginTop: 10,
         }]}
         >

@@ -2,7 +2,7 @@ import React from 'react';
 import {
   StyleProp, StyleSheet, Text, View, ViewStyle,
 } from 'react-native';
-import ColorValues from '../styles/Color';
+import useTheme from '../helpers/useTheme';
 import TextStyles from '../styles/Text';
 import { TimerState } from '../types';
 import ActionButton from './ActionButton';
@@ -30,6 +30,8 @@ function ActionButtonBar({
   onResumePress,
   style,
 }: Props) {
+  const colors = useTheme();
+
   let displayText = 'start';
   let method = onStartPress;
 
@@ -43,7 +45,13 @@ function ActionButtonBar({
 
   return (
     <View style={[style, styles.container]}>
-      <Text style={[TextStyles.textItalic, styles.text]}>{text}</Text>
+      <Text style={[TextStyles.textItalic, styles.text, {
+        color: colors.gray2,
+      }]}
+      >
+        {text}
+
+      </Text>
       <View style={styles.buttonContainer}>
         <View style={styles.resumeResetContainer}>
           {state === 'stopped' || state === 'paused' ? (
@@ -87,7 +95,6 @@ const styles = StyleSheet.create({
   text: {
     marginBottom: 15,
     textAlign: 'center',
-    color: ColorValues.gray3,
   },
   buttonContainer: {
     height: 67,
