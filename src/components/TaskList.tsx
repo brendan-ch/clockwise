@@ -271,7 +271,7 @@ function TaskList() {
         data={[
           {
             type: 'number',
-            title: 'est. pomodoros',
+            title: 'est. sessions',
             index: '0',
             value: item.estPomodoros,
             onChange: (data) => handleChangeTask('estPomodoros', data, item.id),
