@@ -6,7 +6,7 @@ import SettingsHeader from '../components/SettingsHeader';
 import SettingsOption from '../components/SettingsOption';
 import useSettingsData from '../helpers/useSettingsData';
 import useTheme from '../helpers/useTheme';
-import { BREAK_TIME_MINUTES, FOCUS_TIME_MINUTES } from '../StorageKeys';
+import { BREAK_TIME_MINUTES, ENABLE_BACKGROUND_TIMER, FOCUS_TIME_MINUTES } from '../StorageKeys';
 import { Section, SettingsOptionProps } from '../types';
 
 // Store all static option data in here
@@ -21,6 +21,11 @@ const options: SettingsOptionProps[] = [
     type: 'number',
     title: 'Break time (minutes)',
     storageKey: BREAK_TIME_MINUTES,
+  },
+  {
+    type: 'toggle',
+    title: 'Background timer (experimental)',
+    storageKey: ENABLE_BACKGROUND_TIMER,
   },
   // {
   //   type: 'toggle',
