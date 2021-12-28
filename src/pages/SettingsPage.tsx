@@ -38,7 +38,12 @@ const sections: Section[] = [
   {
     title: 'Timer',
     icon: 'timer-outline',
-    data: options.slice(0, 3),
+    data: options.slice(0, 2),
+  },
+  {
+    title: 'Experimental',
+    icon: 'build-outline',
+    data: options.slice(2, 3),
   },
 ];
 
