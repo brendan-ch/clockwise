@@ -102,7 +102,7 @@ function useBackgroundTimer() {
     } else if (context.timerLength && context.start) {
       storeTimerData(context.start, context.timerLength);
     }
-  }, [backgroundState, context.timerLength, context.start]);
+  }, [backgroundState, context.timerLength, context.start, enabled]);
 }
 
 export default useBackgroundTimer;
