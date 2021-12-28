@@ -105,7 +105,7 @@ function LandscapeHeader() {
 
         </Text>
         <Text style={[TextStyles.textBold, {
-          color: colorValues.gray4,
+          color: colorValues.gray3,
         }]}
         >
           an app designed to help you focus.
