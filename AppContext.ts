@@ -9,16 +9,23 @@ interface DefaultAppState {
   timeout?: number,
   mode: 'focus' | 'break',
   /* eslint-disable-next-line */
+  setMode: (newMode: 'focus' | 'break') => any,
+  /* eslint-disable-next-line */
   handleStateSwitch: (newMode: 'focus' | 'break') => any,
   /* eslint-disable-next-line */
   overlay: Overlay,
   setOverlay: Dispatch<SetStateAction<any>>,
   keyboardGroup: KeyboardShortcutGroup,
   setKeyboardGroup: Dispatch<SetStateAction<KeyboardShortcutGroup>>,
-  startTimer: () => any,
+  /* eslint-disable-next-line */
+  startTimer: (customTimerValue?: number) => any,
   stopTimer: () => any,
-  pauseTimer: () => any,
+  /* eslint-disable-next-line */
+  pauseTimer: (background?: boolean) => any,
   setPageTitle: Dispatch<SetStateAction<string>>,
+  setTimeRemaining: Dispatch<SetStateAction<number>>,
+  start?: number,
+  timerLength?: number,
 }
 
 const defaultAppState: DefaultAppState = {
@@ -36,6 +43,8 @@ const defaultAppState: DefaultAppState = {
   stopTimer: () => {},
   pauseTimer: () => {},
   setPageTitle: () => {},
+  setTimeRemaining: () => {},
+  setMode: () => {},
 };
 
 const AppContext = React.createContext(defaultAppState);

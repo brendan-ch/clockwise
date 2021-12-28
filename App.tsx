@@ -53,6 +53,11 @@ export default function App() {
 
   const setPageTitle = usePageTitle('Session', timeRemaining, timerState);
 
+  // Use for background timer handling
+  // Date in milliseconds timer was started on
+  const [start, setStart] = useState<number | undefined>(undefined);
+  const [timerLength, setTimerLength] = useState<number | undefined>(undefined);
+
   // Helper methods
   /**
    * Set the overlay state and keyboard group.
@@ -103,14 +108,17 @@ export default function App() {
 
   /**
    * Set an interval that updates the timer.
+   * @param customTimeRemaining Pass a time value here to skip to a value not specified in state.
    */
-  function startTimer() {
+  function startTimer(customTimeRemaining?: number) {
+    if (timerState === 'running') return;
     setTimerState('running');
 
-    const start = Date.now();
-    // const expected = Date.now() + INTERVAL;
-    // const newTimeout = setTimeout(() => updateTimeRemaining(expected, timeRemaining), INTERVAL);
-    const newTimeout = setInterval(() => updateTimeRemaining(start), 100);
+    const newStart = Date.now();
+    setStart(newStart);
+
+    setTimerLength(customTimeRemaining || timeRemaining);
+    const newTimeout = setInterval(() => updateTimeRemaining(newStart, customTimeRemaining), 100);
 
     setTimeoutState(newTimeout);
   }
@@ -120,6 +128,8 @@ export default function App() {
    */
   function pauseTimer() {
     clearTimerInterval(timeout);
+    setStart(undefined);
+    setTimerLength(undefined);
     setTimerState('paused');
   }
 
@@ -129,6 +139,8 @@ export default function App() {
   async function stopTimer() {
     clearTimerInterval(timeout);
     setTimerState('stopped');
+    setStart(undefined);
+    setTimerLength(undefined);
     await getAndSetTimerValue(mode);
   }
 
@@ -140,11 +152,11 @@ export default function App() {
    * Update the time remaining in the state.
    * @param interval
    */
-  function updateTimeRemaining(start: number) {
+  function updateTimeRemaining(newStart: number, customTimeRemaining?: number) {
     // Set actual time based on delta
-    const delta = Date.now() - start;
+    const delta = Date.now() - newStart;
 
-    setTimeRemaining(timeRemaining - delta);
+    setTimeRemaining((customTimeRemaining || timeRemaining) - delta);
   }
 
   // Hooks
@@ -239,22 +251,22 @@ export default function App() {
       <AppContext.Provider value={{
         keyboardShortcutManager,
         timeRemaining,
-        // setTimeRemaining,
+        setTimeRemaining,
         timerState,
-        // setTimerState,
         timeout,
-        // setTimeoutState,
-        // clearTimerInterval,
         overlay,
         setOverlay,
         keyboardGroup,
         setKeyboardGroup,
         mode,
+        setMode,
         handleStateSwitch,
         startTimer,
         stopTimer,
         pauseTimer,
         setPageTitle,
+        start,
+        timerLength,
       }}
       >
         <View style={[styles.landscapeContainer, {
@@ -299,21 +311,22 @@ export default function App() {
     <AppContext.Provider value={{
       keyboardShortcutManager,
       timeRemaining,
-      // setTimeRemaining,
       timerState,
-      // setTimerState,
       timeout,
-      // setTimeoutState,
       overlay,
       setOverlay,
       keyboardGroup,
       setKeyboardGroup,
       mode,
+      setMode,
       handleStateSwitch,
       startTimer,
       stopTimer,
       pauseTimer,
       setPageTitle,
+      setTimeRemaining,
+      start,
+      timerLength,
     }}
     >
       <NavigationContainer

@@ -4,11 +4,12 @@ import {
 } from 'react-native';
 import useTheme from '../helpers/useTheme';
 import TextStyles from '../styles/Text';
+import { TimerState } from '../types';
 import ActionButton from './ActionButton';
 
 interface Props {
   text?: string,
-  state: 'stopped' | 'running' | 'paused',
+  state: TimerState,
   onStartPress?: () => any,
   onResetPress?: () => any,
   onPausePress?: () => any,

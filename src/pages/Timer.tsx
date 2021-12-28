@@ -14,6 +14,7 @@ import useTheme from '../helpers/useTheme';
 import useWindowSize from '../helpers/useWindowSize';
 // import { getTimerValue } from '../helpers/storage';
 import TaskList from '../components/TaskList';
+import useBackgroundTimer from '../helpers/useBackgroundTimer';
 // import HeaderButton from '../components/HeaderButton';
 
 /**
@@ -45,6 +46,8 @@ export default function TimerPage() {
   } else if (mode === 'break') {
     actionBarText = 'Use this time to plan tasks for the next session.';
   }
+
+  useBackgroundTimer();
 
   useEffect(() => {
     // Read value in storage and set in context
