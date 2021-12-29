@@ -4,7 +4,7 @@ import AppContext from '../../../AppContext';
 import SettingsHeader from '../../components/SettingsHeader';
 import SettingsOption from '../../components/SettingsOption';
 import useSettingsData from '../../helpers/useSettingsData';
-import { BREAK_TIME_MINUTES, FOCUS_TIME_MINUTES } from '../../StorageKeys';
+import { BREAK_TIME_MINUTES, ENABLE_TIMER_ALERTS, FOCUS_TIME_MINUTES } from '../../StorageKeys';
 import { SettingsOptionProps, Section } from '../../types';
 
 // Store all static option data in here
@@ -19,6 +19,11 @@ const options: SettingsOptionProps[] = [
     type: 'number',
     title: 'Break time (minutes)',
     storageKey: BREAK_TIME_MINUTES,
+  },
+  {
+    type: 'toggle',
+    title: 'Timer alerts',
+    storageKey: ENABLE_TIMER_ALERTS,
   },
   // {
   //   type: 'toggle',
