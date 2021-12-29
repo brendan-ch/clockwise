@@ -70,7 +70,7 @@ function useNotifications() {
   }, [backgrounded]);
 
   /**
-   * Refresh the permission stored in local state.
+   * Refresh the permission stored in the state.
    */
   async function checkPermission() {
     // Check whether permission status granted
@@ -155,6 +155,7 @@ function useNotifications() {
 
   return {
     requestPermission,
+    checkPermission,
     sendNotification,
     scheduleNotification,
     permissionGranted,
