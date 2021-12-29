@@ -4,11 +4,17 @@ import * as MobileNotifications from 'expo-notifications';
 async function requestNotifications() {
   if (Platform.OS === 'web') {
     const result = await Notification.requestPermission();
-    return result;
+    return {
+      granted: result === 'granted',
+      canAskAgain: false,
+    };
   }
 
   const result = await MobileNotifications.requestPermissionsAsync();
-  return result.granted;
+  return {
+    granted: result.granted,
+    canAskAgain: result.canAskAgain,
+  };
 }
 
 /**
