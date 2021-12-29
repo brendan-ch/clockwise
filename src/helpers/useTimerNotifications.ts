@@ -12,7 +12,6 @@ function useTimerNotification() {
     // requestPermission,
     sendNotification,
     scheduleNotification,
-    permissionGranted,
     cancelAllNotifications,
   } = useNotifications();
 
@@ -20,7 +19,7 @@ function useTimerNotification() {
   const [shouldSendNotification, setShouldSendNotification] = useState<boolean>(false);
   const [tempMode, setTempMode] = useState('focus');
   useEffect(() => {
-    if (Platform.OS !== 'web' || !permissionGranted) return;
+    if (Platform.OS !== 'web') return;
 
     if (context.timerState === 'running') {
       setShouldSendNotification(true);
@@ -38,7 +37,7 @@ function useTimerNotification() {
 
   // Hook to handle notification scheduling on mobile
   useEffect(() => {
-    if (Platform.OS === 'web' || !permissionGranted) return;
+    if (Platform.OS === 'web') return;
 
     if (context.timerState === 'running') {
       scheduleNotification({
