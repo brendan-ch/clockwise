@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { AppState, Linking, Platform } from 'react-native';
+import { AppState, Platform } from 'react-native';
 import * as MobileNotifications from 'expo-notifications';
+import { checkNotifications } from './notification';
 
 interface LocalNotification {
   scheduledDate?: Date,
@@ -12,9 +13,6 @@ interface LocalNotification {
  * Hook that enables the use of notifications on web and mobile.
  */
 function useNotifications() {
-  const [permissionGranted, setPermissionGranted] = useState<boolean>(false);
-  const [canAskAgain, setCanAskAgain] = useState(true);
-
   // Track app background state to refresh permissionGranted and canAskAgain
   const [backgrounded, setBackgrounded] = useState(false);
 
@@ -62,52 +60,13 @@ function useNotifications() {
     return () => AppState.removeEventListener('change', () => {});
   }, []);
 
-  useEffect(() => {
-    // Don't check if backgrounded
-    if (backgrounded) return;
-
-    checkPermission();
-  }, [backgrounded]);
-
-  /**
-   * Refresh the permission stored in the state.
-   */
-  async function checkPermission() {
-    // Check whether permission status granted
-    // Check the built-in Notification interface for web
-    if (os === 'web' && Notification.permission === 'granted') {
-      setPermissionGranted(true);
-    // Otherwise check via MobileNotifications
-    } else {
-      const value = await MobileNotifications.getPermissionsAsync();
-      setPermissionGranted(value.granted);
-      setCanAskAgain(value.canAskAgain);
-    }
-  }
-
-  async function requestPermission() {
-    if (os === 'web') {
-      const result = await Notification.requestPermission();
-      setPermissionGranted(result === 'granted');
-    } else if (canAskAgain) {
-      const result = await MobileNotifications.requestPermissionsAsync();
-      if (result.canAskAgain) {
-        setPermissionGranted(result.granted);
-      } else {
-        setCanAskAgain(false);
-      }
-    } else {
-      // Works only for iOS to open notification settings
-      Linking.openURL('app-settings:');
-    }
-  }
-
   /**
    * Send a notification immediately (supported on web and mobile)
    * @param notification
    */
   async function sendNotification(notification: LocalNotification) {
-    if (!permissionGranted) return;
+    const { granted } = await checkNotifications();
+    if (!granted) return;
 
     if (os === 'web') {
       /* eslint-disable-next-line */
@@ -134,6 +93,8 @@ function useNotifications() {
    */
   async function scheduleNotification(notification: LocalNotification) {
     if (!notification.scheduledDate || os === 'web') return '-1';
+    const { granted } = await checkNotifications();
+    if (!granted) return '-1';
 
     const id = await MobileNotifications.scheduleNotificationAsync({
       content: {
@@ -154,11 +115,8 @@ function useNotifications() {
   }
 
   return {
-    requestPermission,
-    checkPermission,
     sendNotification,
     scheduleNotification,
-    permissionGranted,
     cancelAllNotifications,
   };
 }
