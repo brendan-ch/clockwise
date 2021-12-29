@@ -15,6 +15,7 @@ import useWindowSize from '../helpers/useWindowSize';
 // import { getTimerValue } from '../helpers/storage';
 import TaskList from '../components/TaskList';
 import useBackgroundTimer from '../helpers/useBackgroundTimer';
+import useTimerNotification from '../helpers/useTimerNotifications';
 // import HeaderButton from '../components/HeaderButton';
 
 /**
@@ -48,6 +49,7 @@ export default function TimerPage() {
   }
 
   useBackgroundTimer();
+  useTimerNotification();
 
   useEffect(() => {
     // Read value in storage and set in context
