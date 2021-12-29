@@ -66,19 +66,24 @@ function useNotifications() {
     // Don't check if backgrounded
     if (backgrounded) return;
 
+    checkPermission();
+  }, [backgrounded]);
+
+  /**
+   * Refresh the permission stored in local state.
+   */
+  async function checkPermission() {
     // Check whether permission status granted
     // Check the built-in Notification interface for web
     if (os === 'web' && Notification.permission === 'granted') {
       setPermissionGranted(true);
     // Otherwise check via MobileNotifications
     } else {
-      MobileNotifications.getPermissionsAsync()
-        .then((value) => {
-          setPermissionGranted(value.granted);
-          setCanAskAgain(value.canAskAgain);
-        });
+      const value = await MobileNotifications.getPermissionsAsync();
+      setPermissionGranted(value.granted);
+      setCanAskAgain(value.canAskAgain);
     }
-  }, [backgrounded]);
+  }
 
   async function requestPermission() {
     if (os === 'web') {
