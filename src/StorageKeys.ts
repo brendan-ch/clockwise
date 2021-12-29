@@ -8,3 +8,4 @@ export const START = '@start';
 export const TIMER_LENGTH = '@timerLength';
 export const MODE = '@mode';
 export const ENABLE_BACKGROUND_TIMER = '@enableBackgroundTimer';
+export const ENABLE_TIMER_ALERTS = '@enableTimerAlerts';
