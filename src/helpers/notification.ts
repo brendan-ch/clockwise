@@ -26,7 +26,7 @@ async function checkNotifications() {
   if (Platform.OS === 'web' && Notification.permission === 'granted') {
     return {
       granted: true,
-      canAskAgain: false,
+      canAskAgain: true,
     };
   // Otherwise check via MobileNotifications
   }
@@ -34,7 +34,7 @@ async function checkNotifications() {
   if (Platform.OS === 'web') {
     return {
       granted: false,
-      canAskAgain: false,
+      canAskAgain: true,
     };
   }
 
