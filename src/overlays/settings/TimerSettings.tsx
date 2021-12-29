@@ -3,49 +3,68 @@ import { SectionList } from 'react-native';
 import AppContext from '../../../AppContext';
 import SettingsHeader from '../../components/SettingsHeader';
 import SettingsOption from '../../components/SettingsOption';
+import { checkNotifications, requestNotifications } from '../../helpers/notification';
 import useSettingsData from '../../helpers/useSettingsData';
 import { BREAK_TIME_MINUTES, ENABLE_TIMER_ALERTS, FOCUS_TIME_MINUTES } from '../../StorageKeys';
 import { SettingsOptionProps, Section } from '../../types';
-
-// Store all static option data in here
-// Make it easier to find and filter settings
-const options: SettingsOptionProps[] = [
-  {
-    type: 'number',
-    title: 'Focus time (minutes)',
-    storageKey: FOCUS_TIME_MINUTES,
-  },
-  {
-    type: 'number',
-    title: 'Break time (minutes)',
-    storageKey: BREAK_TIME_MINUTES,
-  },
-  {
-    type: 'toggle',
-    title: 'Timer alerts',
-    storageKey: ENABLE_TIMER_ALERTS,
-  },
-  // {
-  //   type: 'toggle',
-  //   title: 'Auto start timers?',
-  //   storageKey: AUTO_START_TIMERS,
-  // },
-];
-
-const sections: Section[] = [
-  {
-    title: 'Timer',
-    icon: 'timer-outline',
-    data: options.slice(0, 3),
-  },
-];
 
 /**
  * Timer settings content in the settings overlay.
  */
 function TimerSettingsPane() {
-  const { settingsData, handleChange, handleSelect } = useSettingsData(options);
+  // Store all static option data in here
+  // Make it easier to find and filter settings
+  const options: SettingsOptionProps[] = [
+    {
+      type: 'number',
+      title: 'Focus time (minutes)',
+      storageKey: FOCUS_TIME_MINUTES,
+    },
+    {
+      type: 'number',
+      title: 'Break time (minutes)',
+      storageKey: BREAK_TIME_MINUTES,
+    },
+    {
+      type: 'toggle',
+      title: 'Timer alerts',
+      storageKey: ENABLE_TIMER_ALERTS,
+      validator: async () => {
+        const { granted, canAskAgain } = await checkNotifications();
 
+        if (granted) return true;
+
+        if (canAskAgain) {
+          // Request permission directly from user
+          const requestResults = await requestNotifications();
+          if (requestResults.granted) {
+            // Exit and fill checkbox
+            return true;
+          }
+
+          return false;
+        }
+
+        // Display modal asking to enable notifications
+
+        return false;
+      },
+    },
+    // {
+    //   type: 'toggle',
+    //   title: 'Auto start timers?',
+    //   storageKey: AUTO_START_TIMERS,
+    // },
+  ];
+
+  const sections: Section[] = [
+    {
+      title: 'Timer',
+      icon: 'timer-outline',
+      data: options.slice(0, 3),
+    },
+  ];
+  const { settingsData, handleChange, handleSelect } = useSettingsData(options);
   // Set keyboard selected by storage key
   const [keyboardSelected, setKeyboardSelected] = useState<string | undefined>(undefined);
 
@@ -123,7 +142,16 @@ function TimerSettingsPane() {
       selected={settingsData.find((value) => value.storageKey === item.storageKey)?.selected}
       type={item.type}
       title={item.title}
-      onChange={(data) => handleChange(item.storageKey, data)}
+      onChange={async (data) => {
+        // Validate data first
+        if (item.validator) {
+          const result = await item.validator();
+          if (!result) return;
+        }
+
+        // Handle change
+        handleChange(item.storageKey, data);
+      }}
       onPress={() => {
         if (item.type === 'number') {
           handleSelectAndResetKeyboard(item.storageKey);
