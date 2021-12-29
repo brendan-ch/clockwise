@@ -18,12 +18,17 @@ function useTimerNotification() {
 
   // On web, determines if timer state changed from running -> stopped
   const [shouldSendNotification, setShouldSendNotification] = useState<boolean>(false);
+  const [tempMode, setTempMode] = useState('focus');
   useEffect(() => {
     if (Platform.OS !== 'web' || !permissionGranted) return;
 
     if (context.timerState === 'running') {
       setShouldSendNotification(true);
-    } else if (context.timerState === 'stopped' && shouldSendNotification) {
+      setTempMode(context.mode);
+    } else if (
+      context.timerState === 'stopped'
+      && shouldSendNotification
+      && context.mode !== tempMode) {
       // Send the notification
       sendNotification({
         title: `Time to ${context.mode === 'focus' ? 'focus' : 'take a break'}!`,
