@@ -35,7 +35,7 @@ const options: SettingsOptionProps[] = [
   // },
   {
     type: 'toggle',
-    title: 'Background timer (experimental)',
+    title: 'Background timer',
     storageKey: ENABLE_BACKGROUND_TIMER,
   },
   {
