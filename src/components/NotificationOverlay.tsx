@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Linking, StyleSheet, Text, View,
+  Linking, Platform, StyleSheet, Text, View,
 } from 'react-native';
 import useTheme from '../helpers/useTheme';
 import TextStyles from '../styles/Text';
@@ -35,15 +35,15 @@ function NotificationOverlay({ onClose }: Props) {
         marginBottom: 5,
       }]}
       >
-        Turn on notifications to enable timer alerts.
-        You may change this later by going to Settings → Notifications → Session.
+        Turn on app notifications to enable timer alerts.
+        {Platform.OS === 'ios' ? ' You may change this later by going to Settings → Notifications → Session.' : undefined}
       </Text>
       <OverlayButtonBar
         leftButton={{
-          text: 'no thanks',
+          text: Platform.OS === 'ios' ? 'no thanks' : 'close',
           onPress: onClose ? () => onClose() : () => {},
         }}
-        rightButton={{
+        rightButton={Platform.OS === 'ios' ? {
           text: 'go to settings',
           onPress: () => {
             Linking.openURL('app-settings:');
@@ -52,7 +52,7 @@ function NotificationOverlay({ onClose }: Props) {
             }
           },
           primary: true,
-        }}
+        } : undefined}
       />
     </View>
   );
