@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+  Platform,
   SectionList, StyleSheet, View,
 } from 'react-native';
 import Modal from 'react-native-modal';
@@ -49,7 +50,7 @@ const sections: Section[] = [
   {
     title: 'Timer',
     icon: 'timer-outline',
-    data: options.slice(0, 4),
+    data: Platform.OS === 'web' ? options.slice(0, 2) : options.slice(0, 4),
   },
 ];
 
