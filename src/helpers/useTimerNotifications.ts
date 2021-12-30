@@ -44,6 +44,7 @@ function useTimerNotification() {
     if (context.timerState === 'running' && !scheduled) {
       scheduleNotification({
         title: `Time to ${context.mode === 'focus' ? 'take a break' : 'focus'}!`,
+        body: `Tap here to ${context.mode === 'focus' ? 'plan your next session' : 'start your next session'}.`,
         scheduledDate: new Date(Date.now() + context.timeRemaining),
       });
 
