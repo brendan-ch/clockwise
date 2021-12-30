@@ -31,6 +31,7 @@ function OverlayButton({ text, onPress, primary }: ButtonProps) {
     <TouchableOpacity
       style={[buttonStyles.container, {
         backgroundColor: primary ? colors.primary : colors.background,
+        borderColor: colors.primary,
       }]}
       onPress={() => onPress()}
     >
@@ -55,6 +56,9 @@ const buttonStyles = StyleSheet.create({
     flexBasis: 'auto',
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 10,
+    borderRadius: 2,
+    borderWidth: 1,
   },
 });
 
@@ -94,7 +98,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 10,
   },
 });
 
