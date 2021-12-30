@@ -49,10 +49,11 @@ function NotificationOverlay() {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
-    width: 250,
+    width: 300,
     justifyContent: 'flex-start',
     paddingTop: 20,
-    paddingHorizontal: 5,
+    paddingBottom: 10,
+    paddingHorizontal: 10,
   },
   headerText: {
     fontSize: 17,
