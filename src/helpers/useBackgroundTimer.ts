@@ -99,8 +99,10 @@ function useBackgroundTimer() {
 
     if (backgroundState === 'active') {
       setTimerFromStorage();
+      context.setTimerBackgrounded(false);
     } else if (context.timerLength && context.start) {
       storeTimerData(context.start, context.timerLength);
+      context.setTimerBackgrounded(true);
     }
   }, [backgroundState, context.timerLength, context.start, enabled]);
 }

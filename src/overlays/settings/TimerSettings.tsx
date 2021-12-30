@@ -3,8 +3,9 @@ import { SectionList } from 'react-native';
 import AppContext from '../../../AppContext';
 import SettingsHeader from '../../components/SettingsHeader';
 import SettingsOption from '../../components/SettingsOption';
+import { checkNotifications, requestNotifications } from '../../helpers/notification';
 import useSettingsData from '../../helpers/useSettingsData';
-import { BREAK_TIME_MINUTES, FOCUS_TIME_MINUTES } from '../../StorageKeys';
+import { BREAK_TIME_MINUTES, ENABLE_TIMER_ALERTS, FOCUS_TIME_MINUTES } from '../../StorageKeys';
 import { SettingsOptionProps, Section } from '../../types';
 
 // Store all static option data in here
@@ -19,6 +20,31 @@ const options: SettingsOptionProps[] = [
     type: 'number',
     title: 'Break time (minutes)',
     storageKey: BREAK_TIME_MINUTES,
+  },
+  {
+    type: 'toggle',
+    title: 'Timer alerts',
+    storageKey: ENABLE_TIMER_ALERTS,
+    validator: async (data) => {
+      if (data === false) return true;
+
+      const { granted, canAskAgain } = await checkNotifications();
+
+      if (granted) return true;
+
+      if (canAskAgain) {
+        // Request permission directly from user
+        const requestResults = await requestNotifications();
+        if (requestResults.granted) {
+          // Exit and fill checkbox
+          return true;
+        }
+
+        return false;
+      }
+
+      return false;
+    },
   },
   // {
   //   type: 'toggle',
@@ -40,7 +66,6 @@ const sections: Section[] = [
  */
 function TimerSettingsPane() {
   const { settingsData, handleChange, handleSelect } = useSettingsData(options);
-
   // Set keyboard selected by storage key
   const [keyboardSelected, setKeyboardSelected] = useState<string | undefined>(undefined);
 
@@ -118,7 +143,16 @@ function TimerSettingsPane() {
       selected={settingsData.find((value) => value.storageKey === item.storageKey)?.selected}
       type={item.type}
       title={item.title}
-      onChange={(data) => handleChange(item.storageKey, data)}
+      onChange={async (data) => {
+        // Validate data first
+        if (item.validator) {
+          const result = await item.validator(data);
+          if (!result) return;
+        }
+
+        // Handle change
+        handleChange(item.storageKey, data);
+      }}
       onPress={() => {
         if (item.type === 'number') {
           handleSelectAndResetKeyboard(item.storageKey);

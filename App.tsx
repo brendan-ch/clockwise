@@ -57,6 +57,7 @@ export default function App() {
   // Date in milliseconds timer was started on
   const [start, setStart] = useState<number | undefined>(undefined);
   const [timerLength, setTimerLength] = useState<number | undefined>(undefined);
+  const [timerBackgrounded, setTimerBackgrounded] = useState(false);
 
   // Helper methods
   /**
@@ -267,6 +268,8 @@ export default function App() {
         setPageTitle,
         start,
         timerLength,
+        timerBackgrounded,
+        setTimerBackgrounded,
       }}
       >
         <View style={[styles.landscapeContainer, {
@@ -327,6 +330,8 @@ export default function App() {
       setTimeRemaining,
       start,
       timerLength,
+      timerBackgrounded,
+      setTimerBackgrounded,
     }}
     >
       <NavigationContainer

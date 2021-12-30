@@ -22,6 +22,8 @@ interface SettingsData {
 
 /**
  * Represents static data for a settings button.
+ * Note that the SettingOption button can be used outside of the
+ * useSettingsData hook.
  */
 interface SettingsOptionProps {
   title: string,
@@ -32,6 +34,14 @@ interface SettingsOptionProps {
    * Used for getting and saving data, as well as for identifying different options.
    */
   storageKey: string,
+  /**
+   * Validator function that runs code before the setting is saved.
+   *
+   * @returns If false returned, skips saving the value.
+   * If true is returned, saves the new value.
+   */
+  /* eslint-disable-next-line */
+  validator?: (input?: string | boolean) => Promise<boolean>,
 }
 
 interface Section {
