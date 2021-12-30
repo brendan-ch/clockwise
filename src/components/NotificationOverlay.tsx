@@ -1,14 +1,20 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {
+  Linking, StyleSheet, Text, View,
+} from 'react-native';
 import useTheme from '../helpers/useTheme';
 import TextStyles from '../styles/Text';
 import OverlayButtonBar from './OverlayButtonBar';
+
+interface Props {
+  onClose?: () => any,
+}
 
 /**
  * Component that displays a notification overlay that links users to the
  * notification settings page of their respective OS.
  */
-function NotificationOverlay() {
+function NotificationOverlay({ onClose }: Props) {
   const colors = useTheme();
 
   return (
@@ -21,7 +27,7 @@ function NotificationOverlay() {
         color: colors.primary,
       }]}
       >
-        Enable notifications
+        Notifications are disabled
 
       </Text>
       <Text style={[TextStyles.textItalic, {
@@ -35,17 +41,26 @@ function NotificationOverlay() {
       <OverlayButtonBar
         leftButton={{
           text: 'no thanks',
-          onPress: () => {},
+          onPress: onClose ? () => onClose() : () => {},
         }}
         rightButton={{
-          text: 'enable',
-          onPress: () => {},
+          text: 'go to settings',
+          onPress: () => {
+            Linking.openURL('app-settings:');
+            if (onClose) {
+              onClose();
+            }
+          },
           primary: true,
         }}
       />
     </View>
   );
 }
+
+NotificationOverlay.defaultProps = {
+  onClose: () => {},
+};
 
 const styles = StyleSheet.create({
   container: {
