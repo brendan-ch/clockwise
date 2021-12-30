@@ -4,6 +4,8 @@ import {
 } from 'react-native';
 import SettingsHeader from '../components/SettingsHeader';
 import SettingsOption from '../components/SettingsOption';
+import { checkNotifications, requestNotifications } from '../helpers/notification';
+import { getData } from '../helpers/storage';
 import useSettingsData from '../helpers/useSettingsData';
 import useTheme from '../helpers/useTheme';
 import {
@@ -36,8 +38,35 @@ const options: SettingsOptionProps[] = [
   },
   {
     type: 'toggle',
-    title: 'Timer alerts',
+    title: 'Timer alerts (requires background timer)',
     storageKey: ENABLE_TIMER_ALERTS,
+    validator: async (data) => {
+      if (data === false) return true;
+
+      // First check if background timer enabled
+      const backgroundTimerValue = await getData(ENABLE_BACKGROUND_TIMER);
+      if (backgroundTimerValue !== '1') return false;
+
+      // Check if permissions enabled
+      const { granted, canAskAgain } = await checkNotifications();
+      if (granted) return true;
+
+      if (canAskAgain) {
+        // Request permission directly from user
+        const requestResults = await requestNotifications();
+
+        if (requestResults.granted) {
+          // Exit and fill checkbox
+          return true;
+        }
+
+        return false;
+      }
+
+      // Display modal here explaining how to enable notifications
+
+      return false;
+    },
   },
 ];
 
@@ -70,7 +99,16 @@ function SettingsPage() {
       selected={settingsData.find((value) => value.storageKey === item.storageKey)?.selected}
       type={item.type}
       title={item.title}
-      onChange={(data) => handleChange(item.storageKey, data)}
+      onChange={async (data) => {
+        // Validate data first
+        if (item.validator) {
+          const result = await item.validator(data);
+          if (!result) return;
+        }
+
+        // Handle change
+        handleChange(item.storageKey, data);
+      }}
       onPress={() => {
         if (item.type === 'number') {
           handleSelect(item.storageKey);
