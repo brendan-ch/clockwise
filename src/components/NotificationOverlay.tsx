@@ -26,6 +26,7 @@ function NotificationOverlay() {
       </Text>
       <Text style={[TextStyles.textItalic, {
         color: colors.primary,
+        marginBottom: 5,
       }]}
       >
         Turn on notifications to enable timer alerts.
