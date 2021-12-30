@@ -15,6 +15,8 @@ function useTimerNotification() {
     cancelAllNotifications,
   } = useNotifications();
 
+  const [scheduled, setScheduled] = useState(false);
+
   // On web, determines if timer state changed from running -> stopped
   const [shouldSendNotification, setShouldSendNotification] = useState<boolean>(false);
   const [tempMode, setTempMode] = useState('focus');
@@ -39,13 +41,16 @@ function useTimerNotification() {
   useEffect(() => {
     if (Platform.OS === 'web') return;
 
-    if (context.timerState === 'running') {
+    if (context.timerState === 'running' && !scheduled) {
       scheduleNotification({
         title: `Time to ${context.mode === 'focus' ? 'take a break' : 'focus'}!`,
         scheduledDate: new Date(Date.now() + context.timeRemaining),
       });
-    } else {
+
+      setScheduled(true);
+    } else if (context.timerState !== 'running' && !context.timerBackgrounded) {
       cancelAllNotifications();
+      setScheduled(false);
     }
   }, [context.timerState]);
 }
