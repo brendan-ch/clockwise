@@ -244,8 +244,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   topContainer: {
-    width: '100%',
+    width: 280,
     justifyContent: 'flex-end',
+    alignItems: 'center',
   },
   bottomContainer: {
     width: '100%',
