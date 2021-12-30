@@ -18,12 +18,16 @@ function NotificationOverlay() {
     >
       <Text style={[TextStyles.textBold, styles.headerText, {
         marginBottom: 5,
+        color: colors.primary,
       }]}
       >
         Enable notifications
 
       </Text>
-      <Text style={TextStyles.textItalic}>
+      <Text style={[TextStyles.textItalic, {
+        color: colors.primary,
+      }]}
+      >
         Turn on notifications to enable timer alerts.
         You may change this later by going to Settings → Notifications → Session.
       </Text>
@@ -35,6 +39,7 @@ function NotificationOverlay() {
         rightButton={{
           text: 'enable',
           onPress: () => {},
+          primary: true,
         }}
       />
     </View>
