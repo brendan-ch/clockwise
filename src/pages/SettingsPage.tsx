@@ -160,7 +160,9 @@ function SettingsPage() {
           alignItems: 'center',
         }}
       >
-        <NotificationOverlay />
+        <NotificationOverlay
+          onClose={() => setOverlay('none')}
+        />
       </Modal>
     </View>
   );
