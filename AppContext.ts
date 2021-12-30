@@ -26,6 +26,8 @@ interface DefaultAppState {
   setTimeRemaining: Dispatch<SetStateAction<number>>,
   start?: number,
   timerLength?: number,
+  timerBackgrounded: boolean,
+  setTimerBackgrounded: Dispatch<SetStateAction<boolean>>,
 }
 
 const defaultAppState: DefaultAppState = {
@@ -45,6 +47,8 @@ const defaultAppState: DefaultAppState = {
   setPageTitle: () => {},
   setTimeRemaining: () => {},
   setMode: () => {},
+  timerBackgrounded: false,
+  setTimerBackgrounded: () => {},
 };
 
 const AppContext = React.createContext(defaultAppState);
