@@ -1,6 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 import AppContext from '../../AppContext';
+import { ENABLE_TIMER_ALERTS } from '../StorageKeys';
+import { TimerState } from '../types';
+import { getData } from './storage';
 import useNotifications from './useNotifications';
 
 /**
@@ -20,14 +23,17 @@ function useTimerNotification() {
   // On web, determines if timer state changed from running -> stopped
   const [shouldSendNotification, setShouldSendNotification] = useState<boolean>(false);
   const [tempMode, setTempMode] = useState('focus');
-  useEffect(() => {
-    if (Platform.OS !== 'web') return;
 
-    if (context.timerState === 'running') {
+  async function manageNotificationsWeb(timerState: TimerState) {
+    if (Platform.OS !== 'web') return;
+    const timerAlertsEnabled = await getData(ENABLE_TIMER_ALERTS);
+    if (timerAlertsEnabled !== '1') return;
+
+    if (timerState === 'running') {
       setShouldSendNotification(true);
       setTempMode(context.mode);
     } else if (
-      context.timerState === 'stopped'
+      timerState === 'stopped'
       && shouldSendNotification
       && context.mode !== tempMode) {
       // Send the notification
@@ -35,13 +41,18 @@ function useTimerNotification() {
         title: `Time to ${context.mode === 'focus' ? 'focus' : 'take a break'}!`,
       });
     }
+  }
+
+  useEffect(() => {
+    manageNotificationsWeb(context.timerState);
   }, [context.timerState]);
 
-  // Hook to handle notification scheduling on mobile
-  useEffect(() => {
+  async function manageNotifications(timerState: TimerState) {
     if (Platform.OS === 'web') return;
+    const timerAlertsEnabled = await getData(ENABLE_TIMER_ALERTS);
+    if (timerAlertsEnabled !== '1') return;
 
-    if (context.timerState === 'running' && !scheduled) {
+    if (timerState === 'running' && !scheduled) {
       scheduleNotification({
         title: `Time to ${context.mode === 'focus' ? 'take a break' : 'focus'}!`,
         body: `Tap here to ${context.mode === 'focus' ? 'plan your next session' : 'start your next session'}.`,
@@ -49,10 +60,15 @@ function useTimerNotification() {
       });
 
       setScheduled(true);
-    } else if (context.timerState !== 'running' && !context.timerBackgrounded) {
+    } else if (timerState !== 'running' && !context.timerBackgrounded) {
       cancelAllNotifications();
       setScheduled(false);
     }
+  }
+
+  // Hook to handle notification scheduling on mobile
+  useEffect(() => {
+    manageNotifications(context.timerState);
   }, [context.timerState]);
 }
 
