@@ -307,6 +307,7 @@ function TaskList() {
 
     return (
       <SelectorGroup
+        activeKeyboardGroup="timer"
         fadeInOnMount
         expanded={expandedTask === item.id && !item.completed}
         data={[
@@ -317,6 +318,7 @@ function TaskList() {
             value: item.estPomodoros,
             onChange: (data) => handleChangeTask('estPomodoros', data, item.id),
             disabled: !timerStopped && context.mode === 'focus',
+            keybindings: [['e']],
           },
           !timerStopped && context.mode === 'focus' ? ({
             type: 'icon',
@@ -324,6 +326,7 @@ function TaskList() {
             title: 'complete',
             index: '1',
             onPress: () => handleCompleteTask(item.id),
+            keybindings: [['Meta', 'Enter'], ['Control', 'Enter'], ['Backspace']],
           }) : ({
             type: 'icon',
             value: 'trash-outline',
@@ -331,6 +334,7 @@ function TaskList() {
             index: '1',
             onPress: () => handleDeleteTask(item.id),
             onPressRight: () => handleDeleteTask(item.id),
+            keybindingsPress: [['Backspace']],
           }),
         ]}
         header={item.completed ? ({
