@@ -69,12 +69,12 @@ export default function TimerPage() {
           }));
 
           unsubMethods.push(keyboardShortcutManager?.registerEvent({
-            keys: ['1'],
+            keys: ['f'],
             action: () => handleStateSwitch('focus'),
           }));
 
           unsubMethods.push(keyboardShortcutManager?.registerEvent({
-            keys: ['2'],
+            keys: ['b'],
             action: () => handleStateSwitch('break'),
           }));
 
