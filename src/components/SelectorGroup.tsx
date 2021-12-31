@@ -1,8 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  useContext, useEffect, useRef, useState,
+} from 'react';
 import {
   StyleSheet, View, Animated, FlatList, StyleProp, TextStyle,
 } from 'react-native';
+import AppContext from '../../AppContext';
 import useTheme from '../helpers/useTheme';
+import { KeyboardShortcutGroup } from '../types';
 import SettingsOption from './SettingsOption';
 
 interface SettingsOptionProps {
@@ -20,6 +24,14 @@ interface SettingsOptionProps {
   /* eslint-disable-next-line */
   onChangeText?: (text: string) => any,
   titleStyle?: StyleProp<TextStyle>,
+  /**
+   * Register one or more keybindings to select the setting option.
+   */
+  keybindings?: string[][],
+  /**
+   * Register one or more keybindings to simulate a press of the settings option.
+   */
+  keybindingsPress?: string[][],
 }
 
 interface Props {
@@ -27,13 +39,14 @@ interface Props {
   header: SettingsOptionProps,
   expanded: boolean,
   fadeInOnMount?: boolean,
+  activeKeyboardGroup?: KeyboardShortcutGroup,
 }
 
 /**
  * Component that can expand with additional SettingOption components.
  */
 function SelectorGroup({
-  data, header, expanded, fadeInOnMount,
+  data, header, expanded, fadeInOnMount, activeKeyboardGroup,
 }: Props) {
   const [selected, setSelected] = useState<string | undefined>(undefined);
 
@@ -41,6 +54,42 @@ function SelectorGroup({
   const opacityAnimation = useRef(new Animated.Value(0)).current;
 
   const colorValues = useTheme();
+
+  const {
+    keyboardGroup,
+    keyboardShortcutManager,
+  } = useContext(AppContext);
+
+  useEffect(() => {
+    const unsubMethods: (() => any)[] = [];
+
+    // Set keybindings if available
+    data.forEach((item) => {
+      if (item.keybindings && keyboardGroup === activeKeyboardGroup && keyboardShortcutManager) {
+        item.keybindings.forEach((keybinding) => {
+          unsubMethods.push(keyboardShortcutManager.registerEvent({
+            keys: keybinding,
+            action: () => setSelected(item.index),
+          }));
+        });
+      }
+
+      if (
+        item.keybindingsPress
+        && item.onPress
+        && keyboardGroup === activeKeyboardGroup
+        && keyboardShortcutManager
+      ) {
+        item.keybindingsPress.forEach((keybinding) => {
+          unsubMethods.push(keyboardShortcutManager.registerEvent({
+            keys: keybinding,
+            // @ts-ignore
+            action: () => item.onPress(),
+          }));
+        });
+      }
+    });
+  }, [data, keyboardGroup, keyboardShortcutManager, selected]);
 
   useEffect(() => {
     if (fadeInOnMount) {
@@ -160,6 +209,7 @@ const styles = StyleSheet.create({
 
 SelectorGroup.defaultProps = {
   fadeInOnMount: false,
+  activeKeyboardGroup: undefined,
 };
 
 export default SelectorGroup;
