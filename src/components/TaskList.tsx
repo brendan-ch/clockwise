@@ -250,6 +250,47 @@ function TaskList() {
     }
   }, [context.timerState, tasks, deletionTimeout]);
 
+  // Set keybindings
+  useEffect(() => {
+    const unsubMethods: (() => any)[] = [];
+
+    if (context.keyboardGroup === 'timer') {
+      const { keyboardShortcutManager } = context;
+      if (!keyboardShortcutManager) return () => {};
+
+      unsubMethods.push(keyboardShortcutManager.registerEvent({
+        keys: ['a'],
+        action: () => handleAddTask(),
+      }));
+
+      unsubMethods.push(keyboardShortcutManager.registerEvent({
+        keys: ['+'],
+        action: () => handleAddTask(),
+      }));
+
+      unsubMethods.push(keyboardShortcutManager.registerEvent({
+        keys: ['='],
+        action: () => handleAddTask(),
+      }));
+
+      for (let i = 0; i < 9; i += 1) {
+        unsubMethods.push(keyboardShortcutManager.registerEvent({
+          keys: [`${i + 1}`],
+          action: () => setExpandedTask(tasks[i] ? tasks[i].id : -1),
+        }));
+      }
+
+      unsubMethods.push(keyboardShortcutManager.registerEvent({
+        keys: ['0'],
+        action: () => setExpandedTask(tasks[9] ? tasks[9].id : -1),
+      }));
+    }
+
+    return () => unsubMethods.forEach((value) => {
+      value();
+    });
+  }, [context.keyboardGroup, tasks]);
+
   // Load tasks on start
   useEffect(() => {
     populateTasksData();
