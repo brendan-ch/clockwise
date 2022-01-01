@@ -11,7 +11,7 @@ interface Props {
   selected?: boolean,
   /* eslint-disable-next-line */
   onChange?: (number: number) => any,
-  onSelect?: () => any,
+  onDeselect?: () => any,
   /**
    * Enables the darker border but does not focus the text.
    */
@@ -19,7 +19,7 @@ interface Props {
 }
 
 function NumberBox({
-  text, selected, onChange, onSelect, keyboardSelected,
+  text, selected, onChange, keyboardSelected, onDeselect,
 }: Props) {
   const colors = useTheme();
 
@@ -55,8 +55,8 @@ function NumberBox({
         }
       }}
       onBlur={() => {
-        if (selected && onSelect) {
-          onSelect();
+        if (selected && onDeselect) {
+          onDeselect();
         }
       }}
       maxLength={3}
@@ -70,7 +70,7 @@ NumberBox.defaultProps = {
   selected: false,
   keyboardSelected: false,
   onChange: () => {},
-  onSelect: () => {},
+  onDeselect: () => {},
 };
 
 const styles = StyleSheet.create({
