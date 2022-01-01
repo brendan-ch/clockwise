@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import {
   Platform,
   Pressable,
@@ -77,6 +77,10 @@ interface Props {
    */
   /* eslint-disable-next-line */
   onChangeText?: (text: string) => any,
+  /**
+   * Indicates whether the input should be focused.
+   */
+  inputSelected?: boolean,
 }
 
 function SettingsOption({
@@ -89,7 +93,7 @@ function SettingsOption({
   onChange,
   iconLeft,
   onPressLeft,
-  onSelect, style, titleStyle, disabled, keyboardSelected, onChangeText,
+  onSelect, style, titleStyle, disabled, keyboardSelected, onChangeText, inputSelected,
 }: Props) {
   const colors = useTheme();
   const {
@@ -125,9 +129,15 @@ function SettingsOption({
         });
       };
     }
-
     return () => {};
   }, [keyboardShortcutManager, keyboardGroup, keyboardSelected]);
+
+  const ref = useRef<TextInput>();
+  useEffect(() => {
+    if (inputSelected) {
+      ref.current?.focus();
+    }
+  }, [inputSelected]);
 
   const children = (
     <View
@@ -165,6 +175,8 @@ function SettingsOption({
             }, titleStyle]}
             value={title}
             onChangeText={(text) => onChangeText(text)}
+            // @ts-ignore
+            ref={ref}
           />
         ) : (
           <Text style={[TextStyles.textRegular, {
@@ -249,6 +261,7 @@ SettingsOption.defaultProps = {
   keyboardSelected: false,
   onChangeText: undefined,
   iconLeft: undefined,
+  inputSelected: false,
 };
 
 export default SettingsOption;
