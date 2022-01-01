@@ -66,6 +66,7 @@ function SelectorGroup({
   data, header, expanded, fadeInOnMount, activeKeyboardGroup, outsideData,
 }: Props) {
   const [selected, setSelected] = useState<string | undefined>(undefined);
+  const [headerInputSelected, setHeaderInputSelected] = useState(false);
 
   const expandedAnimation = useRef(new Animated.Value(0)).current;
   const opacityAnimation = useRef(new Animated.Value(0)).current;
@@ -140,16 +141,32 @@ function SelectorGroup({
   ]);
 
   // Register keybind for header
-  // useEffect(() => {
-  //   const unsubMethods: (() => any)[] = [];
-  //   if (!keyboardShortcutManager || keyboardGroup !== activeKeyboardGroup) {
-  //     return () => {};
-  //   }
+  useEffect(() => {
+    const unsubMethods: (() => any)[] = [];
+    if (!keyboardShortcutManager || keyboardGroup !== activeKeyboardGroup || !expanded) {
+      return () => {};
+    }
 
-  //   return () => unsubMethods.forEach((method) => {
-  //     method();
-  //   });
-  // }, [keyboardGroup, keyboardShortcutManager, selected, outsideData]);
+    if (header.keybindingsPressInput && header.onChangeText) {
+      header.keybindingsPressInput.forEach((keybinding) => {
+        unsubMethods.push(keyboardShortcutManager.registerEvent({
+          keys: keybinding,
+          action: () => setHeaderInputSelected(true),
+        }));
+      });
+    }
+
+    return () => unsubMethods.forEach((method) => {
+      method();
+    });
+  }, [
+    keyboardGroup,
+    keyboardShortcutManager,
+    selected,
+    outsideData,
+    expanded,
+    headerInputSelected,
+  ]);
 
   useEffect(() => {
     if (fadeInOnMount) {
@@ -232,6 +249,7 @@ function SelectorGroup({
           marginLeft: expanded ? 5 : 0,
         }}
         titleStyle={header.titleStyle}
+        inputSelected={expanded ? headerInputSelected : false}
       />
       {expanded ? (
         <View style={[styles.line, {
