@@ -156,6 +156,16 @@ function SelectorGroup({
       });
     }
 
+    if (header.keybindingsPressLeft && header.onPressLeft) {
+      header.keybindingsPressLeft.forEach((keybinding) => {
+        unsubMethods.push(keyboardShortcutManager.registerEvent({
+          keys: keybinding,
+          // @ts-ignore
+          action: () => header.onPressLeft(),
+        }));
+      });
+    }
+
     return () => unsubMethods.forEach((method) => {
       method();
     });
