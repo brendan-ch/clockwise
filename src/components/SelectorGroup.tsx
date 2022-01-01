@@ -32,6 +32,18 @@ interface SettingsOptionProps {
    * Register one or more keybindings to simulate a press of the settings option.
    */
   keybindingsPress?: string[][],
+  /**
+   * Register one or more keybindings to simulate a press of the left icon.
+   */
+  keybindingsPressLeft?: string[][],
+  /**
+   * Register one or more keybindings to simulate a press of the right icon.
+   */
+  keybindingsPressRight?: string[][],
+  /**
+   * Register one or more keybindings to select the input (if there is one).
+   */
+  keybindingsPressInput?: string[][],
 }
 
 interface Props {
@@ -65,12 +77,17 @@ function SelectorGroup({
     keyboardShortcutManager,
   } = useContext(AppContext);
 
+  // Register keybinds for data
   useEffect(() => {
     const unsubMethods: (() => any)[] = [];
 
+    if (keyboardGroup !== activeKeyboardGroup || !keyboardShortcutManager || !expanded) {
+      return () => {};
+    }
+
     // Set keybindings if available
     data.forEach((item) => {
-      if (item.keybindings && keyboardGroup === activeKeyboardGroup && keyboardShortcutManager) {
+      if (item.keybindings) {
         item.keybindings.forEach((keybinding) => {
           unsubMethods.push(keyboardShortcutManager.registerEvent({
             keys: keybinding,
@@ -79,12 +96,7 @@ function SelectorGroup({
         });
       }
 
-      if (
-        item.keybindingsPress
-        && item.onPress
-        && keyboardGroup === activeKeyboardGroup
-        && keyboardShortcutManager
-      ) {
+      if (item.keybindingsPress && item.onPress) {
         item.keybindingsPress.forEach((keybinding) => {
           unsubMethods.push(keyboardShortcutManager.registerEvent({
             keys: keybinding,
@@ -93,12 +105,51 @@ function SelectorGroup({
           }));
         });
       }
+
+      if (item.keybindingsPressLeft && item.onPressLeft) {
+        item.keybindingsPressLeft.forEach((keybinding) => {
+          unsubMethods.push(keyboardShortcutManager.registerEvent({
+            keys: keybinding,
+            // @ts-ignore
+            action: () => item.onPressLeft(),
+          }));
+        });
+      }
+
+      if (item.keybindingsPressRight && item.onPressRight) {
+        item.keybindingsPressRight.forEach((keybinding) => {
+          unsubMethods.push(keyboardShortcutManager.registerEvent({
+            keys: keybinding,
+            // @ts-ignore
+            action: () => item.onPressRight(),
+          }));
+        });
+      }
     });
 
     return () => unsubMethods.forEach((method) => {
       method();
     });
-  }, [data, keyboardGroup, keyboardShortcutManager, selected, outsideData]);
+  }, [
+    data,
+    keyboardGroup,
+    keyboardShortcutManager,
+    selected,
+    outsideData,
+    expanded,
+  ]);
+
+  // Register keybind for header
+  // useEffect(() => {
+  //   const unsubMethods: (() => any)[] = [];
+  //   if (!keyboardShortcutManager || keyboardGroup !== activeKeyboardGroup) {
+  //     return () => {};
+  //   }
+
+  //   return () => unsubMethods.forEach((method) => {
+  //     method();
+  //   });
+  // }, [keyboardGroup, keyboardShortcutManager, selected, outsideData]);
 
   useEffect(() => {
     if (fadeInOnMount) {
