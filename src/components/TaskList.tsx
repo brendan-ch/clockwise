@@ -359,6 +359,7 @@ function TaskList() {
           onPressRight: () => setExpandedTask(expandedTask === item.id ? -1 : item.id),
           value: expandedTask === item.id ? 'chevron-down' : 'chevron-forward',
           onChangeText: timerStopped || context.mode === 'break' ? (text) => handleChangeTask('title', text, item.id) : undefined,
+          keybindingsPressInput: [['Enter']],
         })}
       />
     );
