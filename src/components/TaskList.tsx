@@ -331,7 +331,7 @@ function TaskList() {
             title: 'complete',
             index: '1',
             onPress: () => handleCompleteTask(item.id),
-            keybindings: [['Meta', 'Enter'], ['Control', 'Enter'], ['Backspace']],
+            keybindingsPress: [['Meta', 'Enter'], ['Control', 'Enter'], ['Backspace']],
           }) : ({
             type: 'icon',
             value: 'trash-outline',
