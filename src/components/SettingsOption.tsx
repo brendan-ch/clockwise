@@ -81,6 +81,10 @@ interface Props {
    * Indicates whether the input should be focused.
    */
   inputSelected?: boolean,
+  /**
+   * Called when the input is blurred, if input is provided.
+   */
+  onInputBlur?: () => any,
 }
 
 function SettingsOption({
@@ -93,6 +97,7 @@ function SettingsOption({
   onChange,
   iconLeft,
   onPressLeft,
+  onInputBlur,
   onSelect, style, titleStyle, disabled, keyboardSelected, onChangeText, inputSelected,
 }: Props) {
   const colors = useTheme();
@@ -133,6 +138,7 @@ function SettingsOption({
   }, [keyboardShortcutManager, keyboardGroup, keyboardSelected]);
 
   const ref = useRef<TextInput>();
+
   useEffect(() => {
     if (inputSelected) {
       ref.current?.focus();
@@ -177,6 +183,7 @@ function SettingsOption({
             onChangeText={(text) => onChangeText(text)}
             // @ts-ignore
             ref={ref}
+            onBlur={onInputBlur ? () => onInputBlur() : undefined}
           />
         ) : (
           <Text style={[TextStyles.textRegular, {
@@ -262,6 +269,7 @@ SettingsOption.defaultProps = {
   onChangeText: undefined,
   iconLeft: undefined,
   inputSelected: false,
+  onInputBlur: () => {},
 };
 
 export default SettingsOption;
