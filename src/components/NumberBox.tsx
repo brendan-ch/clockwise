@@ -28,6 +28,8 @@ function NumberBox({
   useEffect(() => {
     if (selected) {
       ref.current?.focus();
+    } else {
+      ref.current?.blur();
     }
   }, [selected]);
 
