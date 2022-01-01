@@ -310,6 +310,7 @@ function TaskList() {
         activeKeyboardGroup="timer"
         fadeInOnMount
         expanded={expandedTask === item.id && !item.completed}
+        outsideData={tasks}
         data={[
           {
             type: 'number',
