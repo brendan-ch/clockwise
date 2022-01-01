@@ -208,6 +208,7 @@ function SelectorGroup({
           item.onPress();
         }
       }}
+      onDeselect={() => setSelected(undefined)}
       onPressRight={item.onPressRight}
       onPressLeft={item.onPressLeft}
       type={item.type}

@@ -161,6 +161,7 @@ function TimerSettingsPane() {
         }
       }}
       onSelect={() => handleSelectAndResetKeyboard(item.storageKey)}
+      onDeselect={() => handleSelectAndResetKeyboard(item.storageKey)}
       keyboardSelected={keyboardSelected === item.storageKey}
     />
   );

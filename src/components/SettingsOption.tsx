@@ -58,6 +58,10 @@ interface Props {
    */
   onSelect?: () => any,
   /**
+   * Run when the component is deselected (if it's a number box)
+   */
+  onDeselect?: () => any,
+  /**
    * Marks the component as selected. Only supported for type `number`.
    */
   selected?: boolean,
@@ -95,6 +99,7 @@ function SettingsOption({
   value,
   selected,
   onChange,
+  onDeselect,
   iconLeft,
   onPressLeft,
   onInputBlur,
@@ -205,7 +210,7 @@ function SettingsOption({
           text={value || 0}
           selected={selected}
           onChange={onChange}
-          onSelect={onSelect}
+          onDeselect={onDeselect}
           keyboardSelected={keyboardSelected}
         />
       ) : undefined}
@@ -270,6 +275,7 @@ SettingsOption.defaultProps = {
   iconLeft: undefined,
   inputSelected: false,
   onInputBlur: () => {},
+  onDeselect: () => {},
 };
 
 export default SettingsOption;
