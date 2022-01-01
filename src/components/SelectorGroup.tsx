@@ -250,6 +250,7 @@ function SelectorGroup({
         }}
         titleStyle={header.titleStyle}
         inputSelected={expanded ? headerInputSelected : false}
+        onInputBlur={() => setHeaderInputSelected(false)}
       />
       {expanded ? (
         <View style={[styles.line, {
