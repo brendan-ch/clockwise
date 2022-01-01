@@ -40,13 +40,18 @@ interface Props {
   expanded: boolean,
   fadeInOnMount?: boolean,
   activeKeyboardGroup?: KeyboardShortcutGroup,
+  /**
+   * If the selector group is conditionally rendered based on an array,
+   * provide the array here so keybindings work properly.
+   */
+  outsideData?: any[],
 }
 
 /**
  * Component that can expand with additional SettingOption components.
  */
 function SelectorGroup({
-  data, header, expanded, fadeInOnMount, activeKeyboardGroup,
+  data, header, expanded, fadeInOnMount, activeKeyboardGroup, outsideData,
 }: Props) {
   const [selected, setSelected] = useState<string | undefined>(undefined);
 
@@ -89,7 +94,11 @@ function SelectorGroup({
         });
       }
     });
-  }, [data, keyboardGroup, keyboardShortcutManager, selected]);
+
+    return () => unsubMethods.forEach((method) => {
+      method();
+    });
+  }, [data, keyboardGroup, keyboardShortcutManager, selected, outsideData]);
 
   useEffect(() => {
     if (fadeInOnMount) {
@@ -210,6 +219,7 @@ const styles = StyleSheet.create({
 SelectorGroup.defaultProps = {
   fadeInOnMount: false,
   activeKeyboardGroup: undefined,
+  outsideData: [],
 };
 
 export default SelectorGroup;
