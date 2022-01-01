@@ -276,20 +276,24 @@ function TaskList() {
       for (let i = 0; i < 9; i += 1) {
         unsubMethods.push(keyboardShortcutManager.registerEvent({
           keys: [`${i + 1}`],
-          action: () => setExpandedTask(tasks[i] ? tasks[i].id : -1),
+          action: () => setExpandedTask(tasks[i] && tasks[i].id !== expandedTask
+            ? tasks[i].id
+            : -1),
         }));
       }
 
       unsubMethods.push(keyboardShortcutManager.registerEvent({
         keys: ['0'],
-        action: () => setExpandedTask(tasks[9] ? tasks[9].id : -1),
+        action: () => setExpandedTask(tasks[9] && tasks[9].id !== expandedTask
+          ? tasks[9].id
+          : -1),
       }));
     }
 
     return () => unsubMethods.forEach((value) => {
       value();
     });
-  }, [context.keyboardGroup, tasks]);
+  }, [context.keyboardGroup, tasks, expandedTask]);
 
   // Load tasks on start
   useEffect(() => {
@@ -360,6 +364,7 @@ function TaskList() {
           value: expandedTask === item.id ? 'chevron-down' : 'chevron-forward',
           onChangeText: timerStopped || context.mode === 'break' ? (text) => handleChangeTask('title', text, item.id) : undefined,
           keybindingsPressInput: [['Enter']],
+          keybindingsPressLeft: [['s']],
         })}
       />
     );
