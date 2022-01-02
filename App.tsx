@@ -29,6 +29,9 @@ import LandscapeFooter from './src/components/LandscapeFooter';
 import { getTimerValue } from './src/helpers/storage';
 import usePageTitle from './src/helpers/usePageTitle';
 
+/* eslint-disable-next-line */
+import * as serviceWorkerRegistration from './src/serviceWorkerRegistration';
+
 const MIN_25 = 1500000;
 const MIN_5 = 300000;
 
@@ -374,3 +377,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+if (Platform.OS === 'web') {
+  serviceWorkerRegistration.register();
+}
