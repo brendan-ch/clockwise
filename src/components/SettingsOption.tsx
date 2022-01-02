@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import {
   Platform,
   Pressable,
@@ -58,6 +58,10 @@ interface Props {
    */
   onSelect?: () => any,
   /**
+   * Run when the component is deselected (if it's a number box)
+   */
+  onDeselect?: () => any,
+  /**
    * Marks the component as selected. Only supported for type `number`.
    */
   selected?: boolean,
@@ -77,6 +81,14 @@ interface Props {
    */
   /* eslint-disable-next-line */
   onChangeText?: (text: string) => any,
+  /**
+   * Indicates whether the input should be focused.
+   */
+  inputSelected?: boolean,
+  /**
+   * Called when the input is blurred, if input is provided.
+   */
+  onInputBlur?: () => any,
 }
 
 function SettingsOption({
@@ -87,9 +99,11 @@ function SettingsOption({
   value,
   selected,
   onChange,
+  onDeselect,
   iconLeft,
   onPressLeft,
-  onSelect, style, titleStyle, disabled, keyboardSelected, onChangeText,
+  onInputBlur,
+  onSelect, style, titleStyle, disabled, keyboardSelected, onChangeText, inputSelected,
 }: Props) {
   const colors = useTheme();
   const {
@@ -125,9 +139,16 @@ function SettingsOption({
         });
       };
     }
-
     return () => {};
   }, [keyboardShortcutManager, keyboardGroup, keyboardSelected]);
+
+  const ref = useRef<TextInput>();
+
+  useEffect(() => {
+    if (inputSelected) {
+      ref.current?.focus();
+    }
+  }, [inputSelected]);
 
   const children = (
     <View
@@ -165,6 +186,9 @@ function SettingsOption({
             }, titleStyle]}
             value={title}
             onChangeText={(text) => onChangeText(text)}
+            // @ts-ignore
+            ref={ref}
+            onBlur={onInputBlur ? () => onInputBlur() : undefined}
           />
         ) : (
           <Text style={[TextStyles.textRegular, {
@@ -186,7 +210,7 @@ function SettingsOption({
           text={value || 0}
           selected={selected}
           onChange={onChange}
-          onSelect={onSelect}
+          onDeselect={onDeselect}
           keyboardSelected={keyboardSelected}
         />
       ) : undefined}
@@ -249,6 +273,9 @@ SettingsOption.defaultProps = {
   keyboardSelected: false,
   onChangeText: undefined,
   iconLeft: undefined,
+  inputSelected: false,
+  onInputBlur: () => {},
+  onDeselect: () => {},
 };
 
 export default SettingsOption;

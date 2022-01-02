@@ -129,6 +129,7 @@ function SettingsPage() {
         }
       }}
       onSelect={() => handleSelect(item.storageKey)}
+      onDeselect={() => handleSelect(item.storageKey)}
     />
   );
 

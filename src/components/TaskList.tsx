@@ -250,6 +250,51 @@ function TaskList() {
     }
   }, [context.timerState, tasks, deletionTimeout]);
 
+  // Set keybindings
+  useEffect(() => {
+    const unsubMethods: (() => any)[] = [];
+
+    if (context.keyboardGroup === 'timer') {
+      const { keyboardShortcutManager } = context;
+      if (!keyboardShortcutManager) return () => {};
+
+      unsubMethods.push(keyboardShortcutManager.registerEvent({
+        keys: ['a'],
+        action: () => handleAddTask(),
+      }));
+
+      unsubMethods.push(keyboardShortcutManager.registerEvent({
+        keys: ['+'],
+        action: () => handleAddTask(),
+      }));
+
+      unsubMethods.push(keyboardShortcutManager.registerEvent({
+        keys: ['='],
+        action: () => handleAddTask(),
+      }));
+
+      for (let i = 0; i < 9; i += 1) {
+        unsubMethods.push(keyboardShortcutManager.registerEvent({
+          keys: [`${i + 1}`],
+          action: () => setExpandedTask(tasks[i] && tasks[i].id !== expandedTask
+            ? tasks[i].id
+            : -1),
+        }));
+      }
+
+      unsubMethods.push(keyboardShortcutManager.registerEvent({
+        keys: ['0'],
+        action: () => setExpandedTask(tasks[9] && tasks[9].id !== expandedTask
+          ? tasks[9].id
+          : -1),
+      }));
+    }
+
+    return () => unsubMethods.forEach((value) => {
+      value();
+    });
+  }, [context.keyboardGroup, tasks, expandedTask]);
+
   // Load tasks on start
   useEffect(() => {
     populateTasksData();
@@ -266,8 +311,10 @@ function TaskList() {
 
     return (
       <SelectorGroup
+        activeKeyboardGroup="timer"
         fadeInOnMount
         expanded={expandedTask === item.id && !item.completed}
+        outsideData={tasks}
         data={[
           {
             type: 'number',
@@ -276,6 +323,7 @@ function TaskList() {
             value: item.estPomodoros,
             onChange: (data) => handleChangeTask('estPomodoros', data, item.id),
             disabled: !timerStopped && context.mode === 'focus',
+            keybindings: [['e']],
           },
           !timerStopped && context.mode === 'focus' ? ({
             type: 'icon',
@@ -283,6 +331,7 @@ function TaskList() {
             title: 'complete',
             index: '1',
             onPress: () => handleCompleteTask(item.id),
+            keybindingsPress: [['Meta', 'Enter'], ['Control', 'Enter'], ['Backspace']],
           }) : ({
             type: 'icon',
             value: 'trash-outline',
@@ -290,6 +339,7 @@ function TaskList() {
             index: '1',
             onPress: () => handleDeleteTask(item.id),
             onPressRight: () => handleDeleteTask(item.id),
+            keybindingsPress: [['Backspace']],
           }),
         ]}
         header={item.completed ? ({
@@ -313,6 +363,8 @@ function TaskList() {
           onPressRight: () => setExpandedTask(expandedTask === item.id ? -1 : item.id),
           value: expandedTask === item.id ? 'chevron-down' : 'chevron-forward',
           onChangeText: timerStopped || context.mode === 'break' ? (text) => handleChangeTask('title', text, item.id) : undefined,
+          keybindingsPressInput: [['Enter']],
+          keybindingsPressLeft: [['s']],
         })}
       />
     );
