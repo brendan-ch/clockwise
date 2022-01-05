@@ -7,13 +7,19 @@ import { Section, SettingsOptionPropsNoStorage } from '../../types';
 
 const options: SettingsOptionPropsNoStorage[] = [
   {
-    title: 'Focus view',
+    title: 'Open settings',
+    data: 'Cmd/Ctrl + ,',
+    type: 'text',
+    identifier: 'openSettings',
+  },
+  {
+    title: 'Focus mode',
     data: 'F',
     type: 'text',
     identifier: 'focusView',
   },
   {
-    title: 'Break view',
+    title: 'Break mode',
     data: 'B',
     type: 'text',
     identifier: 'breakView',
@@ -60,18 +66,29 @@ const options: SettingsOptionPropsNoStorage[] = [
     type: 'text',
     identifier: 'deleteTask',
   },
+  {
+    title: 'Complete task',
+    data: 'Cmd/Ctrl + Enter',
+    type: 'text',
+    identifier: 'completeTask',
+  },
 ];
 
 const sections: Section[] = [
   {
+    title: 'General',
+    icon: 'settings-outline',
+    data: options.slice(0, 1),
+  },
+  {
     title: 'Timer',
     icon: 'timer-outline',
-    data: options.slice(0, 4),
+    data: options.slice(1, 5),
   },
   {
     title: 'Task management',
     icon: 'checkbox',
-    data: options.slice(4, 9),
+    data: options.slice(5, 11),
   },
 ];
 
