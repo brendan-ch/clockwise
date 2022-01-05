@@ -12,13 +12,66 @@ const options: SettingsOptionPropsNoStorage[] = [
     type: 'text',
     identifier: 'focusView',
   },
+  {
+    title: 'Break view',
+    data: 'B',
+    type: 'text',
+    identifier: 'breakView',
+  },
+  {
+    title: 'Start/pause timer',
+    data: 'Space',
+    type: 'text',
+    identifier: 'startTimer',
+  },
+  {
+    title: 'Reset timer',
+    data: 'R',
+    type: 'text',
+    identifier: 'resetTimer',
+  },
+  {
+    title: 'Add task',
+    data: 'A, +, =',
+    type: 'text',
+    identifier: 'addTask',
+  },
+  {
+    title: 'Expand/close task',
+    data: '0-9 (for first 10 tasks)',
+    type: 'text',
+    identifier: 'openTask',
+  },
+  {
+    title: 'Edit estimated sessions',
+    data: 'E',
+    type: 'text',
+    identifier: 'editEstimatedSessions',
+  },
+  {
+    title: 'Select task',
+    data: 'S',
+    type: 'text',
+    identifier: 'selectTask',
+  },
+  {
+    title: 'Delete task',
+    data: 'Backspace',
+    type: 'text',
+    identifier: 'deleteTask',
+  },
 ];
 
 const sections: Section[] = [
   {
     title: 'Timer',
     icon: 'timer-outline',
-    data: options.slice(0, 1),
+    data: options.slice(0, 4),
+  },
+  {
+    title: 'Task management',
+    icon: 'checkbox',
+    data: options.slice(4, 9),
   },
 ];
 
