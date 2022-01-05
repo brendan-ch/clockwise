@@ -11,7 +11,11 @@ import { getData } from '../helpers/storage';
 import useSettingsData from '../helpers/useSettingsData';
 import useTheme from '../helpers/useTheme';
 import {
-  BREAK_TIME_MINUTES, ENABLE_BACKGROUND_TIMER, ENABLE_TIMER_ALERTS, FOCUS_TIME_MINUTES,
+  BREAK_TIME_MINUTES,
+  ENABLE_BACKGROUND_TIMER,
+  ENABLE_TIMER_ALERTS,
+  ENABLE_TIMER_SOUND,
+  FOCUS_TIME_MINUTES,
 } from '../StorageKeys';
 import { Section, SettingsOptionProps } from '../types';
 import NotificationOverlay from '../components/NotificationOverlay';
@@ -28,6 +32,11 @@ const options: SettingsOptionProps[] = [
     type: 'number',
     title: 'Break time (minutes)',
     storageKey: BREAK_TIME_MINUTES,
+  },
+  {
+    type: 'toggle',
+    title: 'Timer sound',
+    storageKey: ENABLE_TIMER_SOUND,
   },
   // {
   //   type: 'toggle',
@@ -50,7 +59,7 @@ const sections: Section[] = [
   {
     title: 'Timer',
     icon: 'timer-outline',
-    data: Platform.OS === 'web' ? options.slice(0, 2) : options.slice(0, 4),
+    data: Platform.OS === 'web' ? options.slice(0, 3) : options.slice(0, 5),
   },
 ];
 
