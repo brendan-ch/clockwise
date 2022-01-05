@@ -5,7 +5,9 @@ import renderHeader from '../../helpers/renderers/renderHeader';
 import SettingsOption from '../../components/SettingsOption';
 import { checkNotifications, requestNotifications } from '../../helpers/notification';
 import useSettingsData from '../../helpers/useSettingsData';
-import { BREAK_TIME_MINUTES, ENABLE_TIMER_ALERTS, FOCUS_TIME_MINUTES } from '../../StorageKeys';
+import {
+  BREAK_TIME_MINUTES, ENABLE_TIMER_ALERTS, ENABLE_TIMER_SOUND, FOCUS_TIME_MINUTES,
+} from '../../StorageKeys';
 import { SettingsOptionProps, Section } from '../../types';
 
 // Store all static option data in here
@@ -20,6 +22,11 @@ const options: SettingsOptionProps[] = [
     type: 'number',
     title: 'Break time (minutes)',
     storageKey: BREAK_TIME_MINUTES,
+  },
+  {
+    type: 'toggle',
+    title: 'Timer sound',
+    storageKey: ENABLE_TIMER_SOUND,
   },
   {
     type: 'toggle',
@@ -57,7 +64,7 @@ const sections: Section[] = [
   {
     title: 'Timer',
     icon: 'timer-outline',
-    data: options.slice(0, 3),
+    data: options.slice(0, 4),
   },
 ];
 
