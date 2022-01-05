@@ -29,7 +29,7 @@ interface SettingsOptionProps {
   title: string,
   /* eslint-disable-next-line */
   // onChange: (data: any) => any,
-  type: 'number' | 'toggle' | 'icon',
+  type: 'number' | 'toggle' | 'icon' | 'text',
   /**
    * Used for getting and saving data, as well as for identifying different options.
    */
@@ -44,10 +44,20 @@ interface SettingsOptionProps {
   validator?: (input?: string | boolean) => Promise<boolean>,
 }
 
+/**
+ * Use if the settings option list does not involve storage data.
+ */
+interface SettingsOptionPropsNoStorage {
+  title: string,
+  type: 'number' | 'toggle' | 'icon' | 'text',
+  identifier: string,
+  data: number | boolean | string,
+}
+
 interface Section {
   title: string,
   icon?: string,
-  data: SettingsOptionProps[],
+  data: any[],
 }
 
 interface Task {
@@ -72,4 +82,5 @@ export {
   SettingsOptionProps,
   KeyboardShortcutGroup,
   Task,
+  SettingsOptionPropsNoStorage,
 };

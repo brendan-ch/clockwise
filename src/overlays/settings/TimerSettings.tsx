@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { SectionList } from 'react-native';
 import AppContext from '../../../AppContext';
-import SettingsHeader from '../../components/SettingsHeader';
+import renderHeader from '../../helpers/renderers/renderHeader';
 import SettingsOption from '../../components/SettingsOption';
 import { checkNotifications, requestNotifications } from '../../helpers/notification';
 import useSettingsData from '../../helpers/useSettingsData';
@@ -129,13 +129,6 @@ function TimerSettingsPane() {
       });
     };
   }, [keyboardShortcutManager, keyboardGroup, keyboardSelected]);
-
-  const renderHeader = ({ section }: { section: Section }) => (
-    <SettingsHeader
-      title={section.title}
-      icon={section.icon}
-    />
-  );
 
   const renderItem = ({ item }: { item: SettingsOptionProps }) => (
     <SettingsOption

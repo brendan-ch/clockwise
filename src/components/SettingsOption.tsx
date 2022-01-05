@@ -22,7 +22,7 @@ interface Props {
   /**
    * Indicates type of option displayed and value passed.
    */
-  type: 'number' | 'toggle' | 'icon',
+  type: 'number' | 'text' | 'toggle' | 'icon',
   /**
    * Value for the provided `type`.
    */
@@ -214,7 +214,7 @@ function SettingsOption({
           keyboardSelected={keyboardSelected}
         />
       ) : undefined}
-      {type === 'number' && disabled ? (
+      {(type === 'number' && disabled) || type === 'text' ? (
         <Text style={[TextStyles.textRegular, {
           color: colors.primary,
         }]}
