@@ -26,11 +26,13 @@ import useTheme from './src/helpers/useTheme';
 import SettingsOverlay from './src/overlays/SettingsOverlay';
 import LandscapeHeader from './src/components/LandscapeHeader';
 import LandscapeFooter from './src/components/LandscapeFooter';
-import { getTimerValue } from './src/helpers/storage';
+import { getData, getTimerValue } from './src/helpers/storage';
 import usePageTitle from './src/helpers/usePageTitle';
+import { playTimerSound } from './src/helpers/sounds';
 
 /* eslint-disable-next-line */
 import * as serviceWorkerRegistration from './src/serviceWorkerRegistration';
+import { ENABLE_TIMER_SOUND } from './src/StorageKeys';
 
 const MIN_25 = 1500000;
 const MIN_5 = 300000;
@@ -185,6 +187,13 @@ export default function App() {
 
       // Set timer state
       setTimerState('stopped');
+
+      getData(ENABLE_TIMER_SOUND)
+        .then((value) => {
+          if (value === '1') {
+            playTimerSound();
+          }
+        });
     }
   }, [timeRemaining]);
 
