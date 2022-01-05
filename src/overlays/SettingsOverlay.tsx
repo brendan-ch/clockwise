@@ -7,7 +7,6 @@ import {
 import AppContext from '../../AppContext';
 import SettingsSelector from '../components/SettingSelector';
 import useTheme from '../helpers/useTheme';
-import Keybindings from './settings/Keybindings';
 // import ConnectedAppsPane from './settings/ConnectedApps';
 
 // import TimerSettingsPane from './settings/TimerSettings';
@@ -15,6 +14,7 @@ import Keybindings from './settings/Keybindings';
 /* eslint-disable react/no-array-index-key */
 
 const TimerSettings = React.lazy(() => import('./settings/TimerSettings'));
+const Keybindings = React.lazy(() => import('./settings/Keybindings'));
 
 interface SettingsNavigatorObject {
   /**
