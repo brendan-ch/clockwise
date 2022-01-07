@@ -75,6 +75,10 @@ function TaskList() {
       completed: false,
     };
 
+    const selectedCopy = selected.slice();
+    selectedCopy.push(newId);
+    setSelected(selectedCopy);
+
     setTasks([
       ...tasks,
       newTask,
@@ -115,14 +119,12 @@ function TaskList() {
     }
 
     tasksCopy.splice(index, 1);
-    tasksCopy.forEach((task, i) => {
-      if (task.id > id) {
-        tasksCopy[i].id = task.id - 1;
-      }
-    });
 
     if (selected.includes(id)) {
-      handleDeselect(id);
+      const selectedCopy = selected.slice();
+      const indexSelected = selectedCopy.findIndex((existing) => existing === id);
+      selectedCopy.splice(indexSelected, 1);
+      setSelected(selectedCopy);
     }
 
     setTasks(tasksCopy);
