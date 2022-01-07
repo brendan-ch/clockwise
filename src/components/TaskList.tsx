@@ -75,6 +75,10 @@ function TaskList() {
       completed: false,
     };
 
+    const selectedCopy = selected.slice();
+    selectedCopy.push(newId);
+    setSelected(selectedCopy);
+
     setTasks([
       ...tasks,
       newTask,
