@@ -7,6 +7,7 @@ import {
   AnonymousPro_700Bold_Italic,
 } from '@expo-google-fonts/anonymous-pro';
 import AppLoading from 'expo-app-loading';
+import { Audio } from 'expo-av';
 import * as Linking from 'expo-linking';
 import React, { useEffect, useState } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
@@ -28,7 +29,6 @@ import LandscapeHeader from './src/components/LandscapeHeader';
 import LandscapeFooter from './src/components/LandscapeFooter';
 import { getData, getTimerValue } from './src/helpers/storage';
 import usePageTitle from './src/helpers/usePageTitle';
-import { playTimerSound } from './src/helpers/sounds';
 
 /* eslint-disable-next-line */
 import * as serviceWorkerRegistration from './src/serviceWorkerRegistration';
@@ -64,7 +64,27 @@ export default function App() {
   const [timerLength, setTimerLength] = useState<number | undefined>(undefined);
   const [timerBackgrounded, setTimerBackgrounded] = useState(false);
 
+  const [sound, setSound] = useState<Audio.Sound | undefined>();
+
   // Helper methods
+  /**
+   * Load the timer sound from the assets folder.
+   */
+  async function loadTimerSound() {
+    /* eslint-disable global-require */
+    const newSound = await Audio.Sound.createAsync(
+      require('./assets/timer.mp3'),
+    );
+    setSound(newSound.sound);
+  }
+
+  /**
+   * Play the timer sound.
+   */
+  async function playTimerSound() {
+    await sound?.playAsync();
+  }
+
   /**
    * Set the overlay state and keyboard group.
    * @param newOverlay
@@ -195,7 +215,7 @@ export default function App() {
           }
         });
     }
-  }, [timeRemaining]);
+  }, [timeRemaining, sound]);
 
   useEffect(() => {
     // Initialize keyboard shortcuts on web
@@ -224,6 +244,7 @@ export default function App() {
 
   useEffect(() => {
     getAndSetTimerValue(mode);
+    loadTimerSound();
   }, []);
 
   // Links
