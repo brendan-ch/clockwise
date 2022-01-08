@@ -43,7 +43,7 @@ export default function TimerPage() {
     setPageTitle,
   } = useContext(AppContext);
 
-  const fadeIn = useRef(new Animated.Value(0)).current;
+  const fadeIn = useRef(new Animated.Value(Platform.OS === 'web' ? 1 : 0)).current;
 
   /**
    * Fade in the app interface after the splash screen.
