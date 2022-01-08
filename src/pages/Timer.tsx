@@ -1,6 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useRef } from 'react';
 import {
+  Animated,
+  Platform,
   StyleSheet, View,
 } from 'react-native';
 // import * as Haptics from 'expo-haptics';
@@ -41,6 +43,19 @@ export default function TimerPage() {
     setPageTitle,
   } = useContext(AppContext);
 
+  const fadeIn = useRef(new Animated.Value(0)).current;
+
+  /**
+   * Fade in the app interface after the splash screen.
+   */
+  function fadeInView() {
+    Animated.timing(fadeIn, {
+      toValue: 1,
+      duration: 600,
+      useNativeDriver: true,
+    }).start();
+  }
+
   let actionBarText;
   if (timerState !== 'running' && timerState !== 'paused' && mode === 'focus') {
     actionBarText = `Select some tasks ${size === 'portrait' ? 'above' : 'on the right'} to work on during your session.`;
@@ -55,6 +70,10 @@ export default function TimerPage() {
     // Read value in storage and set in context
     setKeyboardGroup('timer');
     setPageTitle('Timer');
+
+    if (Platform.OS !== 'web') {
+      fadeInView();
+    }
   }, []);
 
   useEffect(
@@ -191,7 +210,10 @@ export default function TimerPage() {
       backgroundColor: colorValues.background,
     }]}
     >
-      <View style={styles.contentContainer}>
+      <Animated.View style={[styles.contentContainer, {
+        opacity: fadeIn,
+      }]}
+      >
         <View style={styles.topContainer}>
           <Timer
             display={calculateTimerDisplay(timeRemaining)}
@@ -218,7 +240,7 @@ export default function TimerPage() {
             text={actionBarText}
           />
         </View>
-      </View>
+      </Animated.View>
       <StatusBar style="auto" />
     </View>
   );
