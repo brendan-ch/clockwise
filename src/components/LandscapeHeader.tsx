@@ -104,13 +104,29 @@ function LandscapeHeader() {
           session
 
         </Text>
-        <Text style={[TextStyles.textBold, {
-          color: colorValues.gray3,
-        }]}
+        {/* To guarantee that text will display on multiple lines,
+            wrap the text with a view */}
+        <View style={{
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+        }}
         >
-          an app designed to help you focus.
+          <Text
+            style={[TextStyles.textBold, {
+              color: colorValues.gray3,
+            }]}
+          >
+            an app designed to
 
-        </Text>
+          </Text>
+          <Text
+            style={[TextStyles.textBold, {
+              color: colorValues.gray3,
+            }]}
+          >
+            help you focus.
+          </Text>
+        </View>
       </Animated.View>
       <Animated.View style={[styles.buttonContainer, {
         opacity: opacityAnimation,
