@@ -86,76 +86,96 @@ function LandscapeHeader() {
   }, [context.timerState, hovering]);
 
   return (
+    // Outside container to control padding
     <View
       style={styles.container}
       // @ts-ignore
       onMouseEnter={Platform.OS === 'web' ? () => setHovering(true) : undefined}
       onMouseLeave={Platform.OS === 'web' ? () => setHovering(false) : undefined}
     >
-      <Animated.View style={[styles.headerTitle, {
-        opacity: opacityAnimation,
-      }]}
-      >
-        <Text style={[TextStyles.textBold, {
-          color: colorValues.primary,
-          fontSize: 50,
+      {/* Content container to host the actual content */}
+      <View style={styles.contentContainer}>
+        {/* View to host the title text */}
+        <Animated.View style={[styles.headerTitle, {
+          opacity: opacityAnimation,
         }]}
         >
-          session
+          <Text style={[TextStyles.textBold, {
+            color: colorValues.primary,
+            fontSize: 50,
+          }]}
+          >
+            session
 
-        </Text>
-        {/* To guarantee that text will display on multiple lines,
-            wrap the text with a view */}
-        <View style={{
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-        }}
+          </Text>
+          {/* To guarantee that text will display on multiple lines,
+              wrap the text with a view */}
+          <View style={{
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+          }}
+          >
+            <Text
+              style={[TextStyles.textBold, {
+                color: colorValues.gray3,
+              }]}
+            >
+              an app designed to
+
+            </Text>
+            <Text
+              style={[TextStyles.textBold, {
+                color: colorValues.gray3,
+              }]}
+            >
+              help you focus.
+            </Text>
+          </View>
+        </Animated.View>
+        {/* Header buttons */}
+        <Animated.View style={[styles.buttonContainer, {
+          opacity: opacityAnimation,
+        }]}
         >
-          <Text
-            style={[TextStyles.textBold, {
-              color: colorValues.gray3,
-            }]}
-          >
-            an app designed to
-
-          </Text>
-          <Text
-            style={[TextStyles.textBold, {
-              color: colorValues.gray3,
-            }]}
-          >
-            help you focus.
-          </Text>
-        </View>
-      </Animated.View>
-      <Animated.View style={[styles.buttonContainer, {
-        opacity: opacityAnimation,
-      }]}
-      >
-        <HeaderButton
-          iconName="settings-outline"
-          onPress={() => context.setOverlay('settings')}
-        />
-      </Animated.View>
+          <HeaderButton
+            iconName="settings-outline"
+            onPress={() => context.setOverlay('settings')}
+          />
+        </Animated.View>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  // Outer container
+  // Used to wrap content container
   container: {
     width: '100%',
     height: 100,
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
   },
+  // Content container
+  contentContainer: {
+    // For when landscape view is resized to be smaller
+    minWidth: 670,
+    // Default width
+    width: '70%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  // Wrapper for the title and subtitle
   headerTitle: {
     flexDirection: 'row',
     width: 350,
     alignItems: 'center',
   },
+  // Wrapper for the header buttons
   buttonContainer: {
     flexDirection: 'row',
-    width: 70,
+    justifyContent: 'flex-end',
     alignItems: 'center',
   },
 });
