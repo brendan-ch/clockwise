@@ -191,9 +191,13 @@ function SettingsOption({
             onBlur={onInputBlur ? () => onInputBlur() : undefined}
           />
         ) : (
-          <Text style={[TextStyles.textRegular, {
-            color: colors.primary,
-          }, titleStyle]}
+          <Text
+            style={[TextStyles.textRegular, {
+              color: colors.primary,
+              maxWidth: 220,
+            }, titleStyle]}
+            numberOfLines={1}
+            ellipsizeMode="tail"
           >
             {title}
 
