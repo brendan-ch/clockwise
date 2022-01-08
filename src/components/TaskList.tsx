@@ -40,6 +40,9 @@ function TaskList() {
   const context = useContext(AppContext);
   const timerStopped = !['running', 'paused'].includes(context.timerState);
 
+  // Indicate whether task can be deselected by clicking the primary touch area
+  const allowDeselect = !timerStopped && context.mode === 'focus';
+
   /**
    * Handle selection of a task.
    * @param id
@@ -361,7 +364,9 @@ function TaskList() {
             : () => handleSelect(item.id),
           type: 'icon',
           index: `${item.id}`,
-          onPress: expandedTask === item.id ? undefined : () => setExpandedTask(item.id),
+          onPress: expandedTask === item.id && !allowDeselect
+            ? undefined
+            : () => setExpandedTask(expandedTask === item.id ? -1 : item.id),
           onPressRight: () => setExpandedTask(expandedTask === item.id ? -1 : item.id),
           value: expandedTask === item.id ? 'chevron-down' : 'chevron-forward',
           onChangeText: timerStopped || context.mode === 'break' ? (text) => handleChangeTask('title', text, item.id) : undefined,
