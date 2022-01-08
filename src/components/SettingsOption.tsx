@@ -180,8 +180,8 @@ function SettingsOption({
           <TextInput
             style={[TextStyles.textRegular, {
               color: colors.primary,
-              width: Platform.OS === 'web' ? 200 : '80%',
-              height: 30,
+              width: Platform.OS === 'web' ? 200 : '75%',
+              height: 35,
               borderWidth: 0,
             }, titleStyle]}
             value={title}
@@ -228,7 +228,16 @@ function SettingsOption({
         </Text>
       ) : undefined}
       {type === 'icon' && typeof value === 'string' ? (
-        <Pressable onPress={onPressRight}>
+        <Pressable
+          onPress={onPressRight}
+          style={{
+            flexDirection: 'row',
+            width: 35,
+            height: 35,
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+          }}
+        >
           <Ionicons
             // @ts-ignore
             name={value}
