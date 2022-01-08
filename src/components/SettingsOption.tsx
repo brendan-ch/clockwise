@@ -180,7 +180,7 @@ function SettingsOption({
           <TextInput
             style={[TextStyles.textRegular, {
               color: colors.primary,
-              width: '80%',
+              width: Platform.OS === 'web' ? 200 : '80%',
               height: 30,
               borderWidth: 0,
             }, titleStyle]}
@@ -191,9 +191,13 @@ function SettingsOption({
             onBlur={onInputBlur ? () => onInputBlur() : undefined}
           />
         ) : (
-          <Text style={[TextStyles.textRegular, {
-            color: colors.primary,
-          }, titleStyle]}
+          <Text
+            style={[TextStyles.textRegular, {
+              color: colors.primary,
+              maxWidth: 220,
+            }, titleStyle]}
+            numberOfLines={1}
+            ellipsizeMode="tail"
           >
             {title}
 
