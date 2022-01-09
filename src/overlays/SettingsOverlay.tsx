@@ -7,9 +7,6 @@ import {
 import AppContext from '../../AppContext';
 import SettingsSelector from '../components/SettingSelector';
 import useTheme from '../helpers/hooks/useTheme';
-// import ConnectedAppsPane from './settings/ConnectedApps';
-
-// import TimerSettingsPane from './settings/TimerSettings';
 
 /* eslint-disable react/no-array-index-key */
 

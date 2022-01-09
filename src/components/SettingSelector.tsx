@@ -66,6 +66,7 @@ function SettingsSelector({
       style={[style, styles.container, {
         backgroundColor: selected ? colors.primary : colors.background,
       }]}
+      onPress={onPress}
     >
       {children}
     </TouchableOpacity>
