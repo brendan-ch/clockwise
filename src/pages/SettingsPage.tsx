@@ -7,12 +7,10 @@ import Modal from 'react-native-modal';
 import SettingsHeader from '../components/SettingsHeader';
 import SettingsOption from '../components/SettingsOption';
 import { checkNotifications, requestNotifications } from '../helpers/notification';
-import { getData } from '../helpers/storage';
 import useSettingsData from '../helpers/hooks/useSettingsData';
 import useTheme from '../helpers/hooks/useTheme';
 import {
   BREAK_TIME_MINUTES,
-  ENABLE_BACKGROUND_TIMER,
   ENABLE_TIMER_ALERTS,
   ENABLE_TIMER_SOUND,
   FOCUS_TIME_MINUTES,
@@ -38,16 +36,6 @@ const options: SettingsOptionPropsStatic[] = [
     title: 'Timer sound',
     storageKey: ENABLE_TIMER_SOUND,
   },
-  // {
-  //   type: 'toggle',
-  //   title: 'Auto start timers?',
-  //   storageKey: AUTO_START_TIMERS,
-  // },
-  // {
-  //   type: 'toggle',
-  //   title: 'Background timer',
-  //   storageKey: ENABLE_BACKGROUND_TIMER,
-  // },
   {
     type: 'toggle',
     title: 'Timer alerts',
@@ -66,11 +54,6 @@ function SettingsPage() {
     (value) => value.storageKey === ENABLE_TIMER_ALERTS,
   )[0].validator = async (data) => {
     if (data === false) return true;
-
-    // First check if background timer enabled
-    const backgroundTimerValue = await getData(ENABLE_BACKGROUND_TIMER);
-    if (backgroundTimerValue !== '1') return false;
-
     // Check if permissions enabled
     const { granted, canAskAgain } = await checkNotifications();
     if (granted) return true;
@@ -128,28 +111,6 @@ function SettingsPage() {
       onSelect={() => setSelected(item.title)}
       onDeselect={() => setSelected(undefined)}
       selected={selected === item.title}
-
-      // value={settingsData.find((value) => value.storageKey === item.storageKey)?.value}
-      // selected={settingsData.find((value) => value.storageKey === item.storageKey)?.selected}
-      // type={item.type}
-      // title={item.title}
-      // onChange={async (data) => {
-      //   // Validate data first
-      //   if (item.validator) {
-      //     const result = await item.validator(data);
-      //     if (!result) return;
-      //   }
-
-      //   // Handle change
-      //   handleChange(item.storageKey, data);
-      // }}
-      // onPress={() => {
-      //   if (item.type === 'number') {
-      //     handleSelect(item.storageKey);
-      //   } else {
-      //     handleSelect();
-      //   }
-      // }}
     />
   );
 
