@@ -62,6 +62,10 @@ function useSettingsData(options: SettingsOptionPropsStatic[]) {
         ...option,
         value: convertedData,
         onChange: async (newData: any) => {
+          if (option.validator) {
+            const result = await option.validator(newData);
+            if (!result) return;
+          }
           // Serialize the data
           await handleChange(option.storageKey, newData);
 
