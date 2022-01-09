@@ -9,6 +9,7 @@ import {
   BREAK_TIME_MINUTES, ENABLE_TIMER_ALERTS, ENABLE_TIMER_SOUND, FOCUS_TIME_MINUTES,
 } from '../../StorageKeys';
 import { SettingsOptionProps, Section, SettingsOptionPropsStatic } from '../../types';
+import { checkNotifications } from '../../helpers/notification';
 
 // Store all static option data in here
 // Make it easier to find and filter settings
@@ -32,26 +33,26 @@ const options: SettingsOptionPropsStatic[] = [
     type: 'toggle',
     title: 'Timer alerts',
     storageKey: ENABLE_TIMER_ALERTS,
-    // validator: async (data) => {
-    //   if (data === false) return true;
+    validator: async (data) => {
+      if (data === false) return true;
 
-    //   const { granted, canAskAgain } = await checkNotifications();
+      const { granted, canAskAgain } = await checkNotifications();
 
-    //   if (granted) return true;
+      if (granted) return true;
 
-    //   if (canAskAgain) {
-    //     // Request permission directly from user
-    //     const requestResults = await requestNotifications();
-    //     if (requestResults.granted) {
-    //       // Exit and fill checkbox
-    //       return true;
-    //     }
+      if (canAskAgain) {
+        // Request permission directly from user
+        const requestResults = await checkNotifications();
+        if (requestResults.granted) {
+          // Exit and fill checkbox
+          return true;
+        }
 
-    //     return false;
-    //   }
+        return false;
+      }
 
-    //   return false;
-    // },
+      return false;
+    },
   },
   // {
   //   type: 'toggle',
