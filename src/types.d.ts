@@ -103,11 +103,11 @@ interface SettingsOptionPropsStatic extends SettingsOptionProps {
    * `onChange` is disabled in the static prop. Use the
    * `useSettingsData` hook to link storage keys to `onChange` props and values.
    */
-  onChange: undefined,
+  onChange?: undefined,
   /**
    * Use the `useSettingsData` hook to link storage keys to `onChange` props and values.
    */
-  value: undefined,
+  value?: undefined,
   /**
    * Storage key to sync.
    */
