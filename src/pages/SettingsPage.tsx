@@ -61,21 +61,6 @@ const options: SettingsOptionPropsStatic[] = [
 function SettingsPage() {
   const colorValues = useTheme();
 
-  // Sync options with settings data
-  // const { settingsData, handleChange, handleSelect } = useSettingsData(options);
-  const settingsData = useSettingsData(options);
-
-  const sections: Section[] = [
-    {
-      title: 'Timer',
-      icon: 'timer-outline',
-      data: Platform.OS === 'web' ? settingsData.slice(0, 3) : settingsData.slice(0, 4),
-    },
-  ];
-  // Overlay to display
-  const [overlay, setOverlay] = useState<'none' | 'notification'>('none');
-  const [selected, setSelected] = useState<string | undefined>(undefined);
-
   // Assign validator keys here
   options.filter(
     (value) => value.storageKey === ENABLE_TIMER_ALERTS,
@@ -107,6 +92,20 @@ function SettingsPage() {
 
     return false;
   };
+
+  // Sync options with storage
+  const settingsData = useSettingsData(options);
+
+  const sections: Section[] = [
+    {
+      title: 'Timer',
+      icon: 'timer-outline',
+      data: Platform.OS === 'web' ? settingsData.slice(0, 3) : settingsData.slice(0, 4),
+    },
+  ];
+  // Overlay to display
+  const [overlay, setOverlay] = useState<'none' | 'notification'>('none');
+  const [selected, setSelected] = useState<string | undefined>(undefined);
 
   const renderHeader = ({ section }: { section: Section }) => (
     <SettingsHeader
