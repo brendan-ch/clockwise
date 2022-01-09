@@ -12,7 +12,7 @@ function useSettingsData(options: SettingsOptionPropsStatic[]) {
   const [renderCount, setRenderCount] = useState(0);
 
   /**
-   * Handle storing data and changing state.
+   * Handle storing data
    * @param key The storage key.
    * @param data
    */
