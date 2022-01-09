@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
 import { Platform } from 'react-native';
-import AppContext from '../../AppContext';
-import { ENABLE_TIMER_ALERTS } from '../StorageKeys';
-import { TimerState } from '../types';
-import { getData } from './storage';
+import AppContext from '../../../AppContext';
+import { ENABLE_TIMER_ALERTS } from '../../StorageKeys';
+import { TimerState } from '../../types';
+import { getData } from '../storage';
 import useNotifications from './useNotifications';
 
 /**

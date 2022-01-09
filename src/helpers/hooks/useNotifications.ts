@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { AppState, Platform } from 'react-native';
 import * as MobileNotifications from 'expo-notifications';
-import { checkNotifications } from './notification';
+import { checkNotifications } from '../notification';
 
 interface LocalNotification {
   scheduledDate?: Date,
