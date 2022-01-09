@@ -9,7 +9,7 @@ import {
   BREAK_TIME_MINUTES, ENABLE_TIMER_ALERTS, ENABLE_TIMER_SOUND, FOCUS_TIME_MINUTES,
 } from '../../StorageKeys';
 import { SettingsOptionProps, Section, SettingsOptionPropsStatic } from '../../types';
-import { checkNotifications } from '../../helpers/notification';
+import { checkNotifications, requestNotifications } from '../../helpers/notification';
 
 // Store all static option data in here
 // Make it easier to find and filter settings
@@ -42,7 +42,7 @@ const options: SettingsOptionPropsStatic[] = [
 
       if (canAskAgain) {
         // Request permission directly from user
-        const requestResults = await checkNotifications();
+        const requestResults = await requestNotifications();
         if (requestResults.granted) {
           // Exit and fill checkbox
           return true;
