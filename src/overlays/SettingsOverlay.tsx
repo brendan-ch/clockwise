@@ -2,7 +2,7 @@ import React, {
   useEffect, useContext, useState, Suspense,
 } from 'react';
 import {
-  StyleProp, ViewStyle, View, StyleSheet,
+  StyleProp, ViewStyle, View, StyleSheet, Platform,
 } from 'react-native';
 import AppContext from '../../AppContext';
 import SettingsSelector from '../components/SettingSelector';
@@ -34,15 +34,20 @@ const navigator: SettingsNavigatorObject[] = [
     title: 'Timer',
     renderer: <TimerSettings />,
   },
-  {
-    title: 'Keybindings',
-    renderer: <Keybindings />,
-  },
   // {
   //   title: 'Connected apps',
   //   renderer: <ConnectedAppsPane />,
   // },
 ];
+
+if (Platform.OS === 'web') {
+  navigator.push(
+    {
+      title: 'Keybindings',
+      renderer: <Keybindings />,
+    },
+  );
+}
 
 interface Props {
   containerStyle?: StyleProp<ViewStyle>,
