@@ -158,31 +158,44 @@ function SettingsOption({
       }, style]}
       onClick={Platform.OS === 'web' ? handlePress : undefined}
     >
-      <View style={{
+      {/* <View style={{
         flexDirection: 'row',
         alignItems: 'center',
       }}
-      >
-        {iconLeft ? (
-          <Pressable onPress={onPressLeft}>
-            <Ionicons
-              // @ts-ignore
-              name={iconLeft}
-              size={20}
-              color={colors.gray1}
-              style={{
-                marginRight: 10,
-              }}
-            />
-          </Pressable>
-        ) : undefined}
-        {onChangeText ? (
+      > */}
+      {iconLeft ? (
+        <Pressable
+          onPress={onPressLeft}
+          style={{
+            width: 30,
+            height: 35,
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+          }}
+        >
+          <Ionicons
+            // @ts-ignore
+            name={iconLeft}
+            size={20}
+            color={colors.gray1}
+            style={{
+              marginRight: 10,
+            }}
+          />
+        </Pressable>
+      ) : undefined}
+      {onChangeText ? (
+        <View style={{
+          flex: 1,
+          height: 35,
+        }}
+        >
           <TextInput
             style={[TextStyles.textRegular, {
               color: colors.primary,
-              width: Platform.OS === 'web' ? 200 : '75%',
-              height: 35,
               borderWidth: 0,
+              height: 35,
             }, titleStyle]}
             value={title}
             onChangeText={(text) => onChangeText(text)}
@@ -190,20 +203,21 @@ function SettingsOption({
             ref={ref}
             onBlur={onInputBlur ? () => onInputBlur() : undefined}
           />
-        ) : (
-          <Text
-            style={[TextStyles.textRegular, {
-              color: colors.primary,
-              maxWidth: 220,
-            }, titleStyle]}
-            numberOfLines={1}
-            ellipsizeMode="tail"
-          >
-            {title}
+        </View>
+      ) : (
+        <Text
+          style={[TextStyles.textRegular, {
+            color: colors.primary,
+            flex: 1,
+          }, titleStyle]}
+          numberOfLines={1}
+          ellipsizeMode="tail"
+        >
+          {title}
 
-          </Text>
-        )}
-      </View>
+        </Text>
+      )}
+      {/* </View> */}
       {type === 'toggle' ? (
         <Checkbox
           selected={value === true}
