@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { SettingsData, SettingsOptionProps } from '../types';
-import { getData, storeData } from './storage';
+import { SettingsData, SettingsOptionProps } from '../../types';
+import { getData, storeData } from '../storage';
 
 /**
  * Hook that manages initialization and updating of settings data.

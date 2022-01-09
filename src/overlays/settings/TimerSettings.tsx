@@ -4,7 +4,7 @@ import AppContext from '../../../AppContext';
 import renderHeader from '../../helpers/renderers/renderHeader';
 import SettingsOption from '../../components/SettingsOption';
 import { checkNotifications, requestNotifications } from '../../helpers/notification';
-import useSettingsData from '../../helpers/useSettingsData';
+import useSettingsData from '../../helpers/hooks/useSettingsData';
 import {
   BREAK_TIME_MINUTES, ENABLE_TIMER_ALERTS, ENABLE_TIMER_SOUND, FOCUS_TIME_MINUTES,
 } from '../../StorageKeys';
