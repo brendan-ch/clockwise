@@ -3,74 +3,74 @@ import { SectionList } from 'react-native';
 import AppContext from '../../../AppContext';
 import SettingsOption from '../../components/SettingsOption';
 import renderHeader from '../../helpers/renderers/renderHeader';
-import { Section, SettingsOptionPropsNoStorage } from '../../types';
+import { Section, SettingsOptionProps } from '../../types';
 
-const options: SettingsOptionPropsNoStorage[] = [
+const options: SettingsOptionProps[] = [
   {
     title: 'Open settings',
-    data: 'Cmd/Ctrl + ,',
+    value: 'Cmd/Ctrl + ,',
     type: 'text',
-    identifier: 'openSettings',
+    // identifier: 'openSettings',
   },
   {
     title: 'Focus mode',
-    data: 'F',
+    value: 'F',
     type: 'text',
-    identifier: 'focusView',
+    // identifier: 'focusView',
   },
   {
     title: 'Break mode',
-    data: 'B',
+    value: 'B',
     type: 'text',
-    identifier: 'breakView',
+    // identifier: 'breakView',
   },
   {
     title: 'Start/pause timer',
-    data: 'Space',
+    value: 'Space',
     type: 'text',
-    identifier: 'startTimer',
+    // identifier: 'startTimer',
   },
   {
     title: 'Reset timer',
-    data: 'R',
+    value: 'R',
     type: 'text',
-    identifier: 'resetTimer',
+    // identifier: 'resetTimer',
   },
   {
     title: 'Add task',
-    data: 'A, +, =',
+    value: 'A, +, =',
     type: 'text',
-    identifier: 'addTask',
+    // identifier: 'addTask',
   },
   {
     title: 'Expand/close task',
-    data: '0-9 (for first 10 tasks)',
+    value: '0-9 (for first 10 tasks)',
     type: 'text',
-    identifier: 'openTask',
+    // identifier: 'openTask',
   },
   {
     title: 'Edit estimated sessions',
-    data: 'E',
+    value: 'E',
     type: 'text',
-    identifier: 'editEstimatedSessions',
+    // identifier: 'editEstimatedSessions',
   },
   {
     title: 'Select task',
-    data: 'S',
+    value: 'S',
     type: 'text',
-    identifier: 'selectTask',
+    // identifier: 'selectTask',
   },
   {
     title: 'Delete task',
-    data: 'Backspace',
+    value: 'Backspace',
     type: 'text',
-    identifier: 'deleteTask',
+    // identifier: 'deleteTask',
   },
   {
     title: 'Complete task',
-    data: 'Cmd/Ctrl + Enter',
+    value: 'Cmd/Ctrl + Enter',
     type: 'text',
-    identifier: 'completeTask',
+    // identifier: 'completeTask',
   },
 ];
 
@@ -107,24 +107,23 @@ function Keybindings() {
 
   useEffect(() => {
     if (keyboardGroup === 'settingsPage' && !keyboardSelected) {
-      setKeyboardSelected(options[0].identifier);
+      setKeyboardSelected(options[0].title);
     } else if (keyboardGroup === 'settings') {
       setKeyboardSelected(undefined);
     }
   }, [keyboardShortcutManager, keyboardGroup]);
 
-  const renderItem = ({ item }: { item: SettingsOptionPropsNoStorage }) => (
+  const renderItem = ({ item }: { item: SettingsOptionProps }) => (
     <SettingsOption
-      value={item.data}
-      type={item.type}
-      title={item.title}
-      keyboardSelected={keyboardSelected === item.identifier}
+      /* eslint-disable react/jsx-props-no-spreading */
+      {...item}
+      keyboardSelected={keyboardSelected === item.title}
     />
   );
 
   return (
     <SectionList
-      keyExtractor={(item) => item.identifier}
+      keyExtractor={(item) => item.title!}
       sections={sections}
       renderSectionHeader={renderHeader}
       renderItem={renderItem}
