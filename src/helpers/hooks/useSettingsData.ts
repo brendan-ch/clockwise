@@ -8,6 +8,8 @@ import { getData, storeData } from '../storage';
  */
 function useSettingsData(options: SettingsOptionPropsStatic[]) {
   const [settingsData, setSettingsData] = useState<SettingsOptionProps[]>([]);
+  // Force re-rendering of updated settings data
+  const [renderCount, setRenderCount] = useState(0);
 
   /**
    * Handle storing data and changing state.
@@ -28,22 +30,6 @@ function useSettingsData(options: SettingsOptionPropsStatic[]) {
 
     // Set data in storage
     await storeData(key, convertedData);
-
-    // Set data in state
-    const settingsIndex = settingsData.findIndex(
-      (value) => value.title === options.find((option) => option.storageKey === key)?.title,
-    );
-
-    if (settingsIndex > -1) {
-      const modifiedSetting: SettingsOptionProps = {
-        ...settingsData[settingsIndex],
-        value: data,
-      };
-
-      const modifiedSettingsData = settingsData.slice();
-      modifiedSettingsData[settingsIndex] = modifiedSetting;
-      setSettingsData(modifiedSettingsData);
-    }
   }
 
   /**
@@ -78,6 +64,8 @@ function useSettingsData(options: SettingsOptionPropsStatic[]) {
         onChange: async (newData: any) => {
           // Serialize the data
           await handleChange(option.storageKey, newData);
+
+          setRenderCount(renderCount === 0 ? 1 : 0);
         },
       });
     }));
@@ -88,7 +76,7 @@ function useSettingsData(options: SettingsOptionPropsStatic[]) {
   useEffect(() => {
     // Load things from storage, and set item key for each option
     loadOptionsFromStorage();
-  }, [options]);
+  }, [options, renderCount]);
 
   return settingsData;
 }
