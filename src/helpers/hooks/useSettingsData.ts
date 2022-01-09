@@ -1,47 +1,13 @@
 import { useEffect, useState } from 'react';
-import { SettingsData, SettingsOptionProps } from '../../types';
+import { SettingsOptionProps, SettingsOptionPropsStatic } from '../../types';
 import { getData, storeData } from '../storage';
 
 /**
  * Hook that manages initialization and updating of settings data.
  * @param initialData
  */
-function useSettingsData(options: SettingsOptionProps[]) {
-  const [settingsData, setSettingsData] = useState<SettingsData[]>([]);
-  // Initialize using static options
-
-  /**
-   * Handle the selection of an option.
-   * @param key Key of the option to select. If not provided, deselects all options.
-   */
-  function handleSelect(key?: string) {
-    const modifiedSettingsDataArray = settingsData.slice();
-
-    // If option is already selected, deselect option
-    const optionIndex = settingsData.findIndex((value) => value.storageKey === key);
-    if (optionIndex === -1) {
-      // Deselect all
-      const selectedOptionIndex = settingsData.findIndex((value) => value.selected);
-      if (selectedOptionIndex > -1) {
-        modifiedSettingsDataArray[selectedOptionIndex].selected = false;
-      }
-    } else if (modifiedSettingsDataArray[optionIndex].selected) {
-      // Deselect option
-      modifiedSettingsDataArray[optionIndex].selected = false;
-    } else {
-      // Check if any other options are selected
-      const selectedOptionIndex = settingsData.findIndex((value) => value.selected);
-      if (selectedOptionIndex > -1) {
-        modifiedSettingsDataArray[selectedOptionIndex].selected = false;
-      }
-
-      // Select the option
-      modifiedSettingsDataArray[optionIndex].selected = true;
-    }
-
-    // Set the state
-    setSettingsData(modifiedSettingsDataArray);
-  }
+function useSettingsData(options: SettingsOptionPropsStatic[]) {
+  const [settingsData, setSettingsData] = useState<SettingsOptionProps[]>([]);
 
   /**
    * Handle storing data and changing state.
@@ -60,10 +26,16 @@ function useSettingsData(options: SettingsOptionProps[]) {
       return;
     }
 
-    // Set in state
-    const settingsIndex = settingsData.findIndex((value) => value.storageKey === key);
+    // Set data in storage
+    await storeData(key, convertedData);
+
+    // Set data in state
+    const settingsIndex = settingsData.findIndex(
+      (value) => value.title === options.find((option) => option.storageKey === key)?.title,
+    );
+
     if (settingsIndex > -1) {
-      const modifiedSetting: SettingsData = {
+      const modifiedSetting: SettingsOptionProps = {
         ...settingsData[settingsIndex],
         value: data,
       };
@@ -71,22 +43,15 @@ function useSettingsData(options: SettingsOptionProps[]) {
       const modifiedSettingsData = settingsData.slice();
       modifiedSettingsData[settingsIndex] = modifiedSetting;
       setSettingsData(modifiedSettingsData);
-
-      // Update in storage
-      await storeData(key, convertedData);
     }
   }
 
   /**
-   * Set the settings data in state.
+   * Load the settings options from local storage.
    */
-  async function initializeSettingsData() {
-    // Initialize settings data once
-    // Subsequent changes to settings should also be made to settingsData state
+  async function loadOptionsFromStorage() {
+    const settingsDataTemp: SettingsOptionProps[] = [];
 
-    const settingsDataTemp: SettingsData[] = [];
-
-    // Loop through static options and get data for each
     await Promise.all(options.map(async (option) => {
       const data = await getData(option.storageKey);
       let convertedData: number | boolean;
@@ -108,9 +73,12 @@ function useSettingsData(options: SettingsOptionProps[]) {
       }
 
       settingsDataTemp.push({
-        storageKey: option.storageKey,
+        ...option,
         value: convertedData,
-        selected: false,
+        onChange: async (newData: any) => {
+          // Serialize the data
+          await handleChange(option.storageKey, newData);
+        },
       });
     }));
 
@@ -118,10 +86,11 @@ function useSettingsData(options: SettingsOptionProps[]) {
   }
 
   useEffect(() => {
-    initializeSettingsData();
+    // Load things from storage, and set item key for each option
+    loadOptionsFromStorage();
   }, [options]);
 
-  return { settingsData, handleChange, handleSelect };
+  return settingsData;
 }
 
 export default useSettingsData;
