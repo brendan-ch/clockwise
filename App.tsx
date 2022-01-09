@@ -21,7 +21,7 @@ import TimerPage from './src/pages/Timer';
 import { KeyboardShortcutGroup, Overlay, TimerState } from './src/types';
 import SettingsPage from './src/pages/SettingsPage';
 import TextStyles from './src/styles/Text';
-import useWindowSize from './src/helpers/useWindowSize';
+import useWindowSize from './src/helpers/hooks/useWindowSize';
 import HeaderButton from './src/components/HeaderButton';
 import useTheme from './src/helpers/hooks/useTheme';
 import SettingsOverlay from './src/overlays/SettingsOverlay';

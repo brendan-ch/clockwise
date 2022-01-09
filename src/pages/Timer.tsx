@@ -11,7 +11,7 @@ import PageButtonBar from '../components/PageButtonBar';
 import Timer from '../components/Timer';
 import calculateTimerDisplay from '../helpers/calculateTimer';
 import useTheme from '../helpers/hooks/useTheme';
-import useWindowSize from '../helpers/useWindowSize';
+import useWindowSize from '../helpers/hooks/useWindowSize';
 import TaskList from '../components/TaskList';
 import useBackgroundTimer from '../helpers/hooks/useBackgroundTimer';
 import useTimerNotification from '../helpers/hooks/useTimerNotifications';
