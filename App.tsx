@@ -28,7 +28,7 @@ import SettingsOverlay from './src/overlays/SettingsOverlay';
 import LandscapeHeader from './src/components/LandscapeHeader';
 import LandscapeFooter from './src/components/LandscapeFooter';
 import { getData, getTimerValue } from './src/helpers/storage';
-import usePageTitle from './src/helpers/usePageTitle';
+import usePageTitle from './src/helpers/hooks/usePageTitle';
 
 /* eslint-disable-next-line */
 import * as serviceWorkerRegistration from './src/serviceWorkerRegistration';
