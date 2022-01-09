@@ -43,14 +43,14 @@ const options: SettingsOptionPropsStatic[] = [
   //   title: 'Auto start timers?',
   //   storageKey: AUTO_START_TIMERS,
   // },
+  // {
+  //   type: 'toggle',
+  //   title: 'Background timer',
+  //   storageKey: ENABLE_BACKGROUND_TIMER,
+  // },
   {
     type: 'toggle',
-    title: 'Background timer',
-    storageKey: ENABLE_BACKGROUND_TIMER,
-  },
-  {
-    type: 'toggle',
-    title: 'Timer alerts (requires background timer)',
+    title: 'Timer alerts',
     storageKey: ENABLE_TIMER_ALERTS,
   },
 ];
@@ -69,7 +69,7 @@ function SettingsPage() {
     {
       title: 'Timer',
       icon: 'timer-outline',
-      data: Platform.OS === 'web' ? settingsData.slice(0, 3) : settingsData.slice(0, 5),
+      data: Platform.OS === 'web' ? settingsData.slice(0, 3) : settingsData.slice(0, 4),
     },
   ];
   // Overlay to display
