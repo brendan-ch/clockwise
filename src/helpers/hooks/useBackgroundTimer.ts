@@ -2,11 +2,11 @@ import {
   useContext, useEffect, useState,
 } from 'react';
 import { AppState, Platform } from 'react-native';
-import AppContext from '../../AppContext';
+import AppContext from '../../../AppContext';
 import {
   ENABLE_BACKGROUND_TIMER, MODE, START, TIMER_LENGTH,
-} from '../StorageKeys';
-import { getData, removeData, storeData } from './storage';
+} from '../../StorageKeys';
+import { getData, removeData, storeData } from '../storage';
 /**
  * Hook that enables timer handling based on background states.
  * Only works on mobile.

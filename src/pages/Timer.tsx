@@ -16,7 +16,7 @@ import useTheme from '../helpers/useTheme';
 import useWindowSize from '../helpers/useWindowSize';
 // import { getTimerValue } from '../helpers/storage';
 import TaskList from '../components/TaskList';
-import useBackgroundTimer from '../helpers/useBackgroundTimer';
+import useBackgroundTimer from '../helpers/hooks/useBackgroundTimer';
 import useTimerNotification from '../helpers/useTimerNotifications';
 // import HeaderButton from '../components/HeaderButton';
 
