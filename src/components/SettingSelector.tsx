@@ -3,7 +3,7 @@ import {
   Platform,
   StyleSheet, ViewStyle, Animated, TouchableOpacity, Text,
 } from 'react-native';
-import useMouseAnimations from '../helpers/useMouseAnimations';
+import useMouseAnimations from '../helpers/hooks/useMouseAnimations';
 import useTheme from '../helpers/useTheme';
 import TextStyles from '../styles/Text';
 
