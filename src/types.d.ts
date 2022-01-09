@@ -112,6 +112,10 @@ interface SettingsOptionPropsStatic extends SettingsOptionProps {
    * Storage key to sync.
    */
   storageKey: string,
+  /**
+   * Title for the settings option. Must be unique when passed into `useSettingsData`.
+   */
+  title: string,
 }
 
 // /**
