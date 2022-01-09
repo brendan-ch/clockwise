@@ -116,6 +116,13 @@ interface SettingsOptionPropsStatic extends SettingsOptionProps {
    * Title for the settings option. Must be unique when passed into `useSettingsData`.
    */
   title: string,
+  /**
+   * Function that runs before the data is saved.
+   * Should return true if the data is valid, or false
+   * if it isn't.
+   */
+  /* eslint-disable-next-line */
+  validator?: (data: any) => Promise<boolean>,
 }
 
 // /**
