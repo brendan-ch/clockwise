@@ -13,15 +13,6 @@ type RootStackParamList = {
   Settings: undefined,
 }
 
-/**
- * Represents data for a settings button.
- */
-// interface SettingsData {
-//   storageKey: string,
-//   value: number | boolean,
-//   selected: boolean,
-// }
-
 interface SettingsOptionProps {
   /**
    * Indicates type of option displayed and value passed.
@@ -124,40 +115,6 @@ interface SettingsOptionPropsStatic extends SettingsOptionProps {
   /* eslint-disable-next-line */
   validator?: (data: any) => Promise<boolean>,
 }
-
-// /**
-//  * Represents static data for a settings button.
-//  * Note that the SettingOption button can be used outside of the
-//  * useSettingsData hook.
-//  */
-// interface SettingsOptionProps {
-//   title: string,
-//   /* eslint-disable-next-line */
-//   // onChange: (data: any) => any,
-//   type: 'number' | 'toggle' | 'icon' | 'text',
-//   /**
-//    * Used for getting and saving data, as well as for identifying different options.
-//    */
-//   storageKey: string,
-//   /**
-//    * Validator function that runs code before the setting is saved.
-//    *
-//    * @returns If false returned, skips saving the value.
-//    * If true is returned, saves the new value.
-//    */
-//   /* eslint-disable-next-line */
-//   validator?: (input?: string | boolean) => Promise<boolean>,
-// }
-
-// /**
-//  * Use if the settings option list does not involve storage data.
-//  */
-// interface SettingsOptionPropsNoStorage {
-//   title: string,
-//   type: 'number' | 'toggle' | 'icon' | 'text',
-//   identifier: string,
-//   data: number | boolean | string,
-// }
 
 interface Section {
   title: string,
