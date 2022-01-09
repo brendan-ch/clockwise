@@ -5,7 +5,7 @@ import {
   StyleSheet, Text, Animated, Platform,
 } from 'react-native';
 import AppContext from '../../AppContext';
-import useTheme from '../helpers/useTheme';
+import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
 
 function LandscapeFooter() {

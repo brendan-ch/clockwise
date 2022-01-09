@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Linking, Platform, StyleSheet, Text, View,
 } from 'react-native';
-import useTheme from '../helpers/useTheme';
+import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
 import OverlayButtonBar from './OverlayButtonBar';
 

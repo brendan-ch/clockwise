@@ -3,16 +3,17 @@ import { SectionList } from 'react-native';
 import AppContext from '../../../AppContext';
 import renderHeader from '../../helpers/renderers/renderHeader';
 import SettingsOption from '../../components/SettingsOption';
-import { checkNotifications, requestNotifications } from '../../helpers/notification';
-import useSettingsData from '../../helpers/useSettingsData';
+// import { checkNotifications, requestNotifications } from '../../helpers/notification';
+import useSettingsData from '../../helpers/hooks/useSettingsData';
 import {
   BREAK_TIME_MINUTES, ENABLE_TIMER_ALERTS, ENABLE_TIMER_SOUND, FOCUS_TIME_MINUTES,
 } from '../../StorageKeys';
-import { SettingsOptionProps, Section } from '../../types';
+import { SettingsOptionProps, Section, SettingsOptionPropsStatic } from '../../types';
+import { checkNotifications, requestNotifications } from '../../helpers/notification';
 
 // Store all static option data in here
 // Make it easier to find and filter settings
-const options: SettingsOptionProps[] = [
+const options: SettingsOptionPropsStatic[] = [
   {
     type: 'number',
     title: 'Focus time (minutes)',
@@ -60,21 +61,23 @@ const options: SettingsOptionProps[] = [
   // },
 ];
 
-const sections: Section[] = [
-  {
-    title: 'Timer',
-    icon: 'timer-outline',
-    data: options.slice(0, 4),
-  },
-];
-
 /**
  * Timer settings content in the settings overlay.
  */
 function TimerSettingsPane() {
-  const { settingsData, handleChange, handleSelect } = useSettingsData(options);
+  // const { settingsData, handleChange, handleSelect } = useSettingsData(options);
+  const settingsData = useSettingsData(options);
+
+  const sections: Section[] = [
+    {
+      title: 'Timer',
+      icon: 'timer-outline',
+      data: settingsData.slice(0, 4),
+    },
+  ];
   // Set keyboard selected by storage key
   const [keyboardSelected, setKeyboardSelected] = useState<string | undefined>(undefined);
+  const [selected, setSelected] = useState<string | undefined>(undefined);
 
   const {
     keyboardShortcutManager,
@@ -82,19 +85,19 @@ function TimerSettingsPane() {
   } = useContext(AppContext);
 
   /**
-   * Call the handleSelect method, and clear the keyboardSelected string
+   * Clear keyboardSelected, and call setSelected.
    */
   function handleSelectAndResetKeyboard(key?: string) {
     if (keyboardSelected !== key) {
       setKeyboardSelected(undefined);
     }
 
-    handleSelect(key);
+    setSelected(key);
   }
 
   useEffect(() => {
     if (keyboardGroup === 'settingsPage' && !keyboardSelected) {
-      setKeyboardSelected(options[0].storageKey);
+      setKeyboardSelected(options[0].title);
     } else if (keyboardGroup === 'settings') {
       setKeyboardSelected(undefined);
     }
@@ -103,13 +106,13 @@ function TimerSettingsPane() {
   useEffect(() => {
     const unsubMethods: ((() => any) | undefined)[] = [];
     if (keyboardGroup === 'settingsPage' && keyboardSelected) {
-      const indexOfCurrent = options.findIndex((value) => value.storageKey === keyboardSelected);
+      const indexOfCurrent = options.findIndex((value) => value.title === keyboardSelected);
       unsubMethods.push(keyboardShortcutManager?.registerEvent({
         keys: ['ArrowDown'],
         action: () => setKeyboardSelected(
           options.length - 1 <= indexOfCurrent
             ? keyboardSelected
-            : options[indexOfCurrent + 1].storageKey,
+            : options[indexOfCurrent + 1].title,
         ),
       }));
 
@@ -118,13 +121,13 @@ function TimerSettingsPane() {
         action: () => setKeyboardSelected(
           indexOfCurrent <= 0
             ? keyboardSelected
-            : options[indexOfCurrent - 1].storageKey,
+            : options[indexOfCurrent - 1].title,
         ),
       }));
     } else if (keyboardGroup === 'settingsPage' && !keyboardSelected) {
       unsubMethods.push(keyboardShortcutManager?.registerEvent({
         keys: ['ArrowDown'],
-        action: () => setKeyboardSelected(options[0].storageKey),
+        action: () => setKeyboardSelected(options[0].title),
       }));
     }
 
@@ -139,36 +142,49 @@ function TimerSettingsPane() {
 
   const renderItem = ({ item }: { item: SettingsOptionProps }) => (
     <SettingsOption
-      value={settingsData.find((value) => value.storageKey === item.storageKey)?.value}
-      selected={settingsData.find((value) => value.storageKey === item.storageKey)?.selected}
-      type={item.type}
-      title={item.title}
-      onChange={async (data) => {
-        // Validate data first
-        if (item.validator) {
-          const result = await item.validator(data);
-          if (!result) return;
-        }
-
-        // Handle change
-        handleChange(item.storageKey, data);
-      }}
+      /* eslint-disable react/jsx-props-no-spreading */
+      {...item}
+      selected={selected === item.title}
       onPress={() => {
         if (item.type === 'number') {
-          handleSelectAndResetKeyboard(item.storageKey);
+          handleSelectAndResetKeyboard(item.title);
         } else {
           handleSelectAndResetKeyboard();
         }
       }}
-      onSelect={() => handleSelectAndResetKeyboard(item.storageKey)}
-      onDeselect={() => handleSelectAndResetKeyboard(item.storageKey)}
-      keyboardSelected={keyboardSelected === item.storageKey}
+      onSelect={() => handleSelectAndResetKeyboard(item.title)}
+      onDeselect={() => handleSelectAndResetKeyboard()}
+      keyboardSelected={keyboardSelected === item.title}
+      // value={settingsData.find((value) => value.storageKey === item.storageKey)?.value}
+      // selected={settingsData.find((value) => value.storageKey === item.storageKey)?.selected}
+      // type={item.type}
+      // title={item.title}
+      // onChange={async (data) => {
+      //   // Validate data first
+      //   if (item.validator) {
+      //     const result = await item.validator(data);
+      //     if (!result) return;
+      //   }
+
+      //   // Handle change
+      //   handleChange(item.storageKey, data);
+      // }}
+      // onPress={() => {
+      //   if (item.type === 'number') {
+      //     handleSelectAndResetKeyboard(item.storageKey);
+      //   } else {
+      //     handleSelectAndResetKeyboard();
+      //   }
+      // }}
+      // onSelect={() => handleSelectAndResetKeyboard(item.storageKey)}
+      // onDeselect={() => handleSelectAndResetKeyboard(item.storageKey)}
+      // keyboardSelected={keyboardSelected === item.storageKey}
     />
   );
 
   return (
     <SectionList
-      keyExtractor={(item) => item.storageKey}
+      keyExtractor={(item) => item.title!}
       sections={sections}
       renderItem={renderItem}
       renderSectionHeader={renderHeader}

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 // import AppContext from '../../AppContext';
-import { TimerState } from '../types';
-import calculateTimerDisplay from './calculateTimer';
+import { TimerState } from '../../types';
+import calculateTimerDisplay from '../calculateTimer';
 
 /**
  * Hook that provides a method to set the page title. If timer is running,

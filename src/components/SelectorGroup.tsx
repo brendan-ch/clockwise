@@ -2,53 +2,31 @@ import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
 import {
-  StyleSheet, View, Animated, FlatList, StyleProp, TextStyle,
+  StyleSheet, View, Animated, FlatList,
 } from 'react-native';
 import AppContext from '../../AppContext';
-import useTheme from '../helpers/useTheme';
-import { KeyboardShortcutGroup } from '../types';
+import useTheme from '../helpers/hooks/useTheme';
+import { KeyboardShortcutGroup, SettingsOptionProps } from '../types';
 import SettingsOption from './SettingsOption';
 
-interface SettingsOptionProps {
-  index: string,
-  type: 'number' | 'toggle' | 'icon',
-  value?: boolean | number | string,
-  iconLeft?: string,
-  /* eslint-disable-next-line */
-  onChange?: (data: any) => any,
-  title?: string,
-  onPress?: () => any,
-  onPressRight?: () => any,
-  onPressLeft?: () => any,
-  disabled?: boolean,
-  /* eslint-disable-next-line */
-  onChangeText?: (text: string) => any,
-  titleStyle?: StyleProp<TextStyle>,
-  /**
-   * Register one or more keybindings to select the setting option.
-   */
-  keybindings?: string[][],
-  /**
-   * Register one or more keybindings to simulate a press of the settings option.
-   */
-  keybindingsPress?: string[][],
-  /**
-   * Register one or more keybindings to simulate a press of the left icon.
-   */
-  keybindingsPressLeft?: string[][],
-  /**
-   * Register one or more keybindings to simulate a press of the right icon.
-   */
-  keybindingsPressRight?: string[][],
-  /**
-   * Register one or more keybindings to select the input (if there is one).
-   */
-  keybindingsPressInput?: string[][],
+/**
+ * Indicate keybindings for each SettingsOption component.
+ */
+interface SelectorKeybinding {
+  title: string,
+  pressLeft?: string[][],
+  pressRight?: string[][],
+  press?: string[][],
+  pressInput?: string[][],
+  select?: string[][]
+  deselect?: string[][],
 }
 
 interface Props {
   data: SettingsOptionProps[],
   header: SettingsOptionProps,
+  keybindings?: SelectorKeybinding[],
+  headerKeybindings?: SelectorKeybinding,
   expanded: boolean,
   fadeInOnMount?: boolean,
   activeKeyboardGroup?: KeyboardShortcutGroup,
@@ -63,7 +41,9 @@ interface Props {
  * Component that can expand with additional SettingOption components.
  */
 function SelectorGroup({
-  data, header, expanded, fadeInOnMount, activeKeyboardGroup, outsideData,
+  data,
+  header,
+  expanded, fadeInOnMount, activeKeyboardGroup, outsideData, keybindings, headerKeybindings,
 }: Props) {
   const [selected, setSelected] = useState<string | undefined>(undefined);
   const [headerInputSelected, setHeaderInputSelected] = useState(false);
@@ -82,43 +62,47 @@ function SelectorGroup({
   useEffect(() => {
     const unsubMethods: (() => any)[] = [];
 
-    if (keyboardGroup !== activeKeyboardGroup || !keyboardShortcutManager || !expanded) {
+    if (keyboardGroup !== activeKeyboardGroup
+      || !keyboardShortcutManager
+      || !expanded
+      || !keybindings) {
       return () => {};
     }
 
     // Set keybindings if available
-    data.forEach((item) => {
-      if (item.keybindings) {
-        item.keybindings.forEach((keybinding) => {
+    keybindings.forEach((item) => {
+      if (item.select) {
+        item.select.forEach((keybinding) => {
           unsubMethods.push(keyboardShortcutManager.registerEvent({
             keys: keybinding,
-            action: () => setSelected(item.index),
+            action: () => setSelected(item.title),
           }));
         });
       }
 
-      if (item.keybindingsPress && item.onPress) {
-        item.keybindingsPress.forEach((keybinding) => {
-          unsubMethods.push(keyboardShortcutManager.registerEvent({
-            keys: keybinding,
-            // @ts-ignore
-            action: () => item.onPress(),
-          }));
-        });
-      }
-
-      if (item.keybindingsPressLeft && item.onPressLeft) {
-        item.keybindingsPressLeft.forEach((keybinding) => {
+      const matchingData = data.find((option) => option.title === item.title);
+      if (item.press && matchingData?.onPress) {
+        item.press.forEach((keybinding) => {
           unsubMethods.push(keyboardShortcutManager.registerEvent({
             keys: keybinding,
             // @ts-ignore
-            action: () => item.onPressLeft(),
+            action: () => matchingData.onPress(),
           }));
         });
       }
 
-      if (item.keybindingsPressRight && item.onPressRight) {
-        item.keybindingsPressRight.forEach((keybinding) => {
+      if (item.pressLeft && matchingData?.onPressLeft) {
+        item.pressLeft.forEach((keybinding) => {
+          unsubMethods.push(keyboardShortcutManager.registerEvent({
+            keys: keybinding,
+            // @ts-ignore
+            action: () => matchingData.onPressLeft(),
+          }));
+        });
+      }
+
+      if (item.pressRight && matchingData?.onPressRight) {
+        item.pressRight.forEach((keybinding) => {
           unsubMethods.push(keyboardShortcutManager.registerEvent({
             keys: keybinding,
             // @ts-ignore
@@ -133,6 +117,7 @@ function SelectorGroup({
     });
   }, [
     data,
+    keybindings,
     keyboardGroup,
     keyboardShortcutManager,
     selected,
@@ -143,12 +128,16 @@ function SelectorGroup({
   // Register keybind for header
   useEffect(() => {
     const unsubMethods: (() => any)[] = [];
-    if (!keyboardShortcutManager || keyboardGroup !== activeKeyboardGroup || !expanded) {
+    if (!keyboardShortcutManager
+      || keyboardGroup !== activeKeyboardGroup
+      || !expanded
+      || !headerKeybindings
+    ) {
       return () => {};
     }
 
-    if (header.keybindingsPressInput && header.onChangeText) {
-      header.keybindingsPressInput.forEach((keybinding) => {
+    if (headerKeybindings.pressInput && header.onChangeText) {
+      headerKeybindings.pressInput.forEach((keybinding) => {
         unsubMethods.push(keyboardShortcutManager.registerEvent({
           keys: keybinding,
           action: () => setHeaderInputSelected(true),
@@ -156,8 +145,8 @@ function SelectorGroup({
       });
     }
 
-    if (header.keybindingsPressLeft && header.onPressLeft) {
-      header.keybindingsPressLeft.forEach((keybinding) => {
+    if (headerKeybindings.pressLeft && header.onPressLeft) {
+      headerKeybindings.pressLeft.forEach((keybinding) => {
         unsubMethods.push(keyboardShortcutManager.registerEvent({
           keys: keybinding,
           // @ts-ignore
@@ -176,6 +165,7 @@ function SelectorGroup({
     outsideData,
     expanded,
     headerInputSelected,
+    headerKeybindings,
   ]);
 
   useEffect(() => {
@@ -207,13 +197,13 @@ function SelectorGroup({
   const renderSelector = ({ item }: { item: SettingsOptionProps }) => (
     <SettingsOption
       onChange={item.onChange}
-      selected={selected === item.index}
-      onSelect={() => setSelected(item.index)}
+      selected={selected === item.title}
+      onSelect={() => setSelected(item.title)}
       onPress={() => {
-        if (item.type === 'number' && selected === item.index) {
+        if (item.type === 'number' && selected === item.title) {
           setSelected(undefined);
         } else if (item.type === 'number') {
-          setSelected(item.index);
+          setSelected(item.title);
         } else if (item.onPress) {
           item.onPress();
         }
@@ -274,7 +264,7 @@ function SelectorGroup({
           style={styles.optionList}
           data={data}
           renderItem={renderSelector}
-          keyExtractor={(item) => item.index}
+          keyExtractor={(item) => item.title!}
         />
       ) : undefined}
     </Animated.View>
@@ -300,6 +290,8 @@ const styles = StyleSheet.create({
 SelectorGroup.defaultProps = {
   fadeInOnMount: false,
   activeKeyboardGroup: undefined,
+  keybindings: [],
+  headerKeybindings: undefined,
   outsideData: [],
 };
 

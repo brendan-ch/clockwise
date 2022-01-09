@@ -21,14 +21,14 @@ import TimerPage from './src/pages/Timer';
 import { KeyboardShortcutGroup, Overlay, TimerState } from './src/types';
 import SettingsPage from './src/pages/SettingsPage';
 import TextStyles from './src/styles/Text';
-import useWindowSize from './src/helpers/useWindowSize';
+import useWindowSize from './src/helpers/hooks/useWindowSize';
 import HeaderButton from './src/components/HeaderButton';
-import useTheme from './src/helpers/useTheme';
+import useTheme from './src/helpers/hooks/useTheme';
 import SettingsOverlay from './src/overlays/SettingsOverlay';
 import LandscapeHeader from './src/components/LandscapeHeader';
 import LandscapeFooter from './src/components/LandscapeFooter';
 import { getData, getTimerValue } from './src/helpers/storage';
-import usePageTitle from './src/helpers/usePageTitle';
+import usePageTitle from './src/helpers/hooks/usePageTitle';
 
 /* eslint-disable-next-line */
 import * as serviceWorkerRegistration from './src/serviceWorkerRegistration';

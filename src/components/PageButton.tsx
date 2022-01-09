@@ -2,8 +2,8 @@ import React from 'react';
 import {
   Animated, Platform, StyleSheet, Text, TouchableOpacity,
 } from 'react-native';
-import useMouseAnimations from '../helpers/useMouseAnimations';
-import useTheme from '../helpers/useTheme';
+import useMouseAnimations from '../helpers/hooks/useMouseAnimations';
+import useTheme from '../helpers/hooks/useTheme';
 import ColorValues from '../styles/Color';
 import TextStyles from '../styles/Text';
 

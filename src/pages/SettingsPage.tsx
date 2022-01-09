@@ -7,22 +7,20 @@ import Modal from 'react-native-modal';
 import SettingsHeader from '../components/SettingsHeader';
 import SettingsOption from '../components/SettingsOption';
 import { checkNotifications, requestNotifications } from '../helpers/notification';
-import { getData } from '../helpers/storage';
-import useSettingsData from '../helpers/useSettingsData';
-import useTheme from '../helpers/useTheme';
+import useSettingsData from '../helpers/hooks/useSettingsData';
+import useTheme from '../helpers/hooks/useTheme';
 import {
   BREAK_TIME_MINUTES,
-  ENABLE_BACKGROUND_TIMER,
   ENABLE_TIMER_ALERTS,
   ENABLE_TIMER_SOUND,
   FOCUS_TIME_MINUTES,
 } from '../StorageKeys';
-import { Section, SettingsOptionProps } from '../types';
+import { Section, SettingsOptionProps, SettingsOptionPropsStatic } from '../types';
 import NotificationOverlay from '../components/NotificationOverlay';
 
 // Store all static option data in here
 // Make it easier to find and filter settings
-const options: SettingsOptionProps[] = [
+const options: SettingsOptionPropsStatic[] = [
   {
     type: 'number',
     title: 'Focus time (minutes)',
@@ -38,28 +36,10 @@ const options: SettingsOptionProps[] = [
     title: 'Timer sound',
     storageKey: ENABLE_TIMER_SOUND,
   },
-  // {
-  //   type: 'toggle',
-  //   title: 'Auto start timers?',
-  //   storageKey: AUTO_START_TIMERS,
-  // },
   {
     type: 'toggle',
-    title: 'Background timer',
-    storageKey: ENABLE_BACKGROUND_TIMER,
-  },
-  {
-    type: 'toggle',
-    title: 'Timer alerts (requires background timer)',
+    title: 'Timer alerts',
     storageKey: ENABLE_TIMER_ALERTS,
-  },
-];
-
-const sections: Section[] = [
-  {
-    title: 'Timer',
-    icon: 'timer-outline',
-    data: Platform.OS === 'web' ? options.slice(0, 3) : options.slice(0, 5),
   },
 ];
 
@@ -69,22 +49,11 @@ const sections: Section[] = [
 function SettingsPage() {
   const colorValues = useTheme();
 
-  // Sync options with settings data
-  const { settingsData, handleChange, handleSelect } = useSettingsData(options);
-
-  // Overlay to display
-  const [overlay, setOverlay] = useState<'none' | 'notification'>('none');
-
   // Assign validator keys here
   options.filter(
     (value) => value.storageKey === ENABLE_TIMER_ALERTS,
   )[0].validator = async (data) => {
     if (data === false) return true;
-
-    // First check if background timer enabled
-    const backgroundTimerValue = await getData(ENABLE_BACKGROUND_TIMER);
-    if (backgroundTimerValue !== '1') return false;
-
     // Check if permissions enabled
     const { granted, canAskAgain } = await checkNotifications();
     if (granted) return true;
@@ -107,6 +76,20 @@ function SettingsPage() {
     return false;
   };
 
+  // Sync options with storage
+  const settingsData = useSettingsData(options);
+
+  const sections: Section[] = [
+    {
+      title: 'Timer',
+      icon: 'timer-outline',
+      data: Platform.OS === 'web' ? settingsData.slice(0, 3) : settingsData.slice(0, 4),
+    },
+  ];
+  // Overlay to display
+  const [overlay, setOverlay] = useState<'none' | 'notification'>('none');
+  const [selected, setSelected] = useState<string | undefined>(undefined);
+
   const renderHeader = ({ section }: { section: Section }) => (
     <SettingsHeader
       title={section.title}
@@ -116,29 +99,18 @@ function SettingsPage() {
 
   const renderItem = ({ item }: { item: SettingsOptionProps }) => (
     <SettingsOption
-      value={settingsData.find((value) => value.storageKey === item.storageKey)?.value}
-      selected={settingsData.find((value) => value.storageKey === item.storageKey)?.selected}
-      type={item.type}
-      title={item.title}
-      onChange={async (data) => {
-        // Validate data first
-        if (item.validator) {
-          const result = await item.validator(data);
-          if (!result) return;
-        }
-
-        // Handle change
-        handleChange(item.storageKey, data);
-      }}
+      /* eslint-disable react/jsx-props-no-spreading */
+      {...item}
       onPress={() => {
         if (item.type === 'number') {
-          handleSelect(item.storageKey);
+          setSelected(item.title);
         } else {
-          handleSelect();
+          setSelected(undefined);
         }
       }}
-      onSelect={() => handleSelect(item.storageKey)}
-      onDeselect={() => handleSelect(item.storageKey)}
+      onSelect={() => setSelected(item.title)}
+      onDeselect={() => setSelected(undefined)}
+      selected={selected === item.title}
     />
   );
 
@@ -150,7 +122,7 @@ function SettingsPage() {
     >
       <SectionList
         style={styles.sectionList}
-        keyExtractor={(item) => item.storageKey}
+        keyExtractor={(item) => item.title!}
         sections={sections}
         renderItem={renderItem}
         renderSectionHeader={renderHeader}

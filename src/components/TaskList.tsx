@@ -6,7 +6,7 @@ import * as Haptics from 'expo-haptics';
 import AppContext from '../../AppContext';
 import generateTaskId from '../helpers/generateId';
 import { getData, storeData } from '../helpers/storage';
-import useTheme from '../helpers/useTheme';
+import useTheme from '../helpers/hooks/useTheme';
 import { TASKS } from '../StorageKeys';
 import TextStyles from '../styles/Text';
 import { Task } from '../types';
@@ -320,37 +320,54 @@ function TaskList() {
         fadeInOnMount
         expanded={expandedTask === item.id && !item.completed}
         outsideData={tasks}
+        keybindings={[
+          {
+            title: 'est. sessions',
+            select: [['e']],
+          },
+          {
+            title: 'delete',
+            press: [['Backspace']],
+          },
+          {
+            title: 'complete',
+            press: [['Meta', 'Enter'], ['Control', 'Enter'], ['Backspace']],
+          },
+        ]}
+        headerKeybindings={{
+          title: 'header',
+          pressLeft: [['s']],
+          pressInput: [['Enter']],
+        }}
         data={[
           {
             type: 'number',
             title: 'est. sessions',
-            index: '0',
             value: item.estPomodoros,
             onChange: (data) => handleChangeTask('estPomodoros', data, item.id),
             disabled: !timerStopped && context.mode === 'focus',
-            keybindings: [['e']],
+            // keybindings: [['e']],
           },
           !timerStopped && context.mode === 'focus' ? ({
             type: 'icon',
             value: 'checkmark',
             title: 'complete',
-            index: '1',
             onPress: () => handleCompleteTask(item.id),
-            keybindingsPress: [['Meta', 'Enter'], ['Control', 'Enter'], ['Backspace']],
+            // keybindingsPress: [['Meta', 'Enter'], ['Control', 'Enter'], ['Backspace']],
           }) : ({
             type: 'icon',
             value: 'trash-outline',
             title: 'delete',
-            index: '1',
+            // index: '1',
             onPress: () => handleDeleteTask(item.id),
             onPressRight: () => handleDeleteTask(item.id),
-            keybindingsPress: [['Backspace']],
+            // keybindingsPress: [['Backspace']],
           }),
         ]}
         header={item.completed ? ({
           title: 'completed (press to undo)',
           type: 'icon',
-          index: `${item.id}`,
+          // index: `${item.id}`,
           value: 'arrow-undo-outline',
           titleStyle: {
             color: colorValues.gray3,
@@ -363,15 +380,15 @@ function TaskList() {
             ? () => handleDeselect(item.id)
             : () => handleSelect(item.id),
           type: 'icon',
-          index: `${item.id}`,
+          // index: `${item.id}`,
           onPress: expandedTask === item.id && !allowDeselect
             ? undefined
             : () => setExpandedTask(expandedTask === item.id ? -1 : item.id),
           onPressRight: () => setExpandedTask(expandedTask === item.id ? -1 : item.id),
           value: expandedTask === item.id ? 'chevron-down' : 'chevron-forward',
           onChangeText: timerStopped || context.mode === 'break' ? (text) => handleChangeTask('title', text, item.id) : undefined,
-          keybindingsPressInput: [['Enter']],
-          keybindingsPressLeft: [['s']],
+          // keybindingsPressInput: [['Enter']],
+          // keybindingsPressLeft: [['s']],
         })}
       />
     );

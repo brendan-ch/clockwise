@@ -5,20 +5,16 @@ import {
   Platform,
   StyleSheet, View,
 } from 'react-native';
-// import * as Haptics from 'expo-haptics';
-// import { useNavigation } from '@react-navigation/native';
 import AppContext from '../../AppContext';
 import ActionButtonBar from '../components/ActionButtonBar';
 import PageButtonBar from '../components/PageButtonBar';
 import Timer from '../components/Timer';
 import calculateTimerDisplay from '../helpers/calculateTimer';
-import useTheme from '../helpers/useTheme';
-import useWindowSize from '../helpers/useWindowSize';
-// import { getTimerValue } from '../helpers/storage';
+import useTheme from '../helpers/hooks/useTheme';
+import useWindowSize from '../helpers/hooks/useWindowSize';
 import TaskList from '../components/TaskList';
-import useBackgroundTimer from '../helpers/useBackgroundTimer';
-import useTimerNotification from '../helpers/useTimerNotifications';
-// import HeaderButton from '../components/HeaderButton';
+import useBackgroundTimer from '../helpers/hooks/useBackgroundTimer';
+import useTimerNotification from '../helpers/hooks/useTimerNotifications';
 
 /**
  * Component that displays information about the timer.

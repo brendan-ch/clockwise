@@ -2,28 +2,23 @@ import {
   useContext, useEffect, useState,
 } from 'react';
 import { AppState, Platform } from 'react-native';
-import AppContext from '../../AppContext';
+import AppContext from '../../../AppContext';
 import {
-  ENABLE_BACKGROUND_TIMER, MODE, START, TIMER_LENGTH,
-} from '../StorageKeys';
-import { getData, removeData, storeData } from './storage';
+  MODE, START, TIMER_LENGTH,
+} from '../../StorageKeys';
+import { getData, removeData, storeData } from '../storage';
 /**
  * Hook that enables timer handling based on background states.
  * Only works on mobile.
  */
 function useBackgroundTimer() {
   // Stores whether timer is running when backgrounded
-  const [enabled, setEnabled] = useState(false);
   const [backgroundState, setBackgroundState] = useState<'active' | 'inactive' | 'background'>('active');
 
   const context = useContext(AppContext);
 
   useEffect(() => {
-    setEnabledFromStorage();
-  }, []);
-
-  useEffect(() => {
-    if (Platform.OS === 'web' || !enabled) return () => {};
+    if (Platform.OS === 'web') return () => {};
 
     AppState.addEventListener('change', async (state) => {
       switch (state) {
@@ -42,15 +37,7 @@ function useBackgroundTimer() {
     });
 
     return () => AppState.removeEventListener('change', () => {});
-  }, [enabled]);
-
-  /**
-   * Enable this hook based on the ENABLE_BACKGROUND_TIMER setting.
-   */
-  async function setEnabledFromStorage() {
-    const enabledSetting = await getData(ENABLE_BACKGROUND_TIMER);
-    setEnabled(enabledSetting === '1');
-  }
+  }, []);
 
   /**
    * Store the current timer data into storage, and pause the timer.
@@ -95,7 +82,7 @@ function useBackgroundTimer() {
   }
 
   useEffect(() => {
-    if (Platform.OS === 'web' || !enabled) return;
+    if (Platform.OS === 'web') return;
 
     if (backgroundState === 'active') {
       setTimerFromStorage();
@@ -104,7 +91,7 @@ function useBackgroundTimer() {
       storeTimerData(context.start, context.timerLength);
       context.setTimerBackgrounded(true);
     }
-  }, [backgroundState, context.timerLength, context.start, enabled]);
+  }, [backgroundState, context.timerLength, context.start]);
 }
 
 export default useBackgroundTimer;

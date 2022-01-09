@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useLinkProps } from '@react-navigation/native';
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
-import useTheme from '../helpers/useTheme';
+import useTheme from '../helpers/hooks/useTheme';
 
 interface HeaderButtonProps {
   iconName: string,

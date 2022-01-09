@@ -3,93 +3,21 @@ import React, { useContext, useEffect, useRef } from 'react';
 import {
   Platform,
   Pressable,
-  StyleProp,
+  // StyleProp,
   StyleSheet,
   Text,
   TextInput,
-  TextStyle,
+  // TextStyle,
   TouchableOpacity,
   View,
-  ViewStyle,
+  // ViewStyle,
 } from 'react-native';
 import AppContext from '../../AppContext';
-import useTheme from '../helpers/useTheme';
+import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
 import Checkbox from './Checkbox';
 import NumberBox from './NumberBox';
-
-interface Props {
-  /**
-   * Indicates type of option displayed and value passed.
-   */
-  type: 'number' | 'text' | 'toggle' | 'icon',
-  /**
-   * Value for the provided `type`.
-   */
-  value?: boolean | number | string,
-  /**
-   * Run when the setting is changed.
-   */
-  /* eslint-disable-next-line */
-  onChange?: (data: any) => any,
-  /**
-   * Title to display for the settings component. If `onChangeText` is provided,
-   * this acts as the value for the input component.
-   */
-  title?: string,
-  /**
-   * Icon to display to the left of the title.
-   */
-  iconLeft?: string,
-  /**
-   * Run when the component is pressed.
-   */
-  onPress?: () => any,
-  /**
-   * If `value` is `icon`, runs when the icon on the right is pressed.
-   */
-  onPressRight?: () => any,
-  /**
-   * If `iconLeft` is populated, runs when the icon on the left is pressed.
-   */
-  onPressLeft?: () => any,
-  /**
-   * Run when the component is selected.
-   */
-  onSelect?: () => any,
-  /**
-   * Run when the component is deselected (if it's a number box)
-   */
-  onDeselect?: () => any,
-  /**
-   * Marks the component as selected. Only supported for type `number`.
-   */
-  selected?: boolean,
-  style?: StyleProp<ViewStyle>,
-  titleStyle?: StyleProp<TextStyle>,
-  /**
-   * Marks the component as view-only.
-   */
-  disabled?: boolean,
-  /**
-   * Indicates whether the component should display a keyboard
-   * selected indicator.
-   */
-  keyboardSelected?: boolean,
-  /**
-   * Changes the title to an input field.
-   */
-  /* eslint-disable-next-line */
-  onChangeText?: (text: string) => any,
-  /**
-   * Indicates whether the input should be focused.
-   */
-  inputSelected?: boolean,
-  /**
-   * Called when the input is blurred, if input is provided.
-   */
-  onInputBlur?: () => any,
-}
+import { SettingsOptionProps } from '../types';
 
 function SettingsOption({
   type,
@@ -104,7 +32,7 @@ function SettingsOption({
   onPressLeft,
   onInputBlur,
   onSelect, style, titleStyle, disabled, keyboardSelected, onChangeText, inputSelected,
-}: Props) {
+}: SettingsOptionProps) {
   const colors = useTheme();
   const {
     keyboardGroup,

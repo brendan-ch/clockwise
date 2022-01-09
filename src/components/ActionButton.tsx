@@ -12,7 +12,7 @@ import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
 import ColorValues from '../styles/Color';
 import TextStyles from '../styles/Text';
-import useTheme from '../helpers/useTheme';
+import useTheme from '../helpers/hooks/useTheme';
 
 interface Props {
   style?: StyleProp<ViewStyle>,
