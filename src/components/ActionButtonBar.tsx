@@ -2,7 +2,7 @@ import React from 'react';
 import {
   StyleProp, StyleSheet, Text, View, ViewStyle,
 } from 'react-native';
-import useTheme from '../helpers/useTheme';
+import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
 import { TimerState } from '../types';
 import ActionButton from './ActionButton';

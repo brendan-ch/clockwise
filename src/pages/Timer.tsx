@@ -10,7 +10,7 @@ import ActionButtonBar from '../components/ActionButtonBar';
 import PageButtonBar from '../components/PageButtonBar';
 import Timer from '../components/Timer';
 import calculateTimerDisplay from '../helpers/calculateTimer';
-import useTheme from '../helpers/useTheme';
+import useTheme from '../helpers/hooks/useTheme';
 import useWindowSize from '../helpers/useWindowSize';
 import TaskList from '../components/TaskList';
 import useBackgroundTimer from '../helpers/hooks/useBackgroundTimer';

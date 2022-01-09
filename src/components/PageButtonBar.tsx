@@ -4,7 +4,7 @@ import {
   Easing,
   StyleProp, StyleSheet, View, ViewStyle,
 } from 'react-native';
-import useTheme from '../helpers/useTheme';
+import useTheme from '../helpers/hooks/useTheme';
 import ColorValues from '../styles/Color';
 import PageButton from './PageButton';
 

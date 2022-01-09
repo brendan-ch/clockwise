@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import {
   View, Text, StyleProp, ViewStyle, StyleSheet, TouchableOpacity, Animated, ScrollView, Platform,
 } from 'react-native';
-import useTheme from '../helpers/useTheme';
+import useTheme from '../helpers/hooks/useTheme';
 import ColorValues from '../styles/Color';
 import TextStyles from '../styles/Text';
 

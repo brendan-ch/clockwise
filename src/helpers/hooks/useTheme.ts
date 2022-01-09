@@ -1,5 +1,5 @@
 import { useColorScheme } from 'react-native';
-import ColorValues from '../styles/Color';
+import ColorValues from '../../styles/Color';
 
 interface Colors {
   primary: string,

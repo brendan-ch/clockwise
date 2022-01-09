@@ -4,7 +4,7 @@ import {
   StyleSheet, ViewStyle, Animated, TouchableOpacity, Text,
 } from 'react-native';
 import useMouseAnimations from '../helpers/hooks/useMouseAnimations';
-import useTheme from '../helpers/useTheme';
+import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
 
 interface Props {

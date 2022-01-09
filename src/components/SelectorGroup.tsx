@@ -5,7 +5,7 @@ import {
   StyleSheet, View, Animated, FlatList, StyleProp, TextStyle,
 } from 'react-native';
 import AppContext from '../../AppContext';
-import useTheme from '../helpers/useTheme';
+import useTheme from '../helpers/hooks/useTheme';
 import { KeyboardShortcutGroup } from '../types';
 import SettingsOption from './SettingsOption';
 

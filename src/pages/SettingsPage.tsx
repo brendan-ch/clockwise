@@ -9,7 +9,7 @@ import SettingsOption from '../components/SettingsOption';
 import { checkNotifications, requestNotifications } from '../helpers/notification';
 import { getData } from '../helpers/storage';
 import useSettingsData from '../helpers/hooks/useSettingsData';
-import useTheme from '../helpers/useTheme';
+import useTheme from '../helpers/hooks/useTheme';
 import {
   BREAK_TIME_MINUTES,
   ENABLE_BACKGROUND_TIMER,

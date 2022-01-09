@@ -6,7 +6,7 @@ import {
   StyleProp, TextStyle,
   StyleSheet, Pressable, Text, View, TextInput,
 } from 'react-native';
-import useTheme from '../helpers/useTheme';
+import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
 
 interface Props {

@@ -6,7 +6,7 @@ import * as Haptics from 'expo-haptics';
 import AppContext from '../../AppContext';
 import generateTaskId from '../helpers/generateId';
 import { getData, storeData } from '../helpers/storage';
-import useTheme from '../helpers/useTheme';
+import useTheme from '../helpers/hooks/useTheme';
 import { TASKS } from '../StorageKeys';
 import TextStyles from '../styles/Text';
 import { Task } from '../types';
