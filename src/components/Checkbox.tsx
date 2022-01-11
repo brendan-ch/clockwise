@@ -5,13 +5,18 @@ import useTheme from '../helpers/hooks/useTheme';
 
 interface Props {
   selected?: boolean,
+  keyboardSelected?: boolean,
 }
 
-function Checkbox({ selected }: Props) {
+function Checkbox({ selected, keyboardSelected }: Props) {
   const colors = useTheme();
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {
+      borderWidth: keyboardSelected ? 1 : 0,
+      borderColor: keyboardSelected ? colors.primary : undefined,
+    }]}
+    >
       <Ionicons
         name={selected ? 'checkbox' : 'checkbox-outline'}
         color={colors.primary}
@@ -32,6 +37,7 @@ const styles = StyleSheet.create({
 
 Checkbox.defaultProps = {
   selected: false,
+  keyboardSelected: false,
 };
 
 export default Checkbox;
