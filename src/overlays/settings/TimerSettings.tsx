@@ -155,30 +155,6 @@ function TimerSettingsPane() {
       onSelect={() => handleSelectAndResetKeyboard(item.title)}
       onDeselect={() => handleSelectAndResetKeyboard()}
       keyboardSelected={keyboardSelected === item.title}
-      // value={settingsData.find((value) => value.storageKey === item.storageKey)?.value}
-      // selected={settingsData.find((value) => value.storageKey === item.storageKey)?.selected}
-      // type={item.type}
-      // title={item.title}
-      // onChange={async (data) => {
-      //   // Validate data first
-      //   if (item.validator) {
-      //     const result = await item.validator(data);
-      //     if (!result) return;
-      //   }
-
-      //   // Handle change
-      //   handleChange(item.storageKey, data);
-      // }}
-      // onPress={() => {
-      //   if (item.type === 'number') {
-      //     handleSelectAndResetKeyboard(item.storageKey);
-      //   } else {
-      //     handleSelectAndResetKeyboard();
-      //   }
-      // }}
-      // onSelect={() => handleSelectAndResetKeyboard(item.storageKey)}
-      // onDeselect={() => handleSelectAndResetKeyboard(item.storageKey)}
-      // keyboardSelected={keyboardSelected === item.storageKey}
     />
   );
 
