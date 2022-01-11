@@ -175,6 +175,8 @@ function SettingsOption({
       {(type === 'number' && disabled) || type === 'text' ? (
         <Text style={[TextStyles.textRegular, {
           color: colors.primary,
+          textDecorationLine: keyboardSelected ? 'underline' : undefined,
+          textDecorationColor: keyboardSelected ? colors.primary : undefined,
         }]}
         >
           {value}
