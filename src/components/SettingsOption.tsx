@@ -199,6 +199,10 @@ function SettingsOption({
             name={value}
             size={20}
             color={colors.gray4}
+            style={{
+              textDecorationColor: keyboardSelected ? colors.gray4 : undefined,
+              textDecorationLine: keyboardSelected ? 'underline' : undefined,
+            }}
           />
         </Pressable>
       ) : undefined}
