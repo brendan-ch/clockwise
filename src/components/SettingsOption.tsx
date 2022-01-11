@@ -52,10 +52,19 @@ function SettingsOption({
       // Register keyboard shortcut to select item
       const unsubMethods: ((() => any) | undefined)[] = [];
 
-      if (onSelect) {
+      /**
+       * @todo Move this logic up to the timer settings page
+       * or task list.
+       */
+      if (onSelect && type === 'number') {
         unsubMethods.push(keyboardShortcutManager?.registerEvent({
           keys: ['ArrowRight'],
           action: () => onSelect(),
+        }));
+      } else if (onChange && type === 'toggle') {
+        unsubMethods.push(keyboardShortcutManager?.registerEvent({
+          keys: ['ArrowRight'],
+          action: () => onChange(!value),
         }));
       }
 
@@ -68,7 +77,9 @@ function SettingsOption({
       };
     }
     return () => {};
-  }, [keyboardShortcutManager, keyboardGroup, keyboardSelected]);
+  }, [
+    keyboardShortcutManager, keyboardGroup, keyboardSelected, onPress, onSelect,
+  ]);
 
   const ref = useRef<TextInput>();
 
@@ -149,6 +160,7 @@ function SettingsOption({
       {type === 'toggle' ? (
         <Checkbox
           selected={value === true}
+          keyboardSelected={keyboardSelected}
         />
       ) : undefined}
       {type === 'number' && !disabled ? (
