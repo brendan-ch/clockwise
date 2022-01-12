@@ -65,7 +65,18 @@ const options: SettingsOptionPropsStatic[] = [
  * Timer settings content in the settings overlay.
  */
 function TimerSettingsPane() {
-  // const { settingsData, handleChange, handleSelect } = useSettingsData(options);
+  // Assign some keys here
+  // Apparently asynchronous reassignments are allowed
+  checkNotifications()
+    .then((value) => {
+      const option = options.find(
+        (filterOption) => filterOption.storageKey === ENABLE_TIMER_ALERTS,
+      );
+      if (option) {
+        option.subtitle = !value.granted ? 'Please enable notifications on your browser.' : undefined;
+      }
+    });
+
   const settingsData = useSettingsData(options);
 
   const sections: Section[] = [
