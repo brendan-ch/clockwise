@@ -149,7 +149,6 @@ function SettingsOption({
           <Text
             style={[TextStyles.textRegular, {
               color: colors.primary,
-              flex: 1,
             }, titleStyle]}
             numberOfLines={1}
             ellipsizeMode="tail"
@@ -158,10 +157,9 @@ function SettingsOption({
           </Text>
           {subtitle ? (
             <Text
-              style={[TextStyles.textRegular, {
+              style={[TextStyles.textItalic, {
                 color: colors.primary,
                 fontSize: 10,
-                fontStyle: 'italic',
                 marginTop: 3,
               }]}
             >
