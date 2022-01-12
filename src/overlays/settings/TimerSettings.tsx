@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { SectionList } from 'react-native';
+import { Platform, SectionList } from 'react-native';
 import AppContext from '../../../AppContext';
 import renderHeader from '../../helpers/renderers/renderHeader';
 import SettingsOption from '../../components/SettingsOption';
@@ -65,7 +65,22 @@ const options: SettingsOptionPropsStatic[] = [
  * Timer settings content in the settings overlay.
  */
 function TimerSettingsPane() {
-  // const { settingsData, handleChange, handleSelect } = useSettingsData(options);
+  // Assign some keys here
+  // Apparently asynchronous reassignments are allowed
+  checkNotifications()
+    .then((value) => {
+      const option = options.find(
+        (filterOption) => filterOption.storageKey === ENABLE_TIMER_ALERTS,
+      );
+      if (option) {
+        const text = Platform.OS === 'web'
+          ? 'For changes to take effect, please enable notifications for this site.'
+          : 'To use timer alerts, please enable notifications for this app.';
+
+        option.subtitle = !value.granted ? text : undefined;
+      }
+    });
+
   const settingsData = useSettingsData(options);
 
   const sections: Section[] = [

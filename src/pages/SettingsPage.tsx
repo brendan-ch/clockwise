@@ -49,6 +49,16 @@ const options: SettingsOptionPropsStatic[] = [
 function SettingsPage() {
   const colorValues = useTheme();
 
+  checkNotifications()
+    .then((value) => {
+      const option = options.find(
+        (filterOption) => filterOption.storageKey === ENABLE_TIMER_ALERTS,
+      );
+      if (option) {
+        option.subtitle = !value.granted ? 'To use timer alerts, enable notifications for this app.' : undefined;
+      }
+    });
+
   // Assign validator keys here
   options.filter(
     (value) => value.storageKey === ENABLE_TIMER_ALERTS,
