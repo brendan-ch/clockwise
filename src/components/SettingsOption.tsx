@@ -125,7 +125,7 @@ function SettingsOption({
           />
         </Pressable>
       ) : undefined}
-      {onChangeText ? (
+      {onChangeText && !disabled ? (
         <View style={{
           flex: 1,
           height: 35,
