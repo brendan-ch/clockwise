@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { SectionList } from 'react-native';
+import { Platform, SectionList } from 'react-native';
 import AppContext from '../../../AppContext';
 import renderHeader from '../../helpers/renderers/renderHeader';
 import SettingsOption from '../../components/SettingsOption';
@@ -73,7 +73,11 @@ function TimerSettingsPane() {
         (filterOption) => filterOption.storageKey === ENABLE_TIMER_ALERTS,
       );
       if (option) {
-        option.subtitle = !value.granted ? 'For changes to take effect, please enable notifications for this site.' : undefined;
+        const text = Platform.OS === 'web'
+          ? 'For changes to take effect, please enable notifications for this site.'
+          : 'To use timer alerts, please enable notifications for this app.';
+
+        option.subtitle = !value.granted ? text : undefined;
       }
     });
 
