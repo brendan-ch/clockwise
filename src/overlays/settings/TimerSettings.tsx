@@ -73,7 +73,7 @@ function TimerSettingsPane() {
         (filterOption) => filterOption.storageKey === ENABLE_TIMER_ALERTS,
       );
       if (option) {
-        option.subtitle = !value.granted ? 'Please enable notifications on your browser.' : undefined;
+        option.subtitle = !value.granted ? 'For changes to take effect, please enable notifications for this site.' : undefined;
       }
     });
 
