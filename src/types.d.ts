@@ -33,6 +33,10 @@ interface SettingsOptionProps {
    */
   title?: string,
   /**
+   * Subtitle to display below the title.
+   */
+  subtitle?: string,
+  /**
    * Icon to display to the left of the title.
    */
   iconLeft?: string,

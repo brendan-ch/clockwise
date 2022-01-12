@@ -31,7 +31,8 @@ function SettingsOption({
   iconLeft,
   onPressLeft,
   onInputBlur,
-  onSelect, style, titleStyle, disabled, keyboardSelected, onChangeText, inputSelected,
+  onSelect,
+  style, titleStyle, disabled, keyboardSelected, onChangeText, inputSelected, subtitle,
 }: SettingsOptionProps) {
   const colors = useTheme();
   const {
@@ -144,17 +145,30 @@ function SettingsOption({
           />
         </View>
       ) : (
-        <Text
-          style={[TextStyles.textRegular, {
-            color: colors.primary,
-            flex: 1,
-          }, titleStyle]}
-          numberOfLines={1}
-          ellipsizeMode="tail"
-        >
-          {title}
-
-        </Text>
+        <View style={[styles.titleContainer]}>
+          <Text
+            style={[TextStyles.textRegular, {
+              color: colors.primary,
+              flex: 1,
+            }, titleStyle]}
+            numberOfLines={1}
+            ellipsizeMode="tail"
+          >
+            {title}
+          </Text>
+          {subtitle ? (
+            <Text
+              style={[TextStyles.textRegular, {
+                color: colors.primary,
+                fontSize: 10,
+                fontStyle: 'italic',
+                marginTop: 3,
+              }]}
+            >
+              {subtitle}
+            </Text>
+          ) : undefined}
+        </View>
       )}
       {/* </View> */}
       {type === 'toggle' ? (
@@ -228,6 +242,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     height: 50,
+  },
+  /**
+   * Styling for the layout of the title and subtitle.
+   */
+  titleContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    flex: 1,
   },
 });
 
