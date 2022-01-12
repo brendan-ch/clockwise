@@ -173,6 +173,7 @@ function SettingsOption({
         <Checkbox
           selected={value === true}
           keyboardSelected={keyboardSelected}
+          disabled={disabled}
         />
       ) : undefined}
       {type === 'number' && !disabled ? (
