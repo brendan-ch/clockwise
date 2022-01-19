@@ -24,6 +24,26 @@ async function removeData(key: string) {
   await AsyncStorage.removeItem(key);
 }
 
+/**
+ * Prefill some settings values on first-time app launch.
+ */
+async function prefillSettings() {
+  // Check if each key exists, and write to storage if it doesn't
+  const defaultSettings = {
+    [BREAK_TIME_MINUTES]: '5',
+    [FOCUS_TIME_MINUTES]: '25',
+  };
+
+  await Promise.all(Object.keys(defaultSettings).map(async (key) => {
+    const data = await getData(key);
+    if (data === null) {
+      // Fill default setting
+      // @ts-ignore
+      await storeData(key, defaultSettings[key]);
+    }
+  }));
+}
+
 export {
-  storeData, getData, getTimerValue, removeData,
+  storeData, getData, getTimerValue, removeData, prefillSettings,
 };
