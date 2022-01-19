@@ -27,7 +27,7 @@ import useTheme from './src/helpers/hooks/useTheme';
 import SettingsOverlay from './src/overlays/SettingsOverlay';
 import LandscapeHeader from './src/components/LandscapeHeader';
 import LandscapeFooter from './src/components/LandscapeFooter';
-import { getData, getTimerValue } from './src/helpers/storage';
+import { getData, getTimerValue, prefillSettings } from './src/helpers/storage';
 import usePageTitle from './src/helpers/hooks/usePageTitle';
 
 /* eslint-disable-next-line */
@@ -243,8 +243,10 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    // Timer and app initialiation
     getAndSetTimerValue(mode);
     loadTimerSound();
+    prefillSettings();
   }, []);
 
   // Links
