@@ -18,7 +18,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AppContext from './AppContext';
 import KeyboardShortcutManager from './src/helpers/keyboardShortcutManager';
 import TimerPage from './src/pages/Timer';
-import { KeyboardShortcutGroup, Overlay, TimerState } from './src/types';
+import {
+  DefaultSettingsState, KeyboardShortcutGroup, Overlay, TimerState,
+} from './src/types';
 import SettingsPage from './src/pages/SettingsPage';
 import TextStyles from './src/styles/Text';
 import useWindowSize from './src/helpers/hooks/useWindowSize';
@@ -27,15 +29,18 @@ import useTheme from './src/helpers/hooks/useTheme';
 import SettingsOverlay from './src/overlays/SettingsOverlay';
 import LandscapeHeader from './src/components/LandscapeHeader';
 import LandscapeFooter from './src/components/LandscapeFooter';
-import { getData, getTimerValue, prefillSettings } from './src/helpers/storage';
+import { getData, prefillSettings } from './src/helpers/storage';
 import usePageTitle from './src/helpers/hooks/usePageTitle';
 
 /* eslint-disable-next-line */
 import * as serviceWorkerRegistration from './src/serviceWorkerRegistration';
-import { ENABLE_TIMER_SOUND } from './src/StorageKeys';
+import {
+  BREAK_TIME_MINUTES, ENABLE_TIMER_ALERTS, ENABLE_TIMER_SOUND, FOCUS_TIME_MINUTES,
+} from './src/StorageKeys';
+import SettingsContext from './SettingsContext';
 
 const MIN_25 = 1500000;
-const MIN_5 = 300000;
+// const MIN_5 = 300000;
 
 // Create the stack navigator
 const Stack = createNativeStackNavigator();
@@ -65,6 +70,13 @@ export default function App() {
   const [timerBackgrounded, setTimerBackgrounded] = useState(false);
 
   const [sound, setSound] = useState<Audio.Sound | undefined>();
+
+  // Initialize settings state here
+  const [settings, setSettings] = useState<DefaultSettingsState>({
+    [ENABLE_TIMER_ALERTS]: false,
+    [FOCUS_TIME_MINUTES]: 25,
+    [BREAK_TIME_MINUTES]: 5,
+  });
 
   // Helper methods
   /**
@@ -110,26 +122,21 @@ export default function App() {
   /**
    * Handle switching between break and focus modes.
    */
-  async function handleStateSwitch(newMode: 'focus' | 'break') {
+  function handleStateSwitch(newMode: 'focus' | 'break') {
     clearTimerInterval(timeout);
     setTimerState('stopped');
     setMode(newMode);
 
-    await getAndSetTimerValue(newMode);
+    getAndSetTimerValue(newMode);
   }
 
   /**
    * Set the time remaining based on AsyncStorage value.
    * @param mode
    */
-  async function getAndSetTimerValue(newMode: 'focus' | 'break') {
-    const timerValueMinutes = await getTimerValue(newMode);
-
-    if (timerValueMinutes && !Number.isNaN(Number(timerValueMinutes))) {
-      setTimeRemaining(Number(timerValueMinutes) * 60 * 1000);
-    } else {
-      setTimeRemaining(newMode === 'break' ? MIN_5 : MIN_25);
-    }
+  function getAndSetTimerValue(newMode: 'focus' | 'break') {
+    const timerValueMinutes = newMode === 'focus' ? settings[FOCUS_TIME_MINUTES] : settings[BREAK_TIME_MINUTES];
+    setTimeRemaining(timerValueMinutes * 60 * 1000);
   }
 
   /**
@@ -167,7 +174,7 @@ export default function App() {
     setTimerState('stopped');
     setStart(undefined);
     setTimerLength(undefined);
-    await getAndSetTimerValue(mode);
+    getAndSetTimerValue(mode);
   }
 
   /**
@@ -183,6 +190,46 @@ export default function App() {
     const delta = Date.now() - newStart;
 
     setTimeRemaining((customTimeRemaining || timeRemaining) - delta);
+  }
+
+  /**
+   * Update a setting in the settings state.
+   * @param key
+   * @param value
+   */
+  function setSetting(key: string, value: boolean | number) {
+    setSettings({
+      ...settings,
+      [key]: value,
+    });
+  }
+
+  /**
+   * Load the settings data specified in the `settings` state.
+   */
+  async function initializeSettingsData() {
+    const temp: DefaultSettingsState = {
+      ...settings,
+    };
+
+    await Promise.all(Object.keys(settings).map(async (key) => {
+      // Load the data
+      const data = await getData(key);
+      if (!data) return;
+      // @ts-ignore
+      const type = typeof temp[key];
+
+      if (type === 'number') {
+        // Convert the data
+        // @ts-ignore
+        temp[key] = !Number.isNaN(Number(data)) ? Number(data) : temp[key];
+      } else if (type === 'boolean') {
+        // @ts-ignore
+        temp[key] = data === '1';
+      }
+    }));
+
+    setSettings(temp);
   }
 
   // Hooks
@@ -244,10 +291,21 @@ export default function App() {
 
   useEffect(() => {
     // Timer and app initialiation
-    getAndSetTimerValue(mode);
+    // getAndSetTimerValue(mode);
     loadTimerSound();
     prefillSettings();
+    initializeSettingsData();
   }, []);
+
+  useEffect(() => {
+    // Change timer display if timer is stopped
+    // and timer setting changes
+    if (timerState === 'stopped') {
+      setTimeRemaining(
+        settings[mode === 'focus' ? FOCUS_TIME_MINUTES : BREAK_TIME_MINUTES] * 60 * 1000,
+      );
+    }
+  }, [settings, timerState]);
 
   // Links
   const config = {
@@ -314,31 +372,42 @@ export default function App() {
           {windowSize === 'landscape' ? (
             <LandscapeHeader />
           ) : undefined}
-          <TimerPage />
+          <SettingsContext.Provider value={{
+            ...settings,
+          }}
+          >
+            <TimerPage />
+          </SettingsContext.Provider>
           {windowSize === 'landscape' ? (
             <LandscapeFooter />
           ) : undefined}
         </View>
         {windowSize === 'landscape' ? (
-          <Modal
-            isVisible={overlay === 'settings'}
-            onBackdropPress={() => setOverlay('none')}
-            backdropOpacity={0.3}
-            backdropColor={colorValues.primary}
-            animationIn="fadeIn"
-            animationInTiming={20}
-            animationOut="fadeOut"
-            backdropTransitionInTiming={20}
-            backdropTransitionOutTiming={20}
-            animationOutTiming={20}
-            style={{
-              // alignSelf: 'center',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
+          <SettingsContext.Provider value={{
+            ...settings,
+            setSetting,
+          }}
           >
-            <SettingsOverlay />
-          </Modal>
+            <Modal
+              isVisible={overlay === 'settings'}
+              onBackdropPress={() => setOverlay('none')}
+              backdropOpacity={0.3}
+              backdropColor={colorValues.primary}
+              animationIn="fadeIn"
+              animationInTiming={20}
+              animationOut="fadeOut"
+              backdropTransitionInTiming={20}
+              backdropTransitionOutTiming={20}
+              animationOutTiming={20}
+              style={{
+                // alignSelf: 'center',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <SettingsOverlay />
+            </Modal>
+          </SettingsContext.Provider>
         ) : undefined}
       </AppContext.Provider>
     );
@@ -369,34 +438,40 @@ export default function App() {
       setTimerBackgrounded,
     }}
     >
-      <NavigationContainer
-        linking={linking}
+      <SettingsContext.Provider value={{
+        ...settings,
+        setSetting,
+      }}
       >
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Timer"
-            component={TimerPage}
-            options={{
-              ...headerOptions,
-              headerTitle: '',
-              headerRight: () => HeaderButton({
-                iconName: 'ellipsis-vertical',
-                to: {
-                  screen: 'Settings',
-                  params: {},
-                },
-              }),
-            }}
-          />
-          <Stack.Screen
-            name="Settings"
-            component={SettingsPage}
-            options={{
-              ...headerOptions,
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+        <NavigationContainer
+          linking={linking}
+        >
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Timer"
+              component={TimerPage}
+              options={{
+                ...headerOptions,
+                headerTitle: '',
+                headerRight: () => HeaderButton({
+                  iconName: 'ellipsis-vertical',
+                  to: {
+                    screen: 'Settings',
+                    params: {},
+                  },
+                }),
+              }}
+            />
+            <Stack.Screen
+              name="Settings"
+              component={SettingsPage}
+              options={{
+                ...headerOptions,
+              }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SettingsContext.Provider>
     </AppContext.Provider>
   );
 }

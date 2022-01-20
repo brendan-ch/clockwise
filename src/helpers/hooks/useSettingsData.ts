@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import SettingsContext from '../../../SettingsContext';
 import { SettingsOptionProps, SettingsOptionPropsStatic } from '../../types';
 import { getData, storeData } from '../storage';
 
@@ -10,6 +11,8 @@ function useSettingsData(options: SettingsOptionPropsStatic[]) {
   const [settingsData, setSettingsData] = useState<SettingsOptionProps[]>([]);
   // Force re-rendering of updated settings data
   const [renderCount, setRenderCount] = useState(0);
+
+  const settings = useContext(SettingsContext);
 
   /**
    * Handle storing data
@@ -30,6 +33,12 @@ function useSettingsData(options: SettingsOptionPropsStatic[]) {
 
     // Set data in storage
     await storeData(key, convertedData);
+
+    // @ts-ignore
+    if (settings[key] !== undefined && settings.setSetting) {
+      // Update the key
+      settings.setSetting(key, data);
+    }
   }
 
   /**
