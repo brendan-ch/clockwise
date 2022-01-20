@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 import AppContext from '../../../AppContext';
+import SettingsContext from '../../../SettingsContext';
 import { ENABLE_TIMER_ALERTS } from '../../StorageKeys';
 import { TimerState } from '../../types';
 import { getData } from '../storage';
@@ -17,6 +18,8 @@ function useTimerNotification() {
     scheduleNotification,
     cancelAllNotifications,
   } = useNotifications();
+
+  const settings = useContext(SettingsContext);
 
   const [scheduled, setScheduled] = useState(false);
 
@@ -49,8 +52,11 @@ function useTimerNotification() {
 
   async function manageNotifications(timerState: TimerState) {
     if (Platform.OS === 'web') return;
-    const timerAlertsEnabled = await getData(ENABLE_TIMER_ALERTS);
-    if (timerAlertsEnabled !== '1') return;
+    const timerAlertsEnabled = settings[ENABLE_TIMER_ALERTS];
+    if (!timerAlertsEnabled) {
+      cancelAllNotifications();
+      return;
+    }
 
     if (timerState === 'running' && !scheduled) {
       scheduleNotification({
@@ -69,7 +75,7 @@ function useTimerNotification() {
   // Hook to handle notification scheduling on mobile
   useEffect(() => {
     manageNotifications(context.timerState);
-  }, [context.timerState]);
+  }, [context.timerState, settings[ENABLE_TIMER_ALERTS]]);
 }
 
 export default useTimerNotification;
