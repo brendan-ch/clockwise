@@ -1,4 +1,5 @@
 import { StyleProp, TextStyle, ViewStyle } from 'react-native';
+import { BREAK_TIME_MINUTES, ENABLE_TIMER_ALERTS, FOCUS_TIME_MINUTES } from './StorageKeys';
 
 type TimerState = 'running' | 'paused' | 'stopped';
 type Overlay = 'none' | 'settings' | 'command';
@@ -139,6 +140,12 @@ interface Task {
   completed?: boolean,
 }
 
+interface DefaultSettingsState {
+  [ENABLE_TIMER_ALERTS]: boolean,
+  [FOCUS_TIME_MINUTES]: number,
+  [BREAK_TIME_MINUTES]: number,
+}
+
 export {
   TimerState,
   RootStackParamList,
@@ -149,5 +156,5 @@ export {
   SettingsOptionPropsStatic,
   KeyboardShortcutGroup,
   Task,
-  // SettingsOptionPropsNoStorage,
+  DefaultSettingsState,
 };
