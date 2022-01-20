@@ -35,7 +35,7 @@ function useSettingsData(options: SettingsOptionPropsStatic[]) {
     await storeData(key, convertedData);
 
     // @ts-ignore
-    if (settings[key] && settings.setSetting) {
+    if (settings[key] !== undefined && settings.setSetting) {
       // Update the key
       settings.setSetting(key, data);
     }
