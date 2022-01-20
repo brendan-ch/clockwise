@@ -29,7 +29,7 @@ import useTheme from './src/helpers/hooks/useTheme';
 import SettingsOverlay from './src/overlays/SettingsOverlay';
 import LandscapeHeader from './src/components/LandscapeHeader';
 import LandscapeFooter from './src/components/LandscapeFooter';
-import { getData, getTimerValue, prefillSettings } from './src/helpers/storage';
+import { getData, prefillSettings } from './src/helpers/storage';
 import usePageTitle from './src/helpers/hooks/usePageTitle';
 
 /* eslint-disable-next-line */
@@ -40,7 +40,7 @@ import {
 import SettingsContext from './SettingsContext';
 
 const MIN_25 = 1500000;
-const MIN_5 = 300000;
+// const MIN_5 = 300000;
 
 // Create the stack navigator
 const Stack = createNativeStackNavigator();
@@ -135,13 +135,15 @@ export default function App() {
    * @param mode
    */
   async function getAndSetTimerValue(newMode: 'focus' | 'break') {
-    const timerValueMinutes = await getTimerValue(newMode);
+    const timerValueMinutes = newMode === 'focus' ? settings[FOCUS_TIME_MINUTES] : settings[BREAK_TIME_MINUTES];
+    setTimeRemaining(timerValueMinutes);
+    // const timerValueMinutes = await getTimerValue(newMode);
 
-    if (timerValueMinutes && !Number.isNaN(Number(timerValueMinutes))) {
-      setTimeRemaining(Number(timerValueMinutes) * 60 * 1000);
-    } else {
-      setTimeRemaining(newMode === 'break' ? MIN_5 : MIN_25);
-    }
+    // if (timerValueMinutes && !Number.isNaN(Number(timerValueMinutes))) {
+    //   setTimeRemaining(Number(timerValueMinutes) * 60 * 1000);
+    // } else {
+    //   setTimeRemaining(newMode === 'break' ? MIN_5 : MIN_25);
+    // }
   }
 
   /**
@@ -296,11 +298,21 @@ export default function App() {
 
   useEffect(() => {
     // Timer and app initialiation
-    getAndSetTimerValue(mode);
+    // getAndSetTimerValue(mode);
     loadTimerSound();
     prefillSettings();
     initializeSettingsData();
   }, []);
+
+  useEffect(() => {
+    // Change timer display if timer is stopped
+    // and timer setting changes
+    if (timerState === 'stopped') {
+      setTimeRemaining(
+        settings[mode === 'focus' ? FOCUS_TIME_MINUTES : BREAK_TIME_MINUTES] * 60 * 1000,
+      );
+    }
+  }, [settings, timerState, mode]);
 
   // Links
   const config = {
