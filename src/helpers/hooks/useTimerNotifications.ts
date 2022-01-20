@@ -55,6 +55,7 @@ function useTimerNotification() {
     const timerAlertsEnabled = settings[ENABLE_TIMER_ALERTS];
     if (!timerAlertsEnabled) {
       cancelAllNotifications();
+      setScheduled(false);
       return;
     }
 
