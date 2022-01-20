@@ -144,6 +144,7 @@ interface DefaultSettingsState {
   [ENABLE_TIMER_ALERTS]: boolean,
   [FOCUS_TIME_MINUTES]: number,
   [BREAK_TIME_MINUTES]: number,
+  setSetting?: () => any,
 }
 
 export {
