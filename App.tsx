@@ -122,28 +122,21 @@ export default function App() {
   /**
    * Handle switching between break and focus modes.
    */
-  async function handleStateSwitch(newMode: 'focus' | 'break') {
+  function handleStateSwitch(newMode: 'focus' | 'break') {
     clearTimerInterval(timeout);
     setTimerState('stopped');
     setMode(newMode);
 
-    await getAndSetTimerValue(newMode);
+    getAndSetTimerValue(newMode);
   }
 
   /**
    * Set the time remaining based on AsyncStorage value.
    * @param mode
    */
-  async function getAndSetTimerValue(newMode: 'focus' | 'break') {
+  function getAndSetTimerValue(newMode: 'focus' | 'break') {
     const timerValueMinutes = newMode === 'focus' ? settings[FOCUS_TIME_MINUTES] : settings[BREAK_TIME_MINUTES];
     setTimeRemaining(timerValueMinutes * 60 * 1000);
-    // const timerValueMinutes = await getTimerValue(newMode);
-
-    // if (timerValueMinutes && !Number.isNaN(Number(timerValueMinutes))) {
-    //   setTimeRemaining(Number(timerValueMinutes) * 60 * 1000);
-    // } else {
-    //   setTimeRemaining(newMode === 'break' ? MIN_5 : MIN_25);
-    // }
   }
 
   /**
@@ -181,7 +174,7 @@ export default function App() {
     setTimerState('stopped');
     setStart(undefined);
     setTimerLength(undefined);
-    await getAndSetTimerValue(mode);
+    getAndSetTimerValue(mode);
   }
 
   /**
