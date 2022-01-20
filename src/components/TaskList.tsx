@@ -32,12 +32,9 @@ function TaskList() {
   const [error, setError] = useState<string | undefined>(undefined);
   const [deletionTimeout, setDeletionTimeout] = useState<TimeoutTracker | undefined>(undefined);
 
-  // Track selected task IDs
-  const [selected, setSelected] = useState<number[]>([]);
-
-  const selectedTasks = tasks.filter(((task) => selected.includes(task.id)));
-
   const context = useContext(AppContext);
+  const selectedTasks = tasks.filter(((task) => context.selected.includes(task.id)));
+
   const timerStopped = !['running', 'paused'].includes(context.timerState);
 
   // Indicate whether task can be deselected by clicking the primary touch area
@@ -48,9 +45,9 @@ function TaskList() {
    * @param id
    */
   function handleSelect(id: number) {
-    const newSelected = selected.slice();
+    const newSelected = context.selected.slice();
     newSelected.push(id);
-    setSelected(newSelected);
+    context.setSelected(newSelected);
   }
 
   /**
@@ -58,10 +55,10 @@ function TaskList() {
    * @param id
    */
   function handleDeselect(id: number) {
-    const newSelected = selected.slice();
+    const newSelected = context.selected.slice();
     const index = newSelected.indexOf(id);
     newSelected.splice(index, 1);
-    setSelected(newSelected);
+    context.setSelected(newSelected);
   }
 
   /**
@@ -78,9 +75,9 @@ function TaskList() {
       completed: false,
     };
 
-    const selectedCopy = selected.slice();
+    const selectedCopy = context.selected.slice();
     selectedCopy.push(newId);
-    setSelected(selectedCopy);
+    context.setSelected(selectedCopy);
 
     setTasks([
       ...tasks,
@@ -123,11 +120,11 @@ function TaskList() {
 
     tasksCopy.splice(index, 1);
 
-    if (selected.includes(id)) {
-      const selectedCopy = selected.slice();
+    if (context.selected.includes(id)) {
+      const selectedCopy = context.selected.slice();
       const indexSelected = selectedCopy.findIndex((existing) => existing === id);
       selectedCopy.splice(indexSelected, 1);
-      setSelected(selectedCopy);
+      context.setSelected(selectedCopy);
     }
 
     setTasks(tasksCopy);
@@ -308,7 +305,7 @@ function TaskList() {
   const taskRenderer = ({ item }: { item: Task }) => {
     let iconLeftDisplay;
 
-    if (timerStopped && selected.includes(item.id) && context.mode === 'focus') {
+    if (timerStopped && context.selected.includes(item.id) && context.mode === 'focus') {
       iconLeftDisplay = 'checkbox';
     } else if (timerStopped && context.mode === 'focus') {
       iconLeftDisplay = 'checkbox-outline';
@@ -376,7 +373,7 @@ function TaskList() {
         }) : ({
           title: item.title,
           iconLeft: iconLeftDisplay,
-          onPressLeft: selected.includes(item.id)
+          onPressLeft: context.selected.includes(item.id)
             ? () => handleDeselect(item.id)
             : () => handleSelect(item.id),
           type: 'icon',
