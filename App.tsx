@@ -445,34 +445,40 @@ export default function App() {
       setTimerBackgrounded,
     }}
     >
-      <NavigationContainer
-        linking={linking}
+      <SettingsContext.Provider value={{
+        ...settings,
+        setSetting,
+      }}
       >
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Timer"
-            component={TimerPage}
-            options={{
-              ...headerOptions,
-              headerTitle: '',
-              headerRight: () => HeaderButton({
-                iconName: 'ellipsis-vertical',
-                to: {
-                  screen: 'Settings',
-                  params: {},
-                },
-              }),
-            }}
-          />
-          <Stack.Screen
-            name="Settings"
-            component={SettingsPage}
-            options={{
-              ...headerOptions,
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+        <NavigationContainer
+          linking={linking}
+        >
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Timer"
+              component={TimerPage}
+              options={{
+                ...headerOptions,
+                headerTitle: '',
+                headerRight: () => HeaderButton({
+                  iconName: 'ellipsis-vertical',
+                  to: {
+                    screen: 'Settings',
+                    params: {},
+                  },
+                }),
+              }}
+            />
+            <Stack.Screen
+              name="Settings"
+              component={SettingsPage}
+              options={{
+                ...headerOptions,
+              }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SettingsContext.Provider>
     </AppContext.Provider>
   );
 }
