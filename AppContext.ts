@@ -1,6 +1,8 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import KeyboardShortcutManager from './src/helpers/keyboardShortcutManager';
-import { KeyboardShortcutGroup, Overlay, TimerState } from './src/types';
+import {
+  KeyboardShortcutGroup, Overlay, TimerState,
+} from './src/types';
 
 interface DefaultAppState {
   keyboardShortcutManager?: KeyboardShortcutManager,
@@ -28,6 +30,8 @@ interface DefaultAppState {
   timerLength?: number,
   timerBackgrounded: boolean,
   setTimerBackgrounded: Dispatch<SetStateAction<boolean>>,
+  selected: number[],
+  setSelected: Dispatch<SetStateAction<number[]>>,
 }
 
 const defaultAppState: DefaultAppState = {
@@ -49,6 +53,8 @@ const defaultAppState: DefaultAppState = {
   setMode: () => {},
   timerBackgrounded: false,
   setTimerBackgrounded: () => {},
+  selected: [],
+  setSelected: () => {},
 };
 
 const AppContext = React.createContext(defaultAppState);
