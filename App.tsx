@@ -78,6 +78,9 @@ export default function App() {
     [BREAK_TIME_MINUTES]: 5,
   });
 
+  // Track selected task IDs
+  const [selected, setSelected] = useState<number[]>([]);
+
   // Helper methods
   /**
    * Load the timer sound from the assets folder.
@@ -363,6 +366,8 @@ export default function App() {
         timerLength,
         timerBackgrounded,
         setTimerBackgrounded,
+        selected,
+        setSelected,
       }}
       >
         <View style={[styles.landscapeContainer, {
@@ -436,6 +441,8 @@ export default function App() {
       timerLength,
       timerBackgrounded,
       setTimerBackgrounded,
+      selected,
+      setSelected,
     }}
     >
       <SettingsContext.Provider value={{
