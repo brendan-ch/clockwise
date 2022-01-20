@@ -136,7 +136,7 @@ export default function App() {
    */
   async function getAndSetTimerValue(newMode: 'focus' | 'break') {
     const timerValueMinutes = newMode === 'focus' ? settings[FOCUS_TIME_MINUTES] : settings[BREAK_TIME_MINUTES];
-    setTimeRemaining(timerValueMinutes);
+    setTimeRemaining(timerValueMinutes * 60 * 1000);
     // const timerValueMinutes = await getTimerValue(newMode);
 
     // if (timerValueMinutes && !Number.isNaN(Number(timerValueMinutes))) {
@@ -312,7 +312,7 @@ export default function App() {
         settings[mode === 'focus' ? FOCUS_TIME_MINUTES : BREAK_TIME_MINUTES] * 60 * 1000,
       );
     }
-  }, [settings, timerState, mode]);
+  }, [settings, timerState]);
 
   // Links
   const config = {
