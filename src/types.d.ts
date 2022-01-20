@@ -144,7 +144,8 @@ interface DefaultSettingsState {
   [ENABLE_TIMER_ALERTS]: boolean,
   [FOCUS_TIME_MINUTES]: number,
   [BREAK_TIME_MINUTES]: number,
-  setSetting?: () => any,
+  /* eslint-disable-next-line */
+  setSetting?: (key: string, value: number | boolean) => any,
 }
 
 export {
