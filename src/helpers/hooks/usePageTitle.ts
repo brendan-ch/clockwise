@@ -3,6 +3,7 @@ import { Platform } from 'react-native';
 // import AppContext from '../../AppContext';
 import { TimerState } from '../../types';
 import calculateTimerDisplay from '../calculateTimer';
+import useWindowSize from './useWindowSize';
 
 /**
  * Hook that provides a method to set the page title. If timer is running,
@@ -11,10 +12,11 @@ import calculateTimerDisplay from '../calculateTimer';
 function usePageTitle(initial: string, timeRemaining: number, timerState: TimerState) {
   // const { timeRemaining, timerState } = useContext(AppContext);
   const [pageTitle, setPageTitle] = useState(initial);
+  const windowSize = useWindowSize();
 
   useEffect(() => {
     // Run platform check
-    if (Platform.OS !== 'web') {
+    if (Platform.OS !== 'web' || windowSize === 'portrait') {
       return;
     }
 
@@ -23,7 +25,7 @@ function usePageTitle(initial: string, timeRemaining: number, timerState: TimerS
     } else {
       window.document.title = pageTitle;
     }
-  }, [timeRemaining, timerState, pageTitle]);
+  }, [timeRemaining, timerState, pageTitle, windowSize]);
 
   return setPageTitle;
 }
