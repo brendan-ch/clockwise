@@ -7,7 +7,8 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "lint": "eslint --ext .ts,.tsx \"./\"",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "build-api": "expo build:web && copyfiles ./api/* ./web-build/"
   },
   "dependencies": {
     "@expo-google-fonts/anonymous-pro": "^0.2.0",
@@ -38,6 +39,8 @@
     "@types/react-native": "~0.64.12",
     "@typescript-eslint/eslint-plugin": "^5.3.1",
     "@typescript-eslint/parser": "^5.3.1",
+    "@vercel/node": "^1.12.1",
+    "copyfiles": "^2.4.1",
     "eslint": "^8.2.0",
     "eslint-config-airbnb": "^19.0.0",
     "eslint-plugin-import": "^2.25.3",
@@ -45,6 +48,7 @@
     "eslint-plugin-react": "^7.27.0",
     "eslint-plugin-react-hooks": "^4.3.0",
     "typescript": "~4.3.5",
+    "vercel": "^23.1.2",
     "workbox-background-sync": "^6.1.5",
     "workbox-broadcast-update": "^6.1.5",
     "workbox-cacheable-response": "^6.1.5",
