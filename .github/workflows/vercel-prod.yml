@@ -46,7 +46,7 @@ jobs:
       
       # Build for web
       - name: Build for web
-        run: expo build:web
+        run: yarn build-api
         
       # Deploy to Vercel
       - name: Deploy to Vercel
