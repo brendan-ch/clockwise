@@ -443,6 +443,8 @@ function TaskList() {
           renderItem={taskRenderer}
           maxToRenderPerBatch={10}
           keyboardDismissMode="on-drag"
+          keyboardShouldPersistTaps="never"
+          scrollsToTop
         />
       )}
     </View>
