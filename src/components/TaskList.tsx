@@ -307,7 +307,7 @@ function TaskList() {
       for (let i = 0; i < 9; i += 1) {
         unsubMethods.push(keyboardShortcutManager.registerEvent({
           keys: [`${i + 1}`],
-          action: () => setExpandedTask(tasks[i] && tasks[i].id !== expandedTask
+          action: () => handleExpand(tasks[i] && tasks[i].id !== expandedTask
             ? tasks[i].id
             : -1),
         }));
@@ -315,7 +315,7 @@ function TaskList() {
 
       unsubMethods.push(keyboardShortcutManager.registerEvent({
         keys: ['0'],
-        action: () => setExpandedTask(tasks[9] && tasks[9].id !== expandedTask
+        action: () => handleExpand(tasks[9] && tasks[9].id !== expandedTask
           ? tasks[9].id
           : -1),
       }));
