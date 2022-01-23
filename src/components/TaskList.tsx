@@ -48,12 +48,13 @@ function TaskList() {
    * Automatically scroll to an item in the list.
    * @param id
    */
-  function handleAutoScroll(id: number) {
+  function handleAutoScroll(id: number, pos = 0) {
     const index = tasks.findIndex((task) => task.id === id);
     if (index === -1) return;
 
     listRef?.current?.scrollToIndex({
       animated: true,
+      viewPosition: pos,
       index,
     });
   }
@@ -74,7 +75,7 @@ function TaskList() {
    */
   function handleExpand(id: number) {
     setExpandedTask(id);
-    handleAutoScroll(id);
+    // handleAutoScroll(id);
   }
 
   /**
@@ -115,8 +116,6 @@ function TaskList() {
       ...tasks,
       newTask,
     ]);
-
-    handleExpand(newId);
   }
 
   /**
@@ -325,6 +324,10 @@ function TaskList() {
       value();
     });
   }, [context.keyboardGroup, tasks, expandedTask]);
+
+  useEffect(() => {
+    handleAutoScroll(expandedTask, Platform.OS === 'web' ? 0.5 : 1);
+  }, [expandedTask]);
 
   // Load tasks on start
   useEffect(() => {
