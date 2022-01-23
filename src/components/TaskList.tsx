@@ -442,6 +442,7 @@ function TaskList() {
             : tasks}
           renderItem={taskRenderer}
           maxToRenderPerBatch={10}
+          keyboardDismissMode="on-drag"
         />
       )}
     </View>
