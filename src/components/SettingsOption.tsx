@@ -31,6 +31,7 @@ function SettingsOption({
   iconLeft,
   onPressLeft,
   onInputBlur,
+  onInputSelect,
   onSelect,
   style, titleStyle, disabled, keyboardSelected, onChangeText, inputSelected, subtitle,
 }: SettingsOptionProps) {
@@ -142,6 +143,7 @@ function SettingsOption({
             // @ts-ignore
             ref={ref}
             onBlur={onInputBlur ? () => onInputBlur() : undefined}
+            onFocus={onInputSelect ? () => onInputSelect() : undefined}
           />
         </View>
       ) : (
