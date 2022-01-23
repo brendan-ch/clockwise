@@ -418,9 +418,9 @@ function TaskList() {
           onChangeText: timerStopped || context.mode === 'break' ? (text) => handleChangeTask('title', text, item.id) : undefined,
           // keybindingsPressInput: [['Enter']],
           // keybindingsPressLeft: [['s']],
-          onInputSelect: () => handleAutoScroll(item.id),
+          onInputSelect: Platform.OS !== 'web' ? () => handleAutoScroll(item.id) : undefined,
         })}
-        onKeyboardShown={() => handleAutoScroll(item.id)}
+        onKeyboardShown={Platform.OS !== 'web' ? () => handleAutoScroll(item.id) : undefined}
       />
     );
   };
