@@ -50,6 +50,7 @@ function TaskList() {
    */
   function handleAutoScroll(id: number) {
     const index = tasks.findIndex((task) => task.id === id);
+    if (index === -1) return;
 
     listRef?.current?.scrollToIndex({
       animated: true,
@@ -65,6 +66,15 @@ function TaskList() {
     const newSelected = context.selected.slice();
     newSelected.push(id);
     context.setSelected(newSelected);
+  }
+
+  /**
+   * Handle expansion and auto scrolling of an item.
+   * @param id
+   */
+  function handleExpand(id: number) {
+    setExpandedTask(id);
+    handleAutoScroll(id);
   }
 
   /**
@@ -105,6 +115,8 @@ function TaskList() {
       ...tasks,
       newTask,
     ]);
+
+    handleExpand(newId);
   }
 
   /**
@@ -397,7 +409,7 @@ function TaskList() {
           // index: `${item.id}`,
           onPress: expandedTask === item.id && !allowDeselect
             ? undefined
-            : () => setExpandedTask(expandedTask === item.id ? -1 : item.id),
+            : () => handleExpand(expandedTask === item.id ? -1 : item.id),
           onPressRight: () => setExpandedTask(expandedTask === item.id ? -1 : item.id),
           value: expandedTask === item.id ? 'chevron-down' : 'chevron-forward',
           onChangeText: timerStopped || context.mode === 'break' ? (text) => handleChangeTask('title', text, item.id) : undefined,
