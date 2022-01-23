@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, {
+  useState, useEffect, useContext, useRef,
+} from 'react';
 import {
   FlatList, StyleSheet, View, Text, Platform,
 } from 'react-native';
@@ -35,10 +37,25 @@ function TaskList() {
   const context = useContext(AppContext);
   const selectedTasks = tasks.filter(((task) => context.selected.includes(task.id)));
 
+  const listRef = useRef<FlatList>();
+
   const timerStopped = !['running', 'paused'].includes(context.timerState);
 
   // Indicate whether task can be deselected by clicking the primary touch area
   const allowDeselect = !timerStopped && context.mode === 'focus';
+
+  /**
+   * Automatically scroll to an item in the list.
+   * @param id
+   */
+  function handleAutoScroll(id: number) {
+    const index = tasks.findIndex((task) => task.id === id);
+
+    listRef?.current?.scrollToIndex({
+      animated: true,
+      index,
+    });
+  }
 
   /**
    * Handle selection of a task.
@@ -386,7 +403,9 @@ function TaskList() {
           onChangeText: timerStopped || context.mode === 'break' ? (text) => handleChangeTask('title', text, item.id) : undefined,
           // keybindingsPressInput: [['Enter']],
           // keybindingsPressLeft: [['s']],
+          onInputSelect: () => handleAutoScroll(item.id),
         })}
+        onKeyboardShown={() => handleAutoScroll(item.id)}
       />
     );
   };
@@ -445,6 +464,9 @@ function TaskList() {
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="never"
           scrollsToTop
+          scrollToOverflowEnabled
+          // @ts-ignore
+          ref={listRef}
         />
       )}
     </View>
