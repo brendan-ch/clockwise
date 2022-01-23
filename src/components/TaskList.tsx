@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, {
+  useState, useEffect, useContext, useRef,
+} from 'react';
 import {
   FlatList, StyleSheet, View, Text, Platform,
 } from 'react-native';
@@ -35,10 +37,27 @@ function TaskList() {
   const context = useContext(AppContext);
   const selectedTasks = tasks.filter(((task) => context.selected.includes(task.id)));
 
+  const listRef = useRef<FlatList>();
+
   const timerStopped = !['running', 'paused'].includes(context.timerState);
 
   // Indicate whether task can be deselected by clicking the primary touch area
   const allowDeselect = !timerStopped && context.mode === 'focus';
+
+  /**
+   * Automatically scroll to an item in the list.
+   * @param id
+   */
+  function handleAutoScroll(id: number, pos = 0) {
+    const index = tasks.findIndex((task) => task.id === id);
+    if (index === -1) return;
+
+    listRef?.current?.scrollToIndex({
+      animated: true,
+      viewPosition: pos,
+      index,
+    });
+  }
 
   /**
    * Handle selection of a task.
@@ -48,6 +67,15 @@ function TaskList() {
     const newSelected = context.selected.slice();
     newSelected.push(id);
     context.setSelected(newSelected);
+  }
+
+  /**
+   * Handle expansion and auto scrolling of an item.
+   * @param id
+   */
+  function handleExpand(id: number) {
+    setExpandedTask(id);
+    // handleAutoScroll(id);
   }
 
   /**
@@ -278,7 +306,7 @@ function TaskList() {
       for (let i = 0; i < 9; i += 1) {
         unsubMethods.push(keyboardShortcutManager.registerEvent({
           keys: [`${i + 1}`],
-          action: () => setExpandedTask(tasks[i] && tasks[i].id !== expandedTask
+          action: () => handleExpand(tasks[i] && tasks[i].id !== expandedTask
             ? tasks[i].id
             : -1),
         }));
@@ -286,7 +314,7 @@ function TaskList() {
 
       unsubMethods.push(keyboardShortcutManager.registerEvent({
         keys: ['0'],
-        action: () => setExpandedTask(tasks[9] && tasks[9].id !== expandedTask
+        action: () => handleExpand(tasks[9] && tasks[9].id !== expandedTask
           ? tasks[9].id
           : -1),
       }));
@@ -296,6 +324,10 @@ function TaskList() {
       value();
     });
   }, [context.keyboardGroup, tasks, expandedTask]);
+
+  useEffect(() => {
+    handleAutoScroll(expandedTask, 0.5);
+  }, [expandedTask]);
 
   // Load tasks on start
   useEffect(() => {
@@ -380,13 +412,15 @@ function TaskList() {
           // index: `${item.id}`,
           onPress: expandedTask === item.id && !allowDeselect
             ? undefined
-            : () => setExpandedTask(expandedTask === item.id ? -1 : item.id),
+            : () => handleExpand(expandedTask === item.id ? -1 : item.id),
           onPressRight: () => setExpandedTask(expandedTask === item.id ? -1 : item.id),
           value: expandedTask === item.id ? 'chevron-down' : 'chevron-forward',
           onChangeText: timerStopped || context.mode === 'break' ? (text) => handleChangeTask('title', text, item.id) : undefined,
           // keybindingsPressInput: [['Enter']],
           // keybindingsPressLeft: [['s']],
+          onInputSelect: Platform.OS !== 'web' ? () => handleAutoScroll(item.id) : undefined,
         })}
+        onKeyboardShown={Platform.OS !== 'web' ? () => handleAutoScroll(item.id) : undefined}
       />
     );
   };
@@ -442,6 +476,12 @@ function TaskList() {
             : tasks}
           renderItem={taskRenderer}
           maxToRenderPerBatch={10}
+          keyboardDismissMode="on-drag"
+          keyboardShouldPersistTaps="never"
+          scrollsToTop
+          scrollToOverflowEnabled
+          // @ts-ignore
+          ref={listRef}
         />
       )}
     </View>

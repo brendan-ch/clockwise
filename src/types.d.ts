@@ -89,6 +89,10 @@ interface SettingsOptionProps {
    * Called when the input is blurred, if input is provided.
    */
   onInputBlur?: () => any,
+  /**
+   * Called when the input is selected, if input is provided.
+   */
+  onInputSelect?: () => any,
 }
 
 /**

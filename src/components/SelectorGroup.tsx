@@ -35,6 +35,7 @@ interface Props {
    * provide the array here so keybindings work properly.
    */
   outsideData?: any[],
+  onKeyboardShown?: () => any,
 }
 
 /**
@@ -43,7 +44,8 @@ interface Props {
 function SelectorGroup({
   data,
   header,
-  expanded, fadeInOnMount, activeKeyboardGroup, outsideData, keybindings, headerKeybindings,
+  expanded,
+  fadeInOnMount, activeKeyboardGroup, outsideData, keybindings, headerKeybindings, onKeyboardShown,
 }: Props) {
   const [selected, setSelected] = useState<string | undefined>(undefined);
   const [headerInputSelected, setHeaderInputSelected] = useState(false);
@@ -194,6 +196,22 @@ function SelectorGroup({
     }
   }, [expanded]);
 
+  // useEffect(() => {
+  //   const subscription = Keyboard.addListener('keyboardDidShow', () => {
+  //     if (onKeyboardShown) {
+  //       onKeyboardShown();
+  //     }
+  //   });
+
+  //   return () => subscription.remove();
+  // }, [onKeyboardShown]);
+
+  useEffect(() => {
+    if (selected && onKeyboardShown) {
+      onKeyboardShown();
+    }
+  }, [selected]);
+
   const renderSelector = ({ item }: { item: SettingsOptionProps }) => (
     <SettingsOption
       onChange={item.onChange}
@@ -220,6 +238,7 @@ function SelectorGroup({
         marginHorizontal: 5,
       }}
       titleStyle={item.titleStyle}
+      onInputSelect={item.onInputSelect}
     />
   );
 
@@ -252,6 +271,7 @@ function SelectorGroup({
         titleStyle={header.titleStyle}
         inputSelected={expanded ? headerInputSelected : false}
         onInputBlur={() => setHeaderInputSelected(false)}
+        onInputSelect={header.onInputSelect}
       />
       {expanded ? (
         <View style={[styles.line, {
@@ -293,6 +313,7 @@ SelectorGroup.defaultProps = {
   keybindings: [],
   headerKeybindings: undefined,
   outsideData: [],
+  onKeyboardShown: () => {},
 };
 
 export default SelectorGroup;
