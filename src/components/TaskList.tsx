@@ -326,7 +326,7 @@ function TaskList() {
   }, [context.keyboardGroup, tasks, expandedTask]);
 
   useEffect(() => {
-    handleAutoScroll(expandedTask, Platform.OS === 'web' ? 0.5 : 1);
+    handleAutoScroll(expandedTask, 0.5);
   }, [expandedTask]);
 
   // Load tasks on start
