@@ -85,9 +85,11 @@ function useBackgroundTimer() {
     if (Platform.OS === 'web') return;
 
     if (backgroundState === 'active') {
+      // If state is active when timer state changes
       setTimerFromStorage();
       context.setTimerBackgrounded(false);
     } else if (context.timerLength && context.start) {
+      // If timer is running and backgrounded
       storeTimerData(context.start, context.timerLength);
       context.setTimerBackgrounded(true);
     }
