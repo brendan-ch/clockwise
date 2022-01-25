@@ -129,6 +129,8 @@ export default function App() {
     clearTimerInterval(timeout);
     setTimerState('stopped');
     setMode(newMode);
+    setTimerLength(undefined);
+    setStart(undefined);
 
     getAndSetTimerValue(newMode);
   }
