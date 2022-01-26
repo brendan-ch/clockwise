@@ -10,6 +10,7 @@ import {
 } from '../../StorageKeys';
 import { SettingsOptionProps, Section, SettingsOptionPropsStatic } from '../../types';
 import { checkNotifications, requestNotifications } from '../../helpers/notification';
+import useKeyboardSelect from '../../helpers/hooks/useKeyboardSelect';
 
 // Store all static option data in here
 // Make it easier to find and filter settings
@@ -90,14 +91,19 @@ function TimerSettingsPane() {
       data: settingsData.slice(0, 4),
     },
   ];
-  // Set keyboard selected by storage key
-  const [keyboardSelected, setKeyboardSelected] = useState<string | undefined>(undefined);
   const [selected, setSelected] = useState<string | undefined>(undefined);
 
   const {
     keyboardShortcutManager,
     keyboardGroup,
   } = useContext(AppContext);
+
+  // Set keyboard selected by storage key
+  const { keyboardSelected, setKeyboardSelected } = useKeyboardSelect(
+    keyboardGroup,
+    options,
+    'title',
+  );
 
   /**
    * Clear keyboardSelected, and call setSelected.
@@ -117,43 +123,6 @@ function TimerSettingsPane() {
       setKeyboardSelected(undefined);
     }
   }, [keyboardShortcutManager, keyboardGroup]);
-
-  useEffect(() => {
-    const unsubMethods: ((() => any) | undefined)[] = [];
-    if (keyboardGroup === 'settingsPage' && keyboardSelected) {
-      const indexOfCurrent = options.findIndex((value) => value.title === keyboardSelected);
-      unsubMethods.push(keyboardShortcutManager?.registerEvent({
-        keys: ['ArrowDown'],
-        action: () => setKeyboardSelected(
-          options.length - 1 <= indexOfCurrent
-            ? keyboardSelected
-            : options[indexOfCurrent + 1].title,
-        ),
-      }));
-
-      unsubMethods.push(keyboardShortcutManager?.registerEvent({
-        keys: ['ArrowUp'],
-        action: () => setKeyboardSelected(
-          indexOfCurrent <= 0
-            ? keyboardSelected
-            : options[indexOfCurrent - 1].title,
-        ),
-      }));
-    } else if (keyboardGroup === 'settingsPage' && !keyboardSelected) {
-      unsubMethods.push(keyboardShortcutManager?.registerEvent({
-        keys: ['ArrowDown'],
-        action: () => setKeyboardSelected(options[0].title),
-      }));
-    }
-
-    return () => {
-      unsubMethods.forEach((method) => {
-        if (method) {
-          method();
-        }
-      });
-    };
-  }, [keyboardShortcutManager, keyboardGroup, keyboardSelected]);
 
   const renderItem = ({ item }: { item: SettingsOptionProps }) => (
     <SettingsOption
