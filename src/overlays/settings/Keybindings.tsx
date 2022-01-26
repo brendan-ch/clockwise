@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { SectionList } from 'react-native';
+import AppContext from '../../../AppContext';
 // import AppContext from '../../../AppContext';
 import SettingsOption from '../../components/SettingsOption';
+import useKeyboardSelect from '../../helpers/hooks/useKeyboardSelect';
 import renderHeader from '../../helpers/renderers/renderHeader';
 import { Section, SettingsOptionProps } from '../../types';
 
@@ -99,26 +101,29 @@ const sections: Section[] = [
 function Keybindings() {
   // Name of the storage key selected out of options
   // Note that storage key is only used as an identifier in this case
-  // const [keyboardSelected, setKeyboardSelected] = useState<string | undefined>(undefined);
+  const {
+    keyboardShortcutManager,
+    keyboardGroup,
+  } = useContext(AppContext);
+  const { keyboardSelected, setKeyboardSelected } = useKeyboardSelect(
+    keyboardGroup,
+    options,
+    'title',
+  );
 
-  // const {
-  //   keyboardShortcutManager,
-  //   keyboardGroup,
-  // } = useContext(AppContext);
-
-  // useEffect(() => {
-  //   if (keyboardGroup === 'settingsPage' && !keyboardSelected) {
-  //     setKeyboardSelected(options[0].title);
-  //   } else if (keyboardGroup === 'settings') {
-  //     setKeyboardSelected(undefined);
-  //   }
-  // }, [keyboardShortcutManager, keyboardGroup]);
+  useEffect(() => {
+    if (keyboardGroup === 'settingsPage' && !keyboardSelected) {
+      setKeyboardSelected(options[0].title);
+    } else if (keyboardGroup === 'settings') {
+      setKeyboardSelected(undefined);
+    }
+  }, [keyboardShortcutManager, keyboardGroup]);
 
   const renderItem = ({ item }: { item: SettingsOptionProps }) => (
     <SettingsOption
       /* eslint-disable react/jsx-props-no-spreading */
       {...item}
-      // keyboardSelected={keyboardSelected === item.title}
+      keyboardSelected={keyboardSelected === item.title}
     />
   );
 
