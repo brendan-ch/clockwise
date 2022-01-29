@@ -4,14 +4,13 @@ import React, {
 import {
   StyleSheet, Text, Animated, Platform,
 } from 'react-native';
+import * as Linking from 'expo-linking';
 import AppContext from '../../AppContext';
 import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
+import ClickableText from './ClickableText';
 
 function LandscapeFooter() {
-  const sampleText = 'Text';
-  const displayText = false;
-
   const [hovering, setHovering] = useState(false);
 
   const opacityAnimation = useRef(new Animated.Value(1)).current;
@@ -44,11 +43,25 @@ function LandscapeFooter() {
       onMouseLeave={Platform.OS === 'web' ? () => setHovering(false) : undefined}
     >
       <Text style={[TextStyles.textRegular, {
-        color: colorValues.gray4,
+        color: colorValues.gray3,
       }]}
       >
-        {displayText ? sampleText : undefined}
-
+        {'Created by '}
+        <ClickableText
+          text="@unnameduser95"
+          onPress={() => Linking.openURL('https://github.com/unnameduser95')}
+          style={[TextStyles.textRegular, {
+            color: colorValues.gray3,
+          }]}
+        />
+        {' | '}
+        <ClickableText
+          text="GitHub"
+          onPress={() => Linking.openURL('https://github.com/unnameduser95/session')}
+          style={[TextStyles.textRegular, {
+            color: colorValues.gray3,
+          }]}
+        />
       </Text>
     </Animated.View>
   );
