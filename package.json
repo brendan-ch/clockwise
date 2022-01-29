@@ -16,6 +16,7 @@
     "@react-native-async-storage/async-storage": "~1.15.0",
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/native-stack": "^6.2.5",
+    "dotenv": "^14.3.2",
     "expo": "~43.0.2",
     "expo-app-loading": "^1.2.1",
     "expo-av": "~10.1.3",
