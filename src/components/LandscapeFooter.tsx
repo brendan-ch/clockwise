@@ -55,7 +55,14 @@ function LandscapeFooter() {
           }]}
         />
         {' | '}
-        GitHub | Privacy Policy
+        <ClickableText
+          text="GitHub"
+          onPress={() => Linking.openURL('https://github.com/unnameduser95/session')}
+          style={[TextStyles.textRegular, {
+            color: colorValues.gray3,
+          }]}
+        />
+        {' | Privacy Policy'}
       </Text>
     </Animated.View>
   );
