@@ -62,7 +62,6 @@ function LandscapeFooter() {
             color: colorValues.gray3,
           }]}
         />
-        {' | Privacy Policy'}
       </Text>
     </Animated.View>
   );
