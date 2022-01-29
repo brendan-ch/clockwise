@@ -1,6 +1,9 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Vercel production deployment
+
+env:
+  PRIVACY_POLICY_LINK: ${{ secrets.PRIVACY_POLICY_LINK }}
+  GITHUB_LINK: ${{ secrets.REPO_LINK }}
+  GITHUB_PROFILE_LINK: ${{ secrets.PROFILE_LINK }}
 
 # Controls when the workflow will run
 on:

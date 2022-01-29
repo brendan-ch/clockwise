@@ -1,5 +1,10 @@
 name: Vercel preview deployment
 
+env:
+  PRIVACY_POLICY_LINK: ${{ secrets.PRIVACY_POLICY_LINK }}
+  GITHUB_LINK: ${{ secrets.REPO_LINK }}
+  GITHUB_PROFILE_LINK: ${{ secrets.PROFILE_LINK }}
+
 # Controls when the workflow will run
 on:
   # Only run on pull request to master

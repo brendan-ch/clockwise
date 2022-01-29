@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import {
+  Linking,
   Platform,
   SectionList, StyleSheet, View,
 } from 'react-native';
 import Modal from 'react-native-modal';
+import Constants from 'expo-constants';
 import SettingsHeader from '../components/SettingsHeader';
 import SettingsOption from '../components/SettingsOption';
 import { checkNotifications, requestNotifications } from '../helpers/notification';
@@ -17,6 +19,8 @@ import {
 } from '../StorageKeys';
 import { Section, SettingsOptionProps, SettingsOptionPropsStatic } from '../types';
 import NotificationOverlay from '../components/NotificationOverlay';
+import ClickableText from '../components/ClickableText';
+import TextStyles from '../styles/Text';
 
 // Store all static option data in here
 // Make it easier to find and filter settings
@@ -48,6 +52,8 @@ const options: SettingsOptionPropsStatic[] = [
  */
 function SettingsPage() {
   const colorValues = useTheme();
+
+  const privacyPolicyLink = Constants.manifest?.extra?.privacyPolicyLink;
 
   checkNotifications()
     .then((value) => {
@@ -136,6 +142,14 @@ function SettingsPage() {
         sections={sections}
         renderItem={renderItem}
         renderSectionHeader={renderHeader}
+      />
+      <ClickableText
+        text="Privacy Policy"
+        style={[TextStyles.textRegular, {
+          color: colorValues.gray3,
+          marginBottom: 30,
+        }]}
+        onPress={privacyPolicyLink ? () => Linking.openURL(privacyPolicyLink) : undefined}
       />
       <Modal
         isVisible={overlay === 'notification'}
