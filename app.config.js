@@ -2,6 +2,7 @@ import 'dotenv/config';
 
 export default {
   name: 'Session',
+  description: 'Pomodoro timer and task management - An app designed to help you focus.',
   slug: 'session',
   scheme: 'session',
   userInterfaceStyle: 'automatic',
