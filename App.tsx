@@ -91,6 +91,7 @@ export default function App() {
     handleAddTask,
     handleChangeTask,
     handleDeleteTask,
+    bumpActualPomodoros,
   } = useTasks();
 
   // Helper methods
@@ -266,12 +267,18 @@ export default function App() {
 
   useEffect(() => {
     if (timeRemaining < 0) {
+      // Update actual sessions of selected tasks
+      if (mode === 'focus') {
+        bumpActualPomodoros();
+      }
+
       // Clear interval and set new state
       handleStateSwitch(mode === 'focus' ? 'break' : 'focus');
 
       // Set timer state
       setTimerState('stopped');
 
+      // Play the timer sound
       getData(ENABLE_TIMER_SOUND)
         .then((value) => {
           if (value === '1') {
