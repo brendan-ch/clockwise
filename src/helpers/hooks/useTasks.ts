@@ -117,7 +117,12 @@ function useTasks() {
 
   return {
     tasks,
-    setTasks,
+    setTasks: (newTasks: Task[]) => {
+      setTasks(newTasks);
+      setTasksInStorage(newTasks);
+    },
+    selected,
+    setSelected,
     setTasksInStorage,
     handleAddTask,
     handleDeleteTask,
