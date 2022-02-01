@@ -22,6 +22,7 @@ function useTasks() {
       title: 'New task',
       id: newId,
       estPomodoros: 1,
+      actualPomodoros: 0,
       syncData: {},
       completed: false,
     };
@@ -110,6 +111,27 @@ function useTasks() {
     }
   }
 
+  /**
+   * Bump the `actualPomodoros` count of selected tasks.
+   */
+  async function bumpActualPomodoros() {
+    const tasksCopy = tasks.slice();
+
+    await Promise.all(selected.map(async (item) => {
+      const i = tasksCopy.findIndex((value) => value.id === item);
+
+      if (tasksCopy[i] && tasksCopy[i]?.actualPomodoros === undefined) {
+        tasksCopy[i].actualPomodoros = 1;
+      } else if (tasksCopy[i]) {
+        // @ts-ignore
+        tasksCopy[i].actualPomodoros += 1;
+      }
+    }));
+
+    setTasks(tasksCopy);
+    setTasksInStorage(tasksCopy);
+  }
+
   // Load tasks on start
   useEffect(() => {
     populateTasksData();
@@ -127,6 +149,7 @@ function useTasks() {
     handleAddTask,
     handleDeleteTask,
     handleChangeTask,
+    bumpActualPomodoros,
   };
 }
 

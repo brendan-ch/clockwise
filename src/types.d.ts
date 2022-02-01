@@ -134,6 +134,7 @@ interface Section {
 interface Task {
   title: string,
   estPomodoros: number,
+  actualPomodoros?: number,
   id: number,
   syncData: {
     notion?: {

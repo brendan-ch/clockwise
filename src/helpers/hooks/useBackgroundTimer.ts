@@ -68,13 +68,8 @@ function useBackgroundTimer() {
     const newTimerLength = Number(newTimerLengthRaw);
     const newTimeRemaining = (newStart + newTimerLength) - Date.now();
 
-    if (newTimeRemaining > 0) {
-      context.startTimer(newTimeRemaining);
-
-      context.setMode(mode === 'focus' ? 'focus' : 'break');
-    } else {
-      context.handleStateSwitch(mode === 'focus' ? 'break' : 'focus');
-    }
+    context.startTimer(newTimeRemaining);
+    context.setMode(mode === 'focus' ? 'focus' : 'break');
 
     removeData(START);
     removeData(TIMER_LENGTH);
