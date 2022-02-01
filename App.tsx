@@ -38,6 +38,8 @@ import {
   BREAK_TIME_MINUTES, ENABLE_TIMER_ALERTS, ENABLE_TIMER_SOUND, FOCUS_TIME_MINUTES,
 } from './src/StorageKeys';
 import SettingsContext from './SettingsContext';
+import useTasks from './src/helpers/hooks/useTasks';
+import TaskContext from './TaskContext';
 
 const MIN_25 = 1500000;
 // const MIN_5 = 300000;
@@ -79,7 +81,17 @@ export default function App() {
   });
 
   // Track selected task IDs
-  const [selected, setSelected] = useState<number[]>([]);
+  // const [selected, setSelected] = useState<number[]>([]);
+
+  const {
+    selected,
+    setSelected,
+    tasks,
+    setTasks,
+    handleAddTask,
+    handleChangeTask,
+    handleDeleteTask,
+  } = useTasks();
 
   // Helper methods
   /**
@@ -383,7 +395,19 @@ export default function App() {
             ...settings,
           }}
           >
-            <TimerPage />
+            <TaskContext.Provider
+              value={{
+                tasks,
+                selected,
+                setTasks,
+                setSelected,
+                handleAddTask,
+                handleChangeTask,
+                handleDeleteTask,
+              }}
+            >
+              <TimerPage />
+            </TaskContext.Provider>
           </SettingsContext.Provider>
           {windowSize === 'landscape' ? (
             <LandscapeFooter />
