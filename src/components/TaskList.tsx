@@ -193,20 +193,22 @@ function TaskList() {
       const { keyboardShortcutManager } = context;
       if (!keyboardShortcutManager) return () => {};
 
-      unsubMethods.push(keyboardShortcutManager.registerEvent({
-        keys: ['a'],
-        action: () => handleAddTask(),
-      }));
+      if (context.timerState === 'stopped' || context.mode === 'break') {
+        unsubMethods.push(keyboardShortcutManager.registerEvent({
+          keys: ['a'],
+          action: () => handleAddTask(),
+        }));
 
-      unsubMethods.push(keyboardShortcutManager.registerEvent({
-        keys: ['+'],
-        action: () => handleAddTask(),
-      }));
+        unsubMethods.push(keyboardShortcutManager.registerEvent({
+          keys: ['+'],
+          action: () => handleAddTask(),
+        }));
 
-      unsubMethods.push(keyboardShortcutManager.registerEvent({
-        keys: ['='],
-        action: () => handleAddTask(),
-      }));
+        unsubMethods.push(keyboardShortcutManager.registerEvent({
+          keys: ['='],
+          action: () => handleAddTask(),
+        }));
+      }
 
       for (let i = 0; i < 9; i += 1) {
         unsubMethods.push(keyboardShortcutManager.registerEvent({
@@ -228,7 +230,7 @@ function TaskList() {
     return () => unsubMethods.forEach((value) => {
       value();
     });
-  }, [context.keyboardGroup, tasks, expandedTask]);
+  }, [context.keyboardGroup, tasks, expandedTask, context.timerState]);
 
   useEffect(() => {
     handleAutoScroll(expandedTask, 0.5);
@@ -265,17 +267,17 @@ function TaskList() {
         ]}
         headerKeybindings={{
           title: 'header',
-          pressLeft: [['s']],
+          pressLeft: context.timerState === 'stopped' || context.mode === 'break' ? [['s']] : undefined,
           pressInput: [['Enter']],
         }}
         data={[
           {
             type: 'number',
             title: 'est. sessions',
+            subtitle: 'actual sessions: 0',
             value: item.estPomodoros,
             onChange: (data) => handleChangeTask('estPomodoros', data, item.id),
             disabled: !timerStopped && context.mode === 'focus',
-            // keybindings: [['e']],
           },
           !timerStopped && context.mode === 'focus' ? ({
             type: 'icon',
