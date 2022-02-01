@@ -6,14 +6,12 @@ import {
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import AppContext from '../../AppContext';
-import generateTaskId from '../helpers/generateId';
-import { getData, storeData } from '../helpers/storage';
 import useTheme from '../helpers/hooks/useTheme';
-import { TASKS } from '../StorageKeys';
 import TextStyles from '../styles/Text';
 import { Task } from '../types';
 import SelectorGroup from './SelectorGroup';
 import SettingsOption from './SettingsOption';
+import TaskContext from '../../TaskContext';
 
 interface TimeoutTracker {
   /**
@@ -27,15 +25,24 @@ interface TimeoutTracker {
  * Task list component that displays selector components and an "Add task" button.
  */
 function TaskList() {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const {
+    tasks,
+    setTasks,
+    selected,
+    setSelected,
+    handleAddTask,
+    handleChangeTask,
+    handleDeleteTask,
+  } = useContext(TaskContext);
+
+  // const [tasks, setTasks] = useState<Task[]>([]);
 
   // ID of expanded task
   const [expandedTask, setExpandedTask] = useState(-1);
-  const [error, setError] = useState<string | undefined>(undefined);
   const [deletionTimeout, setDeletionTimeout] = useState<TimeoutTracker | undefined>(undefined);
 
   const context = useContext(AppContext);
-  const selectedTasks = tasks.filter(((task) => context.selected.includes(task.id)));
+  const selectedTasks = tasks.filter(((task) => selected.includes(task.id)));
 
   const listRef = useRef<FlatList>();
 
@@ -64,9 +71,9 @@ function TaskList() {
    * @param id
    */
   function handleSelect(id: number) {
-    const newSelected = context.selected.slice();
+    const newSelected = selected.slice();
     newSelected.push(id);
-    context.setSelected(newSelected);
+    setSelected(newSelected);
   }
 
   /**
@@ -83,80 +90,10 @@ function TaskList() {
    * @param id
    */
   function handleDeselect(id: number) {
-    const newSelected = context.selected.slice();
+    const newSelected = selected.slice();
     const index = newSelected.indexOf(id);
     newSelected.splice(index, 1);
-    context.setSelected(newSelected);
-  }
-
-  /**
-   * Add a new task to state.
-   */
-  async function handleAddTask() {
-    const newId = await generateTaskId();
-
-    const newTask: Task = {
-      title: 'New task',
-      id: newId,
-      estPomodoros: 1,
-      syncData: {},
-      completed: false,
-    };
-
-    const selectedCopy = context.selected.slice();
-    selectedCopy.push(newId);
-    context.setSelected(selectedCopy);
-
-    setTasks([
-      ...tasks,
-      newTask,
-    ]);
-
-    setTasksInStorage([
-      ...tasks,
-      newTask,
-    ]);
-  }
-
-  /**
-   * Handle changing a task in the state.
-   */
-  function handleChangeTask(key: string, value: any, id: number) {
-    const tasksCopy = tasks.slice();
-    const index = tasksCopy.findIndex((existingTask) => id === existingTask.id);
-
-    tasksCopy[index] = {
-      ...tasksCopy[index],
-      [key]: value,
-    };
-
-    setTasks(tasksCopy);
-    setTasksInStorage(tasksCopy);
-  }
-
-  /**
-   * Remove a task from state.
-   * @param id
-   */
-  function handleDeleteTask(id: number) {
-    const tasksCopy = tasks.slice();
-    const index = tasksCopy.findIndex((existingTask) => id === existingTask.id);
-
-    if (id === expandedTask) {
-      setExpandedTask(-1);
-    }
-
-    tasksCopy.splice(index, 1);
-
-    if (context.selected.includes(id)) {
-      const selectedCopy = context.selected.slice();
-      const indexSelected = selectedCopy.findIndex((existing) => existing === id);
-      selectedCopy.splice(indexSelected, 1);
-      context.setSelected(selectedCopy);
-    }
-
-    setTasks(tasksCopy);
-    setTasksInStorage(tasksCopy);
+    setSelected(newSelected);
   }
 
   /**
@@ -178,7 +115,6 @@ function TaskList() {
       // handleDeleteTask(id);
       tasksCopy.splice(deletedIndex, 1);
       setTasks(tasksCopy);
-      setTasksInStorage(tasksCopy);
 
       setDeletionTimeout(undefined);
     }, 3000);
@@ -199,7 +135,6 @@ function TaskList() {
     });
 
     setTasks(tasksCopy);
-    setTasksInStorage(tasksCopy);
 
     if (Platform.OS === 'android' || Platform.OS === 'ios') {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -220,39 +155,10 @@ function TaskList() {
 
       setDeletionTimeout(undefined);
       setTasks(tasksCopy);
-      setTasksInStorage(tasksCopy);
     }
   }
 
   const colorValues = useTheme();
-
-  /**
-   * Save tasks to local storage.
-   * @param tasks
-   */
-  async function setTasksInStorage(newTasks: Task[]) {
-    const stringified = JSON.stringify(newTasks);
-
-    await storeData(TASKS, stringified);
-  }
-
-  /**
-   * Populate tasks data from storage.
-   */
-  async function populateTasksData() {
-    const loadedTasks = await getData(TASKS);
-    if (!loadedTasks) {
-      return;
-    }
-
-    try {
-      const parsed = JSON.parse(loadedTasks);
-
-      setTasks(parsed);
-    } catch (e) {
-      setError('Unable to load tasks. Please reset your browser\'s cache and try again.');
-    }
-  }
 
   useEffect(() => {
     if (context.timerState === 'stopped' && tasks.length > 0) {
@@ -276,7 +182,6 @@ function TaskList() {
       });
 
       setTasks(tasksCopy);
-      setTasksInStorage(tasksCopy);
     }
   }, [context.timerState, tasks, deletionTimeout]);
 
@@ -329,15 +234,10 @@ function TaskList() {
     handleAutoScroll(expandedTask, 0.5);
   }, [expandedTask]);
 
-  // Load tasks on start
-  useEffect(() => {
-    populateTasksData();
-  }, []);
-
   const taskRenderer = ({ item }: { item: Task }) => {
     let iconLeftDisplay;
 
-    if (timerStopped && context.selected.includes(item.id) && context.mode === 'focus') {
+    if (timerStopped && selected.includes(item.id) && context.mode === 'focus') {
       iconLeftDisplay = 'checkbox';
     } else if (timerStopped && context.mode === 'focus') {
       iconLeftDisplay = 'checkbox-outline';
@@ -405,7 +305,7 @@ function TaskList() {
         }) : ({
           title: item.title,
           iconLeft: iconLeftDisplay,
-          onPressLeft: context.selected.includes(item.id)
+          onPressLeft: selected.includes(item.id)
             ? () => handleDeselect(item.id)
             : () => handleSelect(item.id),
           type: 'icon',
@@ -460,30 +360,20 @@ function TaskList() {
         </Text>
         ) : undefined
 }
-      {error ? (
-        <Text style={[TextStyles.textRegular, {
-          color: colorValues.primary,
-        }]}
-        >
-          {error}
-
-        </Text>
-      ) : (
-        <FlatList
-          style={styles.taskList}
-          data={!timerStopped && context.mode === 'focus'
-            ? selectedTasks
-            : tasks}
-          renderItem={taskRenderer}
-          maxToRenderPerBatch={10}
-          keyboardDismissMode="on-drag"
-          keyboardShouldPersistTaps="never"
-          scrollsToTop
-          scrollToOverflowEnabled
-          // @ts-ignore
-          ref={listRef}
-        />
-      )}
+      <FlatList
+        style={styles.taskList}
+        data={!timerStopped && context.mode === 'focus'
+          ? selectedTasks
+          : tasks}
+        renderItem={taskRenderer}
+        maxToRenderPerBatch={10}
+        keyboardDismissMode="on-drag"
+        keyboardShouldPersistTaps="never"
+        scrollsToTop
+        scrollToOverflowEnabled
+        // @ts-ignore
+        ref={listRef}
+      />
     </View>
   );
 }
