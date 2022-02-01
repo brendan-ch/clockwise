@@ -239,6 +239,7 @@ function SelectorGroup({
       }}
       titleStyle={item.titleStyle}
       onInputSelect={item.onInputSelect}
+      subtitle={item.subtitle}
     />
   );
 
