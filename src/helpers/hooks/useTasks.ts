@@ -22,6 +22,7 @@ function useTasks() {
       title: 'New task',
       id: newId,
       estPomodoros: 1,
+      actualPomodoros: 0,
       syncData: {},
       completed: false,
     };
