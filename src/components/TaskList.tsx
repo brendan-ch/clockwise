@@ -274,7 +274,7 @@ function TaskList() {
           {
             type: 'number',
             title: 'est. sessions',
-            subtitle: 'actual sessions: 0',
+            subtitle: item.actualPomodoros ? `actual sessions: ${item.actualPomodoros}` : undefined,
             value: item.estPomodoros,
             onChange: (data) => handleChangeTask('estPomodoros', data, item.id),
             disabled: !timerStopped && context.mode === 'focus',
