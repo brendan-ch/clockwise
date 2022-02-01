@@ -42,6 +42,10 @@ function TaskList() {
   const [deletionTimeout, setDeletionTimeout] = useState<TimeoutTracker | undefined>(undefined);
 
   const context = useContext(AppContext);
+
+  // Displayed tasks while timer is running
+  // Keybind registration should refer to this array
+  // instead of global tasks array when timer is running
   const selectedTasks = tasks.filter(((task) => selected.includes(task.id)));
 
   const listRef = useRef<FlatList>();
@@ -56,7 +60,9 @@ function TaskList() {
    * @param id
    */
   function handleAutoScroll(id: number, pos = 0) {
-    const index = tasks.findIndex((task) => task.id === id);
+    const index = context.timerState === 'running'
+      ? selectedTasks.findIndex((task) => task.id === id)
+      : tasks.findIndex((task) => task.id === id);
     if (index === -1) return;
 
     listRef?.current?.scrollToIndex({
@@ -208,23 +214,40 @@ function TaskList() {
           keys: ['='],
           action: () => handleAddTask(),
         }));
-      }
 
-      for (let i = 0; i < 9; i += 1) {
+        for (let i = 0; i < 9; i += 1) {
+          unsubMethods.push(keyboardShortcutManager.registerEvent({
+            keys: [`${i + 1}`],
+            action: () => handleExpand(tasks[i] && tasks[i].id !== expandedTask
+              ? tasks[i].id
+              : -1),
+          }));
+        }
+
         unsubMethods.push(keyboardShortcutManager.registerEvent({
-          keys: [`${i + 1}`],
-          action: () => handleExpand(tasks[i] && tasks[i].id !== expandedTask
-            ? tasks[i].id
+          keys: ['0'],
+          action: () => handleExpand(tasks[9] && tasks[9].id !== expandedTask
+            ? tasks[9].id
+            : -1),
+        }));
+      } else if (context.timerState === 'running' && context.mode === 'focus') {
+        // Refer to selectedTasks array
+        for (let i = 0; i < 9; i += 1) {
+          unsubMethods.push(keyboardShortcutManager.registerEvent({
+            keys: [`${i + 1}`],
+            action: () => handleExpand(selectedTasks[i] && selectedTasks[i].id !== expandedTask
+              ? selectedTasks[i].id
+              : -1),
+          }));
+        }
+
+        unsubMethods.push(keyboardShortcutManager.registerEvent({
+          keys: ['0'],
+          action: () => handleExpand(selectedTasks[9] && selectedTasks[9].id !== expandedTask
+            ? selectedTasks[9].id
             : -1),
         }));
       }
-
-      unsubMethods.push(keyboardShortcutManager.registerEvent({
-        keys: ['0'],
-        action: () => handleExpand(tasks[9] && tasks[9].id !== expandedTask
-          ? tasks[9].id
-          : -1),
-      }));
     }
 
     return () => unsubMethods.forEach((value) => {
