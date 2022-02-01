@@ -120,7 +120,7 @@ function useTasks() {
     await Promise.all(selected.map(async (item) => {
       const i = tasksCopy.findIndex((value) => value.id === item);
 
-      if (tasksCopy[i]?.actualPomodoros === undefined) {
+      if (tasksCopy[i] && tasksCopy[i]?.actualPomodoros === undefined) {
         tasksCopy[i].actualPomodoros = 1;
       } else if (tasksCopy[i]) {
         // @ts-ignore
