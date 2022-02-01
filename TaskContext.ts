@@ -6,7 +6,7 @@ import { Task } from './src/types';
 interface DefaultTaskState {
   tasks: Task[],
   selected: number[],
-  setTasks: Dispatch<SetStateAction<Task[]>>,
+  setTasks: (tasks: Task[]) => any,
   setSelected: Dispatch<SetStateAction<number[]>>,
   handleAddTask: () => any,
   handleChangeTask: (key: string, value: any, id: number) => any,
