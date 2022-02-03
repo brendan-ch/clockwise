@@ -2,7 +2,7 @@ import React, {
   useState, useEffect, useContext, useRef,
 } from 'react';
 import {
-  FlatList, StyleSheet, View, Text, Platform,
+  FlatList, StyleSheet, View, Text, Platform, NativeSyntheticEvent, NativeScrollEvent,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import AppContext from '../../AppContext';
@@ -21,10 +21,18 @@ interface TimeoutTracker {
   timeout: any,
 }
 
+interface Props {
+  /**
+   * Returns a boolean indicating whether the scroll list is at the top.
+   */
+  /* eslint-disable-next-line */
+  setAtTop?: (value: boolean) => any,
+}
+
 /**
  * Task list component that displays selector components and an "Add task" button.
  */
-function TaskList() {
+function TaskList({ setAtTop }: Props) {
   const {
     tasks,
     setTasks,
@@ -54,6 +62,17 @@ function TaskList() {
 
   // Indicate whether task can be deselected by clicking the primary touch area
   const allowDeselect = !timerStopped && context.mode === 'focus';
+
+  /**
+   * Handle scroll events in the task list.
+   * @param e
+   */
+  function handleScroll(e: NativeSyntheticEvent<NativeScrollEvent>) {
+    const offset = e.nativeEvent.contentOffset.y;
+    if (setAtTop) {
+      setAtTop(offset <= 0);
+    }
+  }
 
   /**
    * Automatically scroll to an item in the list.
@@ -398,6 +417,7 @@ function TaskList() {
         scrollToOverflowEnabled
         // @ts-ignore
         ref={listRef}
+        onScroll={(e) => handleScroll(e)}
       />
     </View>
   );
