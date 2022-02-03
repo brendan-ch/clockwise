@@ -2,7 +2,7 @@ import React, {
   useState, useEffect, useContext, useRef,
 } from 'react';
 import {
-  FlatList, StyleSheet, View, Text, Platform,
+  FlatList, StyleSheet, View, Text, Platform, NativeSyntheticEvent, NativeScrollEvent,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import AppContext from '../../AppContext';
@@ -12,6 +12,7 @@ import { Task } from '../types';
 import SelectorGroup from './SelectorGroup';
 import SettingsOption from './SettingsOption';
 import TaskContext from '../../TaskContext';
+import useWindowSize from '../helpers/hooks/useWindowSize';
 
 interface TimeoutTracker {
   /**
@@ -21,10 +22,18 @@ interface TimeoutTracker {
   timeout: any,
 }
 
+interface Props {
+  /**
+   * Returns a boolean indicating whether the scroll list is at the top.
+   */
+  /* eslint-disable-next-line */
+  setAtTop?: (value: boolean) => any,
+}
+
 /**
  * Task list component that displays selector components and an "Add task" button.
  */
-function TaskList() {
+function TaskList({ setAtTop }: Props) {
   const {
     tasks,
     setTasks,
@@ -52,8 +61,21 @@ function TaskList() {
 
   const timerStopped = !['running', 'paused'].includes(context.timerState);
 
+  const windowSize = useWindowSize();
+
   // Indicate whether task can be deselected by clicking the primary touch area
   const allowDeselect = !timerStopped && context.mode === 'focus';
+
+  /**
+   * Handle scroll events in the task list.
+   * @param e
+   */
+  function handleScroll(e: NativeSyntheticEvent<NativeScrollEvent>) {
+    const offset = e.nativeEvent.contentOffset.y;
+    if (setAtTop) {
+      setAtTop(offset <= 0);
+    }
+  }
 
   /**
    * Automatically scroll to an item in the list.
@@ -256,7 +278,7 @@ function TaskList() {
   }, [context.keyboardGroup, tasks, expandedTask, context.timerState]);
 
   useEffect(() => {
-    handleAutoScroll(expandedTask, 0.5);
+    handleAutoScroll(expandedTask, 0.4);
   }, [expandedTask]);
 
   const taskRenderer = ({ item }: { item: Task }) => {
@@ -350,6 +372,14 @@ function TaskList() {
     );
   };
 
+  // Render blank view for footer
+  const footerRenderer = () => (
+    <View style={{
+      height: 110,
+    }}
+    />
+  );
+
   return (
     <View style={[styles.container]}>
       {!timerStopped && context.mode === 'focus' ? (
@@ -398,6 +428,9 @@ function TaskList() {
         scrollToOverflowEnabled
         // @ts-ignore
         ref={listRef}
+        onScroll={(e) => handleScroll(e)}
+        overScrollMode="always"
+        ListFooterComponent={windowSize === 'portrait' ? footerRenderer : undefined}
       />
     </View>
   );
