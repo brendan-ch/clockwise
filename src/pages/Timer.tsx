@@ -293,7 +293,8 @@ const styles = StyleSheet.create({
   bottomContainer: {
     width: '100%',
     position: 'absolute',
-    bottom: 70,
+    height: 200,
+    bottom: 0,
     flexDirection: 'row',
     justifyContent: 'center',
     zIndex: 1,
