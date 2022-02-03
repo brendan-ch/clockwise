@@ -231,19 +231,6 @@ export default function TimerPage() {
             setAtTop={setAtTop}
           />
         </View>
-        {/* {isAtTop ? (
-          <View style={styles.bottomContainer}>
-            <ActionButtonBar
-              style={styles.actionButtonBar}
-              state={timerState}
-              onStartPress={() => startTimer()}
-              onPausePress={() => pauseTimer()}
-              onResetPress={() => stopTimer()}
-              onResumePress={() => startTimer()}
-              text={actionBarText}
-            />
-          </View>
-        ) : undefined} */}
       </Animated.View>
       {isAtTop ? (
         <View style={[styles.bottomContainer, {
