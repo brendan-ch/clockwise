@@ -1,5 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useContext, useRef } from 'react';
+import React, {
+  useEffect, useContext, useRef, useState,
+} from 'react';
 import {
   Animated,
   Platform,
@@ -21,6 +23,8 @@ import useTimerNotification from '../helpers/hooks/useTimerNotifications';
  * @returns
  */
 export default function TimerPage() {
+  const [isAtTop, setAtTop] = useState(true);
+
   const colorValues = useTheme();
 
   const size = useWindowSize();
@@ -223,9 +227,29 @@ export default function TimerPage() {
           />
         </View>
         <View style={styles.middleContainer}>
-          <TaskList />
+          <TaskList
+            setAtTop={setAtTop}
+          />
         </View>
-        <View style={styles.bottomContainer}>
+        {/* {isAtTop ? (
+          <View style={styles.bottomContainer}>
+            <ActionButtonBar
+              style={styles.actionButtonBar}
+              state={timerState}
+              onStartPress={() => startTimer()}
+              onPausePress={() => pauseTimer()}
+              onResetPress={() => stopTimer()}
+              onResumePress={() => startTimer()}
+              text={actionBarText}
+            />
+          </View>
+        ) : undefined} */}
+      </Animated.View>
+      {isAtTop ? (
+        <View style={[styles.bottomContainer, {
+          backgroundColor: colorValues.background,
+        }]}
+        >
           <ActionButtonBar
             style={styles.actionButtonBar}
             state={timerState}
@@ -236,7 +260,7 @@ export default function TimerPage() {
             text={actionBarText}
           />
         </View>
-      </Animated.View>
+      ) : undefined}
       <StatusBar style="auto" />
     </View>
   );
@@ -268,12 +292,17 @@ const styles = StyleSheet.create({
   },
   bottomContainer: {
     width: '100%',
-    justifyContent: 'flex-start',
+    position: 'absolute',
+    bottom: 70,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    zIndex: 1,
   },
   middleContainer: {
     marginTop: 10,
     flex: 1,
     width: '100%',
+    zIndex: 0,
   },
   landscapeContainer: {
     flex: 1,
