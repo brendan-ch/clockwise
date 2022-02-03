@@ -275,7 +275,7 @@ function TaskList({ setAtTop }: Props) {
   }, [context.keyboardGroup, tasks, expandedTask, context.timerState]);
 
   useEffect(() => {
-    handleAutoScroll(expandedTask, 0.5);
+    handleAutoScroll(expandedTask, 0.4);
   }, [expandedTask]);
 
   const taskRenderer = ({ item }: { item: Task }) => {
