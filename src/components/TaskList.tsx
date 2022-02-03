@@ -12,6 +12,7 @@ import { Task } from '../types';
 import SelectorGroup from './SelectorGroup';
 import SettingsOption from './SettingsOption';
 import TaskContext from '../../TaskContext';
+import useWindowSize from '../helpers/hooks/useWindowSize';
 
 interface TimeoutTracker {
   /**
@@ -59,6 +60,8 @@ function TaskList({ setAtTop }: Props) {
   const listRef = useRef<FlatList>();
 
   const timerStopped = !['running', 'paused'].includes(context.timerState);
+
+  const windowSize = useWindowSize();
 
   // Indicate whether task can be deselected by clicking the primary touch area
   const allowDeselect = !timerStopped && context.mode === 'focus';
@@ -427,7 +430,7 @@ function TaskList({ setAtTop }: Props) {
         ref={listRef}
         onScroll={(e) => handleScroll(e)}
         overScrollMode="always"
-        ListFooterComponent={footerRenderer}
+        ListFooterComponent={windowSize === 'portrait' ? footerRenderer : undefined}
       />
     </View>
   );
