@@ -61,7 +61,7 @@ function LandscapeFooter() {
         />
         {' | '}
         <ClickableText
-          text="GitHub"
+          text="Licenses"
           onPress={githubLink ? () => Linking.openURL(githubLink) : undefined}
           style={[TextStyles.textRegular, {
             color: colorValues.gray3,
