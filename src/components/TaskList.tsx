@@ -369,6 +369,14 @@ function TaskList({ setAtTop }: Props) {
     );
   };
 
+  // Render blank view for footer
+  const footerRenderer = () => (
+    <View style={{
+      height: 110,
+    }}
+    />
+  );
+
   return (
     <View style={[styles.container]}>
       {!timerStopped && context.mode === 'focus' ? (
@@ -418,6 +426,8 @@ function TaskList({ setAtTop }: Props) {
         // @ts-ignore
         ref={listRef}
         onScroll={(e) => handleScroll(e)}
+        overScrollMode="always"
+        ListFooterComponent={footerRenderer}
       />
     </View>
   );
