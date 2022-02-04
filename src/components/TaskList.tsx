@@ -402,14 +402,14 @@ function TaskList({ setAtTop }: Props) {
         />
       )}
       {
-      (timerStopped && tasks.length === 0)
+      ((timerStopped || context.mode === 'break') && tasks.length === 0)
       || (!timerStopped && selectedTasks.length === 0 && context.mode === 'focus') ? (
         <Text style={[TextStyles.textRegular, {
           color: colorValues.gray2,
           marginTop: 10,
         }]}
         >
-          {timerStopped
+          {timerStopped || context.mode === 'break'
             ? 'Add some tasks to keep track of them during your session.'
             : 'No tasks to display.'}
         </Text>
