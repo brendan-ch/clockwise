@@ -431,6 +431,7 @@ function TaskList({ setAtTop }: Props) {
         onScroll={(e) => handleScroll(e)}
         overScrollMode="always"
         ListFooterComponent={windowSize === 'portrait' ? footerRenderer : undefined}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );
