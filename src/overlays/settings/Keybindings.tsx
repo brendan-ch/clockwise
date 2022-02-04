@@ -129,6 +129,7 @@ function Keybindings() {
 
   return (
     <SectionList
+      showsVerticalScrollIndicator={false}
       keyExtractor={(item) => item.title!}
       sections={sections}
       renderSectionHeader={renderHeader}
