@@ -54,6 +54,7 @@ function SettingsPage() {
   const colorValues = useTheme();
 
   const privacyPolicyLink = Constants.manifest?.extra?.privacyPolicyLink;
+  const githubLink = Constants.manifest?.extra?.githubLink;
 
   checkNotifications()
     .then((value) => {
@@ -147,9 +148,17 @@ function SettingsPage() {
         text="Privacy Policy"
         style={[TextStyles.textRegular, {
           color: colorValues.gray3,
-          marginBottom: 30,
+          marginBottom: 10,
         }]}
         onPress={privacyPolicyLink ? () => Linking.openURL(privacyPolicyLink) : undefined}
+      />
+      <ClickableText
+        text="Licenses"
+        style={[TextStyles.textRegular, {
+          color: colorValues.gray3,
+          marginBottom: 30,
+        }]}
+        onPress={githubLink ? () => Linking.openURL(githubLink) : undefined}
       />
       <Modal
         isVisible={overlay === 'notification'}
