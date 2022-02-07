@@ -82,7 +82,7 @@ function TimerSettingsPane() {
       }
     });
 
-  const settingsData = useSettingsData(options);
+  const { settingsData, handleChange } = useSettingsData(options);
 
   const sections: Section[] = [
     {
@@ -139,6 +139,10 @@ function TimerSettingsPane() {
       onSelect={() => handleSelectAndResetKeyboard(item.title)}
       onDeselect={() => handleSelectAndResetKeyboard()}
       keyboardSelected={keyboardSelected === item.title}
+      onChange={(newData: any) => handleChange(
+        options.find((value) => value.title === item.title)!.storageKey,
+        newData,
+      )}
     />
   );
 

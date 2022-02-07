@@ -94,7 +94,7 @@ function SettingsPage() {
   };
 
   // Sync options with storage
-  const settingsData = useSettingsData(options);
+  const { settingsData, handleChange } = useSettingsData(options);
 
   const sections: Section[] = [
     {
@@ -128,6 +128,10 @@ function SettingsPage() {
       onSelect={() => setSelected(item.title)}
       onDeselect={() => setSelected(undefined)}
       selected={selected === item.title}
+      onChange={(newData: any) => handleChange(
+        options.find((value) => value.title === item.title)!.storageKey,
+        newData,
+      )}
     />
   );
 
