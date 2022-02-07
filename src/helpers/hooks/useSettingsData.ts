@@ -16,14 +16,17 @@ function useSettingsData(options: SettingsOptionPropsStatic[]) {
 
   /**
    * Handle storing data
-   * @param key The storage key.
+   * @param key The storage key or item index in the array.
+   * If an index is provided, it's assumed that the options array has
+   * a matching item at index.
    * @param data
    */
-  async function handleChange(key: string, data: number | boolean) {
-    const matchingOption = options.find((value) => value.storageKey === key);
+  async function handleChange(key: string | number, data: number | boolean) {
+    const matchingOption = typeof key === 'number' ? options[key] : options.find((value) => value.storageKey === key);
+    if (!matchingOption) return;
 
     // Set in state
-    const settingsIndex = settingsData.findIndex(
+    const settingsIndex = typeof key === 'number' ? key : settingsData.findIndex(
       (value) => matchingOption?.title === value.title,
     );
 
@@ -52,12 +55,12 @@ function useSettingsData(options: SettingsOptionPropsStatic[]) {
     }
 
     // Set data in storage
-    await storeData(key, convertedData);
+    await storeData(matchingOption.storageKey, convertedData);
 
     // @ts-ignore
-    if (settings[key] !== undefined && settings.setSetting) {
+    if (settings[matchingOption.storageKey] !== undefined && settings.setSetting) {
       // Update the key
-      settings.setSetting(key, data);
+      settings.setSetting(matchingOption.storageKey, data);
     }
 
     // Update in memory
