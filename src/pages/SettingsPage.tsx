@@ -114,7 +114,7 @@ function SettingsPage() {
     />
   );
 
-  const renderItem = ({ item }: { item: SettingsOptionProps }) => (
+  const renderItem = ({ item, index }: { item: SettingsOptionProps, index: number }) => (
     <SettingsOption
       /* eslint-disable react/jsx-props-no-spreading */
       {...item}
@@ -129,7 +129,7 @@ function SettingsPage() {
       onDeselect={() => setSelected(undefined)}
       selected={selected === item.title}
       onChange={(newData: any) => handleChange(
-        options.find((value) => value.title === item.title)!.storageKey,
+        index,
         newData,
       )}
     />

@@ -124,7 +124,7 @@ function TimerSettingsPane() {
     }
   }, [keyboardShortcutManager, keyboardGroup]);
 
-  const renderItem = ({ item }: { item: SettingsOptionProps }) => (
+  const renderItem = ({ item, index }: { item: SettingsOptionProps, index: number }) => (
     <SettingsOption
       /* eslint-disable react/jsx-props-no-spreading */
       {...item}
@@ -140,7 +140,7 @@ function TimerSettingsPane() {
       onDeselect={() => handleSelectAndResetKeyboard()}
       keyboardSelected={keyboardSelected === item.title}
       onChange={(newData: any) => handleChange(
-        options.find((value) => value.title === item.title)!.storageKey,
+        index,
         newData,
       )}
     />
