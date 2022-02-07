@@ -10,7 +10,7 @@ import { getData, storeData } from '../storage';
 function useSettingsData(options: SettingsOptionPropsStatic[]) {
   const [settingsData, setSettingsData] = useState<SettingsOptionProps[]>([]);
   // Force re-rendering of updated settings data
-  const [renderCount, setRenderCount] = useState(0);
+  // const [renderCount, setRenderCount] = useState(0);
 
   const settings = useContext(SettingsContext);
 
@@ -20,6 +20,26 @@ function useSettingsData(options: SettingsOptionPropsStatic[]) {
    * @param data
    */
   async function handleChange(key: string, data: number | boolean) {
+    const matchingOption = options.find((value) => value.storageKey === key);
+
+    // Set in state
+    const settingsIndex = settingsData.findIndex(
+      (value) => matchingOption?.title === value.title,
+    );
+
+    if (settingsIndex > -1) {
+      const modifiedSetting: SettingsOptionProps = {
+        ...settingsData[settingsIndex],
+        value: data,
+      };
+
+      const modifiedSettingsData = settingsData.slice();
+      modifiedSettingsData[settingsIndex] = modifiedSetting;
+      setSettingsData(modifiedSettingsData);
+
+      // Update in storage
+    }
+
     // Attempt to serialize data
     let convertedData: string;
 
@@ -39,6 +59,31 @@ function useSettingsData(options: SettingsOptionPropsStatic[]) {
       // Update the key
       settings.setSetting(key, data);
     }
+
+    // Update in memory
+    // const settingsDataTemp: SettingsOptionProps[] = [];
+    // settingsData.forEach((option) => {
+    //   const matchingOption = options.find((item) => item.storageKey === key);
+
+    //   settingsDataTemp.push({
+    //     ...option,
+    //     value: matchingOption?.title === option.title
+    //       ? data
+    //       : option.value,
+    //     onChange: async (newData: any) => {
+    //       if (matchingOption?.validator) {
+    //         const result = await matchingOption.validator(newData);
+    //         if (!result) return;
+    //       }
+
+    //       if (!matchingOption?.storageKey) return;
+
+    //       await handleChange(matchingOption?.storageKey, newData);
+    //     },
+    //   });
+    // });
+
+    // setSettingsData(settingsDataTemp);
   }
 
   /**
@@ -70,16 +115,16 @@ function useSettingsData(options: SettingsOptionPropsStatic[]) {
       settingsDataTemp.push({
         ...option,
         value: convertedData,
-        onChange: async (newData: any) => {
-          if (option.validator) {
-            const result = await option.validator(newData);
-            if (!result) return;
-          }
-          // Serialize the data
-          await handleChange(option.storageKey, newData);
+        // onChange: async (newData: any) => {
+        // if (option.validator) {
+        //   const result = await option.validator(newData);
+        //   if (!result) return;
+        // }
+        // Serialize the data
+        // await handleChange(option.storageKey, newData);
 
-          setRenderCount(renderCount === 0 ? 1 : 0);
-        },
+        // setRenderCount(renderCount === 0 ? 1 : 0);
+      // },
       });
     }));
 
@@ -89,9 +134,9 @@ function useSettingsData(options: SettingsOptionPropsStatic[]) {
   useEffect(() => {
     // Load things from storage, and set item key for each option
     loadOptionsFromStorage();
-  }, [options, renderCount]);
+  }, [options]);
 
-  return settingsData;
+  return { settingsData, handleChange };
 }
 
 export default useSettingsData;
