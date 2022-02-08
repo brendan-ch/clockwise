@@ -42,6 +42,7 @@ import {
 import SettingsContext from './SettingsContext';
 import useTasks from './src/helpers/hooks/useTasks';
 import TaskContext from './TaskContext';
+import getBaseURL from './src/helpers/getBaseURL';
 
 const MIN_25 = 1500000;
 // const MIN_5 = 300000;
@@ -53,6 +54,8 @@ const Stack = createNativeStackNavigator();
 const prefix = Linking.createURL('/');
 
 export default function App() {
+  const [backgroundUri, setBackgroundUri] = useState<string | null>(null);
+
   const [
     keyboardShortcutManager, setKeyboardShortcutManager,
   ] = useState<KeyboardShortcutManager | undefined>(undefined);
@@ -252,6 +255,17 @@ export default function App() {
     setSettings(temp);
   }
 
+  /**
+   * Attempt to load and set a background image.
+   */
+  async function setBackgroundImage() {
+    const res = await fetch(`${getBaseURL()}/api/getBackground`);
+    if (res.status === 200) {
+      const json = await res.json();
+      setBackgroundUri(json.uri);
+    }
+  }
+
   // Hooks
   // Get theme
   const colorValues = useTheme();
@@ -333,6 +347,17 @@ export default function App() {
     }
   }, [settings, timerState]);
 
+  // Attempt to set background image
+  useEffect(() => {
+    if (backgroundUri === null) {
+      setBackgroundImage()
+        .catch(() => {
+          /* eslint-disable-next-line */
+          console.log('Unable to set background image.');
+        });
+    }
+  }, [backgroundUri]);
+
   // Links
   const config = {
     screens: {
@@ -395,12 +420,15 @@ export default function App() {
       >
         <ImageBackground
           source={{
-            uri: 'https://images.unsplash.com/photo-1625834384234-fd4eb7fe121f',
+            uri: backgroundUri || '',
           }}
           style={[styles.landscapeContainer, {
             backgroundColor: colorValues.background,
           }]}
           blurRadius={15}
+          loadingIndicatorSource={{
+            uri: '',
+          }}
         >
           <View style={[{
             flex: 1,
