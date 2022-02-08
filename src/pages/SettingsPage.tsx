@@ -128,10 +128,19 @@ function SettingsPage() {
       onSelect={() => setSelected(item.title)}
       onDeselect={() => setSelected(undefined)}
       selected={selected === item.title}
-      onChange={(newData: any) => handleChange(
-        index,
-        newData,
-      )}
+      onChange={async (newData: any) => {
+        if (options[index].validator) {
+          // @ts-ignore
+          const result = await options[index].validator();
+
+          if (!result) return;
+        }
+
+        handleChange(
+          index,
+          newData,
+        );
+      }}
     />
   );
 

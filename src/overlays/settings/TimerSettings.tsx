@@ -139,10 +139,18 @@ function TimerSettingsPane() {
       onSelect={() => handleSelectAndResetKeyboard(item.title)}
       onDeselect={() => handleSelectAndResetKeyboard()}
       keyboardSelected={keyboardSelected === item.title}
-      onChange={(newData: any) => handleChange(
-        index,
-        newData,
-      )}
+      onChange={async (newData: any) => {
+        if (options[index].validator) {
+          // @ts-ignore
+          const result = await options[index].validator(newData);
+          if (!result) return;
+        }
+
+        handleChange(
+          index,
+          newData,
+        );
+      }}
     />
   );
 
