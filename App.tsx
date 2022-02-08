@@ -10,7 +10,9 @@ import AppLoading from 'expo-app-loading';
 import { Audio } from 'expo-av';
 import * as Linking from 'expo-linking';
 import React, { useEffect, useState } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import {
+  ImageBackground, Platform, StyleSheet, View,
+} from 'react-native';
 import Modal from 'react-native-modal';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -391,35 +393,48 @@ export default function App() {
         setSelected,
       }}
       >
-        <View style={[styles.landscapeContainer, {
-          backgroundColor: colorValues.background,
-        }]}
-        >
-          {windowSize === 'landscape' ? (
-            <LandscapeHeader />
-          ) : undefined}
-          <SettingsContext.Provider value={{
-            ...settings,
+        <ImageBackground
+          source={{
+            uri: 'https://images.unsplash.com/photo-1625834384234-fd4eb7fe121f',
           }}
+          style={[styles.landscapeContainer, {
+            backgroundColor: colorValues.background,
+          }]}
+          blurRadius={15}
+        >
+          <View style={[{
+            flex: 1,
+            width: '100%',
+            backgroundColor: colorValues.background,
+            opacity: 0.9,
+          }]}
           >
-            <TaskContext.Provider
-              value={{
-                tasks,
-                selected,
-                setTasks,
-                setSelected,
-                handleAddTask,
-                handleChangeTask,
-                handleDeleteTask,
-              }}
+            {windowSize === 'landscape' ? (
+              <LandscapeHeader />
+            ) : undefined}
+            <SettingsContext.Provider value={{
+              ...settings,
+            }}
             >
-              <TimerPage />
-            </TaskContext.Provider>
-          </SettingsContext.Provider>
-          {windowSize === 'landscape' ? (
-            <LandscapeFooter />
-          ) : undefined}
-        </View>
+              <TaskContext.Provider
+                value={{
+                  tasks,
+                  selected,
+                  setTasks,
+                  setSelected,
+                  handleAddTask,
+                  handleChangeTask,
+                  handleDeleteTask,
+                }}
+              >
+                <TimerPage />
+              </TaskContext.Provider>
+            </SettingsContext.Provider>
+            {windowSize === 'landscape' ? (
+              <LandscapeFooter />
+            ) : undefined}
+          </View>
+        </ImageBackground>
         {windowSize === 'landscape' ? (
           <SettingsContext.Provider value={{
             ...settings,
