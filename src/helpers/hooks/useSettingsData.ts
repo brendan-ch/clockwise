@@ -4,7 +4,7 @@ import { SettingsOptionProps, SettingsOptionPropsStatic } from '../../types';
 import { getData, storeData } from '../storage';
 
 /**
- * Hook that manages initialization and updating of settings data.
+ * Hook that manages initialization of settings data.
  * @param initialData
  */
 function useSettingsData(options: SettingsOptionPropsStatic[]) {
@@ -62,31 +62,6 @@ function useSettingsData(options: SettingsOptionPropsStatic[]) {
       // Update the key
       settings.setSetting(matchingOption.storageKey, data);
     }
-
-    // Update in memory
-    // const settingsDataTemp: SettingsOptionProps[] = [];
-    // settingsData.forEach((option) => {
-    //   const matchingOption = options.find((item) => item.storageKey === key);
-
-    //   settingsDataTemp.push({
-    //     ...option,
-    //     value: matchingOption?.title === option.title
-    //       ? data
-    //       : option.value,
-    //     onChange: async (newData: any) => {
-    //       if (matchingOption?.validator) {
-    //         const result = await matchingOption.validator(newData);
-    //         if (!result) return;
-    //       }
-
-    //       if (!matchingOption?.storageKey) return;
-
-    //       await handleChange(matchingOption?.storageKey, newData);
-    //     },
-    //   });
-    // });
-
-    // setSettingsData(settingsDataTemp);
   }
 
   /**
@@ -118,16 +93,6 @@ function useSettingsData(options: SettingsOptionPropsStatic[]) {
       settingsDataTemp.push({
         ...option,
         value: convertedData,
-        // onChange: async (newData: any) => {
-        // if (option.validator) {
-        //   const result = await option.validator(newData);
-        //   if (!result) return;
-        // }
-        // Serialize the data
-        // await handleChange(option.storageKey, newData);
-
-        // setRenderCount(renderCount === 0 ? 1 : 0);
-      // },
       });
     }));
 
