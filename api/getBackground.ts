@@ -28,7 +28,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   await connectToDB(mongoUri);
 
   const count = await Background.countDocuments();
-  const rand = Math.floor(Math.random() + count - 1);
+  const rand = Math.floor(Math.random() * count);
 
   const background = await Background.findOne().skip(rand);
 
