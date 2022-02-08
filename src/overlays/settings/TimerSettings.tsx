@@ -82,7 +82,7 @@ function TimerSettingsPane() {
       }
     });
 
-  const settingsData = useSettingsData(options);
+  const { settingsData, handleChange } = useSettingsData(options);
 
   const sections: Section[] = [
     {
@@ -124,7 +124,7 @@ function TimerSettingsPane() {
     }
   }, [keyboardShortcutManager, keyboardGroup]);
 
-  const renderItem = ({ item }: { item: SettingsOptionProps }) => (
+  const renderItem = ({ item, index }: { item: SettingsOptionProps, index: number }) => (
     <SettingsOption
       /* eslint-disable react/jsx-props-no-spreading */
       {...item}
@@ -139,6 +139,18 @@ function TimerSettingsPane() {
       onSelect={() => handleSelectAndResetKeyboard(item.title)}
       onDeselect={() => handleSelectAndResetKeyboard()}
       keyboardSelected={keyboardSelected === item.title}
+      onChange={async (newData: any) => {
+        if (options[index].validator) {
+          // @ts-ignore
+          const result = await options[index].validator(newData);
+          if (!result) return;
+        }
+
+        handleChange(
+          index,
+          newData,
+        );
+      }}
     />
   );
 

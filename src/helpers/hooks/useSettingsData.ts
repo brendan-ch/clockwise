@@ -4,22 +4,44 @@ import { SettingsOptionProps, SettingsOptionPropsStatic } from '../../types';
 import { getData, storeData } from '../storage';
 
 /**
- * Hook that manages initialization and updating of settings data.
+ * Hook that manages initialization of settings data.
  * @param initialData
  */
 function useSettingsData(options: SettingsOptionPropsStatic[]) {
   const [settingsData, setSettingsData] = useState<SettingsOptionProps[]>([]);
-  // Force re-rendering of updated settings data
-  const [renderCount, setRenderCount] = useState(0);
 
+  // Global settings
   const settings = useContext(SettingsContext);
 
   /**
    * Handle storing data
-   * @param key The storage key.
+   * @param key The storage key or item index in the array.
+   * If an index is provided, it's assumed that the options array has
+   * a matching item at index.
    * @param data
    */
-  async function handleChange(key: string, data: number | boolean) {
+  async function handleChange(key: string | number, data: number | boolean) {
+    const matchingOption = typeof key === 'number' ? options[key] : options.find((value) => value.storageKey === key);
+    if (!matchingOption) return;
+
+    // Set in state
+    const settingsIndex = typeof key === 'number' ? key : settingsData.findIndex(
+      (value) => matchingOption?.title === value.title,
+    );
+
+    if (settingsIndex > -1) {
+      const modifiedSetting: SettingsOptionProps = {
+        ...settingsData[settingsIndex],
+        value: data,
+      };
+
+      const modifiedSettingsData = settingsData.slice();
+      modifiedSettingsData[settingsIndex] = modifiedSetting;
+      setSettingsData(modifiedSettingsData);
+
+      // Update in storage
+    }
+
     // Attempt to serialize data
     let convertedData: string;
 
@@ -32,17 +54,20 @@ function useSettingsData(options: SettingsOptionPropsStatic[]) {
     }
 
     // Set data in storage
-    await storeData(key, convertedData);
+    await storeData(matchingOption.storageKey, convertedData);
 
+    // Reactive settings
+    // Update in global state for other components to update
     // @ts-ignore
-    if (settings[key] !== undefined && settings.setSetting) {
+    if (settings[matchingOption.storageKey] !== undefined && settings.setSetting) {
       // Update the key
-      settings.setSetting(key, data);
+      settings.setSetting(matchingOption.storageKey, data);
     }
   }
 
   /**
    * Load the settings options from local storage.
+   * This should only be used for initializing the settings.
    */
   async function loadOptionsFromStorage() {
     const settingsDataTemp: SettingsOptionProps[] = [];
@@ -70,16 +95,6 @@ function useSettingsData(options: SettingsOptionPropsStatic[]) {
       settingsDataTemp.push({
         ...option,
         value: convertedData,
-        onChange: async (newData: any) => {
-          if (option.validator) {
-            const result = await option.validator(newData);
-            if (!result) return;
-          }
-          // Serialize the data
-          await handleChange(option.storageKey, newData);
-
-          setRenderCount(renderCount === 0 ? 1 : 0);
-        },
       });
     }));
 
@@ -89,9 +104,9 @@ function useSettingsData(options: SettingsOptionPropsStatic[]) {
   useEffect(() => {
     // Load things from storage, and set item key for each option
     loadOptionsFromStorage();
-  }, [options, renderCount]);
+  }, [options]);
 
-  return settingsData;
+  return { settingsData, handleChange };
 }
 
 export default useSettingsData;

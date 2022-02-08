@@ -94,7 +94,7 @@ function SettingsPage() {
   };
 
   // Sync options with storage
-  const settingsData = useSettingsData(options);
+  const { settingsData, handleChange } = useSettingsData(options);
 
   const sections: Section[] = [
     {
@@ -114,7 +114,7 @@ function SettingsPage() {
     />
   );
 
-  const renderItem = ({ item }: { item: SettingsOptionProps }) => (
+  const renderItem = ({ item, index }: { item: SettingsOptionProps, index: number }) => (
     <SettingsOption
       /* eslint-disable react/jsx-props-no-spreading */
       {...item}
@@ -128,6 +128,19 @@ function SettingsPage() {
       onSelect={() => setSelected(item.title)}
       onDeselect={() => setSelected(undefined)}
       selected={selected === item.title}
+      onChange={async (newData: any) => {
+        if (options[index].validator) {
+          // @ts-ignore
+          const result = await options[index].validator();
+
+          if (!result) return;
+        }
+
+        handleChange(
+          index,
+          newData,
+        );
+      }}
     />
   );
 
