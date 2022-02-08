@@ -9,9 +9,8 @@ import { getData, storeData } from '../storage';
  */
 function useSettingsData(options: SettingsOptionPropsStatic[]) {
   const [settingsData, setSettingsData] = useState<SettingsOptionProps[]>([]);
-  // Force re-rendering of updated settings data
-  // const [renderCount, setRenderCount] = useState(0);
 
+  // Global settings
   const settings = useContext(SettingsContext);
 
   /**
@@ -57,6 +56,8 @@ function useSettingsData(options: SettingsOptionPropsStatic[]) {
     // Set data in storage
     await storeData(matchingOption.storageKey, convertedData);
 
+    // Reactive settings
+    // Update in global state for other components to update
     // @ts-ignore
     if (settings[matchingOption.storageKey] !== undefined && settings.setSetting) {
       // Update the key
@@ -66,6 +67,7 @@ function useSettingsData(options: SettingsOptionPropsStatic[]) {
 
   /**
    * Load the settings options from local storage.
+   * This should only be used for initializing the settings.
    */
   async function loadOptionsFromStorage() {
     const settingsDataTemp: SettingsOptionProps[] = [];
