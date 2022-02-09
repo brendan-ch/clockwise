@@ -4,7 +4,6 @@ import React, {
 } from 'react';
 import {
   Animated,
-  ImageBackground,
   Platform,
   StyleSheet, View,
 } from 'react-native';
@@ -207,64 +206,52 @@ export default function TimerPage() {
 
   // Mobile view
   return (
-    <ImageBackground
-      style={[{
-        flex: 1,
+    <View
+      style={[styles.container, {
         backgroundColor: colorValues.background,
-        // opacity: 0.9,
+        opacity: 0.9,
       }]}
-      source={{
-        uri: 'https://images.unsplash.com/photo-1625834384234-fd4eb7fe121f',
-      }}
-      blurRadius={15}
     >
-      <View
-        style={[styles.container, {
-          backgroundColor: colorValues.background,
-          opacity: 0.9,
-        }]}
+      <Animated.View style={[styles.contentContainer, {
+        opacity: fadeIn,
+      }]}
       >
-        <Animated.View style={[styles.contentContainer, {
-          opacity: fadeIn,
+        <View style={styles.topContainer}>
+          <Timer
+            display={calculateTimerDisplay(timeRemaining)}
+            style={styles.timer}
+          />
+          <PageButtonBar
+            selected={mode}
+            style={styles.pageButtonBar}
+            onPressFocus={() => handleStateSwitch('focus')}
+            onPressBreak={() => handleStateSwitch('break')}
+          />
+        </View>
+        <View style={styles.middleContainer}>
+          <TaskList
+            setAtTop={setAtTop}
+          />
+        </View>
+      </Animated.View>
+      {isAtTop ? (
+        <View style={[styles.bottomContainer, {
+          backgroundColor: colorValues.background,
         }]}
         >
-          <View style={styles.topContainer}>
-            <Timer
-              display={calculateTimerDisplay(timeRemaining)}
-              style={styles.timer}
-            />
-            <PageButtonBar
-              selected={mode}
-              style={styles.pageButtonBar}
-              onPressFocus={() => handleStateSwitch('focus')}
-              onPressBreak={() => handleStateSwitch('break')}
-            />
-          </View>
-          <View style={styles.middleContainer}>
-            <TaskList
-              setAtTop={setAtTop}
-            />
-          </View>
-        </Animated.View>
-        {isAtTop ? (
-          <View style={[styles.bottomContainer, {
-            backgroundColor: colorValues.background,
-          }]}
-          >
-            <ActionButtonBar
-              style={styles.actionButtonBar}
-              state={timerState}
-              onStartPress={() => startTimer()}
-              onPausePress={() => pauseTimer()}
-              onResetPress={() => stopTimer()}
-              onResumePress={() => startTimer()}
-              text={actionBarText}
-            />
-          </View>
-        ) : undefined}
-      </View>
+          <ActionButtonBar
+            style={styles.actionButtonBar}
+            state={timerState}
+            onStartPress={() => startTimer()}
+            onPausePress={() => pauseTimer()}
+            onResetPress={() => stopTimer()}
+            onResumePress={() => startTimer()}
+            text={actionBarText}
+          />
+        </View>
+      ) : undefined}
       <StatusBar style="auto" />
-    </ImageBackground>
+    </View>
   );
 }
 

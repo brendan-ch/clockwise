@@ -355,14 +355,14 @@ export default function App() {
 
   // Attempt to set background image
   useEffect(() => {
-    if (!imageInfo) {
+    if (!imageInfo && windowSize === 'landscape') {
       setBackgroundImage()
         .catch(() => {
           /* eslint-disable-next-line */
           console.log('Unable to set background image.');
         });
     }
-  }, [imageInfo]);
+  }, [imageInfo, windowSize]);
 
   // Links
   const config = {
