@@ -78,6 +78,12 @@ function BackgroundSettingsPane() {
   }
 
   useEffect(() => {
+    if (autoSetTheme) {
+      handleChange(DARK_MODE, false);
+    }
+  }, [autoSetTheme]);
+
+  useEffect(() => {
     if (keyboardGroup === 'settingsPage' && !keyboardSelected) {
       setKeyboardSelected(options[0].title);
     } else if (keyboardGroup === 'settings') {
