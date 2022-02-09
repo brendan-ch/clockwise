@@ -37,7 +37,11 @@ import usePageTitle from './src/helpers/hooks/usePageTitle';
 /* eslint-disable-next-line */
 import * as serviceWorkerRegistration from './src/serviceWorkerRegistration';
 import {
-  BREAK_TIME_MINUTES, ENABLE_TIMER_ALERTS, ENABLE_TIMER_SOUND, FOCUS_TIME_MINUTES,
+  BREAK_TIME_MINUTES,
+  ENABLE_BACKGROUND,
+  ENABLE_TIMER_ALERTS,
+  ENABLE_TIMER_SOUND,
+  FOCUS_TIME_MINUTES,
 } from './src/StorageKeys';
 import SettingsContext from './SettingsContext';
 import useTasks from './src/helpers/hooks/useTasks';
@@ -84,6 +88,7 @@ export default function App() {
     [ENABLE_TIMER_ALERTS]: false,
     [FOCUS_TIME_MINUTES]: 25,
     [BREAK_TIME_MINUTES]: 5,
+    [ENABLE_BACKGROUND]: true,
   });
 
   // Track selected task IDs
@@ -355,14 +360,17 @@ export default function App() {
 
   // Attempt to set background image
   useEffect(() => {
-    if (!imageInfo && windowSize === 'landscape') {
+    if (!imageInfo && windowSize === 'landscape' && settings[ENABLE_BACKGROUND]) {
       setBackgroundImage()
         .catch(() => {
           /* eslint-disable-next-line */
           console.log('Unable to set background image.');
         });
+    } else if (imageInfo && (windowSize !== 'landscape' || !settings[ENABLE_BACKGROUND])) {
+      // Remove image
+      setImageInfo(undefined);
     }
-  }, [imageInfo, windowSize]);
+  }, [imageInfo, windowSize, settings[ENABLE_BACKGROUND]]);
 
   // Links
   const config = {
