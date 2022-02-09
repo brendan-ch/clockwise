@@ -17,6 +17,7 @@ import useWindowSize from '../helpers/hooks/useWindowSize';
 import TaskList from '../components/TaskList';
 import useBackgroundTimer from '../helpers/hooks/useBackgroundTimer';
 import useTimerNotification from '../helpers/hooks/useTimerNotifications';
+import useUnsavedChanges from '../helpers/hooks/useUnsavedChanges';
 
 /**
  * Component that displays information about the timer.
@@ -65,6 +66,7 @@ export default function TimerPage() {
 
   useBackgroundTimer();
   useTimerNotification();
+  useUnsavedChanges();
 
   useEffect(() => {
     // Read value in storage and set in context
