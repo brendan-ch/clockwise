@@ -206,9 +206,10 @@ export default function TimerPage() {
 
   // Mobile view
   return (
-    <View style={[styles.container, {
-      backgroundColor: colorValues.background,
-    }]}
+    <View
+      style={[styles.container, {
+        backgroundColor: colorValues.background,
+      }]}
     >
       <Animated.View style={[styles.contentContainer, {
         opacity: fadeIn,

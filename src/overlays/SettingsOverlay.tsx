@@ -11,6 +11,7 @@ import useTheme from '../helpers/hooks/useTheme';
 /* eslint-disable react/no-array-index-key */
 
 const TimerSettings = React.lazy(() => import('./settings/TimerSettings'));
+const BackgroundSettings = React.lazy(() => import('./settings/BackgroundSettings'));
 const Keybindings = React.lazy(() => import('./settings/Keybindings'));
 
 interface SettingsNavigatorObject {
@@ -34,10 +35,10 @@ const navigator: SettingsNavigatorObject[] = [
     title: 'Timer',
     renderer: <TimerSettings />,
   },
-  // {
-  //   title: 'Connected apps',
-  //   renderer: <ConnectedAppsPane />,
-  // },
+  {
+    title: 'Background',
+    renderer: <BackgroundSettings />,
+  },
 ];
 
 if (Platform.OS === 'web') {

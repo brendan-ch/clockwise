@@ -10,3 +10,4 @@ export const MODE = '@mode';
 export const ENABLE_BACKGROUND_TIMER = '@enableBackgroundTimer';
 export const ENABLE_TIMER_ALERTS = '@enableTimerAlerts';
 export const ENABLE_TIMER_SOUND = '@enableTimerSound';
+export const ENABLE_BACKGROUND = '@enableBackground';

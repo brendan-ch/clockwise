@@ -10,7 +10,9 @@ import AppLoading from 'expo-app-loading';
 import { Audio } from 'expo-av';
 import * as Linking from 'expo-linking';
 import React, { useEffect, useState } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import {
+  ImageBackground, Platform, StyleSheet, View,
+} from 'react-native';
 import Modal from 'react-native-modal';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -19,7 +21,7 @@ import AppContext from './AppContext';
 import KeyboardShortcutManager from './src/helpers/keyboardShortcutManager';
 import TimerPage from './src/pages/Timer';
 import {
-  DefaultSettingsState, KeyboardShortcutGroup, Overlay, TimerState,
+  DefaultSettingsState, ImageInfo, KeyboardShortcutGroup, Overlay, TimerState,
 } from './src/types';
 import SettingsPage from './src/pages/SettingsPage';
 import TextStyles from './src/styles/Text';
@@ -35,11 +37,17 @@ import usePageTitle from './src/helpers/hooks/usePageTitle';
 /* eslint-disable-next-line */
 import * as serviceWorkerRegistration from './src/serviceWorkerRegistration';
 import {
-  BREAK_TIME_MINUTES, ENABLE_TIMER_ALERTS, ENABLE_TIMER_SOUND, FOCUS_TIME_MINUTES,
+  BREAK_TIME_MINUTES,
+  ENABLE_BACKGROUND,
+  ENABLE_TIMER_ALERTS,
+  ENABLE_TIMER_SOUND,
+  FOCUS_TIME_MINUTES,
 } from './src/StorageKeys';
 import SettingsContext from './SettingsContext';
 import useTasks from './src/helpers/hooks/useTasks';
 import TaskContext from './TaskContext';
+import getBaseURL from './src/helpers/getBaseURL';
+import ImageContext from './ImageContext';
 
 const MIN_25 = 1500000;
 // const MIN_5 = 300000;
@@ -51,6 +59,8 @@ const Stack = createNativeStackNavigator();
 const prefix = Linking.createURL('/');
 
 export default function App() {
+  const [imageInfo, setImageInfo] = useState<ImageInfo | undefined>();
+
   const [
     keyboardShortcutManager, setKeyboardShortcutManager,
   ] = useState<KeyboardShortcutManager | undefined>(undefined);
@@ -78,6 +88,7 @@ export default function App() {
     [ENABLE_TIMER_ALERTS]: false,
     [FOCUS_TIME_MINUTES]: 25,
     [BREAK_TIME_MINUTES]: 5,
+    [ENABLE_BACKGROUND]: true,
   });
 
   // Track selected task IDs
@@ -250,6 +261,22 @@ export default function App() {
     setSettings(temp);
   }
 
+  /**
+   * Attempt to load and set a background image.
+   */
+  async function setBackgroundImage() {
+    const res = await fetch(`${getBaseURL()}/api/getBackground`);
+    if (res.status === 200) {
+      const json = await res.json();
+
+      setImageInfo({
+        uri: json.uri,
+        author: json.author,
+        link: json.link,
+      });
+    }
+  }
+
   // Hooks
   // Get theme
   const colorValues = useTheme();
@@ -331,6 +358,20 @@ export default function App() {
     }
   }, [settings, timerState]);
 
+  // Attempt to set background image
+  useEffect(() => {
+    if (!imageInfo && windowSize === 'landscape' && settings[ENABLE_BACKGROUND]) {
+      setBackgroundImage()
+        .catch(() => {
+          /* eslint-disable-next-line */
+          console.log('Unable to set background image.');
+        });
+    } else if (imageInfo && (windowSize !== 'landscape' || !settings[ENABLE_BACKGROUND])) {
+      // Remove image
+      setImageInfo(undefined);
+    }
+  }, [imageInfo, windowSize, settings[ENABLE_BACKGROUND]]);
+
   // Links
   const config = {
     screens: {
@@ -391,35 +432,57 @@ export default function App() {
         setSelected,
       }}
       >
-        <View style={[styles.landscapeContainer, {
-          backgroundColor: colorValues.background,
-        }]}
-        >
-          {windowSize === 'landscape' ? (
-            <LandscapeHeader />
-          ) : undefined}
-          <SettingsContext.Provider value={{
-            ...settings,
+        <ImageBackground
+          source={{
+            uri: imageInfo?.uri,
           }}
+          style={[styles.landscapeContainer, {
+            backgroundColor: colorValues.background,
+          }]}
+          blurRadius={2}
+          loadingIndicatorSource={{
+            uri: '',
+          }}
+        >
+          <View style={[{
+            flex: 1,
+            width: '100%',
+            backgroundColor: colorValues.background,
+            opacity: imageInfo ? 0.9 : 1.0,
+          }]}
           >
-            <TaskContext.Provider
-              value={{
-                tasks,
-                selected,
-                setTasks,
-                setSelected,
-                handleAddTask,
-                handleChangeTask,
-                handleDeleteTask,
-              }}
+            {windowSize === 'landscape' ? (
+              <LandscapeHeader />
+            ) : undefined}
+            <SettingsContext.Provider value={{
+              ...settings,
+            }}
             >
-              <TimerPage />
-            </TaskContext.Provider>
-          </SettingsContext.Provider>
-          {windowSize === 'landscape' ? (
-            <LandscapeFooter />
-          ) : undefined}
-        </View>
+              <TaskContext.Provider
+                value={{
+                  tasks,
+                  selected,
+                  setTasks,
+                  setSelected,
+                  handleAddTask,
+                  handleChangeTask,
+                  handleDeleteTask,
+                }}
+              >
+                <TimerPage />
+              </TaskContext.Provider>
+            </SettingsContext.Provider>
+            {windowSize === 'landscape' ? (
+              <ImageContext.Provider
+                value={{
+                  imageInfo,
+                }}
+              >
+                <LandscapeFooter />
+              </ImageContext.Provider>
+            ) : undefined}
+          </View>
+        </ImageBackground>
         {windowSize === 'landscape' ? (
           <SettingsContext.Provider value={{
             ...settings,

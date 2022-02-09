@@ -6,10 +6,12 @@ import {
 } from 'react-native';
 import * as Linking from 'expo-linking';
 import Constants from 'expo-constants';
+import { Ionicons } from '@expo/vector-icons';
 import AppContext from '../../AppContext';
 import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
 import ClickableText from './ClickableText';
+import ImageContext from '../../ImageContext';
 
 function LandscapeFooter() {
   const [hovering, setHovering] = useState(false);
@@ -21,6 +23,8 @@ function LandscapeFooter() {
   const opacityAnimation = useRef(new Animated.Value(1)).current;
   const colorValues = useTheme();
   const context = useContext(AppContext);
+
+  const { imageInfo } = useContext(ImageContext);
 
   useEffect(() => {
     if (context.timerState === 'running' && !hovering) {
@@ -51,6 +55,22 @@ function LandscapeFooter() {
         color: colorValues.gray3,
       }]}
       >
+        {imageInfo ? (
+          <Text
+            style={[TextStyles.textRegular, {
+              color: colorValues.gray3,
+            }]}
+          >
+            <Ionicons name="camera-outline" />
+            {' '}
+            <ClickableText
+              text={`${imageInfo.author} on Unsplash`}
+              style={[TextStyles.textRegular]}
+              onPress={() => Linking.openURL(imageInfo.link)}
+            />
+            {' | '}
+          </Text>
+        ) : undefined}
         {'Created by '}
         <ClickableText
           text="@unnameduser95"
