@@ -21,7 +21,7 @@ import AppContext from './AppContext';
 import KeyboardShortcutManager from './src/helpers/keyboardShortcutManager';
 import TimerPage from './src/pages/Timer';
 import {
-  DefaultSettingsState, KeyboardShortcutGroup, Overlay, TimerState,
+  DefaultSettingsState, ImageInfo, KeyboardShortcutGroup, Overlay, TimerState,
 } from './src/types';
 import SettingsPage from './src/pages/SettingsPage';
 import TextStyles from './src/styles/Text';
@@ -43,6 +43,7 @@ import SettingsContext from './SettingsContext';
 import useTasks from './src/helpers/hooks/useTasks';
 import TaskContext from './TaskContext';
 import getBaseURL from './src/helpers/getBaseURL';
+import ImageContext from './ImageContext';
 
 const MIN_25 = 1500000;
 // const MIN_5 = 300000;
@@ -54,7 +55,7 @@ const Stack = createNativeStackNavigator();
 const prefix = Linking.createURL('/');
 
 export default function App() {
-  const [backgroundUri, setBackgroundUri] = useState<string | null>(null);
+  const [imageInfo, setImageInfo] = useState<ImageInfo | undefined>();
 
   const [
     keyboardShortcutManager, setKeyboardShortcutManager,
@@ -262,7 +263,12 @@ export default function App() {
     const res = await fetch(`${getBaseURL()}/api/getBackground`);
     if (res.status === 200) {
       const json = await res.json();
-      setBackgroundUri(json.uri);
+
+      setImageInfo({
+        uri: json.uri,
+        author: json.author,
+        link: json.link,
+      });
     }
   }
 
@@ -349,14 +355,14 @@ export default function App() {
 
   // Attempt to set background image
   useEffect(() => {
-    if (backgroundUri === null) {
+    if (!imageInfo) {
       setBackgroundImage()
         .catch(() => {
           /* eslint-disable-next-line */
           console.log('Unable to set background image.');
         });
     }
-  }, [backgroundUri]);
+  }, [imageInfo]);
 
   // Links
   const config = {
@@ -420,7 +426,7 @@ export default function App() {
       >
         <ImageBackground
           source={{
-            uri: backgroundUri || '',
+            uri: imageInfo?.uri || '',
           }}
           style={[styles.landscapeContainer, {
             backgroundColor: colorValues.background,
@@ -459,7 +465,13 @@ export default function App() {
               </TaskContext.Provider>
             </SettingsContext.Provider>
             {windowSize === 'landscape' ? (
-              <LandscapeFooter />
+              <ImageContext.Provider
+                value={{
+                  imageInfo,
+                }}
+              >
+                <LandscapeFooter />
+              </ImageContext.Provider>
             ) : undefined}
           </View>
         </ImageBackground>
