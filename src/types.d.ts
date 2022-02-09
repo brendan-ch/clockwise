@@ -153,12 +153,14 @@ interface DefaultSettingsState {
   setSetting?: (key: string, value: number | boolean) => any,
 }
 
+interface ImageInfo {
+  uri: string,
+  author: string,
+  link: string,
+}
+
 interface DefaultImageState {
-  imageInfo?: {
-    uri: string,
-    author: string,
-    link: string,
-  },
+  imageInfo?: ImageInfo,
 }
 
 export {
@@ -172,4 +174,5 @@ export {
   Task,
   DefaultSettingsState,
   DefaultImageState,
+  ImageInfo,
 };
