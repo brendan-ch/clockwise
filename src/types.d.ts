@@ -1,5 +1,7 @@
 import { StyleProp, TextStyle, ViewStyle } from 'react-native';
-import { BREAK_TIME_MINUTES, ENABLE_TIMER_ALERTS, FOCUS_TIME_MINUTES } from './StorageKeys';
+import {
+  BREAK_TIME_MINUTES, ENABLE_BACKGROUND, ENABLE_TIMER_ALERTS, FOCUS_TIME_MINUTES,
+} from './StorageKeys';
 
 type TimerState = 'running' | 'paused' | 'stopped';
 type Overlay = 'none' | 'settings' | 'command';
@@ -149,6 +151,7 @@ interface DefaultSettingsState {
   [ENABLE_TIMER_ALERTS]: boolean,
   [FOCUS_TIME_MINUTES]: number,
   [BREAK_TIME_MINUTES]: number,
+  [ENABLE_BACKGROUND]: boolean,
   /* eslint-disable-next-line */
   setSetting?: (key: string, value: number | boolean) => any,
 }
