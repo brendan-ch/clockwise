@@ -283,7 +283,7 @@ export default function App() {
 
   // Hooks
   // Get theme
-  const colorValues = useTheme();
+  const colorValues = useTheme(settings);
 
   // Get window size
   const windowSize = useWindowSize();

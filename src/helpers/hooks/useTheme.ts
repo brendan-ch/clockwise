@@ -1,5 +1,9 @@
+import { useContext } from 'react';
 import { useColorScheme } from 'react-native';
+import SettingsContext from '../../../SettingsContext';
+import { AUTO_APPEARANCE, DARK_MODE } from '../../StorageKeys';
 import ColorValues from '../../styles/Color';
+import { DefaultSettingsState } from '../../types';
 
 interface Colors {
   primary: string,
@@ -14,10 +18,17 @@ interface Colors {
 /**
  * Hook that automatically returns a color scheme based on device theme settings.
  */
-function useTheme(): Colors {
+function useTheme(providedContext?: DefaultSettingsState): Colors {
   const colorScheme = useColorScheme();
 
-  if (colorScheme === 'dark') {
+  let context = useContext(SettingsContext);
+  if (providedContext) {
+    context = providedContext;
+  }
+
+  if (
+    (colorScheme === 'dark' && context[AUTO_APPEARANCE]) || context[DARK_MODE]
+  ) {
     return {
       ...ColorValues,
       primary: '#dbdbdb',
