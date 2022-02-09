@@ -6,6 +6,8 @@ import SettingsOption from '../../components/SettingsOption';
 // import { checkNotifications, requestNotifications } from '../../helpers/notification';
 import useSettingsData from '../../helpers/hooks/useSettingsData';
 import {
+  AUTO_APPEARANCE,
+  DARK_MODE,
   ENABLE_BACKGROUND,
 } from '../../StorageKeys';
 import { SettingsOptionProps, Section, SettingsOptionPropsStatic } from '../../types';
@@ -19,6 +21,16 @@ const options: SettingsOptionPropsStatic[] = [
     title: 'Enable Unsplash background',
     storageKey: ENABLE_BACKGROUND,
   },
+  {
+    type: 'toggle',
+    title: 'Automatically set theme',
+    storageKey: AUTO_APPEARANCE,
+  },
+  {
+    type: 'toggle',
+    title: 'Enable dark mode',
+    storageKey: DARK_MODE,
+  },
 ];
 
 /**
@@ -27,11 +39,17 @@ const options: SettingsOptionPropsStatic[] = [
 function BackgroundSettingsPane() {
   const { settingsData, handleChange } = useSettingsData(options);
 
+  const autoSetTheme = settingsData[1]?.value as boolean;
   const sections: Section[] = [
     {
       title: 'Background',
       icon: 'image-outline',
       data: settingsData.slice(0, 1),
+    },
+    {
+      title: 'Theme',
+      icon: 'moon-outline',
+      data: autoSetTheme ? settingsData.slice(1, 2) : settingsData.slice(1, 3),
     },
   ];
   const [selected, setSelected] = useState<string | undefined>(undefined);
@@ -89,8 +107,10 @@ function BackgroundSettingsPane() {
           if (!result) return;
         }
 
+        const i = options.findIndex((option) => option.title === item.title);
+
         handleChange(
-          index,
+          i,
           newData,
         );
       }}
