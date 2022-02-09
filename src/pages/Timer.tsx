@@ -209,7 +209,6 @@ export default function TimerPage() {
     <View
       style={[styles.container, {
         backgroundColor: colorValues.background,
-        opacity: 0.9,
       }]}
     >
       <Animated.View style={[styles.contentContainer, {

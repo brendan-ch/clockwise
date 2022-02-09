@@ -448,7 +448,7 @@ export default function App() {
             flex: 1,
             width: '100%',
             backgroundColor: colorValues.background,
-            opacity: 0.9,
+            opacity: imageInfo ? 0.9 : 1.0,
           }]}
           >
             {windowSize === 'landscape' ? (
