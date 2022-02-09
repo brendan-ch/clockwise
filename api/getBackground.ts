@@ -1,16 +1,22 @@
+// @ts-nocheck
+
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import mongoose from 'mongoose';
 
 const mongoUri = process.env.MONGO_URI;
 
-// @ts-ignore
 let cached = null;
 interface IBackground {
   uri: string,
+  author: string,
+  link: string,
 }
 
-// @ts-ignore
-const Background = mongoose.model<IBackground>('background', { uri: String });
+const Background = mongoose.model<IBackground>('background', {
+  uri: String,
+  author: String,
+  link: String,
+});
 
 async function connectToDB(uri: string) {
   // @ts-ignore
@@ -42,6 +48,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   return res.status(200).json({
     uri: background.uri,
+    author: background.author,
+    link: background.link,
     rand,
     count,
   });
