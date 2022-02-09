@@ -1,15 +1,8 @@
 import React from 'react';
-
-interface DefaultImageState {
-  uri?: string,
-  author?: string,
-  link?: string,
-}
+import { DefaultImageState } from './src/types';
 
 const defaultImageState: DefaultImageState = {
-  uri: undefined,
-  author: undefined,
-  link: undefined,
+  imageInfo: undefined,
 };
 
 const ImageContext = React.createContext(defaultImageState);
