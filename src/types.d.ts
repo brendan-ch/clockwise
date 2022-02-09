@@ -153,15 +153,23 @@ interface DefaultSettingsState {
   setSetting?: (key: string, value: number | boolean) => any,
 }
 
+interface DefaultImageState {
+  imageInfo?: {
+    uri: string,
+    author: string,
+    link: string,
+  },
+}
+
 export {
   TimerState,
   RootStackParamList,
   Overlay,
   Section,
-  // SettingsData,
   SettingsOptionProps,
   SettingsOptionPropsStatic,
   KeyboardShortcutGroup,
   Task,
   DefaultSettingsState,
+  DefaultImageState,
 };
