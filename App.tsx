@@ -455,13 +455,13 @@ export default function App() {
             opacity: imageInfo ? 0.9 : 1.0,
           }]}
           >
-            {windowSize === 'landscape' ? (
-              <LandscapeHeader />
-            ) : undefined}
             <SettingsContext.Provider value={{
               ...settings,
             }}
             >
+              {windowSize === 'landscape' ? (
+                <LandscapeHeader />
+              ) : undefined}
               <TaskContext.Provider
                 value={{
                   tasks,
@@ -475,16 +475,16 @@ export default function App() {
               >
                 <TimerPage />
               </TaskContext.Provider>
+              {windowSize === 'landscape' ? (
+                <ImageContext.Provider
+                  value={{
+                    imageInfo,
+                  }}
+                >
+                  <LandscapeFooter />
+                </ImageContext.Provider>
+              ) : undefined}
             </SettingsContext.Provider>
-            {windowSize === 'landscape' ? (
-              <ImageContext.Provider
-                value={{
-                  imageInfo,
-                }}
-              >
-                <LandscapeFooter />
-              </ImageContext.Provider>
-            ) : undefined}
           </View>
         </ImageBackground>
         {windowSize === 'landscape' ? (
