@@ -27,7 +27,8 @@ function useTheme(providedContext?: DefaultSettingsState): Colors {
   }
 
   if (
-    (colorScheme === 'dark' && context[AUTO_APPEARANCE]) || context[DARK_MODE]
+    (colorScheme === 'dark' && context[AUTO_APPEARANCE])
+    || (context[DARK_MODE] && !context[AUTO_APPEARANCE])
   ) {
     return {
       ...ColorValues,
