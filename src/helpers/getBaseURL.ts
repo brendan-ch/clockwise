@@ -6,7 +6,7 @@ import { Platform } from 'react-native';
  */
 function getBaseURL() {
   if (Constants.manifest?.extra?.prodBuild && Platform.OS !== 'web') {
-    return Constants.manifset.extra?.prodBuild as string;
+    return Constants.manifest.extra?.prodBuild as string;
   }
 
   return '';
