@@ -16,7 +16,7 @@ import useKeyboardSelect from '../../helpers/hooks/useKeyboardSelect';
 const options: SettingsOptionPropsStatic[] = [
   {
     type: 'toggle',
-    title: 'Enable background',
+    title: 'Enable Unsplash background',
     storageKey: ENABLE_BACKGROUND,
   },
 ];
