@@ -37,7 +37,9 @@ import usePageTitle from './src/helpers/hooks/usePageTitle';
 /* eslint-disable-next-line */
 import * as serviceWorkerRegistration from './src/serviceWorkerRegistration';
 import {
+  AUTO_APPEARANCE,
   BREAK_TIME_MINUTES,
+  DARK_MODE,
   ENABLE_BACKGROUND,
   ENABLE_TIMER_ALERTS,
   ENABLE_TIMER_SOUND,
@@ -89,6 +91,8 @@ export default function App() {
     [FOCUS_TIME_MINUTES]: 25,
     [BREAK_TIME_MINUTES]: 5,
     [ENABLE_BACKGROUND]: true,
+    [AUTO_APPEARANCE]: true,
+    [DARK_MODE]: false,
   });
 
   // Track selected task IDs
