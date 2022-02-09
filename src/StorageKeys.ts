@@ -11,3 +11,5 @@ export const ENABLE_BACKGROUND_TIMER = '@enableBackgroundTimer';
 export const ENABLE_TIMER_ALERTS = '@enableTimerAlerts';
 export const ENABLE_TIMER_SOUND = '@enableTimerSound';
 export const ENABLE_BACKGROUND = '@enableBackground';
+export const AUTO_APPEARANCE = '@autoAppearance';
+export const DARK_MODE = '@darkMode';
