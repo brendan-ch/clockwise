@@ -80,6 +80,7 @@ function BackgroundSettingsPane() {
   useEffect(() => {
     if (autoSetTheme) {
       handleChange(DARK_MODE, false);
+      handleChange(AUTO_APPEARANCE, true);
     }
   }, [autoSetTheme]);
 
