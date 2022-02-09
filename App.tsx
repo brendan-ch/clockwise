@@ -426,7 +426,7 @@ export default function App() {
       >
         <ImageBackground
           source={{
-            uri: imageInfo?.uri || '',
+            uri: imageInfo?.uri,
           }}
           style={[styles.landscapeContainer, {
             backgroundColor: colorValues.background,
