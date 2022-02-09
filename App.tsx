@@ -37,7 +37,9 @@ import usePageTitle from './src/helpers/hooks/usePageTitle';
 /* eslint-disable-next-line */
 import * as serviceWorkerRegistration from './src/serviceWorkerRegistration';
 import {
+  AUTO_APPEARANCE,
   BREAK_TIME_MINUTES,
+  DARK_MODE,
   ENABLE_BACKGROUND,
   ENABLE_TIMER_ALERTS,
   ENABLE_TIMER_SOUND,
@@ -89,6 +91,8 @@ export default function App() {
     [FOCUS_TIME_MINUTES]: 25,
     [BREAK_TIME_MINUTES]: 5,
     [ENABLE_BACKGROUND]: true,
+    [AUTO_APPEARANCE]: true,
+    [DARK_MODE]: false,
   });
 
   // Track selected task IDs
@@ -279,7 +283,7 @@ export default function App() {
 
   // Hooks
   // Get theme
-  const colorValues = useTheme();
+  const colorValues = useTheme(settings);
 
   // Get window size
   const windowSize = useWindowSize();
@@ -451,13 +455,13 @@ export default function App() {
             opacity: imageInfo ? 0.9 : 1.0,
           }]}
           >
-            {windowSize === 'landscape' ? (
-              <LandscapeHeader />
-            ) : undefined}
             <SettingsContext.Provider value={{
               ...settings,
             }}
             >
+              {windowSize === 'landscape' ? (
+                <LandscapeHeader />
+              ) : undefined}
               <TaskContext.Provider
                 value={{
                   tasks,
@@ -471,16 +475,16 @@ export default function App() {
               >
                 <TimerPage />
               </TaskContext.Provider>
+              {windowSize === 'landscape' ? (
+                <ImageContext.Provider
+                  value={{
+                    imageInfo,
+                  }}
+                >
+                  <LandscapeFooter />
+                </ImageContext.Provider>
+              ) : undefined}
             </SettingsContext.Provider>
-            {windowSize === 'landscape' ? (
-              <ImageContext.Provider
-                value={{
-                  imageInfo,
-                }}
-              >
-                <LandscapeFooter />
-              </ImageContext.Provider>
-            ) : undefined}
           </View>
         </ImageBackground>
         {windowSize === 'landscape' ? (

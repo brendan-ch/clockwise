@@ -1,5 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { BREAK_TIME_MINUTES, ENABLE_BACKGROUND, FOCUS_TIME_MINUTES } from '../StorageKeys';
+import {
+  AUTO_APPEARANCE, BREAK_TIME_MINUTES, ENABLE_BACKGROUND, FOCUS_TIME_MINUTES,
+} from '../StorageKeys';
 
 /**
  * Retrieve the relevant timer value from AsyncStorage, if existent.
@@ -33,6 +35,7 @@ async function prefillSettings() {
     [BREAK_TIME_MINUTES]: '5',
     [FOCUS_TIME_MINUTES]: '25',
     [ENABLE_BACKGROUND]: '1',
+    [AUTO_APPEARANCE]: '1',
   };
 
   await Promise.all(Object.keys(defaultSettings).map(async (key) => {

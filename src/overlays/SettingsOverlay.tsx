@@ -36,7 +36,7 @@ const navigator: SettingsNavigatorObject[] = [
     renderer: <TimerSettings />,
   },
   {
-    title: 'Background',
+    title: 'Appearance',
     renderer: <BackgroundSettings />,
   },
 ];

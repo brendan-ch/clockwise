@@ -12,7 +12,9 @@ import { checkNotifications, requestNotifications } from '../helpers/notificatio
 import useSettingsData from '../helpers/hooks/useSettingsData';
 import useTheme from '../helpers/hooks/useTheme';
 import {
+  AUTO_APPEARANCE,
   BREAK_TIME_MINUTES,
+  DARK_MODE,
   ENABLE_TIMER_ALERTS,
   ENABLE_TIMER_SOUND,
   FOCUS_TIME_MINUTES,
@@ -44,6 +46,16 @@ const options: SettingsOptionPropsStatic[] = [
     type: 'toggle',
     title: 'Timer alerts',
     storageKey: ENABLE_TIMER_ALERTS,
+  },
+  {
+    type: 'toggle',
+    title: 'Automatically set theme',
+    storageKey: AUTO_APPEARANCE,
+  },
+  {
+    type: 'toggle',
+    title: 'Enable dark mode',
+    storageKey: DARK_MODE,
   },
 ];
 
@@ -96,11 +108,17 @@ function SettingsPage() {
   // Sync options with storage
   const { settingsData, handleChange } = useSettingsData(options);
 
+  const autoSetTheme = settingsData[4]?.value as boolean;
   const sections: Section[] = [
     {
       title: 'Timer',
       icon: 'timer-outline',
       data: Platform.OS === 'web' ? settingsData.slice(0, 3) : settingsData.slice(0, 4),
+    },
+    {
+      title: 'Theme',
+      icon: 'moon-outline',
+      data: autoSetTheme ? settingsData.slice(4, 5) : settingsData.slice(4, 6),
     },
   ];
   // Overlay to display
@@ -136,8 +154,10 @@ function SettingsPage() {
           if (!result) return;
         }
 
+        const i = options.findIndex((value) => value.title === item.title);
+
         handleChange(
-          index,
+          i,
           newData,
         );
       }}

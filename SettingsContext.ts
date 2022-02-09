@@ -1,6 +1,7 @@
 import React from 'react';
 import {
-  BREAK_TIME_MINUTES, ENABLE_BACKGROUND, ENABLE_TIMER_ALERTS, FOCUS_TIME_MINUTES,
+  AUTO_APPEARANCE,
+  BREAK_TIME_MINUTES, DARK_MODE, ENABLE_BACKGROUND, ENABLE_TIMER_ALERTS, FOCUS_TIME_MINUTES,
 } from './src/StorageKeys';
 import { DefaultSettingsState } from './src/types';
 
@@ -9,6 +10,8 @@ const defaultSettingsState: DefaultSettingsState = {
   [FOCUS_TIME_MINUTES]: 25,
   [BREAK_TIME_MINUTES]: 5,
   [ENABLE_BACKGROUND]: true,
+  [AUTO_APPEARANCE]: true,
+  [DARK_MODE]: false,
 };
 
 const SettingsContext = React.createContext(defaultSettingsState);
