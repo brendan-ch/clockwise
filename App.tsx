@@ -425,7 +425,7 @@ export default function App() {
           style={[styles.landscapeContainer, {
             backgroundColor: colorValues.background,
           }]}
-          blurRadius={15}
+          blurRadius={2}
           loadingIndicatorSource={{
             uri: '',
           }}
