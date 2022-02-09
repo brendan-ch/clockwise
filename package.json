@@ -8,7 +8,7 @@
     "eject": "expo eject",
     "lint": "eslint --ext .ts,.tsx \"./\"",
     "type-check": "tsc --noEmit",
-    "build-api": "expo build:web && copyfiles ./api/* ./web-build/"
+    "build-api": "expo build:web && copyfiles ./api/* web-build && copyfiles -f ./api/package.json web-build"
   },
   "dependencies": {
     "@expo-google-fonts/anonymous-pro": "^0.2.0",
