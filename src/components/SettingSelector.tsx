@@ -96,8 +96,10 @@ SettingsSelector.defaultProps = {
 
 const styles = StyleSheet.create({
   container: {
-    paddingLeft: 10,
-    justifyContent: 'center',
+    paddingHorizontal: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 });
 
