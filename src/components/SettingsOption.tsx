@@ -172,6 +172,7 @@ function SettingsOption({
         <Text
           style={[TextStyles.textRegular, {
             color: colors.gray3,
+            marginLeft: 3,
           }]}
         >
           {indicator}
@@ -209,10 +210,11 @@ function SettingsOption({
           onPress={onPressRight}
           style={{
             flexDirection: 'row',
-            width: 35,
-            height: 35,
+            width: 20,
+            height: 32,
             justifyContent: 'flex-end',
             alignItems: 'center',
+            marginLeft: 15,
           }}
         >
           <Ionicons
