@@ -134,6 +134,8 @@ function SettingsOption({
               borderWidth: 0,
               height: 35,
               backgroundColor: colors.gray5,
+              borderRadius: 1,
+              paddingLeft: 5,
             }, titleStyle]}
             value={title}
             onChangeText={(text) => onChangeText(text)}
