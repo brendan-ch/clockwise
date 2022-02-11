@@ -152,6 +152,7 @@ function SettingsOverlay({ containerStyle }: Props) {
             selected={value.title === selected}
             style={styles.settingsSelector}
             onPress={() => setSelected(value.title)}
+            indicator={value.title === selected ? '↑↓' : undefined}
           />
         ))}
       </View>
