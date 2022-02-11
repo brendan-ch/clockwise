@@ -114,7 +114,7 @@ function BackgroundSettingsPane() {
           newData,
         );
       }}
-      indicator={keyboardSelected ? '↑↓' : undefined}
+      indicator={keyboardSelected === item.title ? '↑↓' : undefined}
     />
   );
 
