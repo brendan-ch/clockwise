@@ -33,7 +33,8 @@ function SettingsOption({
   onInputBlur,
   onInputSelect,
   onSelect,
-  style, titleStyle, disabled, keyboardSelected, onChangeText, inputSelected, subtitle,
+  style,
+  titleStyle, disabled, keyboardSelected, onChangeText, inputSelected, subtitle, indicator,
 }: SettingsOptionProps) {
   const colors = useTheme();
   const {
@@ -99,11 +100,6 @@ function SettingsOption({
       }, style]}
       onClick={Platform.OS === 'web' ? handlePress : undefined}
     >
-      {/* <View style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-      }}
-      > */}
       {iconLeft ? (
         <Pressable
           onPress={onPressLeft}
@@ -137,6 +133,7 @@ function SettingsOption({
               color: colors.primary,
               borderWidth: 0,
               height: 35,
+              backgroundColor: colors.gray5,
             }, titleStyle]}
             value={title}
             onChangeText={(text) => onChangeText(text)}
@@ -170,7 +167,16 @@ function SettingsOption({
           ) : undefined}
         </View>
       )}
-      {/* </View> */}
+      {/* Display right side subtitle as indicator */}
+      {indicator ? (
+        <Text
+          style={[TextStyles.textRegular, {
+            color: colors.gray3,
+          }]}
+        >
+          {indicator}
+        </Text>
+      ) : undefined}
       {type === 'toggle' ? (
         <Checkbox
           selected={value === true}
