@@ -201,6 +201,7 @@ function SettingsOption({
           color: colors.primary,
           textDecorationLine: keyboardSelected ? 'underline' : undefined,
           textDecorationColor: keyboardSelected ? colors.primary : undefined,
+          marginLeft: 3,
         }]}
         >
           {value}
@@ -216,7 +217,7 @@ function SettingsOption({
             height: 32,
             justifyContent: 'flex-end',
             alignItems: 'center',
-            marginLeft: 15,
+            marginLeft: 12,
           }}
         >
           <Ionicons
