@@ -43,6 +43,7 @@ function NumberBox({
         borderColor: selected || keyboardSelected ? colors.primary : undefined,
         color: colors.primary,
         textAlign: 'center',
+        marginLeft: 3,
       }, Platform.OS === 'web' ? {
         // @ts-ignore
         outline: 'none',

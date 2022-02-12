@@ -16,6 +16,7 @@ function Checkbox({ selected, keyboardSelected, disabled }: Props) {
     <View style={[styles.container, {
       borderWidth: keyboardSelected ? 1 : 0,
       borderColor: keyboardSelected ? colors.primary : undefined,
+      marginLeft: 3,
     }]}
     >
       <Ionicons

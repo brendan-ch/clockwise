@@ -196,16 +196,6 @@ function SelectorGroup({
     }
   }, [expanded]);
 
-  // useEffect(() => {
-  //   const subscription = Keyboard.addListener('keyboardDidShow', () => {
-  //     if (onKeyboardShown) {
-  //       onKeyboardShown();
-  //     }
-  //   });
-
-  //   return () => subscription.remove();
-  // }, [onKeyboardShown]);
-
   useEffect(() => {
     if (selected && onKeyboardShown) {
       onKeyboardShown();
@@ -240,6 +230,7 @@ function SelectorGroup({
       titleStyle={item.titleStyle}
       onInputSelect={item.onInputSelect}
       subtitle={item.subtitle}
+      indicator={item.indicator}
     />
   );
 
@@ -267,12 +258,13 @@ function SelectorGroup({
         onPress={header.onPress}
         onChangeText={expanded ? header.onChangeText : undefined}
         style={{
-          marginLeft: expanded ? 5 : 0,
+          marginHorizontal: expanded ? 5 : 0,
         }}
         titleStyle={header.titleStyle}
         inputSelected={expanded ? headerInputSelected : false}
         onInputBlur={() => setHeaderInputSelected(false)}
         onInputSelect={header.onInputSelect}
+        indicator={header.indicator}
       />
       {expanded ? (
         <View style={[styles.line, {

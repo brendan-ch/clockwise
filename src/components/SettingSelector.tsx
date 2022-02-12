@@ -14,6 +14,7 @@ interface Props {
   selected?: boolean,
   style?: ViewStyle,
   text?: string,
+  indicator?: string,
   onPress?: () => any,
 }
 
@@ -23,19 +24,29 @@ interface Props {
  * @returns
  */
 function SettingsSelector({
-  selected, style, text, onPress,
+  selected, style, text, onPress, indicator,
 }: Props) {
   const colors = useTheme();
 
   const { mouseHoverAnimation, onMouseEnter, onMouseLeave } = useMouseAnimations();
 
-  const children = (
+  const textChild = (
     <Text style={[selected ? TextStyles.textBold : TextStyles.textRegular, {
       color: selected ? colors.background : colors.primary,
     }]}
     >
       {text}
 
+    </Text>
+  );
+
+  const indicatorChild = (
+    <Text
+      style={[TextStyles.textRegular, {
+        color: colors.gray3,
+      }]}
+    >
+      {indicator}
     </Text>
   );
 
@@ -56,7 +67,8 @@ function SettingsSelector({
         onMouseLeave={onMouseLeave}
         onClick={onPress}
       >
-        {children}
+        {textChild}
+        {indicatorChild}
       </Animated.View>
     );
   }
@@ -68,7 +80,8 @@ function SettingsSelector({
       }]}
       onPress={onPress}
     >
-      {children}
+      {textChild}
+      {indicatorChild}
     </TouchableOpacity>
   );
 }
@@ -77,13 +90,16 @@ SettingsSelector.defaultProps = {
   selected: false,
   style: {},
   text: '',
+  indicator: '',
   onPress: () => {},
 };
 
 const styles = StyleSheet.create({
   container: {
-    paddingLeft: 10,
-    justifyContent: 'center',
+    paddingHorizontal: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 });
 

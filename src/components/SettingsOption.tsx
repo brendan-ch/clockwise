@@ -33,7 +33,8 @@ function SettingsOption({
   onInputBlur,
   onInputSelect,
   onSelect,
-  style, titleStyle, disabled, keyboardSelected, onChangeText, inputSelected, subtitle,
+  style,
+  titleStyle, disabled, keyboardSelected, onChangeText, inputSelected, subtitle, indicator,
 }: SettingsOptionProps) {
   const colors = useTheme();
   const {
@@ -99,11 +100,6 @@ function SettingsOption({
       }, style]}
       onClick={Platform.OS === 'web' ? handlePress : undefined}
     >
-      {/* <View style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-      }}
-      > */}
       {iconLeft ? (
         <Pressable
           onPress={onPressLeft}
@@ -137,6 +133,9 @@ function SettingsOption({
               color: colors.primary,
               borderWidth: 0,
               height: 35,
+              backgroundColor: colors.gray5,
+              borderRadius: 1,
+              paddingLeft: 5,
             }, titleStyle]}
             value={title}
             onChangeText={(text) => onChangeText(text)}
@@ -170,7 +169,17 @@ function SettingsOption({
           ) : undefined}
         </View>
       )}
-      {/* </View> */}
+      {/* Display right side subtitle as indicator */}
+      {indicator ? (
+        <Text
+          style={[TextStyles.textRegular, {
+            color: colors.gray3,
+            marginLeft: 3,
+          }]}
+        >
+          {indicator}
+        </Text>
+      ) : undefined}
       {type === 'toggle' ? (
         <Checkbox
           selected={value === true}
@@ -192,6 +201,7 @@ function SettingsOption({
           color: colors.primary,
           textDecorationLine: keyboardSelected ? 'underline' : undefined,
           textDecorationColor: keyboardSelected ? colors.primary : undefined,
+          marginLeft: 3,
         }]}
         >
           {value}
@@ -203,10 +213,11 @@ function SettingsOption({
           onPress={onPressRight}
           style={{
             flexDirection: 'row',
-            width: 35,
-            height: 35,
+            width: 20,
+            height: 32,
             justifyContent: 'flex-end',
             alignItems: 'center',
+            marginLeft: 12,
           }}
         >
           <Ionicons

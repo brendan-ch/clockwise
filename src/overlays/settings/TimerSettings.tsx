@@ -151,6 +151,7 @@ function TimerSettingsPane() {
           newData,
         );
       }}
+      indicator={keyboardSelected === item.title ? '↑↓' : undefined}
     />
   );
 

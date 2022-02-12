@@ -124,6 +124,7 @@ function Keybindings() {
       /* eslint-disable react/jsx-props-no-spreading */
       {...item}
       keyboardSelected={keyboardSelected === item.title}
+      indicator={keyboardSelected === item.title ? '↑↓' : undefined}
     />
   );
 

@@ -281,13 +281,22 @@ function TaskList({ setAtTop }: Props) {
     handleAutoScroll(expandedTask, 0.4);
   }, [expandedTask]);
 
-  const taskRenderer = ({ item }: { item: Task }) => {
+  const taskRenderer = ({ item, index }: { item: Task, index: number }) => {
     let iconLeftDisplay;
 
     if (timerStopped && selected.includes(item.id) && context.mode === 'focus') {
       iconLeftDisplay = 'checkbox';
     } else if (timerStopped && context.mode === 'focus') {
       iconLeftDisplay = 'checkbox-outline';
+    }
+
+    // Add keybind indicator
+    let headerIndicator = index <= 9
+      && index >= 0
+      && expandedTask !== item.id
+      && Platform.OS === 'web' ? `${index + 1}` : undefined;
+    if (headerIndicator === '10') {
+      headerIndicator = '0';
     }
 
     return (
@@ -329,7 +338,7 @@ function TaskList({ setAtTop }: Props) {
             value: 'checkmark',
             title: 'complete',
             onPress: () => handleCompleteTask(item.id),
-            // keybindingsPress: [['Meta', 'Enter'], ['Control', 'Enter'], ['Backspace']],
+            indicator: '⌘/⌃ + Enter',
           }) : ({
             type: 'icon',
             value: 'trash-outline',
@@ -337,7 +346,6 @@ function TaskList({ setAtTop }: Props) {
             // index: '1',
             onPress: () => handleDeleteTask(item.id),
             onPressRight: () => handleDeleteTask(item.id),
-            // keybindingsPress: [['Backspace']],
           }),
         ]}
         header={item.completed ? ({
@@ -356,16 +364,14 @@ function TaskList({ setAtTop }: Props) {
             ? () => handleDeselect(item.id)
             : () => handleSelect(item.id),
           type: 'icon',
-          // index: `${item.id}`,
           onPress: expandedTask === item.id && !allowDeselect
             ? undefined
             : () => handleExpand(expandedTask === item.id ? -1 : item.id),
           onPressRight: () => setExpandedTask(expandedTask === item.id ? -1 : item.id),
           value: expandedTask === item.id ? 'chevron-down' : 'chevron-forward',
           onChangeText: timerStopped || context.mode === 'break' ? (text) => handleChangeTask('title', text, item.id) : undefined,
-          // keybindingsPressInput: [['Enter']],
-          // keybindingsPressLeft: [['s']],
           onInputSelect: Platform.OS !== 'web' ? () => handleAutoScroll(item.id) : undefined,
+          indicator: headerIndicator,
         })}
         onKeyboardShown={Platform.OS !== 'web' ? () => handleAutoScroll(item.id) : undefined}
       />
@@ -392,6 +398,7 @@ function TaskList({ setAtTop }: Props) {
           titleStyle={TextStyles.textBold}
           onPress={() => handleAddTask()}
           onPressRight={() => handleAddTask()}
+          indicator={Platform.OS === 'web' ? 'A' : undefined}
         />
       )}
       {!timerStopped && context.mode === 'focus' ? undefined : (

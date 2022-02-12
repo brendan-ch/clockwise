@@ -41,6 +41,10 @@ interface SettingsOptionProps {
    */
   subtitle?: string,
   /**
+   * Subtitle to display to the right of the text group.
+   */
+  indicator?: string,
+  /**
    * Icon to display to the left of the title.
    */
   iconLeft?: string,
