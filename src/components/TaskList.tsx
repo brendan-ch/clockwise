@@ -291,7 +291,10 @@ function TaskList({ setAtTop }: Props) {
     }
 
     // Add keybind indicator
-    let headerIndicator = index <= 9 && index >= 0 ? `${index + 1}` : undefined;
+    let headerIndicator = index <= 9
+      && index >= 0
+      && expandedTask !== item.id
+      && Platform.OS === 'web' ? `${index + 1}` : undefined;
     if (headerIndicator === '10') {
       headerIndicator = '0';
     }
@@ -329,7 +332,6 @@ function TaskList({ setAtTop }: Props) {
             value: item.estPomodoros,
             onChange: (data) => handleChangeTask('estPomodoros', data, item.id),
             disabled: !timerStopped && context.mode === 'focus',
-            indicator: 'E',
           },
           !timerStopped && context.mode === 'focus' ? ({
             type: 'icon',
@@ -344,7 +346,6 @@ function TaskList({ setAtTop }: Props) {
             // index: '1',
             onPress: () => handleDeleteTask(item.id),
             onPressRight: () => handleDeleteTask(item.id),
-            indicator: 'Backspace',
           }),
         ]}
         header={item.completed ? ({
@@ -397,7 +398,7 @@ function TaskList({ setAtTop }: Props) {
           titleStyle={TextStyles.textBold}
           onPress={() => handleAddTask()}
           onPressRight={() => handleAddTask()}
-          indicator="A"
+          indicator={Platform.OS === 'web' ? 'A' : undefined}
         />
       )}
       {!timerStopped && context.mode === 'focus' ? undefined : (
