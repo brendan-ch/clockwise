@@ -258,7 +258,7 @@ function SelectorGroup({
         onPress={header.onPress}
         onChangeText={expanded ? header.onChangeText : undefined}
         style={{
-          marginLeft: expanded ? 5 : 0,
+          marginHorizontal: expanded ? 5 : 0,
         }}
         titleStyle={header.titleStyle}
         inputSelected={expanded ? headerInputSelected : false}
