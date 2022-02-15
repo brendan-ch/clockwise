@@ -90,7 +90,7 @@ export default function App() {
     [ENABLE_TIMER_ALERTS]: false,
     [FOCUS_TIME_MINUTES]: 25,
     [BREAK_TIME_MINUTES]: 5,
-    [ENABLE_BACKGROUND]: true,
+    [ENABLE_BACKGROUND]: false,
     [AUTO_APPEARANCE]: true,
     [DARK_MODE]: false,
   });
