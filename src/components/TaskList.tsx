@@ -338,7 +338,7 @@ function TaskList({ setAtTop }: Props) {
             value: 'checkmark',
             title: 'complete',
             onPress: () => handleCompleteTask(item.id),
-            indicator: '⌘/⌃ + Enter',
+            indicator: Platform.OS === 'web' ? '⌘/⌃ + Enter' : undefined,
           }) : ({
             type: 'icon',
             value: 'trash-outline',
