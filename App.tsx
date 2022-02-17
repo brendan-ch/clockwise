@@ -524,7 +524,8 @@ export default function App() {
               <SettingsOverlay />
             </Modal>
             <Modal
-              isVisible={overlay === 'introduction'}
+              // TO-DO @unnameduser95: sort out image resizing issues on mobile platforms
+              isVisible={overlay === 'introduction' && Platform.OS === 'web'}
               onBackdropPress={() => setOverlay('none')}
               backdropOpacity={0.3}
               backdropColor={colorValues.primary}
