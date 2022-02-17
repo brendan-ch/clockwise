@@ -12,8 +12,7 @@ import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
 import OverlayButtonBar from '../components/OverlayButtonBar';
 
-// @ts-ignore
-// import TasksImage from '../../assets/introduction/tasks.png';
+/* eslint-disable global-require */
 
 interface Props {
   containerStyle?: StyleProp<ViewStyle>,
@@ -108,6 +107,10 @@ function IntroductionOverlay({ containerStyle }: Props) {
         <IntroductionBlock
           title="Customize your timer"
           style={styles.block}
+          image={require('../../assets/introduction/settings.png')}
+          imageStyle={{
+            height: 200,
+          }}
         >
           <Text
             style={[TextStyles.textRegular, {
@@ -121,6 +124,10 @@ function IntroductionOverlay({ containerStyle }: Props) {
         <IntroductionBlock
           title="No ads or tracking"
           style={styles.block}
+          image={require('../../assets/introduction/no-ads.png')}
+          imageStyle={{
+            height: 200,
+          }}
         >
           <Text style={[TextStyles.textRegular, {
             color: colorValues.primary,
