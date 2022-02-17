@@ -24,6 +24,7 @@ function IntroductionBlock({
         <Image
           source={image}
           style={[{ marginBottom: 10 }, imageStyle]}
+          resizeMode="center"
         />
       ) : undefined}
       <Text style={[TextStyles.textBold, {
