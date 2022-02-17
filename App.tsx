@@ -44,12 +44,14 @@ import {
   ENABLE_TIMER_ALERTS,
   ENABLE_TIMER_SOUND,
   FOCUS_TIME_MINUTES,
+  SUPPRESS_INTRODUCTION,
 } from './src/StorageKeys';
 import SettingsContext from './SettingsContext';
 import useTasks from './src/helpers/hooks/useTasks';
 import TaskContext from './TaskContext';
 import getBaseURL from './src/helpers/getBaseURL';
 import ImageContext from './ImageContext';
+import IntroductionOverlay from './src/overlays/IntroductionOverlay';
 
 const MIN_25 = 1500000;
 // const MIN_5 = 300000;
@@ -353,6 +355,15 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    getData(SUPPRESS_INTRODUCTION)
+      .then((result) => {
+        if (!result) {
+          setOverlay('introduction');
+        }
+      });
+  }, []);
+
+  useEffect(() => {
     // Change timer display if timer is stopped
     // and timer setting changes
     if (timerState === 'stopped') {
@@ -511,6 +522,24 @@ export default function App() {
               }}
             >
               <SettingsOverlay />
+            </Modal>
+            <Modal
+              // TO-DO @unnameduser95: sort out image resizing issues on mobile platforms
+              isVisible={overlay === 'introduction' && Platform.OS === 'web'}
+              onBackdropPress={() => setOverlay('none')}
+              backdropOpacity={0.3}
+              backdropColor={colorValues.primary}
+              animationIn="fadeIn"
+              animationInTiming={20}
+              animationOut="fadeOut"
+              backdropTransitionInTiming={20}
+              backdropTransitionOutTiming={20}
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <IntroductionOverlay />
             </Modal>
           </SettingsContext.Provider>
         ) : undefined}

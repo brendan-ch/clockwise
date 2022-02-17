@@ -5,7 +5,7 @@ import {
 } from './StorageKeys';
 
 type TimerState = 'running' | 'paused' | 'stopped';
-type Overlay = 'none' | 'settings' | 'command';
+type Overlay = 'none' | 'settings' | 'command' | 'introduction';
 
 type KeyboardShortcutGroup = 'timer' | 'settings' | 'input' | 'settingsPage' | 'none';
 
