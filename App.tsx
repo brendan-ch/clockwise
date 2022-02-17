@@ -44,6 +44,7 @@ import {
   ENABLE_TIMER_ALERTS,
   ENABLE_TIMER_SOUND,
   FOCUS_TIME_MINUTES,
+  SUPPRESS_INTRODUCTION,
 } from './src/StorageKeys';
 import SettingsContext from './SettingsContext';
 import useTasks from './src/helpers/hooks/useTasks';
@@ -71,7 +72,7 @@ export default function App() {
   const [timeRemaining, setTimeRemaining] = useState(MIN_25);
   const [timerState, setTimerState] = useState<TimerState>('stopped');
   const [timeout, setTimeoutState] = useState<any>(undefined);
-  const [overlay, setOverlayState] = useState<Overlay>('introduction');
+  const [overlay, setOverlayState] = useState<Overlay>('none');
   const [mode, setMode] = useState<'focus' | 'break'>('focus');
 
   const [keyboardGroup, setKeyboardGroup] = useState<KeyboardShortcutGroup>('none');
@@ -351,6 +352,15 @@ export default function App() {
     loadTimerSound();
     prefillSettings();
     initializeSettingsData();
+  }, []);
+
+  useEffect(() => {
+    getData(SUPPRESS_INTRODUCTION)
+      .then((result) => {
+        if (!result) {
+          setOverlay('introduction');
+        }
+      });
   }, []);
 
   useEffect(() => {
