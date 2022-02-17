@@ -11,7 +11,7 @@ import { Audio } from 'expo-av';
 import * as Linking from 'expo-linking';
 import React, { useEffect, useState } from 'react';
 import {
-  ImageBackground, Platform, StyleSheet, View,
+  ImageBackground, Platform, StyleSheet, useWindowDimensions, View,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import { NavigationContainer } from '@react-navigation/native';
@@ -289,6 +289,7 @@ export default function App() {
 
   // Get window size
   const windowSize = useWindowSize();
+  const { height, width } = useWindowDimensions();
 
   // Load fonts
   const [fontsLoaded] = useFonts({
@@ -412,6 +413,19 @@ export default function App() {
     headerTitleStyle: TextStyles.textBold,
   };
 
+  // Render custom backdrop that uses height/width provided by
+  // useWindowDimensions
+  const customBackdrop = (
+    <View
+      style={{
+        height,
+        width,
+        backgroundColor: colorValues.gray3,
+      }}
+      onTouchStart={() => setOverlay('none')}
+    />
+  );
+
   if (!fontsLoaded || !shortcutsInitialized) {
     return <AppLoading />;
   }
@@ -514,6 +528,7 @@ export default function App() {
               animationOut="fadeOut"
               backdropTransitionInTiming={20}
               backdropTransitionOutTiming={20}
+              customBackdrop={customBackdrop}
               animationOutTiming={20}
               style={{
                 // alignSelf: 'center',
@@ -532,8 +547,10 @@ export default function App() {
               animationIn="fadeIn"
               animationInTiming={20}
               animationOut="fadeOut"
+              animationOutTiming={20}
               backdropTransitionInTiming={20}
               backdropTransitionOutTiming={20}
+              customBackdrop={customBackdrop}
               style={{
                 justifyContent: 'center',
                 alignItems: 'center',
