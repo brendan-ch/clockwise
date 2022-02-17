@@ -149,8 +149,8 @@ export default function TimerPage() {
         <PageButtonBar
           selected={mode}
           style={styles.pageButtonBar}
-          // onPressFocus={() => handleStateSwitch('focus')}
-          // onPressBreak={() => handleStateSwitch('break')}
+          onPressFocus={() => handleStateSwitch('focus')}
+          onPressBreak={() => handleStateSwitch('break')}
         />
         <ActionButtonBar
           style={styles.actionButtonBar}
