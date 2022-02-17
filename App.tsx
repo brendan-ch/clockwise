@@ -413,6 +413,19 @@ export default function App() {
     headerTitleStyle: TextStyles.textBold,
   };
 
+  // Render custom backdrop that uses height/width provided by
+  // useWindowDimensions
+  const customBackdrop = (
+    <View
+      style={{
+        height,
+        width,
+        backgroundColor: colorValues.gray3,
+      }}
+      onTouchStart={() => setOverlay('none')}
+    />
+  );
+
   if (!fontsLoaded || !shortcutsInitialized) {
     return <AppLoading />;
   }
@@ -515,15 +528,7 @@ export default function App() {
               animationOut="fadeOut"
               backdropTransitionInTiming={20}
               backdropTransitionOutTiming={20}
-              customBackdrop={(
-                <View
-                  style={{
-                    height,
-                    width,
-                    backgroundColor: colorValues.gray3,
-                  }}
-                />
-              )}
+              customBackdrop={customBackdrop}
               animationOutTiming={20}
               style={{
                 // alignSelf: 'center',
@@ -545,15 +550,7 @@ export default function App() {
               animationOutTiming={20}
               backdropTransitionInTiming={20}
               backdropTransitionOutTiming={20}
-              customBackdrop={(
-                <View
-                  style={{
-                    height,
-                    width,
-                    backgroundColor: colorValues.gray3,
-                  }}
-                />
-              )}
+              customBackdrop={customBackdrop}
               style={{
                 justifyContent: 'center',
                 alignItems: 'center',
