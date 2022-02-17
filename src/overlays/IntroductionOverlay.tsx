@@ -24,15 +24,11 @@ interface Props {
 function IntroductionOverlay({ containerStyle }: Props) {
   const { background } = useTheme();
   const {
-    // keyboardShortcutManager,
+    keyboardShortcutManager,
     setOverlay,
-    // keyboardGroup,
-    // setKeyboardGroup,
+    keyboardGroup,
     setPageTitle,
   } = useContext(AppContext);
-
-  // Title of the selected settings navigator object.
-  // const [selected, setSelected] = useState('Timer');
 
   const colorValues = useTheme();
 
@@ -43,6 +39,19 @@ function IntroductionOverlay({ containerStyle }: Props) {
 
     return () => setPageTitle('Timer');
   }, []);
+
+  useEffect(() => {
+    if (keyboardShortcutManager) {
+      const unsubscribe = keyboardShortcutManager.registerEvent({
+        keys: ['Escape'],
+        action: () => setOverlay('none'),
+      });
+
+      return () => unsubscribe();
+    }
+
+    return () => {};
+  }, [keyboardGroup, keyboardShortcutManager]);
 
   return (
     <View style={[styles.container, {
