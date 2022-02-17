@@ -112,8 +112,8 @@ function IntroductionOverlay({ containerStyle }: Props) {
             {'\n\n'}
 
             <ClickableText
-              text="Click here to learn more about the Pomodoro technique."
-              onPress={() => Linking.openURL('https://google.com')}
+              text="Learn more about the Pomodoro technique."
+              onPress={() => Linking.openURL('https://en.wikipedia.org/wiki/Pomodoro_Technique')}
               style={[TextStyles.textRegular, {
                 color: colorValues.gray3,
               }]}
