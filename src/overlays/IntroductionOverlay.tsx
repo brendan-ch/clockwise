@@ -11,6 +11,8 @@ import IntroductionBlock from '../components/IntroductionBlock';
 import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
 import OverlayButtonBar from '../components/OverlayButtonBar';
+import { storeData } from '../helpers/storage';
+import { SUPPRESS_INTRODUCTION } from '../StorageKeys';
 
 /* eslint-disable global-require */
 
@@ -33,6 +35,11 @@ function IntroductionOverlay({ containerStyle }: Props) {
   const colorValues = useTheme();
 
   const privacyPolicyLink = Constants.manifest?.extra?.privacyPolicyLink;
+
+  useEffect(() => {
+    // Set storage option
+    storeData(SUPPRESS_INTRODUCTION, '1');
+  }, []);
 
   useEffect(() => {
     setPageTitle('Welcome!');
@@ -156,10 +163,6 @@ function IntroductionOverlay({ containerStyle }: Props) {
         </IntroductionBlock>
       </View>
       <OverlayButtonBar
-        leftButton={{
-          text: 'full guide',
-          onPress: () => setOverlay('none'),
-        }}
         rightButton={{
           text: 'dismiss',
           onPress: () => setOverlay('none'),
@@ -167,6 +170,7 @@ function IntroductionOverlay({ containerStyle }: Props) {
         }}
         style={{
           paddingHorizontal: 10,
+          justifyContent: 'flex-end',
           alignItems: 'center',
           height: 100,
         }}
