@@ -1,6 +1,7 @@
 import React from 'react';
 import {
-  StyleSheet, Text, TouchableOpacity, View,
+  StyleProp,
+  StyleSheet, Text, TouchableOpacity, View, ViewStyle,
 } from 'react-native';
 import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
@@ -15,7 +16,8 @@ interface Props {
     text: string,
     onPress: () => any,
     primary?: boolean,
-  }
+  },
+  style?: StyleProp<ViewStyle>,
 }
 
 interface ButtonProps {
@@ -65,9 +67,9 @@ const buttonStyles = StyleSheet.create({
 /**
  * Display a set of buttons.
  */
-function OverlayButtonBar({ leftButton, rightButton }: Props) {
+function OverlayButtonBar({ leftButton, rightButton, style }: Props) {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       {leftButton ? (
         <OverlayButton
           text={leftButton.text}
@@ -89,6 +91,7 @@ function OverlayButtonBar({ leftButton, rightButton }: Props) {
 OverlayButtonBar.defaultProps = {
   leftButton: undefined,
   rightButton: undefined,
+  style: {},
 };
 
 const styles = StyleSheet.create({
