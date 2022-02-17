@@ -24,7 +24,6 @@ interface Props {
  * Content for the settings modal.
  */
 function IntroductionOverlay({ containerStyle }: Props) {
-  const { background } = useTheme();
   const {
     keyboardShortcutManager,
     setOverlay,
@@ -62,7 +61,7 @@ function IntroductionOverlay({ containerStyle }: Props) {
 
   return (
     <View style={[styles.container, {
-      backgroundColor: background,
+      backgroundColor: colorValues.background,
     }, containerStyle]}
     >
       <View style={[[{
