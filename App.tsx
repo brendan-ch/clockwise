@@ -50,6 +50,7 @@ import useTasks from './src/helpers/hooks/useTasks';
 import TaskContext from './TaskContext';
 import getBaseURL from './src/helpers/getBaseURL';
 import ImageContext from './ImageContext';
+import IntroductionOverlay from './src/overlays/IntroductionOverlay';
 
 const MIN_25 = 1500000;
 // const MIN_5 = 300000;
@@ -70,7 +71,7 @@ export default function App() {
   const [timeRemaining, setTimeRemaining] = useState(MIN_25);
   const [timerState, setTimerState] = useState<TimerState>('stopped');
   const [timeout, setTimeoutState] = useState<any>(undefined);
-  const [overlay, setOverlayState] = useState<Overlay>('none');
+  const [overlay, setOverlayState] = useState<Overlay>('introduction');
   const [mode, setMode] = useState<'focus' | 'break'>('focus');
 
   const [keyboardGroup, setKeyboardGroup] = useState<KeyboardShortcutGroup>('none');
@@ -511,6 +512,23 @@ export default function App() {
               }}
             >
               <SettingsOverlay />
+            </Modal>
+            <Modal
+              isVisible={overlay === 'introduction'}
+              onBackdropPress={() => setOverlay('none')}
+              backdropOpacity={0.3}
+              backdropColor={colorValues.primary}
+              animationIn="fadeIn"
+              animationInTiming={20}
+              animationOut="fadeOut"
+              backdropTransitionInTiming={20}
+              backdropTransitionOutTiming={20}
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <IntroductionOverlay />
             </Modal>
           </SettingsContext.Provider>
         ) : undefined}
