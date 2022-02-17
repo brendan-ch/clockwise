@@ -23,7 +23,7 @@ function IntroductionBlock({
       {image ? (
         <Image
           source={image}
-          style={imageStyle}
+          style={[{ marginBottom: 10 }, imageStyle]}
         />
       ) : undefined}
       <Text style={[TextStyles.textBold, {
