@@ -423,6 +423,8 @@ export default function App() {
         backgroundColor: colorValues.gray3,
       }}
       onTouchStart={() => setOverlay('none')}
+      // @ts-ignore
+      onClick={Platform.OS === 'web' ? () => setOverlay('none') : undefined}
     />
   );
 
