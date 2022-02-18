@@ -1,4 +1,6 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, {
+  useContext, useEffect, useRef, useState,
+} from 'react';
 import {
   FlatList,
   Linking, Platform, StyleSheet, Text, useWindowDimensions, View,
@@ -11,6 +13,8 @@ import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
 import OverlayButtonBar from '../components/OverlayButtonBar';
 import { IntroductionBlockProps } from '../types';
+import { storeData } from '../helpers/storage';
+import { SUPPRESS_INTRODUCTION } from '../StorageKeys';
 
 /* eslint-disable global-require */
 
@@ -103,6 +107,11 @@ function IntroductionPage() {
     // ref?.current?.scrollTo(index + 400);
     setIndex(index + 1);
   }
+
+  useEffect(() => {
+    // Set storage option
+    storeData(SUPPRESS_INTRODUCTION, '1');
+  }, []);
 
   const renderBlock = ({ item }: { item: IntroductionBlockProps }) => (
     <IntroductionBlock
