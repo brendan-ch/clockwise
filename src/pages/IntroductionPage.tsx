@@ -1,5 +1,5 @@
 import React, {
-  useContext, useEffect, useRef, useState,
+  useContext, useRef, useState,
 } from 'react';
 import {
   FlatList,
@@ -35,6 +35,9 @@ function IntroductionPage() {
 
   function handleNextButtonPress() {
     if (index + 1 >= blocks.length || Platform.OS === 'web') {
+      // Set storage data
+      storeData(SUPPRESS_INTRODUCTION, '1');
+
       // Remove overlay
       setOverlay('none');
       return;
@@ -47,11 +50,6 @@ function IntroductionPage() {
     // ref?.current?.scrollTo(index + 400);
     setIndex(index + 1);
   }
-
-  useEffect(() => {
-    // Set storage option
-    storeData(SUPPRESS_INTRODUCTION, '1');
-  }, []);
 
   const renderBlock = ({ item }: { item: IntroductionBlockProps }) => (
     <IntroductionBlock
