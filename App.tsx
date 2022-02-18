@@ -52,6 +52,7 @@ import TaskContext from './TaskContext';
 import getBaseURL from './src/helpers/getBaseURL';
 import ImageContext from './ImageContext';
 import IntroductionOverlay from './src/overlays/IntroductionOverlay';
+import IntroductionPage from './src/pages/IntroductionPage';
 
 const MIN_25 = 1500000;
 // const MIN_5 = 300000;
@@ -612,30 +613,42 @@ export default function App() {
           <NavigationContainer
             linking={linking}
           >
-            <Stack.Navigator>
-              <Stack.Screen
-                name="Timer"
-                component={TimerPage}
-                options={{
-                  ...headerOptions,
-                  headerTitle: '',
-                  headerRight: () => HeaderButton({
-                    iconName: 'ellipsis-vertical',
-                    to: {
-                      screen: 'Settings',
-                      params: {},
-                    },
-                  }),
-                }}
-              />
-              <Stack.Screen
-                name="Settings"
-                component={SettingsPage}
-                options={{
-                  ...headerOptions,
-                }}
-              />
-            </Stack.Navigator>
+            {overlay === 'introduction' ? (
+              <Stack.Navigator>
+                <Stack.Screen
+                  name="Introduction"
+                  component={IntroductionPage}
+                  options={{
+                    headerShown: false,
+                  }}
+                />
+              </Stack.Navigator>
+            ) : (
+              <Stack.Navigator>
+                <Stack.Screen
+                  name="Timer"
+                  component={TimerPage}
+                  options={{
+                    ...headerOptions,
+                    headerTitle: '',
+                    headerRight: () => HeaderButton({
+                      iconName: 'ellipsis-vertical',
+                      to: {
+                        screen: 'Settings',
+                        params: {},
+                      },
+                    }),
+                  }}
+                />
+                <Stack.Screen
+                  name="Settings"
+                  component={SettingsPage}
+                  options={{
+                    ...headerOptions,
+                  }}
+                />
+              </Stack.Navigator>
+            )}
           </NavigationContainer>
         </TaskContext.Provider>
       </SettingsContext.Provider>
