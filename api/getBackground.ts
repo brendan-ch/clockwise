@@ -1,4 +1,5 @@
 // @ts-nocheck
+/* eslint-disable no-await-in-loop */
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import mongoose from 'mongoose';
@@ -24,6 +25,19 @@ async function connectToDB(uri: string) {
   cached = await mongoose.connect(uri);
 }
 
+/**
+ * Returns a boolean indicating whether the background object is valid.
+ * @param obj
+ */
+function validateBackground(obj: IBackground): boolean {
+  return obj.author
+    && obj.link
+    && obj.uri
+    && typeof obj.author === 'string'
+    && typeof obj.link === 'string'
+    && typeof obj.uri === 'string';
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!mongoUri) {
     return res.status(500).json({
@@ -34,11 +48,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   await connectToDB(mongoUri);
 
   const count = await Background.countDocuments();
-  const rand = Math.floor(Math.random() * count);
+  let rand = Math.floor(Math.random() * count);
 
-  const background = await Background.findOne().skip(rand);
+  let background = await Background.findOne().skip(rand);
 
-  if (!background) {
+  // To prevent potential infinite loop
+  // if there are no valid backgrounds
+  let i = 0;
+  const max = 5;
+
+  // Validate the data
+  while (!validateBackground(background) && i < max) {
+    rand = Math.floor(Math.random() * count);
+    background = await Background.findOne().skip(rand);
+
+    i += 1;
+  }
+
+  if (!background || i >= max) {
     return res.status(404).json({
       error: 'No background found',
       rand,
