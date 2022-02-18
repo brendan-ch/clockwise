@@ -1,4 +1,7 @@
-import { StyleProp, TextStyle, ViewStyle } from 'react-native';
+import { ReactChild } from 'react';
+import {
+  ImageSourcePropType, ImageStyle, StyleProp, TextStyle, ViewStyle,
+} from 'react-native';
 import {
   AUTO_APPEARANCE,
   BREAK_TIME_MINUTES, DARK_MODE, ENABLE_BACKGROUND, ENABLE_TIMER_ALERTS, FOCUS_TIME_MINUTES,
@@ -173,6 +176,14 @@ interface DefaultImageState {
   imageInfo?: ImageInfo,
 }
 
+interface IntroductionBlockProps {
+  title: string,
+  children: ReactChild,
+  style?: StyleProp<ViewStyle>,
+  imageStyle?: StyleProp<ImageStyle>,
+  image?: ImageSourcePropType,
+}
+
 export {
   TimerState,
   RootStackParamList,
@@ -185,4 +196,5 @@ export {
   DefaultSettingsState,
   DefaultImageState,
   ImageInfo,
+  IntroductionBlockProps,
 };
