@@ -2,17 +2,16 @@ import React, {
   useEffect, useContext,
 } from 'react';
 import {
-  StyleProp, ViewStyle, View, StyleSheet, Text, Linking,
+  StyleProp, ViewStyle, View, StyleSheet, Text,
 } from 'react-native';
-import Constants from 'expo-constants';
 import AppContext from '../../AppContext';
-import ClickableText from '../components/ClickableText';
 import IntroductionBlock from '../components/IntroductionBlock';
 import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
 import OverlayButtonBar from '../components/OverlayButtonBar';
 import { storeData } from '../helpers/storage';
 import { SUPPRESS_INTRODUCTION } from '../StorageKeys';
+import useIntroductionData from '../helpers/hooks/useIntroductionData';
 
 /* eslint-disable global-require */
 
@@ -33,7 +32,7 @@ function IntroductionOverlay({ containerStyle }: Props) {
 
   const colorValues = useTheme();
 
-  const privacyPolicyLink = Constants.manifest?.extra?.privacyPolicyLink;
+  const blocks = useIntroductionData();
 
   useEffect(() => {
     // Set storage option
@@ -95,71 +94,20 @@ function IntroductionOverlay({ containerStyle }: Props) {
         backgroundColor: colorValues.background,
       }]}
       >
-        <IntroductionBlock
-          title="Set up your tasks"
-          style={styles.block}
-          image={require('../../assets/introduction/tasks.png')}
-          imageStyle={{
-            height: 200,
-          }}
-        >
-          <Text style={[TextStyles.textRegular, {
-            color: colorValues.primary,
-          }]}
+        {blocks.map((value) => (
+          <IntroductionBlock
+            title={value.title}
+            image={value.image}
+            imageStyle={{
+              height: 200,
+              width: 220,
+            }}
+            style={styles.block}
+            key={value.title}
           >
-            Select tasks to work on during each session, so you never lose track of them.
-            {'\n\n'}
-
-            <ClickableText
-              text="Learn more about the Pomodoro technique."
-              onPress={() => Linking.openURL('https://en.wikipedia.org/wiki/Pomodoro_Technique')}
-              style={[TextStyles.textRegular, {
-                color: colorValues.gray3,
-              }]}
-            />
-          </Text>
-        </IntroductionBlock>
-        <IntroductionBlock
-          title="Customize your timer"
-          style={styles.block}
-          image={require('../../assets/introduction/settings.png')}
-          imageStyle={{
-            height: 200,
-          }}
-        >
-          <Text
-            style={[TextStyles.textRegular, {
-              color: colorValues.primary,
-            }]}
-          >
-            Change timer settings, color theme, and more in the settings.
-
-          </Text>
-        </IntroductionBlock>
-        <IntroductionBlock
-          title="No ads or tracking"
-          style={styles.block}
-          image={require('../../assets/introduction/no-ads.png')}
-          imageStyle={{
-            height: 200,
-          }}
-        >
-          <Text style={[TextStyles.textRegular, {
-            color: colorValues.primary,
-          }]}
-          >
-            {'Your data stays on your device. See the '}
-            <ClickableText
-              text="Privacy Policy"
-              onPress={() => Linking.openURL(privacyPolicyLink)}
-              style={[TextStyles.textRegular, {
-                color: colorValues.gray3,
-              }]}
-            />
-            {' for more information.'}
-
-          </Text>
-        </IntroductionBlock>
+            {value.children}
+          </IntroductionBlock>
+        ))}
       </View>
       <OverlayButtonBar
         rightButton={{

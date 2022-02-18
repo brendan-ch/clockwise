@@ -1,21 +1,14 @@
-import React, { ReactChild } from 'react';
+import React from 'react';
 import {
-  Image, ImageSourcePropType, ImageStyle, StyleProp, StyleSheet, Text, View, ViewStyle,
+  Image, StyleSheet, Text, View,
 } from 'react-native';
 import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
-
-interface Props {
-  title: string,
-  children: ReactChild,
-  style?: StyleProp<ViewStyle>,
-  imageStyle?: StyleProp<ImageStyle>,
-  image?: ImageSourcePropType,
-}
+import { IntroductionBlockProps } from '../types';
 
 function IntroductionBlock({
   title, children, style, imageStyle, image,
-}: Props) {
+}: IntroductionBlockProps) {
   const colorValues = useTheme();
 
   return (

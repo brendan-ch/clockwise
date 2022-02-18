@@ -52,6 +52,8 @@ import TaskContext from './TaskContext';
 import getBaseURL from './src/helpers/getBaseURL';
 import ImageContext from './ImageContext';
 import IntroductionOverlay from './src/overlays/IntroductionOverlay';
+import IntroductionPage from './src/pages/IntroductionPage';
+import { TIMER_SOUND } from './src/Assets';
 
 const MIN_25 = 1500000;
 // const MIN_5 = 300000;
@@ -118,7 +120,7 @@ export default function App() {
   async function loadTimerSound() {
     /* eslint-disable global-require */
     const newSound = await Audio.Sound.createAsync(
-      require('./assets/timer.mp3'),
+      TIMER_SOUND,
     );
     setSound(newSound.sound);
   }
@@ -541,8 +543,7 @@ export default function App() {
               <SettingsOverlay />
             </Modal>
             <Modal
-              // TO-DO @unnameduser95: sort out image resizing issues on mobile platforms
-              isVisible={overlay === 'introduction' && Platform.OS === 'web'}
+              isVisible={overlay === 'introduction'}
               onBackdropPress={() => setOverlay('none')}
               backdropOpacity={0.3}
               backdropColor={colorValues.primary}
@@ -612,30 +613,42 @@ export default function App() {
           <NavigationContainer
             linking={linking}
           >
-            <Stack.Navigator>
-              <Stack.Screen
-                name="Timer"
-                component={TimerPage}
-                options={{
-                  ...headerOptions,
-                  headerTitle: '',
-                  headerRight: () => HeaderButton({
-                    iconName: 'ellipsis-vertical',
-                    to: {
-                      screen: 'Settings',
-                      params: {},
-                    },
-                  }),
-                }}
-              />
-              <Stack.Screen
-                name="Settings"
-                component={SettingsPage}
-                options={{
-                  ...headerOptions,
-                }}
-              />
-            </Stack.Navigator>
+            {overlay === 'introduction' ? (
+              <Stack.Navigator>
+                <Stack.Screen
+                  name="Introduction"
+                  component={IntroductionPage}
+                  options={{
+                    headerShown: false,
+                  }}
+                />
+              </Stack.Navigator>
+            ) : (
+              <Stack.Navigator>
+                <Stack.Screen
+                  name="Timer"
+                  component={TimerPage}
+                  options={{
+                    ...headerOptions,
+                    headerTitle: '',
+                    headerRight: () => HeaderButton({
+                      iconName: 'ellipsis-vertical',
+                      to: {
+                        screen: 'Settings',
+                        params: {},
+                      },
+                    }),
+                  }}
+                />
+                <Stack.Screen
+                  name="Settings"
+                  component={SettingsPage}
+                  options={{
+                    ...headerOptions,
+                  }}
+                />
+              </Stack.Navigator>
+            )}
           </NavigationContainer>
         </TaskContext.Provider>
       </SettingsContext.Provider>
