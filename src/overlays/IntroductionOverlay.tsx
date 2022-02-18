@@ -100,6 +100,7 @@ function IntroductionOverlay({ containerStyle }: Props) {
             image={value.image}
             imageStyle={{
               height: 200,
+              width: 220,
             }}
             style={styles.block}
             key={value.title}
