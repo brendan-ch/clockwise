@@ -6,6 +6,7 @@ import ClickableText from '../../components/ClickableText';
 import { IntroductionBlockProps } from '../../types';
 import useTheme from './useTheme';
 import TextStyles from '../../styles/Text';
+import { NO_ADS_IMAGE, SETTINGS_IMAGE, TASKS_IMAGE } from '../../Assets';
 
 /* eslint-disable global-require */
 
@@ -19,7 +20,7 @@ function useIntroductionData(): IntroductionBlockProps[] {
   const blocks: IntroductionBlockProps[] = [
     {
       title: 'Set up your tasks',
-      image: require('../../../assets/introduction/tasks.png'),
+      image: TASKS_IMAGE,
       children: (
         <Text style={[TextStyles.textRegular, {
           color: colorValues.primary,
@@ -40,7 +41,7 @@ function useIntroductionData(): IntroductionBlockProps[] {
     },
     {
       title: 'Customize your timer',
-      image: require('../../../assets/introduction/settings.png'),
+      image: SETTINGS_IMAGE,
       children: (
         <Text
           style={[TextStyles.textRegular, {
@@ -54,7 +55,7 @@ function useIntroductionData(): IntroductionBlockProps[] {
     },
     {
       title: 'No ads or tracking',
-      image: require('../../../assets/introduction/no-ads.png'),
+      image: NO_ADS_IMAGE,
       children: (
         <Text style={[TextStyles.textRegular, {
           color: colorValues.primary,
