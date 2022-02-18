@@ -1,6 +1,7 @@
 import React, { useContext, useRef, useState } from 'react';
 import {
-  Linking, ScrollView, StyleSheet, Text, View,
+  FlatList,
+  Linking, Platform, StyleSheet, Text, useWindowDimensions, View,
 } from 'react-native';
 import Constants from 'expo-constants';
 import AppContext from '../../AppContext';
@@ -9,6 +10,7 @@ import IntroductionBlock from '../components/IntroductionBlock';
 import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
 import OverlayButtonBar from '../components/OverlayButtonBar';
+import { IntroductionBlockProps } from '../types';
 
 /* eslint-disable global-require */
 
@@ -18,16 +20,105 @@ function IntroductionPage() {
 
   const privacyPolicyLink = Constants.manifest?.extra?.privacyPolicyLink;
 
-  const ref = useRef<ScrollView>();
+  const { width } = useWindowDimensions();
+
+  const ref = useRef<FlatList>();
 
   const {
     setOverlay,
   } = useContext(AppContext);
 
+  const blocks: IntroductionBlockProps[] = [
+    {
+      title: 'Set up your tasks',
+      image: require('../../assets/introduction/tasks.png'),
+      children: (
+        <Text style={[TextStyles.textRegular, {
+          color: colorValues.primary,
+        }]}
+        >
+          Select tasks to work on during each session, so you never lose track of them.
+          {'\n\n'}
+
+          <ClickableText
+            text="Learn more about the Pomodoro technique."
+            onPress={() => Linking.openURL('https://en.wikipedia.org/wiki/Pomodoro_Technique')}
+            style={[TextStyles.textRegular, {
+              color: colorValues.gray3,
+            }]}
+          />
+        </Text>
+      ),
+    },
+    {
+      title: 'Customize your timer',
+      image: require('../../assets/introduction/settings.png'),
+      children: (
+        <Text
+          style={[TextStyles.textRegular, {
+            color: colorValues.primary,
+          }]}
+        >
+          Change timer settings, color theme, and more in the settings.
+
+        </Text>
+      ),
+    },
+    {
+      title: 'No ads or tracking',
+      image: require('../../assets/introduction/no-ads.png'),
+      children: (
+        <Text style={[TextStyles.textRegular, {
+          color: colorValues.primary,
+        }]}
+        >
+          {'Your data stays on your device. See the '}
+          <ClickableText
+            text="Privacy Policy"
+            onPress={() => Linking.openURL(privacyPolicyLink)}
+            style={[TextStyles.textRegular, {
+              color: colorValues.gray3,
+            }]}
+          />
+          {' for more information.'}
+
+        </Text>
+      ),
+    },
+  ];
+
+  const shouldRenderContinue = index + 1 === blocks.length || Platform.OS === 'web';
+
   function handleNextButtonPress() {
-    ref?.current?.scrollTo(index + 400);
-    setIndex(index + 400);
+    if (index + 1 >= blocks.length || Platform.OS === 'web') {
+      // Remove overlay
+      setOverlay('none');
+      return;
+    }
+
+    ref?.current?.scrollToIndex({
+      animated: true,
+      index: index + 1,
+    });
+    // ref?.current?.scrollTo(index + 400);
+    setIndex(index + 1);
   }
+
+  const renderBlock = ({ item }: { item: IntroductionBlockProps }) => (
+    <IntroductionBlock
+      title={item.title}
+      image={item.image}
+      style={[styles.block, {
+        width: width - 10,
+      }]}
+      imageStyle={{
+        height: 250,
+        width: width - 20,
+      }}
+    >
+      {item.children}
+    </IntroductionBlock>
+  );
 
   return (
     <View style={[styles.container, {
@@ -64,9 +155,22 @@ function IntroductionPage() {
       <View
         style={{
           height: 400,
+          width,
         }}
       >
-        <ScrollView
+        <FlatList
+          data={blocks}
+          renderItem={renderBlock}
+          horizontal
+          keyExtractor={(item) => item.title}
+          contentContainerStyle={{
+            // paddingHorizontal: 10,
+          }}
+          pagingEnabled
+          // @ts-ignore
+          ref={ref}
+        />
+        {/* <ScrollView
           horizontal
           pagingEnabled
           contentContainerStyle={{
@@ -141,20 +245,24 @@ function IntroductionPage() {
 
             </Text>
           </IntroductionBlock>
-        </ScrollView>
+        </ScrollView> */}
       </View>
       <OverlayButtonBar
-        leftButton={{
+        leftButton={shouldRenderContinue ? undefined : {
           text: 'skip',
           onPress: () => setOverlay('none'),
         }}
         rightButton={{
-          text: 'next',
+          text: shouldRenderContinue ? 'continue' : 'next',
           onPress: () => handleNextButtonPress(),
           primary: true,
         }}
         style={{
           paddingHorizontal: 10,
+          justifyContent:
+            shouldRenderContinue
+              ? 'flex-end'
+              : 'space-between',
         }}
       />
     </View>
@@ -169,8 +277,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   block: {
-    width: 380,
-    marginRight: 10,
+    width: 350,
+    marginLeft: 10,
   },
 });
 
