@@ -102,6 +102,7 @@ function IntroductionOverlay({ containerStyle }: Props) {
               height: 200,
             }}
             style={styles.block}
+            key={value.title}
           >
             {value.children}
           </IntroductionBlock>
