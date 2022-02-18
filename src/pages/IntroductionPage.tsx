@@ -3,11 +3,9 @@ import React, {
 } from 'react';
 import {
   FlatList,
-  Linking, Platform, StyleSheet, Text, useWindowDimensions, View,
+  Platform, StyleSheet, Text, useWindowDimensions, View,
 } from 'react-native';
-import Constants from 'expo-constants';
 import AppContext from '../../AppContext';
-import ClickableText from '../components/ClickableText';
 import IntroductionBlock from '../components/IntroductionBlock';
 import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
@@ -15,14 +13,13 @@ import OverlayButtonBar from '../components/OverlayButtonBar';
 import { IntroductionBlockProps } from '../types';
 import { storeData } from '../helpers/storage';
 import { SUPPRESS_INTRODUCTION } from '../StorageKeys';
+import useIntroductionData from '../helpers/hooks/useIntroductionData';
 
 /* eslint-disable global-require */
 
 function IntroductionPage() {
   const [index, setIndex] = useState(0);
   const colorValues = useTheme();
-
-  const privacyPolicyLink = Constants.manifest?.extra?.privacyPolicyLink;
 
   const { width } = useWindowDimensions();
 
@@ -32,64 +29,7 @@ function IntroductionPage() {
     setOverlay,
   } = useContext(AppContext);
 
-  const blocks: IntroductionBlockProps[] = [
-    {
-      title: 'Set up your tasks',
-      image: require('../../assets/introduction/tasks.png'),
-      children: (
-        <Text style={[TextStyles.textRegular, {
-          color: colorValues.primary,
-        }]}
-        >
-          Select tasks to work on during each session, so you never lose track of them.
-          {'\n\n'}
-
-          <ClickableText
-            text="Learn more about the Pomodoro technique."
-            onPress={() => Linking.openURL('https://en.wikipedia.org/wiki/Pomodoro_Technique')}
-            style={[TextStyles.textRegular, {
-              color: colorValues.gray3,
-            }]}
-          />
-        </Text>
-      ),
-    },
-    {
-      title: 'Customize your timer',
-      image: require('../../assets/introduction/settings.png'),
-      children: (
-        <Text
-          style={[TextStyles.textRegular, {
-            color: colorValues.primary,
-          }]}
-        >
-          Change timer settings, color theme, and more in the settings.
-
-        </Text>
-      ),
-    },
-    {
-      title: 'No ads or tracking',
-      image: require('../../assets/introduction/no-ads.png'),
-      children: (
-        <Text style={[TextStyles.textRegular, {
-          color: colorValues.primary,
-        }]}
-        >
-          {'Your data stays on your device. See the '}
-          <ClickableText
-            text="Privacy Policy"
-            onPress={() => Linking.openURL(privacyPolicyLink)}
-            style={[TextStyles.textRegular, {
-              color: colorValues.gray3,
-            }]}
-          />
-          {' for more information.'}
-
-        </Text>
-      ),
-    },
-  ];
+  const blocks = useIntroductionData();
 
   const shouldRenderContinue = index + 1 === blocks.length || Platform.OS === 'web';
 

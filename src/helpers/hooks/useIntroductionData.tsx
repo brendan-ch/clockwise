@@ -1,0 +1,81 @@
+import React from 'react';
+import { Text, Linking } from 'react-native';
+import Constants from 'expo-constants';
+
+import ClickableText from '../../components/ClickableText';
+import { IntroductionBlockProps } from '../../types';
+import useTheme from './useTheme';
+import TextStyles from '../../styles/Text';
+
+/* eslint-disable global-require */
+
+/**
+ * Hook that returns introduction data.
+ */
+function useIntroductionData(): IntroductionBlockProps[] {
+  const colorValues = useTheme();
+  const privacyPolicyLink = Constants.manifest?.extra?.privacyPolicyLink;
+
+  const blocks: IntroductionBlockProps[] = [
+    {
+      title: 'Set up your tasks',
+      image: require('../../../assets/introduction/tasks.png'),
+      children: (
+        <Text style={[TextStyles.textRegular, {
+          color: colorValues.primary,
+        }]}
+        >
+          Select tasks to work on during each session, so you never lose track of them.
+          {'\n\n'}
+
+          <ClickableText
+            text="Learn more about the Pomodoro technique."
+            onPress={() => Linking.openURL('https://en.wikipedia.org/wiki/Pomodoro_Technique')}
+            style={[TextStyles.textRegular, {
+              color: colorValues.gray3,
+            }]}
+          />
+        </Text>
+      ),
+    },
+    {
+      title: 'Customize your timer',
+      image: require('../../../assets/introduction/settings.png'),
+      children: (
+        <Text
+          style={[TextStyles.textRegular, {
+            color: colorValues.primary,
+          }]}
+        >
+          Change timer settings, color theme, and more in the settings.
+
+        </Text>
+      ),
+    },
+    {
+      title: 'No ads or tracking',
+      image: require('../../../assets/introduction/no-ads.png'),
+      children: (
+        <Text style={[TextStyles.textRegular, {
+          color: colorValues.primary,
+        }]}
+        >
+          {'Your data stays on your device. See the '}
+          <ClickableText
+            text="Privacy Policy"
+            onPress={() => Linking.openURL(privacyPolicyLink)}
+            style={[TextStyles.textRegular, {
+              color: colorValues.gray3,
+            }]}
+          />
+          {' for more information.'}
+
+        </Text>
+      ),
+    },
+  ];
+
+  return blocks;
+}
+
+export default useIntroductionData;
