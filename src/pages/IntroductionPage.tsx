@@ -121,7 +121,10 @@ function IntroductionPage() {
       <OverlayButtonBar
         leftButton={shouldRenderContinue ? undefined : {
           text: 'skip',
-          onPress: () => setOverlay('none'),
+          onPress: () => {
+            storeData(SUPPRESS_INTRODUCTION, '1');
+            setOverlay('none');
+          },
         }}
         rightButton={{
           text: shouldRenderContinue ? 'continue' : 'next',
