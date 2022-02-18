@@ -53,6 +53,7 @@ import getBaseURL from './src/helpers/getBaseURL';
 import ImageContext from './ImageContext';
 import IntroductionOverlay from './src/overlays/IntroductionOverlay';
 import IntroductionPage from './src/pages/IntroductionPage';
+import { TIMER_SOUND } from './src/Assets';
 
 const MIN_25 = 1500000;
 // const MIN_5 = 300000;
@@ -119,7 +120,7 @@ export default function App() {
   async function loadTimerSound() {
     /* eslint-disable global-require */
     const newSound = await Audio.Sound.createAsync(
-      require('./assets/timer.mp3'),
+      TIMER_SOUND,
     );
     setSound(newSound.sound);
   }
