@@ -23,6 +23,7 @@ import { Section, SettingsOptionProps, SettingsOptionPropsStatic } from '../type
 import NotificationOverlay from '../components/NotificationOverlay';
 import ClickableText from '../components/ClickableText';
 import TextStyles from '../styles/Text';
+import { clearAll } from '../helpers/storage';
 
 // Store all static option data in here
 // Make it easier to find and filter settings
@@ -177,6 +178,16 @@ function SettingsPage() {
         renderItem={renderItem}
         renderSectionHeader={renderHeader}
       />
+      {process.env.NODE_ENV === 'development' ? (
+        <ClickableText
+          text="Reset all data"
+          style={[TextStyles.textRegular, {
+            color: colorValues.gray3,
+            marginBottom: 10,
+          }]}
+          onPress={() => clearAll()}
+        />
+      ) : undefined}
       <ClickableText
         text="Privacy Policy"
         style={[TextStyles.textRegular, {
