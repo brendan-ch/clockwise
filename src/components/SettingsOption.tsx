@@ -69,6 +69,11 @@ function SettingsOption({
           keys: ['ArrowRight'],
           action: () => onChange(!value),
         }));
+      } else if (onPress && type === 'icon') {
+        unsubMethods.push(keyboardShortcutManager?.registerEvent({
+          keys: ['ArrowRight'],
+          action: () => onPress(),
+        }));
       }
 
       return () => {

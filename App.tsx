@@ -6,13 +6,13 @@ import {
   AnonymousPro_700Bold,
   AnonymousPro_700Bold_Italic,
 } from '@expo-google-fonts/anonymous-pro';
-import AppLoading from 'expo-app-loading';
 import { Audio } from 'expo-av';
 import * as Linking from 'expo-linking';
 import React, { useEffect, useState } from 'react';
 import {
   ImageBackground, Platform, StyleSheet, useWindowDimensions, View,
 } from 'react-native';
+import AppLoading from 'expo-app-loading';
 import Modal from 'react-native-modal';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -358,15 +358,6 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    getData(SUPPRESS_INTRODUCTION)
-      .then((result) => {
-        if (!result) {
-          setOverlay('introduction');
-        }
-      });
-  }, []);
-
-  useEffect(() => {
     // Change timer display if timer is stopped
     // and timer setting changes
     if (timerState === 'stopped') {
@@ -389,6 +380,26 @@ export default function App() {
       setImageInfo(undefined);
     }
   }, [imageInfo, windowSize, settings[ENABLE_BACKGROUND]]);
+
+  useEffect(() => {
+    function setIntroduction() {
+      getData(SUPPRESS_INTRODUCTION)
+        .then((result) => {
+          if (!result) {
+            setOverlay('introduction');
+          }
+        });
+    }
+
+    if ((fontsLoaded && shortcutsInitialized) && windowSize === 'landscape') {
+      // Set artificial timeout
+      setTimeout(() => {
+        setIntroduction();
+      }, 500);
+    } else if (windowSize === 'portrait') {
+      setIntroduction();
+    }
+  }, [fontsLoaded, shortcutsInitialized]);
 
   // Links
   const config = {
@@ -431,7 +442,9 @@ export default function App() {
   );
 
   if (!fontsLoaded || !shortcutsInitialized) {
-    return <AppLoading />;
+    return (
+      <AppLoading />
+    );
   }
 
   // Do conditional rendering based on window size

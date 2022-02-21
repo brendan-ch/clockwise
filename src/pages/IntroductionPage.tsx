@@ -36,7 +36,8 @@ function IntroductionPage() {
   const shouldRenderContinue = index + 1 === blocks.length || Platform.OS === 'web';
 
   function handleMomentumScrollEnd(e: NativeSyntheticEvent<NativeScrollEvent>) {
-    setIndex(Math.floor(e.nativeEvent.contentOffset.x / width));
+    // console.log(index);
+    setIndex(Math.ceil(e.nativeEvent.contentOffset.x / width));
   }
 
   function handleNextButtonPress() {
@@ -53,6 +54,7 @@ function IntroductionPage() {
       animated: true,
       index: index + 1,
     });
+    setIndex(index + 1);
   }
 
   const renderBlock = ({ item }: { item: IntroductionBlockProps }) => (
