@@ -50,6 +50,17 @@ if (Platform.OS === 'web') {
   );
 }
 
+if (process.env.NODE_ENV === 'development') {
+  const Debugging = React.lazy(() => import('./settings/DebugSettings'));
+
+  navigator.push(
+    {
+      title: 'Debugging',
+      renderer: <Debugging />,
+    },
+  );
+}
+
 interface Props {
   containerStyle?: StyleProp<ViewStyle>,
 }
