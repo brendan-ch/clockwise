@@ -71,15 +71,21 @@ function LandscapeFooter() {
             {' | '}
           </Text>
         ) : undefined}
-        {'Created by '}
-        <ClickableText
-          text="@unnameduser95"
-          onPress={githubProfileLink ? () => Linking.openURL(githubProfileLink) : undefined}
-          style={[TextStyles.textRegular, {
-            color: colorValues.gray3,
-          }]}
-        />
-        {' | '}
+        {Platform.OS === 'web'
+          ? (
+            <Text>
+              {'Created by '}
+              <ClickableText
+                text="Brendan C."
+                onPress={githubProfileLink ? () => Linking.openURL(githubProfileLink) : undefined}
+                style={[TextStyles.textRegular, {
+                  color: colorValues.gray3,
+                }]}
+              />
+              {' | '}
+            </Text>
+          )
+          : undefined}
         <ClickableText
           text="Licenses"
           onPress={githubLink ? () => Linking.openURL(githubLink) : undefined}
