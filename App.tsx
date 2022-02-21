@@ -382,16 +382,22 @@ export default function App() {
   }, [imageInfo, windowSize, settings[ENABLE_BACKGROUND]]);
 
   useEffect(() => {
-    if (fontsLoaded && shortcutsInitialized) {
+    function setIntroduction() {
+      getData(SUPPRESS_INTRODUCTION)
+        .then((result) => {
+          if (!result) {
+            setOverlay('introduction');
+          }
+        });
+    }
+
+    if ((fontsLoaded && shortcutsInitialized) && windowSize === 'landscape') {
       // Set artificial timeout
       setTimeout(() => {
-        getData(SUPPRESS_INTRODUCTION)
-          .then((result) => {
-            if (!result) {
-              setOverlay('introduction');
-            }
-          });
+        setIntroduction();
       }, 500);
+    } else if (windowSize === 'portrait') {
+      setIntroduction();
     }
   }, [fontsLoaded, shortcutsInitialized]);
 
