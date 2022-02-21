@@ -1,6 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-  AUTO_APPEARANCE, BREAK_TIME_MINUTES, ENABLE_BACKGROUND, FOCUS_TIME_MINUTES,
+  AUTO_APPEARANCE,
+  AUTO_START_TIMERS,
+  BREAK_TIME_MINUTES,
+  DARK_MODE,
+  ENABLE_BACKGROUND,
+  ENABLE_TIMER_ALERTS,
+  ENABLE_TIMER_SOUND, FOCUS_TIME_MINUTES, MODE, START, SUPPRESS_INTRODUCTION, TASKS,
 } from '../StorageKeys';
 
 /**
@@ -27,6 +33,30 @@ async function removeData(key: string) {
 }
 
 /**
+ * Clear all storage keys from storage.
+ */
+async function clearAll() {
+  const keys = [
+    AUTO_APPEARANCE,
+    FOCUS_TIME_MINUTES,
+    BREAK_TIME_MINUTES,
+    ENABLE_BACKGROUND,
+    ENABLE_TIMER_SOUND,
+    ENABLE_TIMER_ALERTS,
+    DARK_MODE,
+    SUPPRESS_INTRODUCTION,
+    AUTO_START_TIMERS,
+    TASKS,
+    START,
+    MODE,
+  ];
+
+  await Promise.all(keys.map(async (value) => {
+    await removeData(value);
+  }));
+}
+
+/**
  * Prefill some settings values on first-time app launch.
  */
 async function prefillSettings() {
@@ -49,5 +79,5 @@ async function prefillSettings() {
 }
 
 export {
-  storeData, getData, getTimerValue, removeData, prefillSettings,
+  storeData, getData, getTimerValue, removeData, prefillSettings, clearAll,
 };
