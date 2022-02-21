@@ -6,7 +6,6 @@ import {
   AnonymousPro_700Bold,
   AnonymousPro_700Bold_Italic,
 } from '@expo-google-fonts/anonymous-pro';
-import AppLoading from 'expo-app-loading';
 import { Audio } from 'expo-av';
 import * as Linking from 'expo-linking';
 import React, { useEffect, useState } from 'react';
@@ -431,7 +430,7 @@ export default function App() {
   );
 
   if (!fontsLoaded || !shortcutsInitialized) {
-    return <AppLoading />;
+    return <View />;
   }
 
   // Do conditional rendering based on window size
