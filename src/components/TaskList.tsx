@@ -278,7 +278,9 @@ function TaskList({ setAtTop }: Props) {
   }, [context.keyboardGroup, tasks, expandedTask, context.timerState]);
 
   useEffect(() => {
-    handleAutoScroll(expandedTask, 0.4);
+    setTimeout(() => {
+      handleAutoScroll(expandedTask, 0.4);
+    }, 120);
   }, [expandedTask]);
 
   const taskRenderer = ({ item, index }: { item: Task, index: number }) => {
@@ -436,7 +438,7 @@ function TaskList({ setAtTop }: Props) {
         // @ts-ignore
         ref={listRef}
         onScroll={(e) => handleScroll(e)}
-        overScrollMode="always"
+        overScrollMode={windowSize === 'portrait' ? 'always' : 'never'}
         ListFooterComponent={windowSize === 'portrait' ? footerRenderer : undefined}
         showsVerticalScrollIndicator={false}
       />

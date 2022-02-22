@@ -4,6 +4,7 @@ import React, {
 } from 'react';
 import {
   Animated,
+  KeyboardAvoidingView,
   Platform,
   StyleSheet, View,
 } from 'react-native';
@@ -172,7 +173,10 @@ export default function TimerPage() {
         backgroundColor: colorValues.background,
       }]}
       >
-        <View style={styles.contentContainerLandscape}>
+        <KeyboardAvoidingView
+          style={styles.contentContainerLandscape}
+          behavior="padding"
+        >
           <View style={[styles.landscapeContainer, styles.leftContainer]}>
             <View style={styles.leftContentContainer}>
               <Timer
@@ -201,7 +205,7 @@ export default function TimerPage() {
               <TaskList />
             </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
         <StatusBar style="auto" />
       </View>
     );
