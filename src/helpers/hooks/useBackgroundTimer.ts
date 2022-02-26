@@ -79,7 +79,7 @@ function useBackgroundTimer() {
   useEffect(() => {
     if (Platform.OS === 'web') return;
 
-    if (backgroundState === 'active') {
+    if (backgroundState === 'active' || backgroundState === 'inactive') {
       // If state is active when timer state changes
       setTimerFromStorage();
       context.setTimerBackgrounded(false);
