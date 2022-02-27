@@ -100,7 +100,7 @@ function useBackgroundTimer() {
       // notification screen on iOS
       // Compare last active time and inactive event before storing timer data
       && (
-        (backgroundState === 'inactive' && (!lastActive || now - lastActive.getTime() > 100))
+        (backgroundState === 'inactive' && (!lastActive || now - lastActive.getTime() > 200))
         || backgroundState === 'background'
       )
     ) {
