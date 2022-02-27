@@ -218,11 +218,11 @@ function SettingsOption({
           onPress={onPressRight}
           style={{
             flexDirection: 'row',
-            width: 20,
+            width: 32,
             height: 32,
             justifyContent: 'flex-end',
             alignItems: 'center',
-            marginLeft: 12,
+            marginLeft: 0,
           }}
         >
           <Ionicons
