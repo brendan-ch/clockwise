@@ -3,7 +3,7 @@ import { SectionList } from 'react-native';
 import AppContext from '../../../AppContext';
 // import AppContext from '../../../AppContext';
 import SettingsOption from '../../components/SettingsOption';
-import { exportData } from '../../helpers/dataManagement';
+import { exportData, importData } from '../../helpers/dataManagement';
 import useKeyboardSelect from '../../helpers/hooks/useKeyboardSelect';
 import renderHeader from '../../helpers/renderers/renderHeader';
 import { Section, SettingsOptionProps } from '../../types';
@@ -71,6 +71,8 @@ function ImportSettingsPane() {
       setOverwriteTasks(!overwriteTasks);
     } else if (item.title === 'Export settings') {
       exportData(includeTaskData);
+    } else if (item.title === 'Import settings') {
+      importData(overwriteTasks);
     }
   }
 
