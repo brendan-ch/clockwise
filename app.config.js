@@ -1,12 +1,12 @@
 import 'dotenv/config';
 
 export default {
-  name: 'Session',
+  name: 'Clockwise',
   description: 'Pomodoro timer and task management - An app designed to help you focus.',
-  slug: 'session',
-  scheme: 'session',
+  slug: 'clockwise',
+  scheme: 'clockwise',
   userInterfaceStyle: 'automatic',
-  version: '1.0.1',
+  version: '1.1.0',
   orientation: 'portrait',
   icon: './assets/icon.png',
   splash: {
