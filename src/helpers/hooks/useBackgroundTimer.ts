@@ -14,6 +14,7 @@ import { getData, removeData, storeData } from '../storage';
 function useBackgroundTimer() {
   // Stores whether timer is running when backgrounded
   const [backgroundState, setBackgroundState] = useState<'active' | 'inactive' | 'background'>('active');
+  const [lastActive, setLastActive] = useState<Date | undefined>();
 
   const context = useContext(AppContext);
 
@@ -25,6 +26,7 @@ function useBackgroundTimer() {
         case 'active':
           // console.log('active');
           setBackgroundState('active');
+          setLastActive(new Date());
           break;
         case 'background':
           // console.log('background');
@@ -86,11 +88,22 @@ function useBackgroundTimer() {
   useEffect(() => {
     if (Platform.OS === 'web') return;
 
+    const now = Date.now();
+
     if (backgroundState === 'active') {
       // If state is active when timer state changes
       setTimerFromStorage();
       context.setTimerBackgrounded(false);
-    } else if (context.timerLength && context.start) {
+    } else if (context.timerLength
+      && context.start
+      // Workaround: AppState is bugged, sends active event when pulling down
+      // notification screen on iOS
+      // Compare last active time and inactive event before storing timer data
+      && (
+        (backgroundState === 'inactive' && (!lastActive || now - lastActive.getTime() > 200))
+        || backgroundState === 'background'
+      )
+    ) {
       // If timer is running and backgrounded
       storeTimerData(context.start, context.timerLength);
       context.setTimerBackgrounded(true);
