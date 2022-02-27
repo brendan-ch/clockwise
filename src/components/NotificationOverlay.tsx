@@ -36,7 +36,7 @@ function NotificationOverlay({ onClose }: Props) {
       }]}
       >
         Turn on app notifications to enable timer alerts.
-        {Platform.OS === 'ios' ? ' You may change this later by going to Settings → Notifications → Session.' : undefined}
+        {Platform.OS === 'ios' ? ' You may change this later by going to Settings → Notifications → Clockwise.' : undefined}
       </Text>
       <OverlayButtonBar
         leftButton={{

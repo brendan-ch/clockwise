@@ -80,7 +80,7 @@ export default function App() {
 
   const [keyboardGroup, setKeyboardGroup] = useState<KeyboardShortcutGroup>('none');
 
-  const setPageTitle = usePageTitle('Session', timeRemaining, timerState);
+  const setPageTitle = usePageTitle('Clockwise', timeRemaining, timerState);
 
   // Use for background timer handling
   // Date in milliseconds timer was started on
