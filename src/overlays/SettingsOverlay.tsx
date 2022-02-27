@@ -13,6 +13,7 @@ import useTheme from '../helpers/hooks/useTheme';
 const TimerSettings = React.lazy(() => import('./settings/TimerSettings'));
 const BackgroundSettings = React.lazy(() => import('./settings/BackgroundSettings'));
 const Keybindings = React.lazy(() => import('./settings/Keybindings'));
+const Import = React.lazy(() => import('./settings/ImportSettings'));
 
 interface SettingsNavigatorObject {
   /**
@@ -46,6 +47,12 @@ if (Platform.OS === 'web') {
     {
       title: 'Keybindings',
       renderer: <Keybindings />,
+    },
+  );
+  navigator.push(
+    {
+      title: 'Data management',
+      renderer: <Import />,
     },
   );
 }

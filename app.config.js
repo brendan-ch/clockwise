@@ -24,6 +24,7 @@ export default {
     supportsTablet: true,
     bundleIdentifier: 'co.birb.session',
     buildNumber: '4',
+    usesIcloudStorage: true,
   },
   android: {
     adaptiveIcon: {
