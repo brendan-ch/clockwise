@@ -14,3 +14,4 @@ export const ENABLE_BACKGROUND = '@enableBackground';
 export const AUTO_APPEARANCE = '@autoAppearance';
 export const DARK_MODE = '@darkMode';
 export const SUPPRESS_INTRODUCTION = '@suppressIntroduction';
+export const SELECTED = '@selectedTasks';

@@ -4,7 +4,7 @@ import {
 import { AppState, Platform } from 'react-native';
 import AppContext from '../../../AppContext';
 import {
-  MODE, START, TIMER_LENGTH,
+  MODE, SELECTED, START, TIMER_LENGTH,
 } from '../../StorageKeys';
 import { getData, removeData, storeData } from '../storage';
 /**
@@ -14,6 +14,7 @@ import { getData, removeData, storeData } from '../storage';
 function useBackgroundTimer() {
   // Stores whether timer is running when backgrounded
   const [backgroundState, setBackgroundState] = useState<'active' | 'inactive' | 'background'>('active');
+  const [lastActive, setLastActive] = useState<Date | undefined>();
 
   const context = useContext(AppContext);
 
@@ -23,12 +24,16 @@ function useBackgroundTimer() {
     AppState.addEventListener('change', async (state) => {
       switch (state) {
         case 'active':
+          // console.log('active');
           setBackgroundState('active');
+          setLastActive(new Date());
           break;
         case 'background':
+          // console.log('background');
           setBackgroundState('background');
           break;
         case 'inactive':
+          // console.log('inactive');
           setBackgroundState('inactive');
           break;
         default:
@@ -47,6 +52,7 @@ function useBackgroundTimer() {
     storeData(START, `${start}`);
     storeData(TIMER_LENGTH, `${timerLength}`);
     storeData(MODE, context.mode);
+    storeData(SELECTED, JSON.stringify(context.selected));
 
     // Pause the timer
     context.pauseTimer();
@@ -61,15 +67,18 @@ function useBackgroundTimer() {
     const newStartRaw = await getData(START);
     const newTimerLengthRaw = await getData(TIMER_LENGTH);
     const mode = await getData(MODE);
+    const selectedRaw = await getData(SELECTED);
 
-    if (!newStartRaw || !newTimerLengthRaw || !mode) return;
+    if (!newStartRaw || !newTimerLengthRaw || !mode || !selectedRaw) return;
 
     const newStart = Number(newStartRaw);
     const newTimerLength = Number(newTimerLengthRaw);
     const newTimeRemaining = (newStart + newTimerLength) - Date.now();
+    const selected = JSON.parse(selectedRaw);
 
     context.startTimer(newTimeRemaining);
     context.setMode(mode === 'focus' ? 'focus' : 'break');
+    context.setSelected(selected);
 
     removeData(START);
     removeData(TIMER_LENGTH);
@@ -79,11 +88,22 @@ function useBackgroundTimer() {
   useEffect(() => {
     if (Platform.OS === 'web') return;
 
-    if (backgroundState === 'active' || backgroundState === 'inactive') {
+    const now = Date.now();
+
+    if (backgroundState === 'active') {
       // If state is active when timer state changes
       setTimerFromStorage();
       context.setTimerBackgrounded(false);
-    } else if (context.timerLength && context.start) {
+    } else if (context.timerLength
+      && context.start
+      // Workaround: AppState is bugged, sends active event when pulling down
+      // notification screen on iOS
+      // Compare last active time and inactive event before storing timer data
+      && (
+        (backgroundState === 'inactive' && (!lastActive || now - lastActive.getTime() > 200))
+        || backgroundState === 'background'
+      )
+    ) {
       // If timer is running and backgrounded
       storeTimerData(context.start, context.timerLength);
       context.setTimerBackgrounded(true);
