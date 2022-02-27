@@ -1,4 +1,6 @@
 import { Platform } from 'react-native';
+import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
 import {
   AUTO_APPEARANCE,
   AUTO_START_TIMERS,
@@ -34,6 +36,23 @@ function downloadWeb(data: string): void {
 }
 
 /**
+ * On mobile, saves the file to the app's cache directory,
+ * and prompts user to save it using share menu.
+ * @param data
+ */
+async function downloadMobile(data: string) {
+  const filename = 'config.clockwise-cfg';
+  const path = FileSystem.cacheDirectory + filename;
+  await FileSystem.writeAsStringAsync(path, data);
+
+  // Share the file
+  const available = await Sharing.isAvailableAsync();
+  if (available) {
+    await Sharing.shareAsync(path);
+  }
+}
+
+/**
  * Read storage data and prompt the user to save a file.
  * @param withTasks Indicate whether to export tasks.
  */
@@ -62,7 +81,12 @@ async function exportData(withTasks: boolean = false) {
 
   // Convert to JSON
   const json = JSON.stringify(data);
-  downloadWeb(json);
+
+  if (Platform.OS === 'web') {
+    downloadWeb(json);
+  } else {
+    downloadMobile(json);
+  }
 }
 
 /* eslint-disable-next-line */
