@@ -15,6 +15,7 @@ import {
 } from '../StorageKeys';
 import { getData, removeData, storeData } from './storage';
 import { Task } from '../types';
+import generateTaskId from './generateId';
 
 // Read storage data
 const keys = [
@@ -85,9 +86,14 @@ async function importData(overwriteTasks: boolean = false) {
         // Merge tasks
         const decoded: Task[] = JSON.parse(existing);
         const toMerge: Task[] = JSON.parse(parsed[key]);
-        toMerge.forEach((value) => {
-          decoded.push(value);
-        });
+        await Promise.all(toMerge.map(async (value) => {
+          // Regenerate task ID
+          const id = await generateTaskId();
+          decoded.push({
+            ...value,
+            id,
+          });
+        }));
 
         // Write to storage
         storeData(TASKS, JSON.stringify(decoded));
