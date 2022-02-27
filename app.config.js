@@ -6,7 +6,7 @@ export default {
   slug: 'session',
   scheme: 'session',
   userInterfaceStyle: 'automatic',
-  version: '1.0.0',
+  version: '1.0.1',
   orientation: 'portrait',
   icon: './assets/icon.png',
   splash: {
@@ -23,7 +23,7 @@ export default {
   ios: {
     supportsTablet: true,
     bundleIdentifier: 'co.birb.session',
-    buildNumber: '3',
+    buildNumber: '4',
   },
   android: {
     adaptiveIcon: {
@@ -32,7 +32,7 @@ export default {
     },
     package: 'co.birb.session',
     softwareKeyboardLayoutMode: 'pan',
-    versionCode: 3,
+    versionCode: 4,
   },
   web: {
     favicon: './assets/favicon.png',
