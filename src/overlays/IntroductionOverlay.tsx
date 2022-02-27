@@ -84,7 +84,7 @@ function IntroductionOverlay({ containerStyle }: Props) {
               color: colorValues.primary,
             }]}
           >
-            {' Session'}
+            {' Clockwise'}
           </Text>
           , a no-nonsense Pomodoro timer designed to help you focus.
 

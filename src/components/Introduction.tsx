@@ -70,7 +70,7 @@ function Introduction({ onDismiss, style }: Props) {
             color: colorValues.primary,
           }]}
         >
-          session: an app designed to help you focus
+          Clockwise: an app designed to help you focus
         </Text>
         <Text
           style={[TextStyles.textRegular, styles.text, {

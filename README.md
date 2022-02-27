@@ -1,5 +1,5 @@
-# Session
-An app designed to help you focus. Try it here: https://session.vercel.app
+# Clockwise
+An app designed to help you focus. Try it here: https://clockwise.sh
 
 Features:
 - Pomodoro timer with customization options and alerts

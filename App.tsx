@@ -54,6 +54,7 @@ import ImageContext from './ImageContext';
 import IntroductionOverlay from './src/overlays/IntroductionOverlay';
 import IntroductionPage from './src/pages/IntroductionPage';
 import { TIMER_SOUND } from './src/Assets';
+import RedirectPage from './src/pages/RedirectPage';
 
 const MIN_25 = 1500000;
 // const MIN_5 = 300000;
@@ -79,7 +80,7 @@ export default function App() {
 
   const [keyboardGroup, setKeyboardGroup] = useState<KeyboardShortcutGroup>('none');
 
-  const setPageTitle = usePageTitle('Session', timeRemaining, timerState);
+  const setPageTitle = usePageTitle('Clockwise', timeRemaining, timerState);
 
   // Use for background timer handling
   // Date in milliseconds timer was started on
@@ -444,6 +445,15 @@ export default function App() {
   if (!fontsLoaded || !shortcutsInitialized) {
     return (
       <AppLoading />
+    );
+  }
+
+  if (Platform.OS === 'web'
+    && window.location.host.includes('session.vercel.app')
+  ) {
+    // Present redirect page
+    return (
+      <RedirectPage />
     );
   }
 

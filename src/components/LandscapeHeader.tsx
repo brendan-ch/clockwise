@@ -102,10 +102,10 @@ function LandscapeHeader() {
         >
           <Text style={[TextStyles.textBold, {
             color: colorValues.primary,
-            fontSize: 50,
+            fontSize: 49,
           }]}
           >
-            session
+            clockwise
 
           </Text>
           {/* To guarantee that text will display on multiple lines,
