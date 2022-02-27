@@ -49,6 +49,12 @@ if (Platform.OS === 'web') {
       renderer: <Keybindings />,
     },
   );
+  navigator.push(
+    {
+      title: 'Data management',
+      renderer: <Import />,
+    },
+  );
 }
 
 if (process.env.NODE_ENV === 'development') {
@@ -61,13 +67,6 @@ if (process.env.NODE_ENV === 'development') {
     },
   );
 }
-
-navigator.push(
-  {
-    title: 'Data management',
-    renderer: <Import />,
-  },
-);
 
 interface Props {
   containerStyle?: StyleProp<ViewStyle>,
