@@ -20,6 +20,12 @@ const options: SettingsOptionProps[] = [
     value: 'chevron-forward-outline',
   },
   {
+    title: 'Overwrite task data',
+    type: 'toggle',
+    value: false,
+    subtitle: 'WARNING: If selected, this will replace all existing task data.',
+  },
+  {
     title: 'Import settings',
     type: 'icon',
     value: 'chevron-forward-outline',
@@ -35,7 +41,7 @@ const sections: Section[] = [
   {
     title: 'Import',
     icon: 'enter-outline',
-    data: options.slice(2, 3),
+    data: options.slice(2, 4),
   },
 ];
 
@@ -44,6 +50,7 @@ const sections: Section[] = [
  */
 function ImportSettingsPane() {
   const [includeTaskData, setIncludeTaskData] = useState(false);
+  const [overwriteTasks, setOverwriteTasks] = useState(false);
 
   // Name of the storage key selected out of options
   // Note that storage key is only used as an identifier in this case
@@ -60,6 +67,8 @@ function ImportSettingsPane() {
   function handlePress(item: SettingsOptionProps) {
     if (item.title === 'Include task data') {
       setIncludeTaskData(!includeTaskData);
+    } else if (item.title === 'Overwrite task data') {
+      setOverwriteTasks(!overwriteTasks);
     } else if (item.title === 'Export settings') {
       exportData(includeTaskData);
     }
@@ -73,18 +82,27 @@ function ImportSettingsPane() {
     }
   }, [keyboardShortcutManager, keyboardGroup]);
 
-  const renderItem = ({ item }: { item: SettingsOptionProps }) => (
-    <SettingsOption
-      /* eslint-disable react/jsx-props-no-spreading */
-      {...item}
-      value={item.title === 'Include task data' ? includeTaskData : item.value}
-      onPress={() => handlePress(item)}
-      onSelect={() => handlePress(item)}
-      onChange={() => handlePress(item)}
-      keyboardSelected={keyboardSelected === item.title}
-      indicator={keyboardSelected === item.title ? '↑↓' : undefined}
-    />
-  );
+  const renderItem = ({ item }: { item: SettingsOptionProps }) => {
+    let { value } = item;
+    if (item.title === 'Include task data') {
+      value = includeTaskData;
+    } else if (item.title === 'Overwrite task data') {
+      value = overwriteTasks;
+    }
+
+    return (
+      <SettingsOption
+        /* eslint-disable react/jsx-props-no-spreading */
+        {...item}
+        value={value}
+        onPress={() => handlePress(item)}
+        onSelect={() => handlePress(item)}
+        onChange={() => handlePress(item)}
+        keyboardSelected={keyboardSelected === item.title}
+        indicator={keyboardSelected === item.title ? '↑↓' : undefined}
+      />
+    );
+  };
 
   return (
     <SectionList
