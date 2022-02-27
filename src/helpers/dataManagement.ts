@@ -1,6 +1,7 @@
 import { Platform } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
+import * as DocumentPicker from 'expo-document-picker';
 import {
   AUTO_APPEARANCE,
   AUTO_START_TIMERS,
@@ -12,7 +13,97 @@ import {
   FOCUS_TIME_MINUTES,
   SUPPRESS_INTRODUCTION, TASKS,
 } from '../StorageKeys';
-import { getData } from './storage';
+import { getData, removeData, storeData } from './storage';
+import { Task } from '../types';
+
+// Read storage data
+const keys = [
+  FOCUS_TIME_MINUTES, BREAK_TIME_MINUTES, AUTO_START_TIMERS, ENABLE_TIMER_ALERTS,
+  ENABLE_TIMER_SOUND, ENABLE_BACKGROUND, AUTO_APPEARANCE, DARK_MODE,
+  SUPPRESS_INTRODUCTION,
+];
+
+/**
+ * Read the contents of a file as text.
+ * @param file
+ */
+function readDataWeb(file: File) {
+  if (Platform.OS !== 'web') {
+    throw new Error('This function can only be called on web.');
+  }
+
+  const promise: Promise<string> = new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      resolve(reader.result as string);
+    };
+    reader.readAsText(file);
+  });
+
+  return promise;
+}
+
+/**
+ * Prompt the user for a document, and write data
+ * to storage.
+ * @throws If file cannot be read, or file data is invalid.
+ */
+async function importData(overwriteTasks: boolean = false) {
+  // Retrieve the file
+  const result = await DocumentPicker.getDocumentAsync({
+    copyToCacheDirectory: true,
+    type: '*/*',
+  });
+
+  let data: string;
+  if (result.type === 'success' && result.file && Platform.OS === 'web') {
+    data = await readDataWeb(result.file);
+  } else {
+    throw new Error('Unable to read file.');
+  }
+
+  let parsed: any;
+
+  // Validate the data
+  try {
+    parsed = JSON.parse(data);
+  } catch (e) {
+    throw new Error('Invalid data.');
+  }
+
+  // Write to storage
+  const importKeys = keys.slice();
+  importKeys.push(TASKS);
+
+  await Promise.all(importKeys.map(async (key) => {
+    if (parsed[key] && key === TASKS && !overwriteTasks) {
+      // Append to existing tasks
+      const existing = await getData(TASKS);
+      if (!existing) {
+        await storeData(TASKS, parsed[key]);
+      } else {
+        // Merge tasks
+        const decoded: Task[] = JSON.parse(existing);
+        const toMerge: Task[] = JSON.parse(parsed[key]);
+        toMerge.forEach((value) => {
+          decoded.push(value);
+        });
+
+        // Write to storage
+        storeData(TASKS, JSON.stringify(decoded));
+      }
+    } else if (parsed[key]) {
+      await storeData(key, parsed[key]);
+    } else if (key !== TASKS || overwriteTasks) {
+      // Remove data key from storage
+      await removeData(key);
+    }
+  }));
+
+  if (Platform.OS === 'web') {
+    window.location.reload();
+  }
+}
 
 /**
  * On web, prompts the user to save a file with the given
@@ -20,7 +111,9 @@ import { getData } from './storage';
  * @param data
  */
 function downloadWeb(data: string): void {
-  if (Platform.OS !== 'web') return;
+  if (Platform.OS !== 'web') {
+    throw new Error('This function can only be called on web.');
+  }
   const filename = 'config.clockwise-cfg';
 
   const element = document.createElement('a');
@@ -57,21 +150,16 @@ async function downloadMobile(data: string) {
  * @param withTasks Indicate whether to export tasks.
  */
 async function exportData(withTasks: boolean = false) {
-  // Read storage data
-  const keys = [
-    FOCUS_TIME_MINUTES, BREAK_TIME_MINUTES, AUTO_START_TIMERS, ENABLE_TIMER_ALERTS,
-    ENABLE_TIMER_SOUND, ENABLE_BACKGROUND, AUTO_APPEARANCE, DARK_MODE,
-    SUPPRESS_INTRODUCTION,
-  ];
+  const exportKeys = keys.slice();
 
   if (withTasks) {
-    keys.push(TASKS);
+    exportKeys.push(TASKS);
   }
 
   // Store data
   const data = {};
 
-  await Promise.all(keys.map(async (item) => {
+  await Promise.all(exportKeys.map(async (item) => {
     const storageData = await getData(item);
     if (storageData) {
       // @ts-ignore
@@ -89,5 +177,4 @@ async function exportData(withTasks: boolean = false) {
   }
 }
 
-/* eslint-disable-next-line */
-export { exportData };
+export { exportData, importData };
