@@ -30,6 +30,7 @@ const options: SettingsOptionProps[] = [
     title: 'Import settings',
     type: 'icon',
     value: 'chevron-forward-outline',
+    subtitle: 'Only import files that you trust.',
   },
 ];
 
@@ -53,6 +54,8 @@ function ImportSettingsPane() {
   const [includeTaskData, setIncludeTaskData] = useState(false);
   const [overwriteTasks, setOverwriteTasks] = useState(false);
 
+  const [importError, setImportError] = useState<string | undefined>();
+
   // Name of the storage key selected out of options
   // Note that storage key is only used as an identifier in this case
   const {
@@ -73,7 +76,11 @@ function ImportSettingsPane() {
     } else if (item.title === 'Export settings') {
       exportData(includeTaskData);
     } else if (item.title === 'Import settings') {
-      importData(overwriteTasks);
+      importData(overwriteTasks)
+        .catch(() => {
+          // Set import error
+          setImportError('Invalid config.');
+        });
     }
   }
 
@@ -97,6 +104,7 @@ function ImportSettingsPane() {
       <SettingsOption
         /* eslint-disable react/jsx-props-no-spreading */
         {...item}
+        subtitle={item.title === 'Import settings' ? importError : item.subtitle}
         value={value}
         onPress={() => handlePress(item)}
         onSelect={() => handlePress(item)}
