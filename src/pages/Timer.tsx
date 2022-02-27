@@ -4,6 +4,7 @@ import React, {
 } from 'react';
 import {
   Animated,
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   StyleSheet, View,
@@ -169,9 +170,11 @@ export default function TimerPage() {
   if (size === 'landscape') {
     // Display timer and tasks side by side
     return (
-      <View style={[styles.container, {
-        backgroundColor: colorValues.background,
-      }]}
+      <View
+        style={[styles.container, {
+          backgroundColor: colorValues.background,
+        }]}
+        onTouchStart={() => Keyboard.dismiss()}
       >
         <KeyboardAvoidingView
           style={styles.contentContainerLandscape}
@@ -217,6 +220,7 @@ export default function TimerPage() {
       style={[styles.container, {
         backgroundColor: colorValues.background,
       }]}
+      onTouchStart={() => Keyboard.dismiss()}
     >
       <Animated.View style={[styles.contentContainer, {
         opacity: fadeIn,
