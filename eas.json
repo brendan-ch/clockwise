@@ -10,9 +10,17 @@
     "preview": {
       "distribution": "internal"
     },
-    "production": {}
+    "production": {
+      "env": {
+        "EXPO_APPLE_TEAM_ID": "4A9XHUS87Q"
+      }
+    }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "ios": {
+        "appleTeamId": "4A9XHUS87Q"
+      }
+    }
   }
 }
