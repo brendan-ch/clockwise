@@ -55,6 +55,7 @@ import IntroductionOverlay from './src/overlays/IntroductionOverlay';
 import IntroductionPage from './src/pages/IntroductionPage';
 import { TIMER_SOUND } from './src/Assets';
 import RedirectPage from './src/pages/RedirectPage';
+import ImportSettingsPane from './src/overlays/settings/ImportSettings';
 
 const MIN_25 = 1500000;
 // const MIN_5 = 300000;
@@ -666,6 +667,13 @@ export default function App() {
                 <Stack.Screen
                   name="Settings"
                   component={SettingsPage}
+                  options={{
+                    ...headerOptions,
+                  }}
+                />
+                <Stack.Screen
+                  name="Data Management"
+                  component={ImportSettingsPane}
                   options={{
                     ...headerOptions,
                   }}

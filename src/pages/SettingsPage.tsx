@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import Constants from 'expo-constants';
+import { useNavigation } from '@react-navigation/native';
 import SettingsHeader from '../components/SettingsHeader';
 import SettingsOption from '../components/SettingsOption';
 import { checkNotifications, requestNotifications } from '../helpers/notification';
@@ -68,6 +69,20 @@ function SettingsPage() {
 
   const privacyPolicyLink = Constants.manifest?.extra?.privacyPolicyLink;
   const githubLink = Constants.manifest?.extra?.githubLink;
+
+  const navigation = useNavigation();
+
+  const pages: SettingsOptionProps[] = [
+    {
+      type: 'icon',
+      title: 'Data management',
+      onPress: () => {
+        // @ts-ignore
+        navigation.navigate('Data Management');
+      },
+      value: 'chevron-forward-outline',
+    },
+  ];
 
   checkNotifications()
     .then((value) => {
@@ -171,6 +186,21 @@ function SettingsPage() {
         backgroundColor: colorValues.background,
       }]}
     >
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          width: '100%',
+        }}
+      >
+        {pages.map((item) => (
+          <SettingsOption
+            {...item}
+            key={item.title!}
+            titleStyle={TextStyles.textBold}
+          />
+        ))}
+      </View>
       <SectionList
         style={styles.sectionList}
         keyExtractor={(item) => item.title!}
