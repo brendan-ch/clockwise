@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { SectionList } from 'react-native';
+import { SectionList, View } from 'react-native';
+import Modal from 'react-native-modal';
 import AppContext from '../../../AppContext';
-// import AppContext from '../../../AppContext';
 import SettingsOption from '../../components/SettingsOption';
+import TimerWarningOverlay from '../../components/TimerWarningOverlay';
 import { exportData, importData } from '../../helpers/dataManagement';
 import useKeyboardSelect from '../../helpers/hooks/useKeyboardSelect';
 import useTheme from '../../helpers/hooks/useTheme';
@@ -60,7 +61,13 @@ function ImportSettingsPane() {
 
   const [importError, setImportError] = useState<string | undefined>();
 
+  const [overlay, setOverlay] = useState<'none' | 'warning'>();
+
   const windowSize = useWindowSize();
+
+  const {
+    timerState,
+  } = useContext(AppContext);
 
   // Name of the storage key selected out of options
   // Note that storage key is only used as an identifier in this case
@@ -81,9 +88,14 @@ function ImportSettingsPane() {
       setOverwriteTasks(!overwriteTasks);
     } else if (item.title === 'Export settings') {
       exportData(includeTaskData);
-    } else if (item.title === 'Import settings') {
+    } else if (item.title === 'Import settings' && windowSize === 'portrait' && timerState !== 'stopped') {
+      setOverlay('warning');
+    } else if (
+      item.title === 'Import settings' && (windowSize === 'landscape' || timerState === 'stopped')
+    ) {
       importData(overwriteTasks)
-        .catch(() => {
+        .catch((e) => {
+          console.error(e);
           // Set import error
           setImportError('Invalid config.');
         });
@@ -121,7 +133,7 @@ function ImportSettingsPane() {
     );
   };
 
-  return (
+  return windowSize === 'landscape' ? (
     <SectionList
       showsVerticalScrollIndicator={false}
       keyExtractor={(item) => item.title!}
@@ -130,9 +142,57 @@ function ImportSettingsPane() {
       renderItem={renderItem}
       style={{
         backgroundColor: colors.background,
-        padding: windowSize === 'portrait' ? 10 : 0,
+        padding: 0,
       }}
     />
+  ) : (
+    <View
+      style={{
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+      }}
+    >
+      <SectionList
+        showsVerticalScrollIndicator={false}
+        keyExtractor={(item) => item.title!}
+        sections={sections}
+        renderSectionHeader={renderHeader}
+        renderItem={renderItem}
+        style={{
+          backgroundColor: colors.background,
+          padding: 10,
+        }}
+      />
+      <Modal
+        isVisible={overlay === 'warning'}
+        onBackdropPress={() => setOverlay('none')}
+        backdropOpacity={0.3}
+        backdropColor={colors.primary}
+        animationIn="fadeIn"
+        animationInTiming={20}
+        animationOut="fadeOut"
+        animationOutTiming={20}
+        backdropTransitionInTiming={20}
+        backdropTransitionOutTiming={20}
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <TimerWarningOverlay
+          onClose={() => setOverlay('none')}
+          onConfirm={() => {
+            setOverlay('none');
+            importData(overwriteTasks)
+              .catch(() => {
+                // Set import error
+                setImportError('Invalid config.');
+              });
+          }}
+        />
+      </Modal>
+    </View>
   );
 }
 
