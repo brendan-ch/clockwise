@@ -131,7 +131,7 @@ function downloadWeb(data: string): void {
   if (Platform.OS !== 'web') {
     throw new Error('This function can only be called on web.');
   }
-  const filename = 'config.clockwise-cfg';
+  const filename = 'clockwise-config.json';
 
   const element = document.createElement('a');
   element.setAttribute('href', `data:text/plain;charset=utf-8,${encodeURIComponent(data)}`);
@@ -151,7 +151,7 @@ function downloadWeb(data: string): void {
  * @param data
  */
 async function downloadMobile(data: string) {
-  const filename = 'config.clockwise-cfg';
+  const filename = 'clockwise-config.json';
   const path = FileSystem.cacheDirectory + filename;
   await FileSystem.writeAsStringAsync(path, data);
 
