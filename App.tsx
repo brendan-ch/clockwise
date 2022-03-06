@@ -548,26 +548,38 @@ export default function App() {
             setSettings,
           }}
           >
-            <Modal
-              isVisible={overlay === 'settings'}
-              onBackdropPress={() => setOverlay('none')}
-              backdropOpacity={0.3}
-              backdropColor={colorValues.primary}
-              animationIn="fadeIn"
-              animationInTiming={20}
-              animationOut="fadeOut"
-              backdropTransitionInTiming={20}
-              backdropTransitionOutTiming={20}
-              customBackdrop={customBackdrop}
-              animationOutTiming={20}
-              style={{
-                // alignSelf: 'center',
-                justifyContent: 'center',
-                alignItems: 'center',
+            <TaskContext.Provider
+              value={{
+                tasks,
+                selected,
+                setTasks,
+                setSelected,
+                handleAddTask,
+                handleChangeTask,
+                handleDeleteTask,
               }}
             >
-              <SettingsOverlay />
-            </Modal>
+              <Modal
+                isVisible={overlay === 'settings'}
+                onBackdropPress={() => setOverlay('none')}
+                backdropOpacity={0.3}
+                backdropColor={colorValues.primary}
+                animationIn="fadeIn"
+                animationInTiming={20}
+                animationOut="fadeOut"
+                backdropTransitionInTiming={20}
+                backdropTransitionOutTiming={20}
+                customBackdrop={customBackdrop}
+                animationOutTiming={20}
+                style={{
+                // alignSelf: 'center',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <SettingsOverlay />
+              </Modal>
+            </TaskContext.Provider>
             <Modal
               isVisible={overlay === 'introduction'}
               onBackdropPress={() => setOverlay('none')}
