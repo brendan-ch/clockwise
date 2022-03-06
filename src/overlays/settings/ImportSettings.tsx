@@ -1,15 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { SectionList, View } from 'react-native';
-import Modal from 'react-native-modal';
+// import Modal from 'react-native-modal';
 import AppContext from '../../../AppContext';
+import SettingsContext from '../../../SettingsContext';
+import TaskContext from '../../../TaskContext';
 import SettingsOption from '../../components/SettingsOption';
-import TimerWarningOverlay from '../../components/TimerWarningOverlay';
+// import TimerWarningOverlay from '../../components/TimerWarningOverlay';
 import { exportData, importData } from '../../helpers/dataManagement';
 import useKeyboardSelect from '../../helpers/hooks/useKeyboardSelect';
 import useTheme from '../../helpers/hooks/useTheme';
 import useWindowSize from '../../helpers/hooks/useWindowSize';
 import renderHeader from '../../helpers/renderers/renderHeader';
-import { Section, SettingsOptionProps } from '../../types';
+import { getData } from '../../helpers/storage';
+import { TASKS } from '../../StorageKeys';
+import { DefaultSettingsState, Section, SettingsOptionProps } from '../../types';
 
 const options: SettingsOptionProps[] = [
   {
@@ -61,13 +65,18 @@ function ImportSettingsPane() {
 
   const [importError, setImportError] = useState<string | undefined>();
 
-  const [overlay, setOverlay] = useState<'none' | 'warning'>();
+  // const [overlay, setOverlay] = useState<'none' | 'warning'>();
 
   const windowSize = useWindowSize();
 
+  // const {
+  //   timerState,
+  // } = useContext(AppContext);
+
+  const settings = useContext(SettingsContext);
   const {
-    timerState,
-  } = useContext(AppContext);
+    setTasks,
+  } = useContext(TaskContext);
 
   // Name of the storage key selected out of options
   // Note that storage key is only used as an identifier in this case
@@ -88,17 +97,62 @@ function ImportSettingsPane() {
       setOverwriteTasks(!overwriteTasks);
     } else if (item.title === 'Export settings') {
       exportData(includeTaskData);
-    } else if (item.title === 'Import settings' && windowSize === 'portrait' && timerState !== 'stopped') {
-      setOverlay('warning');
-    } else if (
-      item.title === 'Import settings' && (windowSize === 'landscape' || timerState === 'stopped')
-    ) {
+    } else if (item.title === 'Import settings') {
       importData(overwriteTasks)
-        .catch((e) => {
-          console.error(e);
+        .then(() => updateReactiveSettings())
+        .then(() => {
+          setImportError('Data imported successfully.');
+        })
+        .catch(() => {
           // Set import error
-          setImportError('Invalid config.');
+          setImportError('Unable to import data.');
         });
+    }
+  }
+
+  /**
+   * Update reactive settings and tasks from storage.
+   */
+  async function updateReactiveSettings() {
+    const temp: DefaultSettingsState = {
+      ...settings,
+    };
+    delete temp.setSetting;
+    delete temp.setSettings;
+
+    await Promise.all(Object.keys(settings).map(async (key) => {
+      // Load the data
+      const data = await getData(key);
+      if (!data) return;
+      // @ts-ignore
+      const type = typeof temp[key];
+
+      if (type === 'number') {
+        // Convert the data
+        // @ts-ignore
+        temp[key] = !Number.isNaN(Number(data)) ? Number(data) : temp[key];
+      } else if (type === 'boolean') {
+        // @ts-ignore
+        temp[key] = data === '1';
+      }
+    }));
+
+    if (settings.setSettings) {
+      settings.setSettings(temp);
+    }
+
+    // Update tasks
+    const loadedTasks = await getData(TASKS);
+    if (!loadedTasks) {
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(loadedTasks);
+
+      setTasks(parsed);
+    } catch (e) {
+      setImportError('Error loading task data.');
     }
   }
 
@@ -164,34 +218,6 @@ function ImportSettingsPane() {
           padding: 10,
         }}
       />
-      <Modal
-        isVisible={overlay === 'warning'}
-        onBackdropPress={() => setOverlay('none')}
-        backdropOpacity={0.3}
-        backdropColor={colors.primary}
-        animationIn="fadeIn"
-        animationInTiming={20}
-        animationOut="fadeOut"
-        animationOutTiming={20}
-        backdropTransitionInTiming={20}
-        backdropTransitionOutTiming={20}
-        style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <TimerWarningOverlay
-          onClose={() => setOverlay('none')}
-          onConfirm={() => {
-            setOverlay('none');
-            importData(overwriteTasks)
-              .catch(() => {
-                // Set import error
-                setImportError('Invalid config.');
-              });
-          }}
-        />
-      </Modal>
     </View>
   );
 }
