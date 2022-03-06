@@ -7,6 +7,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   StyleSheet, View,
 } from 'react-native';
 import AppContext from '../../AppContext';
@@ -170,11 +171,11 @@ export default function TimerPage() {
   if (size === 'landscape') {
     // Display timer and tasks side by side
     return (
-      <View
+      <Pressable
         style={[styles.container, {
           backgroundColor: colorValues.background,
         }]}
-        onTouchStart={() => Keyboard.dismiss()}
+        onPress={() => Keyboard.dismiss()}
       >
         <KeyboardAvoidingView
           style={styles.contentContainerLandscape}
@@ -210,17 +211,17 @@ export default function TimerPage() {
           </View>
         </KeyboardAvoidingView>
         <StatusBar style="auto" />
-      </View>
+      </Pressable>
     );
   }
 
   // Mobile view
   return (
-    <View
+    <Pressable
       style={[styles.container, {
         backgroundColor: colorValues.background,
       }]}
-      onTouchStart={() => Keyboard.dismiss()}
+      onPress={() => Keyboard.dismiss()}
     >
       <Animated.View style={[styles.contentContainer, {
         opacity: fadeIn,
@@ -261,7 +262,7 @@ export default function TimerPage() {
         </View>
       ) : undefined}
       <StatusBar style={isLightMode ? 'dark' : 'light'} />
-    </View>
+    </Pressable>
   );
 }
 
