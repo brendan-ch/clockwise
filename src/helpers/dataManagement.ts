@@ -25,6 +25,19 @@ const keys = [
 ];
 
 /**
+ * Read the contens of a URI as text.
+ * @param uri
+ */
+async function readDataFromUri(uri: string) {
+  if (Platform.OS === 'web') {
+    throw new Error('This function can only be called on mobile.');
+  }
+
+  const data = await FileSystem.readAsStringAsync(uri);
+  return data;
+}
+
+/**
  * Read the contents of a file as text.
  * @param file
  */
@@ -59,6 +72,8 @@ async function importData(overwriteTasks: boolean = false) {
   let data: string;
   if (result.type === 'success' && result.file && Platform.OS === 'web') {
     data = await readDataWeb(result.file);
+  } else if (result.type === 'success' && Platform.OS !== 'web' && result.uri) {
+    data = await readDataFromUri(result.uri);
   } else {
     throw new Error('Unable to read file.');
   }
@@ -108,6 +123,8 @@ async function importData(overwriteTasks: boolean = false) {
 
   if (Platform.OS === 'web') {
     window.location.reload();
+  } else {
+    console.log('Restart the app to see changes.');
   }
 }
 
