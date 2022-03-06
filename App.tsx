@@ -426,6 +426,7 @@ export default function App() {
       backgroundColor: colorValues.background,
     },
     headerTitleStyle: TextStyles.textBold,
+    headerBackTitleStyle: TextStyles.textRegular,
   };
 
   // Render custom backdrop that uses height/width provided by
@@ -669,6 +670,7 @@ export default function App() {
                   component={SettingsPage}
                   options={{
                     ...headerOptions,
+                    headerTitle: 'Settings',
                   }}
                 />
                 <Stack.Screen
