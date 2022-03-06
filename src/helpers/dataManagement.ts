@@ -120,12 +120,6 @@ async function importData(overwriteTasks: boolean = false) {
       await removeData(key);
     }
   }));
-
-  if (Platform.OS === 'web') {
-    window.location.reload();
-  } else {
-    console.log('Restart the app to see changes.');
-  }
 }
 
 /**
