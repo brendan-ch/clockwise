@@ -545,6 +545,7 @@ export default function App() {
           <SettingsContext.Provider value={{
             ...settings,
             setSetting,
+            setSettings,
           }}
           >
             <Modal
@@ -622,6 +623,7 @@ export default function App() {
       <SettingsContext.Provider value={{
         ...settings,
         setSetting,
+        setSettings,
       }}
       >
         <TaskContext.Provider
