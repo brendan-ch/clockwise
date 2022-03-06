@@ -23,7 +23,7 @@ export default {
   ios: {
     supportsTablet: true,
     bundleIdentifier: 'co.birb.session',
-    buildNumber: '4',
+    buildNumber: '5',
     usesIcloudStorage: true,
   },
   android: {
@@ -33,7 +33,7 @@ export default {
     },
     package: 'co.birb.session',
     softwareKeyboardLayoutMode: 'pan',
-    versionCode: 4,
+    versionCode: 5,
   },
   web: {
     favicon: './assets/favicon.png',
