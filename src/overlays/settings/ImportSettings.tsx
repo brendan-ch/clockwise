@@ -37,7 +37,6 @@ const options: SettingsOptionProps[] = [
     title: 'Import settings',
     type: 'icon',
     value: 'chevron-forward-outline',
-    subtitle: 'Only import files that you trust.',
   },
 ];
 
@@ -63,15 +62,9 @@ function ImportSettingsPane() {
   const [includeTaskData, setIncludeTaskData] = useState(false);
   const [overwriteTasks, setOverwriteTasks] = useState(false);
 
-  const [importError, setImportError] = useState<string | undefined>();
-
-  // const [overlay, setOverlay] = useState<'none' | 'warning'>();
+  const [importError, setImportError] = useState<string | undefined>('Only import files that you trust.');
 
   const windowSize = useWindowSize();
-
-  // const {
-  //   timerState,
-  // } = useContext(AppContext);
 
   const settings = useContext(SettingsContext);
   const {
