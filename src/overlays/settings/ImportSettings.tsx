@@ -1,12 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { SectionList } from 'react-native';
+import { SectionList, View } from 'react-native';
+// import Modal from 'react-native-modal';
 import AppContext from '../../../AppContext';
-// import AppContext from '../../../AppContext';
+import SettingsContext from '../../../SettingsContext';
+import TaskContext from '../../../TaskContext';
 import SettingsOption from '../../components/SettingsOption';
+// import TimerWarningOverlay from '../../components/TimerWarningOverlay';
 import { exportData, importData } from '../../helpers/dataManagement';
 import useKeyboardSelect from '../../helpers/hooks/useKeyboardSelect';
+import useTheme from '../../helpers/hooks/useTheme';
+import useWindowSize from '../../helpers/hooks/useWindowSize';
 import renderHeader from '../../helpers/renderers/renderHeader';
-import { Section, SettingsOptionProps } from '../../types';
+import { getData } from '../../helpers/storage';
+import { TASKS } from '../../StorageKeys';
+import { DefaultSettingsState, Section, SettingsOptionProps } from '../../types';
 
 const options: SettingsOptionProps[] = [
   {
@@ -30,7 +37,6 @@ const options: SettingsOptionProps[] = [
     title: 'Import settings',
     type: 'icon',
     value: 'chevron-forward-outline',
-    subtitle: 'Only import files that you trust.',
   },
 ];
 
@@ -51,10 +57,19 @@ const sections: Section[] = [
  * Component that lets users view the available keybindings.
  */
 function ImportSettingsPane() {
+  const colors = useTheme();
+
   const [includeTaskData, setIncludeTaskData] = useState(false);
   const [overwriteTasks, setOverwriteTasks] = useState(false);
 
-  const [importError, setImportError] = useState<string | undefined>();
+  const [importError, setImportError] = useState<string | undefined>('Only import files that you trust.');
+
+  const windowSize = useWindowSize();
+
+  const settings = useContext(SettingsContext);
+  const {
+    setTasks,
+  } = useContext(TaskContext);
 
   // Name of the storage key selected out of options
   // Note that storage key is only used as an identifier in this case
@@ -77,10 +92,60 @@ function ImportSettingsPane() {
       exportData(includeTaskData);
     } else if (item.title === 'Import settings') {
       importData(overwriteTasks)
+        .then(() => updateReactiveSettings())
+        .then(() => {
+          setImportError('Data imported successfully.');
+        })
         .catch(() => {
           // Set import error
-          setImportError('Invalid config.');
+          setImportError('Unable to import data.');
         });
+    }
+  }
+
+  /**
+   * Update reactive settings and tasks from storage.
+   */
+  async function updateReactiveSettings() {
+    const temp: DefaultSettingsState = {
+      ...settings,
+    };
+    delete temp.setSetting;
+    delete temp.setSettings;
+
+    await Promise.all(Object.keys(settings).map(async (key) => {
+      // Load the data
+      const data = await getData(key);
+      if (!data) return;
+      // @ts-ignore
+      const type = typeof temp[key];
+
+      if (type === 'number') {
+        // Convert the data
+        // @ts-ignore
+        temp[key] = !Number.isNaN(Number(data)) ? Number(data) : temp[key];
+      } else if (type === 'boolean') {
+        // @ts-ignore
+        temp[key] = data === '1';
+      }
+    }));
+
+    if (settings.setSettings) {
+      settings.setSettings(temp);
+    }
+
+    // Update tasks
+    const loadedTasks = await getData(TASKS);
+    if (!loadedTasks) {
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(loadedTasks);
+
+      setTasks(parsed);
+    } catch (e) {
+      setImportError('Error loading task data.');
     }
   }
 
@@ -115,14 +180,38 @@ function ImportSettingsPane() {
     );
   };
 
-  return (
+  return windowSize === 'landscape' ? (
     <SectionList
       showsVerticalScrollIndicator={false}
       keyExtractor={(item) => item.title!}
       sections={sections}
       renderSectionHeader={renderHeader}
       renderItem={renderItem}
+      style={{
+        backgroundColor: colors.background,
+        padding: 0,
+      }}
     />
+  ) : (
+    <View
+      style={{
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+      }}
+    >
+      <SectionList
+        showsVerticalScrollIndicator={false}
+        keyExtractor={(item) => item.title!}
+        sections={sections}
+        renderSectionHeader={renderHeader}
+        renderItem={renderItem}
+        style={{
+          backgroundColor: colors.background,
+          padding: 10,
+        }}
+      />
+    </View>
   );
 }
 

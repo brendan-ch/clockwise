@@ -49,13 +49,13 @@ if (Platform.OS === 'web') {
       renderer: <Keybindings />,
     },
   );
-  navigator.push(
-    {
-      title: 'Data management',
-      renderer: <Import />,
-    },
-  );
 }
+navigator.push(
+  {
+    title: 'Data management',
+    renderer: <Import />,
+  },
+);
 
 if (process.env.NODE_ENV === 'development') {
   const Debugging = React.lazy(() => import('./settings/DebugSettings'));

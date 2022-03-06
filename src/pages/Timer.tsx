@@ -7,6 +7,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   StyleSheet, View,
 } from 'react-native';
 import AppContext from '../../AppContext';
@@ -168,59 +169,74 @@ export default function TimerPage() {
 
   // Landscape view
   if (size === 'landscape') {
+    const children = (
+      <KeyboardAvoidingView
+        style={styles.contentContainerLandscape}
+        behavior="padding"
+      >
+        <View style={[styles.landscapeContainer, styles.leftContainer]}>
+          <View style={styles.leftContentContainer}>
+            <Timer
+              display={calculateTimerDisplay(timeRemaining)}
+              style={styles.timer}
+            />
+            <PageButtonBar
+              selected={mode}
+              style={styles.pageButtonBar}
+              onPressFocus={() => handleStateSwitch('focus')}
+              onPressBreak={() => handleStateSwitch('break')}
+            />
+            <ActionButtonBar
+              style={styles.actionButtonBar}
+              state={timerState}
+              onStartPress={() => startTimer()}
+              onPausePress={() => pauseTimer()}
+              onResetPress={() => stopTimer()}
+              onResumePress={() => startTimer()}
+              text={actionBarText}
+            />
+          </View>
+        </View>
+        <View style={[styles.landscapeContainer, styles.rightContainer]}>
+          <View style={styles.rightContentContainer}>
+            <TaskList />
+          </View>
+        </View>
+      </KeyboardAvoidingView>
+    );
+
     // Display timer and tasks side by side
+    if (Platform.OS === 'web') {
+      return (
+        <View
+          style={[styles.container, {
+            backgroundColor: colorValues.background,
+          }]}
+        >
+          {children}
+        </View>
+      );
+    }
     return (
-      <View
+      <Pressable
         style={[styles.container, {
           backgroundColor: colorValues.background,
         }]}
-        onTouchStart={() => Keyboard.dismiss()}
+        onPress={() => Keyboard.dismiss()}
       >
-        <KeyboardAvoidingView
-          style={styles.contentContainerLandscape}
-          behavior="padding"
-        >
-          <View style={[styles.landscapeContainer, styles.leftContainer]}>
-            <View style={styles.leftContentContainer}>
-              <Timer
-                display={calculateTimerDisplay(timeRemaining)}
-                style={styles.timer}
-              />
-              <PageButtonBar
-                selected={mode}
-                style={styles.pageButtonBar}
-                onPressFocus={() => handleStateSwitch('focus')}
-                onPressBreak={() => handleStateSwitch('break')}
-              />
-              <ActionButtonBar
-                style={styles.actionButtonBar}
-                state={timerState}
-                onStartPress={() => startTimer()}
-                onPausePress={() => pauseTimer()}
-                onResetPress={() => stopTimer()}
-                onResumePress={() => startTimer()}
-                text={actionBarText}
-              />
-            </View>
-          </View>
-          <View style={[styles.landscapeContainer, styles.rightContainer]}>
-            <View style={styles.rightContentContainer}>
-              <TaskList />
-            </View>
-          </View>
-        </KeyboardAvoidingView>
+        {children}
         <StatusBar style="auto" />
-      </View>
+      </Pressable>
     );
   }
 
   // Mobile view
   return (
-    <View
+    <Pressable
       style={[styles.container, {
         backgroundColor: colorValues.background,
       }]}
-      onTouchStart={() => Keyboard.dismiss()}
+      onPress={() => Keyboard.dismiss()}
     >
       <Animated.View style={[styles.contentContainer, {
         opacity: fadeIn,
@@ -261,7 +277,7 @@ export default function TimerPage() {
         </View>
       ) : undefined}
       <StatusBar style={isLightMode ? 'dark' : 'light'} />
-    </View>
+    </Pressable>
   );
 }
 

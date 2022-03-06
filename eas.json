@@ -8,7 +8,10 @@
       "distribution": "internal"
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "EXPO_APPLE_TEAM_ID": "4A9XHUS87Q"
+      }
     },
     "production": {
       "env": {

@@ -164,6 +164,8 @@ interface DefaultSettingsState {
   [DARK_MODE]: boolean,
   /* eslint-disable-next-line */
   setSetting?: (key: string, value: number | boolean) => any,
+  /* eslint-disable-next-line */
+  setSettings?: (settings: any) => any,
 }
 
 interface ImageInfo {

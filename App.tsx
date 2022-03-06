@@ -55,6 +55,7 @@ import IntroductionOverlay from './src/overlays/IntroductionOverlay';
 import IntroductionPage from './src/pages/IntroductionPage';
 import { TIMER_SOUND } from './src/Assets';
 import RedirectPage from './src/pages/RedirectPage';
+import ImportSettingsPane from './src/overlays/settings/ImportSettings';
 
 const MIN_25 = 1500000;
 // const MIN_5 = 300000;
@@ -425,6 +426,7 @@ export default function App() {
       backgroundColor: colorValues.background,
     },
     headerTitleStyle: TextStyles.textBold,
+    headerBackTitleStyle: TextStyles.textRegular,
   };
 
   // Render custom backdrop that uses height/width provided by
@@ -543,28 +545,41 @@ export default function App() {
           <SettingsContext.Provider value={{
             ...settings,
             setSetting,
+            setSettings,
           }}
           >
-            <Modal
-              isVisible={overlay === 'settings'}
-              onBackdropPress={() => setOverlay('none')}
-              backdropOpacity={0.3}
-              backdropColor={colorValues.primary}
-              animationIn="fadeIn"
-              animationInTiming={20}
-              animationOut="fadeOut"
-              backdropTransitionInTiming={20}
-              backdropTransitionOutTiming={20}
-              customBackdrop={customBackdrop}
-              animationOutTiming={20}
-              style={{
-                // alignSelf: 'center',
-                justifyContent: 'center',
-                alignItems: 'center',
+            <TaskContext.Provider
+              value={{
+                tasks,
+                selected,
+                setTasks,
+                setSelected,
+                handleAddTask,
+                handleChangeTask,
+                handleDeleteTask,
               }}
             >
-              <SettingsOverlay />
-            </Modal>
+              <Modal
+                isVisible={overlay === 'settings'}
+                onBackdropPress={() => setOverlay('none')}
+                backdropOpacity={0.3}
+                backdropColor={colorValues.primary}
+                animationIn="fadeIn"
+                animationInTiming={20}
+                animationOut="fadeOut"
+                backdropTransitionInTiming={20}
+                backdropTransitionOutTiming={20}
+                customBackdrop={customBackdrop}
+                animationOutTiming={20}
+                style={{
+                // alignSelf: 'center',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <SettingsOverlay />
+              </Modal>
+            </TaskContext.Provider>
             <Modal
               isVisible={overlay === 'introduction'}
               onBackdropPress={() => setOverlay('none')}
@@ -620,6 +635,7 @@ export default function App() {
       <SettingsContext.Provider value={{
         ...settings,
         setSetting,
+        setSettings,
       }}
       >
         <TaskContext.Provider
@@ -666,6 +682,14 @@ export default function App() {
                 <Stack.Screen
                   name="Settings"
                   component={SettingsPage}
+                  options={{
+                    ...headerOptions,
+                    headerTitle: 'Settings',
+                  }}
+                />
+                <Stack.Screen
+                  name="Data Management"
+                  component={ImportSettingsPane}
                   options={{
                     ...headerOptions,
                   }}
