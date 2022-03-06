@@ -5,6 +5,8 @@ import AppContext from '../../../AppContext';
 import SettingsOption from '../../components/SettingsOption';
 import { exportData, importData } from '../../helpers/dataManagement';
 import useKeyboardSelect from '../../helpers/hooks/useKeyboardSelect';
+import useTheme from '../../helpers/hooks/useTheme';
+import useWindowSize from '../../helpers/hooks/useWindowSize';
 import renderHeader from '../../helpers/renderers/renderHeader';
 import { Section, SettingsOptionProps } from '../../types';
 
@@ -51,10 +53,14 @@ const sections: Section[] = [
  * Component that lets users view the available keybindings.
  */
 function ImportSettingsPane() {
+  const colors = useTheme();
+
   const [includeTaskData, setIncludeTaskData] = useState(false);
   const [overwriteTasks, setOverwriteTasks] = useState(false);
 
   const [importError, setImportError] = useState<string | undefined>();
+
+  const windowSize = useWindowSize();
 
   // Name of the storage key selected out of options
   // Note that storage key is only used as an identifier in this case
@@ -122,6 +128,10 @@ function ImportSettingsPane() {
       sections={sections}
       renderSectionHeader={renderHeader}
       renderItem={renderItem}
+      style={{
+        backgroundColor: colors.background,
+        padding: windowSize === 'portrait' ? 10 : 0,
+      }}
     />
   );
 }
