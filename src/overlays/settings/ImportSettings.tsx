@@ -20,7 +20,6 @@ const options: SettingsOptionProps[] = [
     title: 'Include task data',
     type: 'toggle',
     value: false,
-    subtitle: 'If selected, task data will be included in the export file.',
   },
   {
     title: 'Export settings',
@@ -31,7 +30,7 @@ const options: SettingsOptionProps[] = [
     title: 'Overwrite task data',
     type: 'toggle',
     value: false,
-    subtitle: 'WARNING: If selected, existing task data will be lost.',
+    subtitle: 'WARNING: Existing tasks will be lost.',
   },
   {
     title: 'Import settings',

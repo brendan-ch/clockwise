@@ -66,7 +66,7 @@ async function importData(overwriteTasks: boolean = false) {
   // Retrieve the file
   const result = await DocumentPicker.getDocumentAsync({
     copyToCacheDirectory: true,
-    type: '*/*',
+    type: 'application/json',
   });
 
   let data: string;
