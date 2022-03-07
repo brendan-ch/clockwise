@@ -1,13 +1,13 @@
 import React from 'react';
-import { Text, Linking } from 'react-native';
+import { Text } from 'react-native';
 import Constants from 'expo-constants';
-import * as WebBrowser from 'expo-web-browser';
 
 import ClickableText from '../../components/ClickableText';
 import { IntroductionBlockProps } from '../../types';
 import useTheme from './useTheme';
 import TextStyles from '../../styles/Text';
 import { NO_ADS_IMAGE, SETTINGS_IMAGE, TASKS_IMAGE } from '../../Assets';
+import handleOpenLink from '../handleOpenLink';
 
 /* eslint-disable global-require */
 
@@ -32,10 +32,7 @@ function useIntroductionData(): IntroductionBlockProps[] {
 
           <ClickableText
             text="Learn more about the Pomodoro technique."
-            onPress={() => WebBrowser.openBrowserAsync('https://en.wikipedia.org/wiki/Pomodoro_Technique', {
-              enableBarCollapsing: true,
-              dismissButtonStyle: 'close',
-            })}
+            onPress={() => handleOpenLink('https://en.wikipedia.org/wiki/Pomodoro_Technique')}
             style={[TextStyles.textRegular, {
               color: colorValues.gray3,
             }]}
@@ -68,7 +65,7 @@ function useIntroductionData(): IntroductionBlockProps[] {
           {'Your data stays on your device. See the '}
           <ClickableText
             text="Privacy Policy"
-            onPress={() => Linking.openURL(privacyPolicyLink)}
+            onPress={() => handleOpenLink(privacyPolicyLink)}
             style={[TextStyles.textRegular, {
               color: colorValues.gray3,
             }]}
