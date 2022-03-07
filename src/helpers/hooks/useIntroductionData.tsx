@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, Linking } from 'react-native';
 import Constants from 'expo-constants';
+import * as WebBrowser from 'expo-web-browser';
 
 import ClickableText from '../../components/ClickableText';
 import { IntroductionBlockProps } from '../../types';
@@ -31,7 +32,10 @@ function useIntroductionData(): IntroductionBlockProps[] {
 
           <ClickableText
             text="Learn more about the Pomodoro technique."
-            onPress={() => Linking.openURL('https://en.wikipedia.org/wiki/Pomodoro_Technique')}
+            onPress={() => WebBrowser.openBrowserAsync('https://en.wikipedia.org/wiki/Pomodoro_Technique', {
+              enableBarCollapsing: true,
+              dismissButtonStyle: 'close',
+            })}
             style={[TextStyles.textRegular, {
               color: colorValues.gray3,
             }]}
