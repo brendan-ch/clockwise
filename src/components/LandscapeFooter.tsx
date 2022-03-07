@@ -4,7 +4,6 @@ import React, {
 import {
   StyleSheet, Text, Animated, Platform,
 } from 'react-native';
-import * as Linking from 'expo-linking';
 import Constants from 'expo-constants';
 import { Ionicons } from '@expo/vector-icons';
 import AppContext from '../../AppContext';
@@ -12,6 +11,7 @@ import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
 import ClickableText from './ClickableText';
 import ImageContext from '../../ImageContext';
+import handleOpenLink from '../helpers/handleOpenLink';
 
 function LandscapeFooter() {
   const [hovering, setHovering] = useState(false);
@@ -66,7 +66,7 @@ function LandscapeFooter() {
             <ClickableText
               text={`${imageInfo.author} on Unsplash`}
               style={[TextStyles.textRegular]}
-              onPress={() => Linking.openURL(imageInfo.link)}
+              onPress={() => handleOpenLink(imageInfo.link)}
             />
             {' | '}
           </Text>
@@ -77,7 +77,7 @@ function LandscapeFooter() {
               {'Created by '}
               <ClickableText
                 text="Brendan C."
-                onPress={githubProfileLink ? () => Linking.openURL(githubProfileLink) : undefined}
+                onPress={githubProfileLink ? () => handleOpenLink(githubProfileLink) : undefined}
                 style={[TextStyles.textRegular, {
                   color: colorValues.gray3,
                 }]}
@@ -88,7 +88,7 @@ function LandscapeFooter() {
           : undefined}
         <ClickableText
           text="Licenses"
-          onPress={githubLink ? () => Linking.openURL(githubLink) : undefined}
+          onPress={githubLink ? () => handleOpenLink(githubLink) : undefined}
           style={[TextStyles.textRegular, {
             color: colorValues.gray3,
           }]}
@@ -96,7 +96,7 @@ function LandscapeFooter() {
         {' | '}
         <ClickableText
           text="Privacy Policy"
-          onPress={privacyPolicyLink ? () => Linking.openURL(privacyPolicyLink) : undefined}
+          onPress={privacyPolicyLink ? () => handleOpenLink(privacyPolicyLink) : undefined}
           style={[TextStyles.textRegular, {
             color: colorValues.gray3,
           }]}
