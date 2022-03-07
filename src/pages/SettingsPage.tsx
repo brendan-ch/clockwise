@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Linking,
   Platform,
   SectionList, StyleSheet, View,
 } from 'react-native';
@@ -25,6 +24,7 @@ import NotificationOverlay from '../components/NotificationOverlay';
 import ClickableText from '../components/ClickableText';
 import TextStyles from '../styles/Text';
 import { clearAll } from '../helpers/storage';
+import handleOpenLink from '../helpers/handleOpenLink';
 
 // Store all static option data in here
 // Make it easier to find and filter settings
@@ -224,7 +224,7 @@ function SettingsPage() {
           color: colorValues.gray3,
           marginBottom: 10,
         }]}
-        onPress={privacyPolicyLink ? () => Linking.openURL(privacyPolicyLink) : undefined}
+        onPress={privacyPolicyLink ? () => handleOpenLink(privacyPolicyLink) : undefined}
       />
       <ClickableText
         text="Licenses"
@@ -232,7 +232,7 @@ function SettingsPage() {
           color: colorValues.gray3,
           marginBottom: 30,
         }]}
-        onPress={githubLink ? () => Linking.openURL(githubLink) : undefined}
+        onPress={githubLink ? () => handleOpenLink(githubLink) : undefined}
       />
       <Modal
         isVisible={overlay === 'notification'}
