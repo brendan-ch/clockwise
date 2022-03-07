@@ -44,7 +44,7 @@ function NotificationOverlay({ onClose }: Props) {
           onPress: onClose ? () => onClose() : () => {},
         }}
         rightButton={Platform.OS === 'ios' ? {
-          text: 'go to settings',
+          text: 'open settings',
           onPress: () => {
             Linking.openSettings();
             if (onClose) {
