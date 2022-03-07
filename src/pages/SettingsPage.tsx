@@ -240,11 +240,11 @@ function SettingsPage() {
         backdropOpacity={0.3}
         backdropColor={colorValues.primary}
         animationIn="fadeIn"
-        animationInTiming={20}
+        animationInTiming={100}
         animationOut="fadeOut"
-        animationOutTiming={20}
-        backdropTransitionInTiming={20}
-        backdropTransitionOutTiming={20}
+        animationOutTiming={100}
+        backdropTransitionInTiming={200}
+        backdropTransitionOutTiming={200}
         style={{
           justifyContent: 'center',
           alignItems: 'center',
