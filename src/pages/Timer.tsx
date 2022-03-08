@@ -87,7 +87,7 @@ export default function TimerPage() {
   const timeFinish = new Date(
     now.getTime() + (
       ((settings[FOCUS_TIME_MINUTES] + settings[BREAK_TIME_MINUTES]) * 60 * 1000 * max)
-      - settings[BREAK_TIME_MINUTES] * 60 * 1000
+      - (max === 0 ? 0 : settings[BREAK_TIME_MINUTES] * 60 * 1000)
     ),
   );
 
