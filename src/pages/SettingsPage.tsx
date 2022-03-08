@@ -18,6 +18,7 @@ import {
   ENABLE_TIMER_ALERTS,
   ENABLE_TIMER_SOUND,
   FOCUS_TIME_MINUTES,
+  _24_HOUR_TIME,
 } from '../StorageKeys';
 import { Section, SettingsOptionProps, SettingsOptionPropsStatic } from '../types';
 import NotificationOverlay from '../components/NotificationOverlay';
@@ -48,6 +49,11 @@ const options: SettingsOptionPropsStatic[] = [
     type: 'toggle',
     title: 'Timer alerts',
     storageKey: ENABLE_TIMER_ALERTS,
+  },
+  {
+    type: 'toggle',
+    title: '24-hour time',
+    storageKey: _24_HOUR_TIME,
   },
   {
     type: 'toggle',
@@ -124,7 +130,7 @@ function SettingsPage() {
   // Sync options with storage
   const { settingsData, handleChange } = useSettingsData(options);
 
-  const autoSetTheme = settingsData[4]?.value as boolean;
+  const autoSetTheme = settingsData[5]?.value as boolean;
   const sections: Section[] = [
     {
       title: 'Timer',
@@ -132,9 +138,14 @@ function SettingsPage() {
       data: Platform.OS === 'web' ? settingsData.slice(0, 3) : settingsData.slice(0, 4),
     },
     {
+      title: 'Region',
+      icon: 'location-outline',
+      data: settingsData.slice(4, 5),
+    },
+    {
       title: 'Theme',
       icon: 'moon-outline',
-      data: autoSetTheme ? settingsData.slice(4, 5) : settingsData.slice(4, 6),
+      data: autoSetTheme ? settingsData.slice(5, 6) : settingsData.slice(5, 7),
     },
   ];
   // Overlay to display
