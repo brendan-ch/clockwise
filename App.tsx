@@ -356,10 +356,11 @@ export default function App() {
 
   useEffect(() => {
     // Timer and app initialiation
-    // getAndSetTimerValue(mode);
     loadTimerSound();
-    prefillSettings();
-    initializeSettingsData();
+    prefillSettings()
+      .then(() => {
+        initializeSettingsData();
+      });
   }, []);
 
   useEffect(() => {
