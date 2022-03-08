@@ -6,7 +6,7 @@ import SettingsOption from '../../components/SettingsOption';
 // import { checkNotifications, requestNotifications } from '../../helpers/notification';
 import useSettingsData from '../../helpers/hooks/useSettingsData';
 import {
-  BREAK_TIME_MINUTES, ENABLE_TIMER_ALERTS, ENABLE_TIMER_SOUND, FOCUS_TIME_MINUTES,
+  BREAK_TIME_MINUTES, ENABLE_TIMER_ALERTS, ENABLE_TIMER_SOUND, FOCUS_TIME_MINUTES, _24_HOUR_TIME,
 } from '../../StorageKeys';
 import { SettingsOptionProps, Section, SettingsOptionPropsStatic } from '../../types';
 import { checkNotifications, requestNotifications } from '../../helpers/notification';
@@ -55,11 +55,11 @@ const options: SettingsOptionPropsStatic[] = [
       return false;
     },
   },
-  // {
-  //   type: 'toggle',
-  //   title: 'Auto start timers?',
-  //   storageKey: AUTO_START_TIMERS,
-  // },
+  {
+    type: 'toggle',
+    title: '24-hour time',
+    storageKey: _24_HOUR_TIME,
+  },
 ];
 
 /**
@@ -89,6 +89,11 @@ function TimerSettingsPane() {
       title: 'Timer',
       icon: 'timer-outline',
       data: settingsData.slice(0, 4),
+    },
+    {
+      title: 'Region',
+      icon: 'location-outline',
+      data: settingsData.slice(4, 5),
     },
   ];
   const [selected, setSelected] = useState<string | undefined>(undefined);
@@ -146,8 +151,9 @@ function TimerSettingsPane() {
           if (!result) return;
         }
 
+        const i = options.findIndex((value) => item.title === value.title);
         handleChange(
-          index,
+          i,
           newData,
         );
       }}

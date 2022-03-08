@@ -4,7 +4,12 @@ import {
 } from 'react-native';
 import {
   AUTO_APPEARANCE,
-  BREAK_TIME_MINUTES, DARK_MODE, ENABLE_BACKGROUND, ENABLE_TIMER_ALERTS, FOCUS_TIME_MINUTES,
+  BREAK_TIME_MINUTES,
+  DARK_MODE,
+  ENABLE_BACKGROUND,
+  ENABLE_TIMER_ALERTS,
+  FOCUS_TIME_MINUTES,
+  _24_HOUR_TIME,
 } from './StorageKeys';
 
 type TimerState = 'running' | 'paused' | 'stopped';
@@ -162,6 +167,7 @@ interface DefaultSettingsState {
   [ENABLE_BACKGROUND]: boolean,
   [AUTO_APPEARANCE]: boolean,
   [DARK_MODE]: boolean,
+  [_24_HOUR_TIME]: boolean,
   /* eslint-disable-next-line */
   setSetting?: (key: string, value: number | boolean) => any,
   /* eslint-disable-next-line */

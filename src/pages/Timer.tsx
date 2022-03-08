@@ -22,6 +22,11 @@ import useBackgroundTimer from '../helpers/hooks/useBackgroundTimer';
 import useTimerNotification from '../helpers/hooks/useTimerNotifications';
 import useUnsavedChanges from '../helpers/hooks/useUnsavedChanges';
 import ColorValues from '../styles/Color';
+import TaskContext from '../../TaskContext';
+import useTimeUpdates from '../helpers/hooks/useTimeUpdates';
+import calculateTime from '../helpers/calculateTime';
+import SettingsContext from '../../SettingsContext';
+import { BREAK_TIME_MINUTES, FOCUS_TIME_MINUTES, _24_HOUR_TIME } from '../StorageKeys';
 
 /**
  * Component that displays information about the timer.
@@ -31,6 +36,13 @@ export default function TimerPage() {
   const [isAtTop, setAtTop] = useState(true);
   const colorValues = useTheme();
   const isLightMode = colorValues.primary === ColorValues.primary;
+
+  const now = useTimeUpdates();
+
+  const {
+    selected,
+    tasks,
+  } = useContext(TaskContext);
 
   const size = useWindowSize();
   const {
@@ -48,6 +60,8 @@ export default function TimerPage() {
     setPageTitle,
   } = useContext(AppContext);
 
+  const settings = useContext(SettingsContext);
+
   const fadeIn = useRef(new Animated.Value(Platform.OS === 'web' ? 1 : 0)).current;
 
   /**
@@ -61,11 +75,35 @@ export default function TimerPage() {
     }).start();
   }
 
+  // Calculate finish time, based on provide est. sessions data
+  // Get the task w/ the longest number of sessions
+  let max = 0;
+  selected.forEach((id) => {
+    const task = tasks.find((value) => value.id === id);
+    if (task?.estPomodoros && max < task?.estPomodoros) {
+      max = task.estPomodoros;
+    }
+  });
+  const timeFinish = new Date(
+    now.getTime() + (
+      ((settings[FOCUS_TIME_MINUTES] + settings[BREAK_TIME_MINUTES]) * 60 * 1000 * max)
+      - (max === 0 ? 0 : settings[BREAK_TIME_MINUTES] * 60 * 1000)
+    ),
+  );
+
   let actionBarText;
-  if (timerState !== 'running' && timerState !== 'paused' && mode === 'focus') {
+  if (
+    timerState === 'stopped'
+    && mode === 'focus'
+    && selected.length === 0
+  ) {
     actionBarText = `Select some tasks ${size === 'portrait' ? 'above' : 'on the right'} to work on during your session.`;
+  } else if (mode === 'focus' && timerState === 'stopped') {
+    actionBarText = `${selected.length}/${tasks.length} tasks selected. Est. time finish: ${
+      calculateTime(timeFinish, settings[_24_HOUR_TIME] ? '24h' : '12h')
+    }`;
   } else if (mode === 'break') {
-    actionBarText = 'Use this time to plan tasks for the next session.';
+    actionBarText = 'Use this time to plan your next session.';
   }
 
   useBackgroundTimer();
