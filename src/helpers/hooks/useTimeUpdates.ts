@@ -13,11 +13,16 @@ function useTimeUpdates() {
     // Execute the callback every time `now` changes
     // Note: this will run when the hook is first called
     // Create another timeout
-    const secondsRemaining = 60 - now.getSeconds();
+    let secondsRemaining = 60 - now.getSeconds();
+
+    // If on Android, set a shorter timeout (~20 seconds)
+    if (Platform.OS === 'android') {
+      secondsRemaining = Math.min(secondsRemaining, 20000);
+    }
 
     setTimeoutInState(setTimeout(() => {
       setNow(new Date());
-    }, secondsRemaining * 1000 + 500));
+    }, secondsRemaining * 1000 + 250));
     // Add 500 ms delay to execution
 
     if (Platform.OS !== 'web') {
