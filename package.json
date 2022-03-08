@@ -26,6 +26,7 @@
     "expo-font": "~10.0.3",
     "expo-haptics": "~11.0.3",
     "expo-linking": "~2.4.2",
+    "expo-localization": "~11.0.0",
     "expo-notifications": "~0.13.3",
     "expo-sharing": "~10.0.3",
     "expo-status-bar": "~1.1.0",
