@@ -25,6 +25,8 @@ import ColorValues from '../styles/Color';
 import TaskContext from '../../TaskContext';
 import useTimeUpdates from '../helpers/hooks/useTimeUpdates';
 import calculateTime from '../helpers/calculateTime';
+import SettingsContext from '../../SettingsContext';
+import { BREAK_TIME_MINUTES, FOCUS_TIME_MINUTES } from '../StorageKeys';
 
 /**
  * Component that displays information about the timer.
@@ -58,6 +60,8 @@ export default function TimerPage() {
     setPageTitle,
   } = useContext(AppContext);
 
+  const settings = useContext(SettingsContext);
+
   const fadeIn = useRef(new Animated.Value(Platform.OS === 'web' ? 1 : 0)).current;
 
   /**
@@ -71,6 +75,22 @@ export default function TimerPage() {
     }).start();
   }
 
+  // Calculate finish time, based on provide est. sessions data
+  // Get the task w/ the longest number of sessions
+  let max = 0;
+  selected.forEach((id) => {
+    const task = tasks.find((value) => value.id === id);
+    if (task?.estPomodoros && max < task?.estPomodoros) {
+      max = task.estPomodoros;
+    }
+  });
+  const timeFinish = new Date(
+    now.getTime() + (
+      ((settings[FOCUS_TIME_MINUTES] + settings[BREAK_TIME_MINUTES]) * 60 * 1000 * max)
+      - settings[BREAK_TIME_MINUTES] * 60 * 1000
+    ),
+  );
+
   let actionBarText;
   if (
     timerState === 'stopped'
@@ -79,7 +99,7 @@ export default function TimerPage() {
   ) {
     actionBarText = `Select some tasks ${size === 'portrait' ? 'above' : 'on the right'} to work on during your session.`;
   } else if (mode === 'focus' && timerState === 'stopped') {
-    actionBarText = `${selected.length}/${tasks.length} tasks selected. Est. time finish: ${calculateTime(now)}`;
+    actionBarText = `${selected.length}/${tasks.length} tasks selected. Est. time finish: ${calculateTime(timeFinish)}`;
   } else if (mode === 'break') {
     actionBarText = 'Use this time to plan your next session.';
   }
