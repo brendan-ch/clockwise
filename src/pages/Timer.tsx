@@ -26,7 +26,7 @@ import TaskContext from '../../TaskContext';
 import useTimeUpdates from '../helpers/hooks/useTimeUpdates';
 import calculateTime from '../helpers/calculateTime';
 import SettingsContext from '../../SettingsContext';
-import { BREAK_TIME_MINUTES, FOCUS_TIME_MINUTES } from '../StorageKeys';
+import { BREAK_TIME_MINUTES, FOCUS_TIME_MINUTES, _24_HOUR_TIME } from '../StorageKeys';
 
 /**
  * Component that displays information about the timer.
@@ -99,7 +99,9 @@ export default function TimerPage() {
   ) {
     actionBarText = `Select some tasks ${size === 'portrait' ? 'above' : 'on the right'} to work on during your session.`;
   } else if (mode === 'focus' && timerState === 'stopped') {
-    actionBarText = `${selected.length}/${tasks.length} tasks selected. Est. time finish: ${calculateTime(timeFinish)}`;
+    actionBarText = `${selected.length}/${tasks.length} tasks selected. Est. time finish: ${
+      calculateTime(timeFinish, settings[_24_HOUR_TIME] ? '24h' : '12h')
+    }`;
   } else if (mode === 'break') {
     actionBarText = 'Use this time to plan your next session.';
   }
