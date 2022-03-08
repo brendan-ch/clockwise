@@ -16,7 +16,8 @@ import AppLoading from 'expo-app-loading';
 import Modal from 'react-native-modal';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-// import { Ionicons } from '@expo/vector-icons';
+import * as Localization from 'expo-localization';
+
 import AppContext from './AppContext';
 import KeyboardShortcutManager from './src/helpers/keyboardShortcutManager';
 import TimerPage from './src/pages/Timer';
@@ -57,9 +58,9 @@ import IntroductionPage from './src/pages/IntroductionPage';
 import { TIMER_SOUND } from './src/Assets';
 import RedirectPage from './src/pages/RedirectPage';
 import ImportSettingsPane from './src/overlays/settings/ImportSettings';
+import { REGIONS_WITH_12H_TIME } from './src/Constants';
 
 const MIN_25 = 1500000;
-// const MIN_5 = 300000;
 
 // Create the stack navigator
 const Stack = createNativeStackNavigator();
@@ -100,7 +101,7 @@ export default function App() {
     [ENABLE_BACKGROUND]: false,
     [AUTO_APPEARANCE]: true,
     [DARK_MODE]: false,
-    [_24_HOUR_TIME]: true,
+    [_24_HOUR_TIME]: !(Localization.region && REGIONS_WITH_12H_TIME.includes(Localization.region)),
   });
 
   // Track selected task IDs

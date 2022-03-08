@@ -1,4 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Localization from 'expo-localization';
+import { REGIONS_WITH_12H_TIME } from '../Constants';
 import {
   AUTO_APPEARANCE,
   AUTO_START_TIMERS,
@@ -6,7 +8,7 @@ import {
   DARK_MODE,
   ENABLE_BACKGROUND,
   ENABLE_TIMER_ALERTS,
-  ENABLE_TIMER_SOUND, FOCUS_TIME_MINUTES, MODE, START, SUPPRESS_INTRODUCTION, TASKS,
+  ENABLE_TIMER_SOUND, FOCUS_TIME_MINUTES, MODE, START, SUPPRESS_INTRODUCTION, TASKS, _24_HOUR_TIME,
 } from '../StorageKeys';
 
 /**
@@ -60,12 +62,15 @@ async function clearAll() {
  * Prefill some settings values on first-time app launch.
  */
 async function prefillSettings() {
+  const { region } = Localization;
+
   // Check if each key exists, and write to storage if it doesn't
   const defaultSettings = {
     [BREAK_TIME_MINUTES]: '5',
     [FOCUS_TIME_MINUTES]: '25',
     [ENABLE_BACKGROUND]: '1',
     [AUTO_APPEARANCE]: '1',
+    [_24_HOUR_TIME]: !(region && REGIONS_WITH_12H_TIME.includes(region)) ? '1' : '0',
   };
 
   await Promise.all(Object.keys(defaultSettings).map(async (key) => {
