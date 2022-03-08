@@ -16,8 +16,9 @@ function useTimeUpdates() {
     let secondsRemaining = 60 - now.getSeconds();
 
     // If on Android, set a shorter timeout (~20 seconds)
+    // See RN issue https://github.com/facebook/react-native/issues/12981
     if (Platform.OS === 'android') {
-      secondsRemaining = Math.min(secondsRemaining, 20000);
+      secondsRemaining = Math.min(secondsRemaining, 20);
     }
 
     setTimeoutInState(setTimeout(() => {
