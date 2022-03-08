@@ -45,6 +45,7 @@ import {
   ENABLE_TIMER_SOUND,
   FOCUS_TIME_MINUTES,
   SUPPRESS_INTRODUCTION,
+  _24_HOUR_TIME,
 } from './src/StorageKeys';
 import SettingsContext from './SettingsContext';
 import useTasks from './src/helpers/hooks/useTasks';
@@ -99,6 +100,7 @@ export default function App() {
     [ENABLE_BACKGROUND]: false,
     [AUTO_APPEARANCE]: true,
     [DARK_MODE]: false,
+    [_24_HOUR_TIME]: true,
   });
 
   // Track selected task IDs
