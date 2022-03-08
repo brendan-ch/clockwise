@@ -23,6 +23,8 @@ import useTimerNotification from '../helpers/hooks/useTimerNotifications';
 import useUnsavedChanges from '../helpers/hooks/useUnsavedChanges';
 import ColorValues from '../styles/Color';
 import TaskContext from '../../TaskContext';
+import useTimeUpdates from '../helpers/hooks/useTimeUpdates';
+import calculateTime from '../helpers/calculateTime';
 
 /**
  * Component that displays information about the timer.
@@ -32,6 +34,8 @@ export default function TimerPage() {
   const [isAtTop, setAtTop] = useState(true);
   const colorValues = useTheme();
   const isLightMode = colorValues.primary === ColorValues.primary;
+
+  const now = useTimeUpdates();
 
   const {
     selected,
@@ -75,7 +79,7 @@ export default function TimerPage() {
   ) {
     actionBarText = `Select some tasks ${size === 'portrait' ? 'above' : 'on the right'} to work on during your session.`;
   } else if (mode === 'focus' && timerState === 'stopped') {
-    actionBarText = `${selected.length}/${tasks.length} tasks selected.`;
+    actionBarText = `${selected.length}/${tasks.length} tasks selected. Est. time finish: ${calculateTime(now)}`;
   } else if (mode === 'break') {
     actionBarText = 'Use this time to plan your next session.';
   }
