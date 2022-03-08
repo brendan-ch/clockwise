@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { AppState } from 'react-native';
+import { AppState, Platform } from 'react-native';
 
 /**
  * Hook that changes state every time the time changes (every minute).
@@ -20,28 +20,32 @@ function useTimeUpdates() {
     }, secondsRemaining * 1000 + 500));
     // Add 500 ms delay to execution
 
-    // Listen to background state
-    AppState.addEventListener('change', (state) => {
-      switch (state) {
-        case 'background':
-        case 'inactive':
-          // Stop updating (clear timeout)
-          clearTimeout(timeout);
-          break;
-        case 'active':
-          // Start updating again
-          // Changing `now` will cause useEffect hook to re-run
-          setNow(new Date());
-          break;
-        default:
-          // Do something
-          setNow(new Date());
-      }
-    });
+    if (Platform.OS !== 'web') {
+      // Listen to background state
+      AppState.addEventListener('change', (state) => {
+        switch (state) {
+          case 'background':
+          case 'inactive':
+            // Stop updating (clear timeout)
+            clearTimeout(timeout);
+            break;
+          case 'active':
+            // Start updating again
+            // Changing `now` will cause useEffect hook to re-run
+            setNow(new Date());
+            break;
+          default:
+            // Do something
+            setNow(new Date());
+        }
+      });
+    }
 
     return () => {
       clearTimeout(timeout);
-      AppState.removeEventListener('change', () => {});
+      if (Platform.OS !== 'web') {
+        AppState.removeEventListener('change', () => {});
+      }
     };
   }, [now]);
 
