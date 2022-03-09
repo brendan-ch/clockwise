@@ -80,8 +80,9 @@ export default function TimerPage() {
   let max = 0;
   selected.forEach((id) => {
     const task = tasks.find((value) => value.id === id);
-    if (task?.estPomodoros && max < task?.estPomodoros) {
-      max = task.estPomodoros;
+    const actual = task?.actualPomodoros ? task.actualPomodoros : 0;
+    if (task?.estPomodoros && max < task.estPomodoros - actual) {
+      max = task.estPomodoros - actual;
     }
   });
   const timeFinish = new Date(
