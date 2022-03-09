@@ -330,7 +330,7 @@ function TaskList({ setAtTop }: Props) {
           {
             type: 'number',
             title: 'est. sessions',
-            subtitle: item.actualPomodoros ? `actual sessions: ${item.actualPomodoros}` : undefined,
+            subtitle: item.actualPomodoros ? `sessions tracked: ${item.actualPomodoros}` : undefined,
             value: item.estPomodoros,
             onChange: (data) => handleChangeTask('estPomodoros', data, item.id),
             disabled: !timerStopped && context.mode === 'focus',
