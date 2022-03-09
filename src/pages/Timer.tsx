@@ -81,7 +81,7 @@ export default function TimerPage() {
   selected.forEach((id) => {
     const task = tasks.find((value) => value.id === id);
     const actual = task?.actualPomodoros ? task.actualPomodoros : 0;
-    if (task?.estPomodoros && max < task?.estPomodoros - actual) {
+    if (task?.estPomodoros && max < task.estPomodoros - actual) {
       max = task.estPomodoros - actual;
     }
   });
