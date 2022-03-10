@@ -188,13 +188,17 @@ function TaskList({ setAtTop }: Props) {
 
   const colorValues = useTheme();
 
+  // When timer state switches, clear completed tasks
+  // and deselect them accordingly
   useEffect(() => {
     if (context.timerState === 'stopped' && tasks.length > 0) {
       // Check whether selected tasks still exist
       const selectedCopy = selected.slice();
 
       selected.forEach((value) => {
-        if (!tasks.find((task) => task.id === value)) {
+        const task = tasks.find((item) => item.id === value);
+
+        if (!task || task.completed) {
           // Remove from selectedCopy
           const index = selectedCopy.findIndex((item) => item === value);
           selectedCopy.splice(index, 1);
