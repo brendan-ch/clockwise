@@ -191,7 +191,7 @@ function TaskList({ setAtTop }: Props) {
   // When timer state switches, clear completed tasks
   // and deselect them accordingly
   useEffect(() => {
-    if (context.timerState === 'stopped' && tasks.length > 0) {
+    if ((context.timerState === 'stopped' || context.mode === 'break')) {
       // Check whether selected tasks still exist
       const selectedCopy = selected.slice();
 
@@ -228,7 +228,7 @@ function TaskList({ setAtTop }: Props) {
 
       setTasks(tasksCopy);
     }
-  }, [context.timerState, tasks, deletionTimeout]);
+  }, [context.timerState, context.mode, tasks, deletionTimeout]);
 
   // Set keybindings
   useEffect(() => {
