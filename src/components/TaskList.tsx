@@ -297,6 +297,7 @@ function TaskList({ setAtTop }: Props) {
     tasks,
     expandedTask,
     context.timerState,
+    context.mode,
     selected,
   ]);
 
