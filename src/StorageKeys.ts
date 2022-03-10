@@ -16,3 +16,5 @@ export const DARK_MODE = '@darkMode';
 export const SUPPRESS_INTRODUCTION = '@suppressIntroduction';
 export const SELECTED = '@selectedTasks';
 export const _24_HOUR_TIME = '@24h';
+export const AUTO_START_BREAK = '@autoStartBreak';
+export const AUTO_START_FOCUS = '@autoStartFocus';

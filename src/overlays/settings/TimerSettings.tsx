@@ -6,6 +6,8 @@ import SettingsOption from '../../components/SettingsOption';
 // import { checkNotifications, requestNotifications } from '../../helpers/notification';
 import useSettingsData from '../../helpers/hooks/useSettingsData';
 import {
+  AUTO_START_BREAK,
+  AUTO_START_FOCUS,
   BREAK_TIME_MINUTES, ENABLE_TIMER_ALERTS, ENABLE_TIMER_SOUND, FOCUS_TIME_MINUTES, _24_HOUR_TIME,
 } from '../../StorageKeys';
 import { SettingsOptionProps, Section, SettingsOptionPropsStatic } from '../../types';
@@ -57,6 +59,16 @@ const options: SettingsOptionPropsStatic[] = [
   },
   {
     type: 'toggle',
+    title: 'Automatically start breaks',
+    storageKey: AUTO_START_BREAK,
+  },
+  {
+    type: 'toggle',
+    title: 'Automatically start sessions',
+    storageKey: AUTO_START_FOCUS,
+  },
+  {
+    type: 'toggle',
     title: '24-hour time',
     storageKey: _24_HOUR_TIME,
   },
@@ -88,12 +100,12 @@ function TimerSettingsPane() {
     {
       title: 'Timer',
       icon: 'timer-outline',
-      data: settingsData.slice(0, 4),
+      data: settingsData.slice(0, 6),
     },
     {
       title: 'Region',
       icon: 'location-outline',
-      data: settingsData.slice(4, 5),
+      data: settingsData.slice(6, 7),
     },
   ];
   const [selected, setSelected] = useState<string | undefined>(undefined);
