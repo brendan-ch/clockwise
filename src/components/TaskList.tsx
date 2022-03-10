@@ -288,7 +288,13 @@ function TaskList({ setAtTop }: Props) {
     return () => unsubMethods.forEach((value) => {
       value();
     });
-  }, [context.keyboardGroup, tasks, expandedTask, context.timerState]);
+  }, [
+    context.keyboardGroup,
+    tasks,
+    expandedTask,
+    context.timerState,
+    selected,
+  ]);
 
   useEffect(() => {
     setTimeout(() => {
