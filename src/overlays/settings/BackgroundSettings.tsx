@@ -9,6 +9,7 @@ import {
   AUTO_APPEARANCE,
   DARK_MODE,
   ENABLE_BACKGROUND,
+  _24_HOUR_TIME,
 } from '../../StorageKeys';
 import { SettingsOptionProps, Section, SettingsOptionPropsStatic } from '../../types';
 import useKeyboardSelect from '../../helpers/hooks/useKeyboardSelect';
@@ -20,6 +21,11 @@ const options: SettingsOptionPropsStatic[] = [
     type: 'toggle',
     title: 'Enable Unsplash background',
     storageKey: ENABLE_BACKGROUND,
+  },
+  {
+    type: 'toggle',
+    title: '24-hour time',
+    storageKey: _24_HOUR_TIME,
   },
   {
     type: 'toggle',
@@ -39,7 +45,7 @@ const options: SettingsOptionPropsStatic[] = [
 function BackgroundSettingsPane() {
   const { settingsData, handleChange } = useSettingsData(options);
 
-  const autoSetTheme = settingsData[1]?.value as boolean;
+  const autoSetTheme = settingsData[2]?.value as boolean;
   const sections: Section[] = [
     {
       title: 'Background',
@@ -47,9 +53,14 @@ function BackgroundSettingsPane() {
       data: settingsData.slice(0, 1),
     },
     {
+      title: 'Region',
+      icon: 'location-outline',
+      data: settingsData.slice(1, 2),
+    },
+    {
       title: 'Theme',
       icon: 'moon-outline',
-      data: autoSetTheme ? settingsData.slice(1, 2) : settingsData.slice(1, 3),
+      data: autoSetTheme ? settingsData.slice(2, 3) : settingsData.slice(2, 4),
     },
   ];
   const [selected, setSelected] = useState<string | undefined>(undefined);
