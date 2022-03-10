@@ -4,14 +4,15 @@ import * as Sharing from 'expo-sharing';
 import * as DocumentPicker from 'expo-document-picker';
 import {
   AUTO_APPEARANCE,
-  AUTO_START_TIMERS,
+  AUTO_START_BREAK,
+  AUTO_START_FOCUS,
   BREAK_TIME_MINUTES,
   DARK_MODE,
   ENABLE_BACKGROUND,
   ENABLE_TIMER_ALERTS,
   ENABLE_TIMER_SOUND,
   FOCUS_TIME_MINUTES,
-  SUPPRESS_INTRODUCTION, TASKS,
+  SUPPRESS_INTRODUCTION, TASKS, _24_HOUR_TIME,
 } from '../StorageKeys';
 import { getData, removeData, storeData } from './storage';
 import { Task } from '../types';
@@ -19,9 +20,10 @@ import generateTaskId from './generateId';
 
 // Read storage data
 const keys = [
-  FOCUS_TIME_MINUTES, BREAK_TIME_MINUTES, AUTO_START_TIMERS, ENABLE_TIMER_ALERTS,
+  FOCUS_TIME_MINUTES, BREAK_TIME_MINUTES, ENABLE_TIMER_ALERTS,
   ENABLE_TIMER_SOUND, ENABLE_BACKGROUND, AUTO_APPEARANCE, DARK_MODE,
-  SUPPRESS_INTRODUCTION,
+  SUPPRESS_INTRODUCTION, AUTO_START_BREAK, AUTO_START_FOCUS,
+  _24_HOUR_TIME,
 ];
 
 /**
