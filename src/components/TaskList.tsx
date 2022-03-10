@@ -188,8 +188,25 @@ function TaskList({ setAtTop }: Props) {
 
   const colorValues = useTheme();
 
+  // When timer state switches, clear completed tasks
+  // and deselect them accordingly
   useEffect(() => {
     if (context.timerState === 'stopped' && tasks.length > 0) {
+      // Check whether selected tasks still exist
+      const selectedCopy = selected.slice();
+
+      selected.forEach((value) => {
+        const task = tasks.find((item) => item.id === value);
+
+        if (!task || task.completed) {
+          // Remove from selectedCopy
+          const index = selectedCopy.findIndex((item) => item === value);
+          selectedCopy.splice(index, 1);
+        }
+      });
+
+      setSelected(selectedCopy);
+
       // Check for completed tasks
       const completed = tasks.filter((task) => task.completed);
       if (completed.length === 0) {
@@ -275,12 +292,18 @@ function TaskList({ setAtTop }: Props) {
     return () => unsubMethods.forEach((value) => {
       value();
     });
-  }, [context.keyboardGroup, tasks, expandedTask, context.timerState]);
+  }, [
+    context.keyboardGroup,
+    tasks,
+    expandedTask,
+    context.timerState,
+    selected,
+  ]);
 
   useEffect(() => {
     setTimeout(() => {
       handleAutoScroll(expandedTask, 0.4);
-    }, 120);
+    }, 100);
   }, [expandedTask]);
 
   const taskRenderer = ({ item, index }: { item: Task, index: number }) => {
