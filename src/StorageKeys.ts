@@ -2,6 +2,9 @@
 
 export const FOCUS_TIME_MINUTES = '@focusTimeMinutes';
 export const BREAK_TIME_MINUTES = '@breakTimeMinutes';
+/**
+ * @deprecated Use `AUTO_START_BREAK` and `AUTO_START_FOCUS` keys instead.
+ */
 export const AUTO_START_TIMERS = '@autoStartTimers';
 export const TASKS = '@tasks';
 export const START = '@start';
