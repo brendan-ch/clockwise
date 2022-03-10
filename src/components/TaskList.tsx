@@ -303,7 +303,7 @@ function TaskList({ setAtTop }: Props) {
   useEffect(() => {
     setTimeout(() => {
       handleAutoScroll(expandedTask, 0.4);
-    }, 120);
+    }, 100);
   }, [expandedTask]);
 
   const taskRenderer = ({ item, index }: { item: Task, index: number }) => {
