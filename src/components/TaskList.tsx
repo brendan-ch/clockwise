@@ -190,6 +190,19 @@ function TaskList({ setAtTop }: Props) {
 
   useEffect(() => {
     if (context.timerState === 'stopped' && tasks.length > 0) {
+      // Check whether selected tasks still exist
+      const selectedCopy = selected.slice();
+
+      selected.forEach((value) => {
+        if (!tasks.find((task) => task.id === value)) {
+          // Remove from selectedCopy
+          const index = selectedCopy.findIndex((item) => item === value);
+          selectedCopy.splice(index, 1);
+        }
+      });
+
+      setSelected(selectedCopy);
+
       // Check for completed tasks
       const completed = tasks.filter((task) => task.completed);
       if (completed.length === 0) {
