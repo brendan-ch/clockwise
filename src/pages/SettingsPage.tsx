@@ -49,6 +49,11 @@ const options: SettingsOptionPropsStatic[] = [
   },
   {
     type: 'toggle',
+    title: 'Timer alerts',
+    storageKey: ENABLE_TIMER_ALERTS,
+  },
+  {
+    type: 'toggle',
     title: 'Automatically start breaks',
     storageKey: AUTO_START_BREAK,
   },
@@ -56,11 +61,6 @@ const options: SettingsOptionPropsStatic[] = [
     type: 'toggle',
     title: 'Automatically start sessions',
     storageKey: AUTO_START_FOCUS,
-  },
-  {
-    type: 'toggle',
-    title: 'Timer alerts',
-    storageKey: ENABLE_TIMER_ALERTS,
   },
   {
     type: 'toggle',
@@ -78,6 +78,11 @@ const options: SettingsOptionPropsStatic[] = [
     storageKey: DARK_MODE,
   },
 ];
+
+// Remove timer alerts
+if (Platform.OS === 'web') {
+  options.splice(3, 1);
+}
 
 /**
  * Component containing content for the settings page for mobile.
@@ -113,31 +118,32 @@ function SettingsPage() {
     });
 
   // Assign validator keys here
-  options.filter(
-    (value) => value.storageKey === ENABLE_TIMER_ALERTS,
-  )[0].validator = async (data) => {
-    if (data === false) return true;
-    // Check if permissions enabled
-    const { granted, canAskAgain } = await checkNotifications();
-    if (granted) return true;
+  if (Platform.OS !== 'web') {
+    options.filter(
+      (value) => value.storageKey === ENABLE_TIMER_ALERTS,
+    )[0].validator = async (data) => {
+      if (data === false) return true;
+      // Check if permissions enabled
+      const { granted, canAskAgain } = await checkNotifications();
+      if (granted) return true;
 
-    if (canAskAgain) {
-      // Request permission directly from user
-      const requestResults = await requestNotifications();
+      if (canAskAgain) {
+        // Request permission directly from user
+        const requestResults = await requestNotifications();
 
-      if (requestResults.granted) {
-        // Exit and fill checkbox
-        return true;
+        if (requestResults.granted) {
+          // Exit and fill checkbox
+          return true;
+        }
+
+        return false;
       }
+      // Display modal here explaining how to enable notifications
+      setOverlay('notification');
 
       return false;
-    }
-
-    // Display modal here explaining how to enable notifications
-    setOverlay('notification');
-
-    return false;
-  };
+    };
+  }
 
   // Sync options with storage
   const { settingsData, handleChange } = useSettingsData(options);
