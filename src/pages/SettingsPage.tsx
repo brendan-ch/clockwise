@@ -13,6 +13,8 @@ import useSettingsData from '../helpers/hooks/useSettingsData';
 import useTheme from '../helpers/hooks/useTheme';
 import {
   AUTO_APPEARANCE,
+  AUTO_START_BREAK,
+  AUTO_START_FOCUS,
   BREAK_TIME_MINUTES,
   DARK_MODE,
   ENABLE_TIMER_ALERTS,
@@ -44,6 +46,16 @@ const options: SettingsOptionPropsStatic[] = [
     type: 'toggle',
     title: 'Timer sound',
     storageKey: ENABLE_TIMER_SOUND,
+  },
+  {
+    type: 'toggle',
+    title: 'Automatically start breaks',
+    storageKey: AUTO_START_BREAK,
+  },
+  {
+    type: 'toggle',
+    title: 'Automatically start sessions',
+    storageKey: AUTO_START_FOCUS,
   },
   {
     type: 'toggle',
@@ -130,22 +142,22 @@ function SettingsPage() {
   // Sync options with storage
   const { settingsData, handleChange } = useSettingsData(options);
 
-  const autoSetTheme = settingsData[5]?.value as boolean;
+  const autoSetTheme = settingsData[7]?.value as boolean;
   const sections: Section[] = [
     {
       title: 'Timer',
       icon: 'timer-outline',
-      data: Platform.OS === 'web' ? settingsData.slice(0, 3) : settingsData.slice(0, 4),
+      data: Platform.OS === 'web' ? settingsData.slice(0, 5) : settingsData.slice(0, 6),
     },
     {
       title: 'Region',
       icon: 'location-outline',
-      data: settingsData.slice(4, 5),
+      data: settingsData.slice(6, 7),
     },
     {
       title: 'Theme',
       icon: 'moon-outline',
-      data: autoSetTheme ? settingsData.slice(5, 6) : settingsData.slice(5, 7),
+      data: autoSetTheme ? settingsData.slice(7, 8) : settingsData.slice(7, 9),
     },
   ];
   // Overlay to display
@@ -191,34 +203,31 @@ function SettingsPage() {
     />
   );
 
-  return (
+  const AboveContent = (
     <View
-      style={[styles.container, {
-        backgroundColor: colorValues.background,
-      }]}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+      }}
     >
-      <View
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          width: '100%',
-        }}
-      >
-        {pages.map((item) => (
-          <SettingsOption
-            {...item}
-            key={item.title!}
-            titleStyle={TextStyles.textBold}
-          />
-        ))}
-      </View>
-      <SectionList
-        style={styles.sectionList}
-        keyExtractor={(item) => item.title!}
-        sections={sections}
-        renderItem={renderItem}
-        renderSectionHeader={renderHeader}
-      />
+      {pages.map((item) => (
+        <SettingsOption
+          {...item}
+          key={item.title!}
+          titleStyle={TextStyles.textBold}
+        />
+      ))}
+    </View>
+  );
+
+  const BelowContent = (
+    <View
+      style={{
+        marginTop: 10,
+        alignItems: 'center',
+      }}
+    >
       {process.env.NODE_ENV === 'development' ? (
         <ClickableText
           text="Reset all data"
@@ -244,6 +253,25 @@ function SettingsPage() {
           marginBottom: 30,
         }]}
         onPress={githubLink ? () => handleOpenLink(githubLink) : undefined}
+      />
+    </View>
+  );
+
+  return (
+    <View
+      style={[styles.container, {
+        backgroundColor: colorValues.background,
+      }]}
+    >
+      <SectionList
+        style={styles.sectionList}
+        keyExtractor={(item) => item.title!}
+        sections={sections}
+        renderItem={renderItem}
+        renderSectionHeader={renderHeader}
+        ListHeaderComponent={AboveContent}
+        ListFooterComponent={BelowContent}
+        showsVerticalScrollIndicator={false}
       />
       <Modal
         isVisible={overlay === 'notification'}
