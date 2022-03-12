@@ -23,32 +23,27 @@ function useTimerNotification() {
 
   const [scheduled, setScheduled] = useState(false);
 
-  // On web, determines if timer state changed from running -> stopped
-  const [shouldSendNotification, setShouldSendNotification] = useState<boolean>(false);
-  const [tempMode, setTempMode] = useState('focus');
-
-  async function manageNotificationsWeb(timerState: TimerState) {
+  /**
+   * Send a notification on web.
+   * @param newMode
+   */
+  async function sendNotificationWeb(newMode: 'focus' | 'break') {
     if (Platform.OS !== 'web') return;
     const timerAlertsEnabled = await getData(ENABLE_TIMER_ALERTS);
     if (timerAlertsEnabled !== '1') return;
 
-    if (timerState === 'running') {
-      setShouldSendNotification(true);
-      setTempMode(context.mode);
-    } else if (
-      timerState === 'stopped'
-      && shouldSendNotification
-      && context.mode !== tempMode) {
-      // Send the notification
-      sendNotification({
-        title: `Time to ${context.mode === 'focus' ? 'focus' : 'take a break'}!`,
-      });
-    }
+    // Send the notification
+    sendNotification({
+      title: `Time to ${newMode === 'focus' ? 'focus' : 'take a break'}!`,
+    });
   }
 
   useEffect(() => {
-    manageNotificationsWeb(context.timerState);
-  }, [context.timerState]);
+    if (context.timeRemaining < 0) {
+      // Send a notification on web
+      sendNotificationWeb(context.mode === 'focus' ? 'break' : 'focus');
+    }
+  }, [context.timeRemaining]);
 
   async function manageNotifications(timerState: TimerState) {
     if (Platform.OS === 'web') return;
@@ -75,8 +70,12 @@ function useTimerNotification() {
 
   // Hook to handle notification scheduling on mobile
   useEffect(() => {
+    if (context.timeRemaining < 0) {
+      setScheduled(false);
+    }
+
     manageNotifications(context.timerState);
-  }, [context.timerState, settings[ENABLE_TIMER_ALERTS]]);
+  }, [context.timerState, context.timeRemaining, settings[ENABLE_TIMER_ALERTS]]);
 }
 
 export default useTimerNotification;

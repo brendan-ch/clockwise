@@ -83,6 +83,7 @@ function SettingsOverlay({ containerStyle }: Props) {
     keyboardGroup,
     setKeyboardGroup,
     setPageTitle,
+    mode,
   } = useContext(AppContext);
 
   // Title of the selected settings navigator object.
@@ -93,7 +94,7 @@ function SettingsOverlay({ containerStyle }: Props) {
   useEffect(() => {
     setPageTitle('Settings');
 
-    return () => setPageTitle('Timer');
+    return () => setPageTitle(mode === 'focus' ? 'Focus' : 'Break');
   }, []);
 
   useEffect(() => {

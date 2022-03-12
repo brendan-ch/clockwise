@@ -39,6 +39,8 @@ import usePageTitle from './src/helpers/hooks/usePageTitle';
 import * as serviceWorkerRegistration from './src/serviceWorkerRegistration';
 import {
   AUTO_APPEARANCE,
+  AUTO_START_BREAK,
+  AUTO_START_FOCUS,
   BREAK_TIME_MINUTES,
   DARK_MODE,
   ENABLE_BACKGROUND,
@@ -157,6 +159,28 @@ export default function App() {
   function clearTimerInterval(passedInterval: any) {
     clearInterval(passedInterval);
     // setTimeoutState(undefined);
+  }
+
+  /**
+   * Handle automatic timer starting.
+   * @param newMode
+   */
+  function handleAutoStart(newMode: 'focus' | 'break') {
+    // Change the mode
+    setMode(newMode);
+    // Change the time remaining
+    const newTimeRemaining = settings[newMode === 'focus' ? FOCUS_TIME_MINUTES : BREAK_TIME_MINUTES] * 60 * 1000;
+    setTimeRemaining(newTimeRemaining);
+    // Clear the existing interval
+    clearTimerInterval(timeout);
+    // Create a new timeout with said time remaining
+    const newStart = Date.now();
+    setStart(newStart);
+
+    setTimerLength(newTimeRemaining);
+    const newTimeout = setInterval(() => updateTimeRemaining(newStart, newTimeRemaining), 100);
+
+    setTimeoutState(newTimeout);
   }
 
   /**
@@ -313,11 +337,16 @@ export default function App() {
         bumpActualPomodoros();
       }
 
-      // Clear interval and set new state
-      handleStateSwitch(mode === 'focus' ? 'break' : 'focus');
-
-      // Set timer state
-      setTimerState('stopped');
+      // Call function depending on whether auto start is enabled
+      getData(mode === 'focus' ? AUTO_START_BREAK : AUTO_START_FOCUS)
+        .then((value) => {
+          if (value === '1') {
+            handleAutoStart(mode === 'focus' ? 'break' : 'focus');
+          } else {
+            // Clear interval and set new state
+            handleStateSwitch(mode === 'focus' ? 'break' : 'focus');
+          }
+        });
 
       // Play the timer sound
       getData(ENABLE_TIMER_SOUND)

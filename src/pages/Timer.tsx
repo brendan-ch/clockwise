@@ -112,9 +112,11 @@ export default function TimerPage() {
   useUnsavedChanges();
 
   useEffect(() => {
-    // Read value in storage and set in context
+    setPageTitle(mode === 'focus' ? 'Focus' : 'Break');
+  }, [mode]);
+
+  useEffect(() => {
     setKeyboardGroup('timer');
-    setPageTitle('Timer');
 
     if (Platform.OS !== 'web') {
       fadeInView();

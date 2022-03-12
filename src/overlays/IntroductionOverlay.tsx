@@ -42,7 +42,7 @@ function IntroductionOverlay({ containerStyle }: Props) {
   useEffect(() => {
     setPageTitle('Welcome!');
 
-    return () => setPageTitle('Timer');
+    return () => setPageTitle('Focus');
   }, []);
 
   useEffect(() => {

@@ -1,11 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { SectionList, View } from 'react-native';
-// import Modal from 'react-native-modal';
 import AppContext from '../../../AppContext';
 import SettingsContext from '../../../SettingsContext';
 import TaskContext from '../../../TaskContext';
 import SettingsOption from '../../components/SettingsOption';
-// import TimerWarningOverlay from '../../components/TimerWarningOverlay';
 import { exportData, importData } from '../../helpers/dataManagement';
 import useKeyboardSelect from '../../helpers/hooks/useKeyboardSelect';
 import useTheme from '../../helpers/hooks/useTheme';
@@ -207,7 +205,7 @@ function ImportSettingsPane() {
         renderItem={renderItem}
         style={{
           backgroundColor: colors.background,
-          padding: 10,
+          paddingHorizontal: 10,
         }}
       />
     </View>

@@ -2,6 +2,9 @@
 
 export const FOCUS_TIME_MINUTES = '@focusTimeMinutes';
 export const BREAK_TIME_MINUTES = '@breakTimeMinutes';
+/**
+ * @deprecated Use `AUTO_START_BREAK` and `AUTO_START_FOCUS` keys instead.
+ */
 export const AUTO_START_TIMERS = '@autoStartTimers';
 export const TASKS = '@tasks';
 export const START = '@start';
@@ -16,3 +19,5 @@ export const DARK_MODE = '@darkMode';
 export const SUPPRESS_INTRODUCTION = '@suppressIntroduction';
 export const SELECTED = '@selectedTasks';
 export const _24_HOUR_TIME = '@24h';
+export const AUTO_START_BREAK = '@autoStartBreak';
+export const AUTO_START_FOCUS = '@autoStartFocus';
