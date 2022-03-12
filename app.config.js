@@ -6,7 +6,7 @@ export default {
   slug: 'clockwise',
   scheme: 'clockwise',
   userInterfaceStyle: 'automatic',
-  version: '1.2.0',
+  version: '1.3.0',
   orientation: 'portrait',
   icon: './assets/icon.png',
   splash: {
@@ -23,7 +23,7 @@ export default {
   ios: {
     supportsTablet: true,
     bundleIdentifier: 'co.birb.session',
-    buildNumber: '6',
+    buildNumber: '7',
     usesIcloudStorage: true,
   },
   android: {
@@ -33,7 +33,7 @@ export default {
     },
     package: 'co.birb.session',
     softwareKeyboardLayoutMode: 'pan',
-    versionCode: 6,
+    versionCode: 7,
   },
   web: {
     favicon: './assets/favicon.png',
