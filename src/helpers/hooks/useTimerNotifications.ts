@@ -38,10 +38,6 @@ function useTimerNotification() {
     });
   }
 
-  // useEffect(() => {
-  //   manageNotificationsWeb(context.timerState);
-  // }, [context.timerState]);
-
   useEffect(() => {
     if (context.timeRemaining < 0) {
       // Send a notification on web
@@ -74,8 +70,12 @@ function useTimerNotification() {
 
   // Hook to handle notification scheduling on mobile
   useEffect(() => {
+    if (context.timeRemaining < 0) {
+      setScheduled(false);
+    }
+
     manageNotifications(context.timerState);
-  }, [context.timerState, settings[ENABLE_TIMER_ALERTS]]);
+  }, [context.timerState, context.timeRemaining, settings[ENABLE_TIMER_ALERTS]]);
 }
 
 export default useTimerNotification;
