@@ -11,12 +11,14 @@
       "distribution": "internal",
       "env": {
         "EXPO_APPLE_TEAM_ID": "4A9XHUS87Q"
-      }
+      },
+      "releaseChannel": "staging"
     },
     "production": {
       "env": {
         "EXPO_APPLE_TEAM_ID": "4A9XHUS87Q"
-      }
+      },
+      "releaseChannel": "production"
     }
   },
   "submit": {
