@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Platform, SectionList, View } from 'react-native';
+import { SectionList, View } from 'react-native';
 import AppContext from '../../../AppContext';
 import SettingsContext from '../../../SettingsContext';
 import TaskContext from '../../../TaskContext';
@@ -22,7 +22,7 @@ const options: SettingsOptionProps[] = [
   {
     title: 'Export settings',
     type: 'icon',
-    value: Platform.OS === 'web' ? 'download-outline' : 'share-outline',
+    value: 'chevron-forward-outline',
   },
   {
     title: 'Overwrite task data',

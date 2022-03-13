@@ -52,7 +52,7 @@ if (Platform.OS === 'web') {
 }
 navigator.push(
   {
-    title: 'Data Management',
+    title: 'Data management',
     renderer: <Import />,
   },
 );
