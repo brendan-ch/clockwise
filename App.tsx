@@ -27,7 +27,6 @@ import {
 import SettingsPage from './src/pages/SettingsPage';
 import TextStyles from './src/styles/Text';
 import useWindowSize from './src/helpers/hooks/useWindowSize';
-import HeaderButton from './src/components/HeaderButton';
 import useTheme from './src/helpers/hooks/useTheme';
 import SettingsOverlay from './src/overlays/SettingsOverlay';
 import LandscapeHeader from './src/components/LandscapeHeader';
@@ -62,6 +61,7 @@ import RedirectPage from './src/pages/RedirectPage';
 import ImportSettingsPane from './src/overlays/settings/ImportSettings';
 import { REGIONS_WITH_12H_TIME } from './src/Constants';
 import BackgroundSettingsPane from './src/overlays/settings/BackgroundSettings';
+import CustomHeader from './src/components/CustomHeader';
 
 const MIN_25 = 1500000;
 
@@ -703,14 +703,8 @@ export default function App() {
                   component={TimerPage}
                   options={{
                     ...headerOptions,
-                    headerTitle: '',
-                    headerRight: () => HeaderButton({
-                      iconName: 'ellipsis-vertical',
-                      to: {
-                        screen: 'Settings',
-                        params: {},
-                      },
-                    }),
+                    /* eslint-disable-next-line */
+                    headerTitle: () => <CustomHeader />
                   }}
                 />
                 <Stack.Screen
