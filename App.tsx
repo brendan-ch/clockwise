@@ -61,7 +61,6 @@ import RedirectPage from './src/pages/RedirectPage';
 import ImportSettingsPane from './src/overlays/settings/ImportSettings';
 import { REGIONS_WITH_12H_TIME } from './src/Constants';
 import BackgroundSettingsPane from './src/overlays/settings/BackgroundSettings';
-import CustomHeader from './src/components/CustomHeader';
 
 const MIN_25 = 1500000;
 
@@ -405,13 +404,13 @@ export default function App() {
 
   // Attempt to set background image
   useEffect(() => {
-    if (!imageInfo && windowSize === 'landscape' && settings[ENABLE_BACKGROUND]) {
+    if (!imageInfo && settings[ENABLE_BACKGROUND]) {
       setBackgroundImage()
         .catch(() => {
           /* eslint-disable-next-line */
           console.log('Unable to set background image.');
         });
-    } else if (imageInfo && (windowSize !== 'landscape' || !settings[ENABLE_BACKGROUND])) {
+    } else if (imageInfo && !settings[ENABLE_BACKGROUND]) {
       // Remove image
       setImageInfo(undefined);
     }
@@ -697,39 +696,43 @@ export default function App() {
                 />
               </Stack.Navigator>
             ) : (
-              <Stack.Navigator>
-                <Stack.Screen
-                  name="Timer"
-                  component={TimerPage}
-                  options={{
-                    ...headerOptions,
-                    /* eslint-disable-next-line */
-                    headerTitle: () => <CustomHeader />
-                  }}
-                />
-                <Stack.Screen
-                  name="Settings"
-                  component={SettingsPage}
-                  options={{
-                    ...headerOptions,
-                    headerTitle: 'Settings',
-                  }}
-                />
-                <Stack.Screen
-                  name="Data Management"
-                  component={ImportSettingsPane}
-                  options={{
-                    ...headerOptions,
-                  }}
-                />
-                <Stack.Screen
-                  name="Appearance"
-                  component={BackgroundSettingsPane}
-                  options={{
-                    ...headerOptions,
-                  }}
-                />
-              </Stack.Navigator>
+              <ImageContext.Provider
+                value={{
+                  imageInfo,
+                }}
+              >
+                <Stack.Navigator>
+                  <Stack.Screen
+                    name="Timer"
+                    component={TimerPage}
+                    options={{
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="Settings"
+                    component={SettingsPage}
+                    options={{
+                      ...headerOptions,
+                      headerTitle: 'Settings',
+                    }}
+                  />
+                  <Stack.Screen
+                    name="Data Management"
+                    component={ImportSettingsPane}
+                    options={{
+                      ...headerOptions,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="Appearance"
+                    component={BackgroundSettingsPane}
+                    options={{
+                      ...headerOptions,
+                    }}
+                  />
+                </Stack.Navigator>
+              </ImageContext.Provider>
             )}
           </NavigationContainer>
         </TaskContext.Provider>
