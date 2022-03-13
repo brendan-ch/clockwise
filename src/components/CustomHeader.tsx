@@ -1,25 +1,41 @@
 import React from 'react';
 import { View } from 'react-native';
+import useTheme from '../helpers/hooks/useTheme';
 import HeaderButton from './HeaderButton';
 
 function CustomHeader() {
+  const colors = useTheme();
+
   return (
     <View
       style={{
-        flex: 1,
-        flexDirection: 'row',
+        flexDirection: 'column',
         justifyContent: 'flex-end',
-        alignItems: 'center',
-        paddingHorizontal: 22,
+        width: '100%',
+        height: 100,
+        backgroundColor: colors.background,
+        opacity: 0.9,
       }}
     >
-      <HeaderButton
-        iconName="ellipsis-vertical"
-        to={{
-          screen: 'Settings',
-          params: {},
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+          paddingHorizontal: 22,
+          height: 50,
+          width: '100%',
+          backgroundColor: colors.background,
         }}
-      />
+      >
+        <HeaderButton
+          iconName="ellipsis-vertical"
+          to={{
+            screen: 'Settings',
+            params: {},
+          }}
+        />
+      </View>
     </View>
   );
 }

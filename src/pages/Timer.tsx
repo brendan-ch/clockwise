@@ -4,6 +4,7 @@ import React, {
 } from 'react';
 import {
   Animated,
+  ImageBackground,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -27,6 +28,8 @@ import useTimeUpdates from '../helpers/hooks/useTimeUpdates';
 import calculateTime from '../helpers/calculateTime';
 import SettingsContext from '../../SettingsContext';
 import { BREAK_TIME_MINUTES, FOCUS_TIME_MINUTES, _24_HOUR_TIME } from '../StorageKeys';
+import ImageContext from '../../ImageContext';
+import CustomHeader from '../components/CustomHeader';
 
 /**
  * Component that displays information about the timer.
@@ -35,6 +38,7 @@ import { BREAK_TIME_MINUTES, FOCUS_TIME_MINUTES, _24_HOUR_TIME } from '../Storag
 export default function TimerPage() {
   const [isAtTop, setAtTop] = useState(true);
   const colorValues = useTheme();
+  const { imageInfo } = useContext(ImageContext);
   const isLightMode = colorValues.primary === ColorValues.primary;
 
   const now = useTimeUpdates();
@@ -273,59 +277,78 @@ export default function TimerPage() {
 
   // Mobile view
   return (
-    <Pressable
+    <ImageBackground
       style={[styles.container, {
         backgroundColor: colorValues.background,
       }]}
-      onPress={() => Keyboard.dismiss()}
+      source={{
+        uri: imageInfo?.uri,
+      }}
+      blurRadius={2}
+      loadingIndicatorSource={{
+        uri: '',
+      }}
     >
-      <Animated.View style={[styles.contentContainer, {
-        opacity: fadeIn,
-      }]}
-      >
-        <View style={styles.topContainer}>
-          <Timer
-            display={calculateTimerDisplay(timeRemaining)}
-            style={styles.timer}
-          />
-          <PageButtonBar
-            selected={mode}
-            style={styles.pageButtonBar}
-            onPressFocus={() => handleStateSwitch('focus')}
-            onPressBreak={() => handleStateSwitch('break')}
-          />
-        </View>
-        <View style={styles.middleContainer}>
-          <TaskList
-            setAtTop={setAtTop}
-          />
-        </View>
-      </Animated.View>
-      {isAtTop ? (
-        <View style={[styles.bottomContainer, {
+      <CustomHeader />
+      <Pressable
+        style={{
+          flex: 1,
+          width: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
           backgroundColor: colorValues.background,
+          opacity: 0.9,
+        }}
+        onPress={() => Keyboard.dismiss()}
+      >
+        <Animated.View style={[styles.contentContainer, {
+          opacity: fadeIn,
         }]}
         >
-          <ActionButtonBar
-            style={styles.actionButtonBar}
-            state={timerState}
-            onStartPress={() => startTimer()}
-            onPausePress={() => pauseTimer()}
-            onResetPress={() => stopTimer()}
-            onResumePress={() => startTimer()}
-            text={actionBarText}
-          />
-        </View>
-      ) : undefined}
+          <View style={styles.topContainer}>
+            <Timer
+              display={calculateTimerDisplay(timeRemaining)}
+              style={styles.timer}
+            />
+            <PageButtonBar
+              selected={mode}
+              style={styles.pageButtonBar}
+              onPressFocus={() => handleStateSwitch('focus')}
+              onPressBreak={() => handleStateSwitch('break')}
+            />
+          </View>
+          <View style={styles.middleContainer}>
+            <TaskList
+              setAtTop={setAtTop}
+            />
+          </View>
+        </Animated.View>
+        {isAtTop ? (
+          <View style={[styles.bottomContainer, {
+            backgroundColor: colorValues.background,
+          }]}
+          >
+            <ActionButtonBar
+              style={styles.actionButtonBar}
+              state={timerState}
+              onStartPress={() => startTimer()}
+              onPausePress={() => pauseTimer()}
+              onResetPress={() => stopTimer()}
+              onResumePress={() => startTimer()}
+              text={actionBarText}
+            />
+          </View>
+        ) : undefined}
+      </Pressable>
       <StatusBar style={isLightMode ? 'dark' : 'light'} />
-    </Pressable>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
   },
