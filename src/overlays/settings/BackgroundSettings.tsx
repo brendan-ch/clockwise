@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { SectionList } from 'react-native';
+import { SectionList, StyleSheet } from 'react-native';
 import AppContext from '../../../AppContext';
 import renderHeader from '../../helpers/renderers/renderHeader';
 import SettingsOption from '../../components/SettingsOption';
@@ -13,6 +13,7 @@ import {
 } from '../../StorageKeys';
 import { SettingsOptionProps, Section, SettingsOptionPropsStatic } from '../../types';
 import useKeyboardSelect from '../../helpers/hooks/useKeyboardSelect';
+import useTheme from '../../helpers/hooks/useTheme';
 
 // Store all static option data in here
 // Make it easier to find and filter settings
@@ -44,6 +45,7 @@ const options: SettingsOptionPropsStatic[] = [
  */
 function BackgroundSettingsPane() {
   const { settingsData, handleChange } = useSettingsData(options);
+  const colors = useTheme();
 
   const autoSetTheme = settingsData[2]?.value as boolean;
   const sections: Section[] = [
@@ -131,6 +133,9 @@ function BackgroundSettingsPane() {
 
   return (
     <SectionList
+      style={[styles.container, {
+        backgroundColor: colors.background,
+      }]}
       keyExtractor={(item) => item.title!}
       sections={sections}
       renderItem={renderItem}
@@ -138,5 +143,11 @@ function BackgroundSettingsPane() {
     />
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 10,
+  },
+});
 
 export default BackgroundSettingsPane;
