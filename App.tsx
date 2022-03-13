@@ -61,6 +61,7 @@ import { TIMER_SOUND } from './src/Assets';
 import RedirectPage from './src/pages/RedirectPage';
 import ImportSettingsPane from './src/overlays/settings/ImportSettings';
 import { REGIONS_WITH_12H_TIME } from './src/Constants';
+import BackgroundSettingsPane from './src/overlays/settings/BackgroundSettings';
 
 const MIN_25 = 1500000;
 
@@ -723,6 +724,13 @@ export default function App() {
                 <Stack.Screen
                   name="Data Management"
                   component={ImportSettingsPane}
+                  options={{
+                    ...headerOptions,
+                  }}
+                />
+                <Stack.Screen
+                  name="Appearance"
+                  component={BackgroundSettingsPane}
                   options={{
                     ...headerOptions,
                   }}
