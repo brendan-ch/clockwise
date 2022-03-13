@@ -14,7 +14,7 @@
       "env": {
         "EXPO_APPLE_TEAM_ID": "4A9XHUS87Q"
       },
-      "releaseChannel": "staging"
+      "releaseChannel": "preview"
     },
     "production": {
       "env": {
