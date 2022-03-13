@@ -1,0 +1,53 @@
+# Run expo publish --release-channel preview
+name: Expo production deployment
+
+env:
+  PRIVACY_POLICY_LINK: ${{ secrets.PRIVACY_POLICY_LINK }}
+  GITHUB_LINK: ${{ secrets.REPO_LINK }}
+  GITHUB_PROFILE_LINK: ${{ secrets.PROFILE_LINK }}
+
+# Controls when the workflow will run
+on:
+  # Run on push to production branch
+  push:
+    branches: [ production ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Git checkout
+        uses: actions/checkout@v2
+      
+      # Use Node and yarn
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+          cache: 'yarn'
+      
+      # Add Expo action
+      - name: Use Expo
+        uses: expo/expo-github-action@v6
+        with:
+          token: ${{ secrets.EXPO_TOKEN }}
+          packager: yarn
+          expo-cache: true
+          expo-version: 4.11.0
+          
+      # Install dependencies
+      - name: Install dependencies
+        run: yarn install
+
+      # Run expo publish
+      - name: Run expo publish
+        run: expo publish --release-channel production
