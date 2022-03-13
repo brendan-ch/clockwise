@@ -98,6 +98,15 @@ function SettingsPage() {
   const pages: SettingsOptionProps[] = [
     {
       type: 'icon',
+      title: 'Appearance',
+      value: 'chevron-forward-outline',
+      onPress: () => {
+        // @ts-ignore
+        navigation.navigate('Appearance');
+      },
+    },
+    {
+      type: 'icon',
       title: 'Data Management',
       onPress: () => {
         // @ts-ignore
