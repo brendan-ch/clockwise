@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import useTheme from '../helpers/hooks/useTheme';
 import HeaderButton from './HeaderButton';
 
@@ -12,7 +12,7 @@ function CustomHeader() {
         flexDirection: 'column',
         justifyContent: 'flex-end',
         width: '100%',
-        height: 100,
+        height: Platform.OS === 'web' ? 64 : 35,
         backgroundColor: colors.background,
         opacity: 0.9,
       }}
@@ -21,9 +21,9 @@ function CustomHeader() {
         style={{
           flexDirection: 'row',
           justifyContent: 'flex-end',
-          alignItems: 'center',
-          paddingHorizontal: 22,
-          height: 50,
+          alignItems: 'flex-end',
+          paddingHorizontal: 15,
+          height: Platform.OS === 'web' ? 64 : 35,
           width: '100%',
           backgroundColor: colors.background,
         }}

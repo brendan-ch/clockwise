@@ -11,6 +11,7 @@ import {
   Pressable,
   StyleSheet, View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import AppContext from '../../AppContext';
 import ActionButtonBar from '../components/ActionButtonBar';
 import PageButtonBar from '../components/PageButtonBar';
@@ -280,6 +281,8 @@ export default function TimerPage() {
     <ImageBackground
       style={[styles.container, {
         backgroundColor: colorValues.background,
+        height: '100%',
+        width: '100%',
       }]}
       source={{
         uri: imageInfo?.uri,
@@ -289,57 +292,64 @@ export default function TimerPage() {
         uri: '',
       }}
     >
-      <CustomHeader />
-      <Pressable
+      <SafeAreaView
         style={{
           flex: 1,
           width: '100%',
-          justifyContent: 'center',
-          alignItems: 'center',
+          alignContent: 'center',
           backgroundColor: colorValues.background,
           opacity: 0.9,
         }}
-        onPress={() => Keyboard.dismiss()}
       >
-        <Animated.View style={[styles.contentContainer, {
-          opacity: fadeIn,
-        }]}
+        <Pressable
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          onPress={() => Keyboard.dismiss()}
         >
-          <View style={styles.topContainer}>
-            <Timer
-              display={calculateTimerDisplay(timeRemaining)}
-              style={styles.timer}
-            />
-            <PageButtonBar
-              selected={mode}
-              style={styles.pageButtonBar}
-              onPressFocus={() => handleStateSwitch('focus')}
-              onPressBreak={() => handleStateSwitch('break')}
-            />
-          </View>
-          <View style={styles.middleContainer}>
-            <TaskList
-              setAtTop={setAtTop}
-            />
-          </View>
-        </Animated.View>
-        {isAtTop ? (
-          <View style={[styles.bottomContainer, {
-            backgroundColor: colorValues.background,
+          <CustomHeader />
+          <Animated.View style={[styles.contentContainer, {
+            opacity: fadeIn,
+            marginTop: 20,
           }]}
           >
-            <ActionButtonBar
-              style={styles.actionButtonBar}
-              state={timerState}
-              onStartPress={() => startTimer()}
-              onPausePress={() => pauseTimer()}
-              onResetPress={() => stopTimer()}
-              onResumePress={() => startTimer()}
-              text={actionBarText}
-            />
-          </View>
-        ) : undefined}
-      </Pressable>
+            <View style={styles.topContainer}>
+              <Timer
+                display={calculateTimerDisplay(timeRemaining)}
+                style={styles.timer}
+              />
+              <PageButtonBar
+                selected={mode}
+                style={styles.pageButtonBar}
+                onPressFocus={() => handleStateSwitch('focus')}
+                onPressBreak={() => handleStateSwitch('break')}
+              />
+            </View>
+            <View style={styles.middleContainer}>
+              <TaskList
+                setAtTop={setAtTop}
+              />
+            </View>
+          </Animated.View>
+        </Pressable>
+      </SafeAreaView>
+      {isAtTop ? (
+        <View style={[styles.bottomContainer, {
+          opacity: 0.9,
+        }]}
+        >
+          <ActionButtonBar
+            style={styles.actionButtonBar}
+            state={timerState}
+            onStartPress={() => startTimer()}
+            onPausePress={() => pauseTimer()}
+            onResetPress={() => stopTimer()}
+            onResumePress={() => startTimer()}
+            text={actionBarText}
+          />
+        </View>
+      ) : undefined}
       <StatusBar style={isLightMode ? 'dark' : 'light'} />
     </ImageBackground>
   );
