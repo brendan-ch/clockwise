@@ -7,9 +7,9 @@ env:
 
 # Controls when the workflow will run
 on:
-  # Only run on pull request to master
+  # Run on pull request/push to master
   pull_request:
-    branches: [ master ]
+    branches: [ master, production ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -41,7 +41,7 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
           packager: yarn
           expo-cache: true
-          expo-version: 4.11.0
+          expo-version: 5.3.0
           
       # Install dependencies
       - name: Install dependencies

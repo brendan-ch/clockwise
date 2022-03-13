@@ -20,9 +20,7 @@ export default {
   assetBundlePatterns: [
     '**/*',
   ],
-  runtimeVersion: {
-    policy: 'nativeVersion',
-  },
+  runtimeVersion: '1.3.0(7)',
   ios: {
     supportsTablet: true,
     bundleIdentifier: 'co.birb.session',

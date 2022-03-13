@@ -1,4 +1,5 @@
-name: Vercel production deployment
+# Run expo publish --release-channel preview
+name: Expo preview deployment
 
 env:
   PRIVACY_POLICY_LINK: ${{ secrets.PRIVACY_POLICY_LINK }}
@@ -7,9 +8,9 @@ env:
 
 # Controls when the workflow will run
 on:
-  # Run only on merge to production
-  push:
-    branches: [ production ]
+  # Run on pull request/push to master
+  pull_request:
+    branches: [ master, production ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -46,19 +47,7 @@ jobs:
       # Install dependencies
       - name: Install dependencies
         run: yarn install
-      
-      # Build for web
-      - name: Build for web
-        run: yarn build-api
-        
-      # Deploy to Vercel
-      - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v20.0.0
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-args: --prod
-          vercel-project-name: ${{ secrets.VERCEL_PROJECT_NAME }}
-          working-directory: ./web-build
-          github-comment: false
+
+      # Run expo publish
+      - name: Run expo publish
+        run: expo publish --release-channel preview
