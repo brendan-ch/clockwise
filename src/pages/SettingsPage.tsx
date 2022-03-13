@@ -98,7 +98,7 @@ function SettingsPage() {
   const pages: SettingsOptionProps[] = [
     {
       type: 'icon',
-      title: 'Data management',
+      title: 'Data Management',
       onPress: () => {
         // @ts-ignore
         navigation.navigate('Data Management');

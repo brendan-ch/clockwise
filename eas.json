@@ -4,19 +4,23 @@
   },
   "build": {
     "development": {
-      "developmentClient": true,
-      "distribution": "internal"
+      "ios": {
+        "simulator": true
+      },
+      "releaseChannel": "development"
     },
     "preview": {
       "distribution": "internal",
       "env": {
         "EXPO_APPLE_TEAM_ID": "4A9XHUS87Q"
-      }
+      },
+      "releaseChannel": "preview"
     },
     "production": {
       "env": {
         "EXPO_APPLE_TEAM_ID": "4A9XHUS87Q"
-      }
+      },
+      "releaseChannel": "production"
     }
   },
   "submit": {
