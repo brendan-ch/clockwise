@@ -220,7 +220,7 @@ function SettingsOption({
             flexDirection: 'row',
             width: 32,
             height: 32,
-            justifyContent: 'flex-end',
+            justifyContent: 'center',
             alignItems: 'center',
             marginLeft: 0,
           }}
