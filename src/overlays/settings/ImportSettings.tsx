@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Platform, SectionList, View } from 'react-native';
+import * as Haptics from 'expo-haptics';
 import AppContext from '../../../AppContext';
 import SettingsContext from '../../../SettingsContext';
 import TaskContext from '../../../TaskContext';
@@ -23,6 +24,7 @@ function ImportSettingsPane() {
   const [overwriteTasks, setOverwriteTasks] = useState(false);
 
   const [importError, setImportError] = useState<string | undefined>('Only import files that you trust.');
+  const [importSuccessful, setImportSuccessful] = useState(false);
 
   const windowSize = useWindowSize();
 
@@ -93,6 +95,7 @@ function ImportSettingsPane() {
       importData(overwriteTasks)
         .then(() => updateReactiveSettings())
         .then(() => {
+          setImportSuccessful(true);
           setImportError('Data imported successfully.');
         })
         .catch(() => {
@@ -147,6 +150,22 @@ function ImportSettingsPane() {
       setImportError('Error loading task data.');
     }
   }
+
+  useEffect(() => {
+    if (importSuccessful) {
+      Haptics.impactAsync();
+
+      // Set a timeout to clear import status
+      const timeout = setTimeout(() => {
+        setImportError('Only import files that you trust.');
+        setImportSuccessful(false);
+      }, 3000);
+
+      return () => clearTimeout(timeout);
+    }
+
+    return () => {};
+  }, [importSuccessful]);
 
   useEffect(() => {
     if (keyboardGroup === 'settingsPage' && !keyboardSelected) {
