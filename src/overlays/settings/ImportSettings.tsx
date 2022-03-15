@@ -13,43 +13,6 @@ import { getData } from '../../helpers/storage';
 import { TASKS } from '../../StorageKeys';
 import { DefaultSettingsState, Section, SettingsOptionProps } from '../../types';
 
-const options: SettingsOptionProps[] = [
-  {
-    title: 'Include task data',
-    type: 'toggle',
-    value: false,
-  },
-  {
-    title: 'Export settings',
-    type: 'icon',
-    value: Platform.OS === 'web' ? 'download-outline' : 'share-outline',
-  },
-  {
-    title: 'Overwrite task data',
-    type: 'toggle',
-    value: false,
-    subtitle: 'WARNING: Existing tasks will be lost.',
-  },
-  {
-    title: 'Import settings',
-    type: 'icon',
-    value: 'chevron-forward-outline',
-  },
-];
-
-const sections: Section[] = [
-  {
-    title: 'Export',
-    icon: 'exit-outline',
-    data: options.slice(0, 2),
-  },
-  {
-    title: 'Import',
-    icon: 'enter-outline',
-    data: options.slice(2, 4),
-  },
-];
-
 /**
  * Component that lets users view the available keybindings.
  */
@@ -66,7 +29,46 @@ function ImportSettingsPane() {
   const settings = useContext(SettingsContext);
   const {
     setTasks,
+    tasks,
   } = useContext(TaskContext);
+
+  const options: SettingsOptionProps[] = [
+    {
+      title: 'Include task data',
+      type: 'toggle',
+      value: false,
+      subtitle: `${tasks.length} tasks will be exported.`,
+    },
+    {
+      title: 'Export settings',
+      type: 'icon',
+      value: Platform.OS === 'web' ? 'download-outline' : 'share-outline',
+    },
+    {
+      title: 'Overwrite task data',
+      type: 'toggle',
+      value: false,
+      subtitle: 'WARNING: Existing tasks will be lost.',
+    },
+    {
+      title: 'Import settings',
+      type: 'icon',
+      value: 'chevron-forward-outline',
+    },
+  ];
+
+  const sections: Section[] = [
+    {
+      title: 'Export',
+      icon: 'exit-outline',
+      data: options.slice(0, 2),
+    },
+    {
+      title: 'Import',
+      icon: 'enter-outline',
+      data: options.slice(2, 4),
+    },
+  ];
 
   // Name of the storage key selected out of options
   // Note that storage key is only used as an identifier in this case
