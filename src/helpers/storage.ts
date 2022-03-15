@@ -3,6 +3,8 @@ import * as Localization from 'expo-localization';
 import { REGIONS_WITH_12H_TIME } from '../Constants';
 import {
   AUTO_APPEARANCE,
+  AUTO_START_BREAK,
+  AUTO_START_FOCUS,
   AUTO_START_TIMERS,
   BREAK_TIME_MINUTES,
   DARK_MODE,
@@ -51,6 +53,8 @@ async function clearAll() {
     TASKS,
     START,
     MODE,
+    AUTO_START_BREAK,
+    AUTO_START_FOCUS,
   ];
 
   await Promise.all(keys.map(async (value) => {
