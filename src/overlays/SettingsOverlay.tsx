@@ -37,7 +37,7 @@ const bottomNavigator: SettingsNavigatorObject[] = [];
 if (Platform.OS === 'web') {
   bottomNavigator.push(
     {
-      title: 'Keyboard Shortcuts',
+      title: 'Keybindings',
       renderer: <Keybindings />,
     },
   );
