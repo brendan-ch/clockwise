@@ -85,6 +85,19 @@ async function importData(overwriteTasks: boolean = false) {
   // Validate the data
   try {
     parsed = JSON.parse(data);
+
+    // Check if keys exist
+    // These keys should be pre-populated on first app load
+    const keysToValidate = [
+      FOCUS_TIME_MINUTES,
+      BREAK_TIME_MINUTES,
+      AUTO_APPEARANCE,
+    ];
+    keysToValidate.forEach((key) => {
+      if (!parsed[key]) {
+        throw new Error('Invalid data.');
+      }
+    });
   } catch (e) {
     throw new Error('Invalid data.');
   }
