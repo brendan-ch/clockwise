@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Platform, SectionList, View } from 'react-native';
 import * as Haptics from 'expo-haptics';
+import { useNavigation } from '@react-navigation/native';
 import AppContext from '../../../AppContext';
 import SettingsContext from '../../../SettingsContext';
 import TaskContext from '../../../TaskContext';
@@ -33,6 +34,13 @@ function ImportSettingsPane() {
     setTasks,
     tasks,
   } = useContext(TaskContext);
+
+  let navigation: any;
+  // NOTE: component will always unmount before window size changes,
+  // so this is allowed
+  if (windowSize === 'portrait') {
+    navigation = useNavigation();
+  }
 
   const options: SettingsOptionProps[] = [
     {
@@ -157,6 +165,13 @@ function ImportSettingsPane() {
     if (importSuccessful) {
       if (Platform.OS !== 'web') {
         Haptics.impactAsync();
+      }
+
+      // Navigate back to timer page
+      if (navigation) {
+        setTimeout(() => {
+          navigation.navigate('Timer');
+        }, 100);
       }
 
       // Set a timeout to clear import status
