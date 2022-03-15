@@ -155,7 +155,9 @@ function ImportSettingsPane() {
 
   useEffect(() => {
     if (importSuccessful) {
-      Haptics.impactAsync();
+      if (Platform.OS !== 'web') {
+        Haptics.impactAsync();
+      }
 
       // Set a timeout to clear import status
       const timeout = setTimeout(() => {
