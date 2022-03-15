@@ -55,7 +55,7 @@ function ImportSettingsPane() {
     {
       title: 'Import settings',
       type: 'icon',
-      value: 'chevron-forward-outline',
+      value: importSuccessful ? 'checkmark-outline' : 'chevron-forward-outline',
     },
   ];
 
