@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Platform, SectionList, View } from 'react-native';
+import * as Haptics from 'expo-haptics';
+import { useNavigation } from '@react-navigation/native';
 import AppContext from '../../../AppContext';
 import SettingsContext from '../../../SettingsContext';
 import TaskContext from '../../../TaskContext';
@@ -13,43 +15,6 @@ import { getData } from '../../helpers/storage';
 import { TASKS } from '../../StorageKeys';
 import { DefaultSettingsState, Section, SettingsOptionProps } from '../../types';
 
-const options: SettingsOptionProps[] = [
-  {
-    title: 'Include task data',
-    type: 'toggle',
-    value: false,
-  },
-  {
-    title: 'Export settings',
-    type: 'icon',
-    value: Platform.OS === 'web' ? 'download-outline' : 'share-outline',
-  },
-  {
-    title: 'Overwrite task data',
-    type: 'toggle',
-    value: false,
-    subtitle: 'WARNING: Existing tasks will be lost.',
-  },
-  {
-    title: 'Import settings',
-    type: 'icon',
-    value: 'chevron-forward-outline',
-  },
-];
-
-const sections: Section[] = [
-  {
-    title: 'Export',
-    icon: 'exit-outline',
-    data: options.slice(0, 2),
-  },
-  {
-    title: 'Import',
-    icon: 'enter-outline',
-    data: options.slice(2, 4),
-  },
-];
-
 /**
  * Component that lets users view the available keybindings.
  */
@@ -60,13 +25,60 @@ function ImportSettingsPane() {
   const [overwriteTasks, setOverwriteTasks] = useState(false);
 
   const [importError, setImportError] = useState<string | undefined>('Only import files that you trust.');
+  const [importSuccessful, setImportSuccessful] = useState(false);
 
   const windowSize = useWindowSize();
 
   const settings = useContext(SettingsContext);
   const {
     setTasks,
+    tasks,
   } = useContext(TaskContext);
+
+  let navigation: any;
+  // NOTE: component will always unmount before window size changes,
+  // so this is allowed
+  if (windowSize === 'portrait') {
+    navigation = useNavigation();
+  }
+
+  const options: SettingsOptionProps[] = [
+    {
+      title: 'Include task data',
+      type: 'toggle',
+      value: false,
+      subtitle: `${tasks.length} task${tasks.length === 1 ? '' : 's'} will be exported.`,
+    },
+    {
+      title: 'Export settings',
+      type: 'icon',
+      value: Platform.OS === 'web' ? 'download-outline' : 'share-outline',
+    },
+    {
+      title: 'Overwrite task data',
+      type: 'toggle',
+      value: false,
+      subtitle: 'WARNING: Existing tasks will be lost.',
+    },
+    {
+      title: 'Import settings',
+      type: 'icon',
+      value: importSuccessful ? 'checkmark-outline' : 'chevron-forward-outline',
+    },
+  ];
+
+  const sections: Section[] = [
+    {
+      title: 'Export',
+      icon: 'exit-outline',
+      data: options.slice(0, 2),
+    },
+    {
+      title: 'Import',
+      icon: 'enter-outline',
+      data: options.slice(2, 4),
+    },
+  ];
 
   // Name of the storage key selected out of options
   // Note that storage key is only used as an identifier in this case
@@ -91,11 +103,14 @@ function ImportSettingsPane() {
       importData(overwriteTasks)
         .then(() => updateReactiveSettings())
         .then(() => {
+          setImportSuccessful(true);
           setImportError('Data imported successfully.');
         })
-        .catch(() => {
+        .catch((e) => {
           // Set import error
-          setImportError('Unable to import data.');
+          if (e.message !== 'User canceled file selection.') {
+            setImportError(e.message);
+          }
         });
     }
   }
@@ -145,6 +160,31 @@ function ImportSettingsPane() {
       setImportError('Error loading task data.');
     }
   }
+
+  useEffect(() => {
+    if (importSuccessful) {
+      if (Platform.OS !== 'web') {
+        Haptics.impactAsync();
+      }
+
+      // Navigate back to timer page
+      if (navigation) {
+        setTimeout(() => {
+          navigation.navigate('Timer');
+        }, 100);
+      }
+
+      // Set a timeout to clear import status
+      const timeout = setTimeout(() => {
+        setImportError('Only import files that you trust.');
+        setImportSuccessful(false);
+      }, 3000);
+
+      return () => clearTimeout(timeout);
+    }
+
+    return () => {};
+  }, [importSuccessful]);
 
   useEffect(() => {
     if (keyboardGroup === 'settingsPage' && !keyboardSelected) {

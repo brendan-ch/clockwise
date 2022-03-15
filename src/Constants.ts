@@ -20,3 +20,9 @@ export const REGIONS_WITH_12H_TIME = [
   'SA',
   'US',
 ];
+
+// This is added to export files to indicate compatibility with future versions
+// Export files from previous versions should always be compatible with new ones,
+// but files generated from newer versions can break compatibility with previous
+// versions.
+export const EXPORT_VERSION_NUM = 1;
