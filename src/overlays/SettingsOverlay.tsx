@@ -29,6 +29,28 @@ interface SettingsNavigatorObject {
 }
 
 /**
+ * Panes that appears at the bottom of the navigator.
+ * Should be used for non-interactive pages.
+ */
+const bottomNavigator: SettingsNavigatorObject[] = [];
+
+if (Platform.OS === 'web') {
+  bottomNavigator.push(
+    {
+      title: 'Keybindings',
+      renderer: <Keybindings />,
+    },
+  );
+
+  bottomNavigator.push(
+    {
+      title: 'Get the apps',
+      renderer: <Keybindings />,
+    },
+  );
+}
+
+/**
  * Settings pane navigator.
  */
 const navigator: SettingsNavigatorObject[] = [
@@ -42,14 +64,6 @@ const navigator: SettingsNavigatorObject[] = [
   },
 ];
 
-if (Platform.OS === 'web') {
-  navigator.push(
-    {
-      title: 'Keybindings',
-      renderer: <Keybindings />,
-    },
-  );
-}
 navigator.push(
   {
     title: 'Data Management',
@@ -97,6 +111,8 @@ function SettingsOverlay({ containerStyle }: Props) {
     return () => setPageTitle(mode === 'focus' ? 'Focus' : 'Break');
   }, []);
 
+  const combinedNavigator = [...navigator, ...bottomNavigator];
+
   useEffect(() => {
     setKeyboardGroup('settings');
   }, [selected]);
@@ -112,14 +128,14 @@ function SettingsOverlay({ containerStyle }: Props) {
       }));
 
       if (keyboardGroup === 'settings') {
-        const indexOfCurrent = navigator.findIndex((value) => value.title === selected);
+        const indexOfCurrent = combinedNavigator.findIndex((value) => value.title === selected);
 
         unsubMethods.push(keyboardShortcutManager?.registerEvent({
           keys: ['ArrowDown'],
           action: () => setSelected(
-            navigator.length - 1 <= indexOfCurrent
+            combinedNavigator.length - 1 <= indexOfCurrent
               ? selected
-              : navigator[indexOfCurrent + 1].title,
+              : combinedNavigator[indexOfCurrent + 1].title,
           ),
         }));
 
@@ -128,7 +144,7 @@ function SettingsOverlay({ containerStyle }: Props) {
           action: () => setSelected(
             indexOfCurrent <= 0
               ? selected
-              : navigator[indexOfCurrent - 1].title,
+              : combinedNavigator[indexOfCurrent - 1].title,
           ),
         }));
 
@@ -164,20 +180,38 @@ function SettingsOverlay({ containerStyle }: Props) {
         borderRightColor: colorValues.gray5,
       }]}
       >
-        {navigator.map((value, index) => (
-          <SettingsSelector
-            key={index}
-            text={value.title}
-            selected={value.title === selected}
-            style={styles.settingsSelector}
-            onPress={() => setSelected(value.title)}
-            indicator={value.title === selected && keyboardGroup === 'settings' ? '↑↓' : undefined}
-          />
-        ))}
+        <View
+          style={styles.navigator}
+        >
+          {navigator.map((value, index) => (
+            <SettingsSelector
+              key={index}
+              text={value.title}
+              selected={value.title === selected}
+              style={styles.settingsSelector}
+              onPress={() => setSelected(value.title)}
+              indicator={value.title === selected && keyboardGroup === 'settings' ? '↑↓' : undefined}
+            />
+          ))}
+        </View>
+        <View
+          style={styles.navigator}
+        >
+          {bottomNavigator.map((value, index) => (
+            <SettingsSelector
+              key={index}
+              text={value.title}
+              selected={value.title === selected}
+              style={styles.settingsSelector}
+              onPress={() => setSelected(value.title)}
+              indicator={value.title === selected && keyboardGroup === 'settings' ? '↑↓' : undefined}
+            />
+          ))}
+        </View>
       </View>
       <View style={styles.settingsContent}>
         <Suspense fallback={<View />}>
-          {navigator.find((value) => value.title === selected)?.renderer}
+          {combinedNavigator.find((value) => value.title === selected)?.renderer}
         </Suspense>
       </View>
     </View>
@@ -199,6 +233,11 @@ const styles = StyleSheet.create({
   navigationBar: {
     flex: 1,
     borderRightWidth: 0.5,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+  navigator: {
+    flexDirection: 'column',
   },
   settingsContent: {
     flexDirection: 'column',
