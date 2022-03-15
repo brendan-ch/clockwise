@@ -441,6 +441,7 @@ export default function App() {
     screens: {
       Timer: '',
       Settings: 'settings',
+      'Data Management': 'data-management',
     },
   };
 
