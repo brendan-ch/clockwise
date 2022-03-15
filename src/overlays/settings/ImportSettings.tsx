@@ -47,7 +47,7 @@ function ImportSettingsPane() {
       title: 'Include task data',
       type: 'toggle',
       value: false,
-      subtitle: `${tasks.length} tasks will be exported.`,
+      subtitle: `${tasks.length} task${tasks.length === 1 ? '' : 's'} will be exported.`,
     },
     {
       title: 'Export settings',
