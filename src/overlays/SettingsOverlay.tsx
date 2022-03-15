@@ -37,14 +37,14 @@ const bottomNavigator: SettingsNavigatorObject[] = [];
 if (Platform.OS === 'web') {
   bottomNavigator.push(
     {
-      title: 'Keybindings',
+      title: 'Keyboard Shortcuts',
       renderer: <Keybindings />,
     },
   );
 
   bottomNavigator.push(
     {
-      title: 'Get the apps',
+      title: 'Apps',
       renderer: <Keybindings />,
     },
   );
@@ -202,11 +202,19 @@ function SettingsOverlay({ containerStyle }: Props) {
               key={index}
               text={value.title}
               selected={value.title === selected}
-              style={styles.settingsSelector}
+              style={[styles.settingsSelector, {
+                height: 25,
+              }]}
               onPress={() => setSelected(value.title)}
               indicator={value.title === selected && keyboardGroup === 'settings' ? '↑↓' : undefined}
+              isBottom
             />
           ))}
+          <View
+            style={{
+              height: 10,
+            }}
+          />
         </View>
       </View>
       <View style={styles.settingsContent}>
