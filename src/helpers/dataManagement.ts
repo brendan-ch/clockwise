@@ -77,6 +77,8 @@ async function importData(overwriteTasks: boolean = false) {
     data = await readDataWeb(result.file);
   } else if (result.type === 'success' && Platform.OS !== 'web' && result.uri) {
     data = await readDataFromUri(result.uri);
+  } else if (result.type === 'cancel') {
+    throw new Error('User canceled file selection.');
   } else {
     throw new Error('Unable to read file.');
   }
@@ -96,46 +98,50 @@ async function importData(overwriteTasks: boolean = false) {
     ];
     keysToValidate.forEach((key) => {
       if (!parsed[key]) {
-        throw new Error('Invalid data.');
+        throw new Error('Invalid configuration.');
       }
     });
   } catch (e) {
-    throw new Error('Invalid data.');
+    throw new Error('Invalid configuration.');
   }
 
   // Write to storage
   const importKeys = keys.slice();
   importKeys.push(TASKS);
 
-  await Promise.all(importKeys.map(async (key) => {
-    if (parsed[key] && key === TASKS && !overwriteTasks) {
-      // Append to existing tasks
-      const existing = await getData(TASKS);
-      if (!existing) {
-        await storeData(TASKS, parsed[key]);
-      } else {
-        // Merge tasks
-        const decoded: Task[] = JSON.parse(existing);
-        const toMerge: Task[] = JSON.parse(parsed[key]);
-        await Promise.all(toMerge.map(async (value) => {
-          // Regenerate task ID
-          const id = await generateTaskId();
-          decoded.push({
-            ...value,
-            id,
-          });
-        }));
+  try {
+    await Promise.all(importKeys.map(async (key) => {
+      if (parsed[key] && key === TASKS && !overwriteTasks) {
+        // Append to existing tasks
+        const existing = await getData(TASKS);
+        if (!existing) {
+          await storeData(TASKS, parsed[key]);
+        } else {
+          // Merge tasks
+          const decoded: Task[] = JSON.parse(existing);
+          const toMerge: Task[] = JSON.parse(parsed[key]);
+          await Promise.all(toMerge.map(async (value) => {
+            // Regenerate task ID
+            const id = await generateTaskId();
+            decoded.push({
+              ...value,
+              id,
+            });
+          }));
 
-        // Write to storage
-        storeData(TASKS, JSON.stringify(decoded));
+          // Write to storage
+          storeData(TASKS, JSON.stringify(decoded));
+        }
+      } else if (parsed[key]) {
+        await storeData(key, parsed[key]);
+      } else if (key !== TASKS || overwriteTasks) {
+        // Remove data key from storage
+        await removeData(key);
       }
-    } else if (parsed[key]) {
-      await storeData(key, parsed[key]);
-    } else if (key !== TASKS || overwriteTasks) {
-      // Remove data key from storage
-      await removeData(key);
-    }
-  }));
+    }));
+  } catch (e) {
+    throw new Error('An unknown error occurred.');
+  }
 }
 
 /**
