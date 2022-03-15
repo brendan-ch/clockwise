@@ -17,6 +17,7 @@ import {
 import { getData, removeData, storeData } from './storage';
 import { Task } from '../types';
 import generateTaskId from './generateId';
+import { EXPORT_VERSION_NUM } from '../Constants';
 
 // Read storage data
 const keys = [
@@ -189,7 +190,9 @@ async function exportData(withTasks: boolean = false) {
   }
 
   // Store data
-  const data = {};
+  const data = {
+    version: EXPORT_VERSION_NUM,
+  };
 
   await Promise.all(exportKeys.map(async (item) => {
     const storageData = await getData(item);
