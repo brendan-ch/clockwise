@@ -98,9 +98,11 @@ function ImportSettingsPane() {
           setImportSuccessful(true);
           setImportError('Data imported successfully.');
         })
-        .catch(() => {
+        .catch((e) => {
           // Set import error
-          setImportError('Unable to import data.');
+          if (e.message !== 'User canceled file selection.') {
+            setImportError(e.message);
+          }
         });
     }
   }
