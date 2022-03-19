@@ -12,6 +12,7 @@ import useTheme from '../../helpers/hooks/useTheme';
 import ColorValues from '../../styles/Color';
 import TextStyles from '../../styles/Text';
 import AppStoreBadge from '../../components/badges/AppStoreBadge';
+import GooglePlayBadge from '../../components/badges/GooglePlayBadge';
 
 /**
  * Settings pane that contains a link to the apps.
@@ -58,6 +59,7 @@ export default function AppsPane() {
             Or, click the links below:
           </Text>
           <AppStoreBadge />
+          <GooglePlayBadge />
         </View>
         <Image
           source={
