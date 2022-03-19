@@ -3,12 +3,15 @@ import {
   Image, StyleSheet, Text, View,
 } from 'react-native';
 import Constants from 'expo-constants';
-import { DARK_MODE_SCREENSHOT, LIGHT_MODE_SCREENSHOT } from '../../Assets';
+import {
+  DARK_MODE_SCREENSHOT, LIGHT_MODE_SCREENSHOT,
+} from '../../Assets';
 import ClickableText from '../../components/ClickableText';
 import handleOpenLink from '../../helpers/handleOpenLink';
 import useTheme from '../../helpers/hooks/useTheme';
 import ColorValues from '../../styles/Color';
 import TextStyles from '../../styles/Text';
+import AppStoreBadge from '../../components/badges/AppStoreBadge';
 
 /**
  * Settings pane that contains a link to the apps.
@@ -54,6 +57,7 @@ export default function AppsPane() {
           <Text style={textStyle}>
             Or, click the links below:
           </Text>
+          <AppStoreBadge />
         </View>
         <Image
           source={
@@ -103,5 +107,9 @@ const styles = StyleSheet.create({
   },
   legalContainer: {
 
+  },
+  badgeContainer: {
+    height: 50,
+    width: 100,
   },
 });
