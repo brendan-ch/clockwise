@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Image, StyleSheet, Text, View,
+  Image, Pressable, StyleSheet, Text, View,
 } from 'react-native';
 import Constants from 'expo-constants';
 import {
@@ -58,8 +58,16 @@ export default function AppsPane() {
           <Text style={textStyle}>
             Or, click the links below:
           </Text>
-          <AppStoreBadge />
-          <GooglePlayBadge />
+          <Pressable>
+            <AppStoreBadge
+              style={styles.badge}
+            />
+          </Pressable>
+          <Pressable>
+            <GooglePlayBadge
+              style={styles.badge}
+            />
+          </Pressable>
         </View>
         <Image
           source={
@@ -110,8 +118,7 @@ const styles = StyleSheet.create({
   legalContainer: {
 
   },
-  badgeContainer: {
-    height: 50,
-    width: 100,
+  badge: {
+    marginVertical: 5,
   },
 });
