@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Platform, SectionList, View } from 'react-native';
-import * as Haptics from 'expo-haptics';
 import { useNavigation } from '@react-navigation/native';
 import AppContext from '../../../AppContext';
 import SettingsContext from '../../../SettingsContext';
@@ -14,6 +13,7 @@ import renderHeader from '../../helpers/renderers/renderHeader';
 import { getData } from '../../helpers/storage';
 import { TASKS } from '../../StorageKeys';
 import { DefaultSettingsState, Section, SettingsOptionProps } from '../../types';
+import handleHaptic from '../../helpers/handleHaptic';
 
 /**
  * Component that lets users view the available keybindings.
@@ -163,9 +163,7 @@ function ImportSettingsPane() {
 
   useEffect(() => {
     if (importSuccessful) {
-      if (Platform.OS !== 'web') {
-        Haptics.impactAsync();
-      }
+      handleHaptic('impact');
 
       // Navigate back to timer page
       if (navigation) {

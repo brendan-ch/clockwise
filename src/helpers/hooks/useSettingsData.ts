@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import SettingsContext from '../../../SettingsContext';
 import { SettingsOptionProps, SettingsOptionPropsStatic } from '../../types';
 import { getData, storeData } from '../storage';
+import handleHaptic from '../handleHaptic';
 
 /**
  * Hook that manages initialization of settings data.
@@ -21,6 +22,11 @@ function useSettingsData(options: SettingsOptionPropsStatic[]) {
    * @param data
    */
   async function handleChange(key: string | number, data: number | boolean) {
+    // Haptic feedback
+    if (typeof data === 'boolean') {
+      handleHaptic('selection');
+    }
+
     const matchingOption = typeof key === 'number' ? options[key] : options.find((value) => value.storageKey === key);
     if (!matchingOption) return;
 

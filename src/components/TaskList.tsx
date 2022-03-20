@@ -13,6 +13,7 @@ import SelectorGroup from './SelectorGroup';
 import SettingsOption from './SettingsOption';
 import TaskContext from '../../TaskContext';
 import useWindowSize from '../helpers/hooks/useWindowSize';
+import handleHaptic from '../helpers/handleHaptic';
 
 interface TimeoutTracker {
   /**
@@ -100,9 +101,7 @@ function TaskList({ setAtTop }: Props) {
    */
   function handleSelect(id: number) {
     // Haptic feedback
-    if (Platform.OS !== 'web') {
-      Haptics.selectionAsync();
-    }
+    handleHaptic('selection');
 
     const newSelected = selected.slice();
     newSelected.push(id);
@@ -124,9 +123,7 @@ function TaskList({ setAtTop }: Props) {
    */
   function handleDeselect(id: number) {
     // Haptic feedback
-    if (Platform.OS !== 'web') {
-      Haptics.selectionAsync();
-    }
+    handleHaptic('selection');
 
     const newSelected = selected.slice();
     const index = newSelected.indexOf(id);
@@ -174,9 +171,7 @@ function TaskList({ setAtTop }: Props) {
 
     setTasks(tasksCopy);
 
-    if (Platform.OS === 'android' || Platform.OS === 'ios') {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    }
+    handleHaptic('impact', Haptics.ImpactFeedbackStyle.Medium);
   }
 
   /**
