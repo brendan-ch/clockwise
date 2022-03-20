@@ -65,7 +65,7 @@ function IntroductionOverlay({ containerStyle }: Props) {
     >
       <View style={[[{
         backgroundColor: colorValues.background,
-        height: 100,
+        // height: 100,
         flexDirection: 'column',
         justifyContent: 'center',
         paddingHorizontal: 10,
@@ -86,7 +86,7 @@ function IntroductionOverlay({ containerStyle }: Props) {
           >
             {' Clockwise'}
           </Text>
-          , a no-nonsense Pomodoro timer designed to help you focus.
+          , a Pomodoro timer designed to help you focus.
 
         </Text>
       </View>
@@ -134,6 +134,7 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'center',
     flex: 1,
     maxHeight: 500,
     width: 700,

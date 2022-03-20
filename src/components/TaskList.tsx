@@ -13,6 +13,7 @@ import SelectorGroup from './SelectorGroup';
 import SettingsOption from './SettingsOption';
 import TaskContext from '../../TaskContext';
 import useWindowSize from '../helpers/hooks/useWindowSize';
+import handleHaptic from '../helpers/handleHaptic';
 
 interface TimeoutTracker {
   /**
@@ -99,6 +100,9 @@ function TaskList({ setAtTop }: Props) {
    * @param id
    */
   function handleSelect(id: number) {
+    // Haptic feedback
+    handleHaptic('selection');
+
     const newSelected = selected.slice();
     newSelected.push(id);
     setSelected(newSelected);
@@ -118,6 +122,9 @@ function TaskList({ setAtTop }: Props) {
    * @param id
    */
   function handleDeselect(id: number) {
+    // Haptic feedback
+    handleHaptic('selection');
+
     const newSelected = selected.slice();
     const index = newSelected.indexOf(id);
     newSelected.splice(index, 1);
@@ -164,9 +171,7 @@ function TaskList({ setAtTop }: Props) {
 
     setTasks(tasksCopy);
 
-    if (Platform.OS === 'android' || Platform.OS === 'ios') {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    }
+    handleHaptic('impact', Haptics.ImpactFeedbackStyle.Medium);
   }
 
   /**
@@ -313,7 +318,7 @@ function TaskList({ setAtTop }: Props) {
     if (timerStopped && selected.includes(item.id) && context.mode === 'focus') {
       iconLeftDisplay = 'checkbox';
     } else if (timerStopped && context.mode === 'focus') {
-      iconLeftDisplay = 'checkbox-outline';
+      iconLeftDisplay = 'square-outline';
     }
 
     // Add keybind indicator

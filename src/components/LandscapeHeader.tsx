@@ -113,6 +113,7 @@ function LandscapeHeader() {
           <View style={{
             flexDirection: 'column',
             alignItems: 'flex-start',
+            marginLeft: 7,
           }}
           >
             <Text

@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import ColorValues from '../styles/Color';
 import TextStyles from '../styles/Text';
 import useTheme from '../helpers/hooks/useTheme';
+import handleHaptic from '../helpers/handleHaptic';
 
 interface Props {
   style?: StyleProp<ViewStyle>,
@@ -63,7 +64,7 @@ function ActionButton({
 
   function onPressButton() {
     if (haptics && Platform.OS !== 'web') {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      handleHaptic('impact', Haptics.ImpactFeedbackStyle.Medium);
     }
 
     if (onPress) {
