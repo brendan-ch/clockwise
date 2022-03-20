@@ -163,7 +163,7 @@ function SettingsOption({
           </Text>
           {subtitle ? (
             <Text
-              style={[TextStyles.textItalic, {
+              style={[TextStyles.textRegular, {
                 color: colors.primary,
                 fontSize: 10,
                 marginTop: 3,

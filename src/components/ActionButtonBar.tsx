@@ -45,7 +45,7 @@ function ActionButtonBar({
 
   return (
     <View style={[style, styles.container]}>
-      <Text style={[TextStyles.textItalic, styles.text, {
+      <Text style={[TextStyles.textRegular, styles.text, {
         color: colors.gray2,
       }]}
       >

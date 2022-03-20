@@ -30,7 +30,7 @@ function NotificationOverlay({ onClose }: Props) {
         Notifications are disabled
 
       </Text>
-      <Text style={[TextStyles.textItalic, {
+      <Text style={[TextStyles.textRegular, {
         color: colors.primary,
         marginBottom: 5,
       }]}

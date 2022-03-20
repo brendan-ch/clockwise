@@ -30,7 +30,7 @@ function TimerWarningOverlay({ onClose, onConfirm }: Props) {
         Timer is active
 
       </Text>
-      <Text style={[TextStyles.textItalic, {
+      <Text style={[TextStyles.textRegular, {
         color: colors.primary,
         marginBottom: 5,
       }]}
