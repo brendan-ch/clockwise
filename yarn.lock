@@ -1869,6 +1869,11 @@
   resolved "https://registry.yarnpkg.com/@expo-google-fonts/anonymous-pro/-/anonymous-pro-0.2.0.tgz#e7cf25888515ad748ca87e41d8ea506cce0fa5c2"
   integrity sha512-GbsoDk3AYImlo30yqPeq+uDNfj71WXDlOESn7KqOffsYIBZHOqijI7SBSdTGEppCZfCDQXW7BxKRmARm2ckKKg==
 
+"@expo-google-fonts/public-sans@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/public-sans/-/public-sans-0.2.2.tgz#d89352afac85200a6ea683c3ba7fe97ef10bef9e"
+  integrity sha512-BIpyxjhF2RWemnvOgp6Kg5ljm7SxSx88Z4mM7vK7Ag+ycnI8+DXdUt0uRKq8kHn0oY1g04bZC9tCyQmrm0X1DA==
+
 "@expo/config-plugins@3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@expo/config-plugins/-/config-plugins-3.1.0.tgz#0752ff33c5eab21cf42034a44e79df97f0f867f8"
