@@ -471,7 +471,7 @@ export default function App() {
     headerStyle: {
       backgroundColor: colorValues.background,
     },
-    headerTitleStyle: TextStyles.textBold,
+    headerTitleStyle: TextStyles.textMonoBold,
     headerBackTitleStyle: TextStyles.textRegular,
   };
 

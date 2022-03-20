@@ -21,7 +21,7 @@ function Timer({ display, style, textStyle }: Props) {
   return (
     <View style={[style, styles.container]}>
       <Text
-        style={[TextStyles.textBold, textStyle, styles.text, {
+        style={[TextStyles.textMonoBold, textStyle, styles.text, {
           color: colorValues.primary,
         }]}
         allowFontScaling={false}

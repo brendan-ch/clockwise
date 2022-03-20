@@ -153,7 +153,7 @@ function ActionButton({
               size={30}
             />
           ) : (
-            <Text style={[TextStyles.textBold, styles.text, {
+            <Text style={[TextStyles.textMonoBold, styles.text, {
               color: colorValues.primary,
             }]}
             >
@@ -177,7 +177,7 @@ function ActionButton({
           />
         ) : (
           <Animated.Text style={[
-            TextStyles.textBold,
+            TextStyles.textMonoBold,
             styles.text,
             {
               opacity: fadeAnimation.interpolate({
