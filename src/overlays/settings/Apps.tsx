@@ -6,7 +6,6 @@ import Constants from 'expo-constants';
 import {
   DARK_MODE_SCREENSHOT, LIGHT_MODE_SCREENSHOT,
 } from '../../Assets';
-import ClickableText from '../../components/ClickableText';
 import handleOpenLink from '../../helpers/handleOpenLink';
 import useTheme from '../../helpers/hooks/useTheme';
 import ColorValues from '../../styles/Color';
@@ -19,7 +18,9 @@ import GooglePlayBadge from '../../components/badges/GooglePlayBadge';
  */
 export default function AppsPane() {
   const colors = useTheme();
-  const privacyPolicyLink = Constants.manifest?.extra?.privacyPolicyLink;
+
+  const appStoreLink = Constants.manifest?.extra?.appStoreLink;
+  const googlePlayLink = Constants.manifest?.extra?.googlePlayLink;
 
   const textStyle = [TextStyles.textRegular, {
     color: colors.primary,
@@ -44,26 +45,21 @@ export default function AppsPane() {
             Download the app
           </Text>
           <Text style={textStyle}>
-            Enter your phone number to get a link to download the app. SMS rates may apply.
+            A Pomodoro timer designed to help you focus, now available on the go.
           </Text>
           <Text style={textStyle}>
-            {'We won\'t spam you or sell your data. See the '}
-            <ClickableText
-              text="Privacy Policy"
-              onPress={() => handleOpenLink(privacyPolicyLink)}
-              style={textStyle}
-            />
-            {' for more information.'}
+            Click the links below to download the app:
           </Text>
-          <Text style={textStyle}>
-            Or, click the links below:
-          </Text>
-          <Pressable>
+          <Pressable
+            onPress={() => handleOpenLink(appStoreLink)}
+          >
             <AppStoreBadge
               style={styles.badge}
             />
           </Pressable>
-          <Pressable>
+          <Pressable
+            onPress={() => handleOpenLink(googlePlayLink)}
+          >
             <GooglePlayBadge
               style={styles.badge}
             />
