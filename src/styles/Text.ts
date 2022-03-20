@@ -8,7 +8,7 @@ const TextStyles = StyleSheet.create({
   //   fontFamily: 'AnonymousPro_400Regular_Italic',
   // },
   textBold: {
-    fontFamily: 'PublicSans_400Regular',
+    fontFamily: 'PublicSans_500Medium',
   },
   // textBoldItalic: {
   //   fontFamily: 'AnonymousPro_700Bold_Italic',
