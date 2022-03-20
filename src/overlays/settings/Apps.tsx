@@ -47,20 +47,22 @@ export default function AppsPane() {
           <Text style={textStyle}>
             Click the links below to download the app:
           </Text>
-          <Pressable
-            onPress={() => handleOpenLink(APP_STORE_LINK)}
-          >
-            <AppStoreBadge
-              style={styles.badge}
-            />
-          </Pressable>
-          <Pressable
-            onPress={() => handleOpenLink(GOOGLE_PLAY_LINK)}
-          >
-            <GooglePlayBadge
-              style={styles.badge}
-            />
-          </Pressable>
+          <View style={styles.badgesContainer}>
+            <Pressable
+              onPress={() => handleOpenLink(APP_STORE_LINK)}
+            >
+              <AppStoreBadge
+                style={styles.badge}
+              />
+            </Pressable>
+            <Pressable
+              onPress={() => handleOpenLink(GOOGLE_PLAY_LINK)}
+            >
+              <GooglePlayBadge
+                style={styles.badge}
+              />
+            </Pressable>
+          </View>
         </View>
         <Image
           source={
@@ -111,7 +113,13 @@ const styles = StyleSheet.create({
   legalContainer: {
 
   },
-  badge: {
+  badgesContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
     marginVertical: 5,
+  },
+  badge: {
+    marginRight: 10,
   },
 });
