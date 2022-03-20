@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Image, Pressable, StyleSheet, Text, View,
 } from 'react-native';
-import Constants from 'expo-constants';
 import {
   DARK_MODE_SCREENSHOT, LIGHT_MODE_SCREENSHOT,
 } from '../../Assets';
@@ -12,15 +11,13 @@ import ColorValues from '../../styles/Color';
 import TextStyles from '../../styles/Text';
 import AppStoreBadge from '../../components/badges/AppStoreBadge';
 import GooglePlayBadge from '../../components/badges/GooglePlayBadge';
+import { APP_STORE_LINK, GOOGLE_PLAY_LINK } from '../../Constants';
 
 /**
  * Settings pane that contains a link to the apps.
  */
 export default function AppsPane() {
   const colors = useTheme();
-
-  const appStoreLink = Constants.manifest?.extra?.appStoreLink;
-  const googlePlayLink = Constants.manifest?.extra?.googlePlayLink;
 
   const textStyle = [TextStyles.textRegular, {
     color: colors.primary,
@@ -51,14 +48,14 @@ export default function AppsPane() {
             Click the links below to download the app:
           </Text>
           <Pressable
-            onPress={() => handleOpenLink(appStoreLink)}
+            onPress={() => handleOpenLink(APP_STORE_LINK)}
           >
             <AppStoreBadge
               style={styles.badge}
             />
           </Pressable>
           <Pressable
-            onPress={() => handleOpenLink(googlePlayLink)}
+            onPress={() => handleOpenLink(GOOGLE_PLAY_LINK)}
           >
             <GooglePlayBadge
               style={styles.badge}
