@@ -100,7 +100,7 @@ function LandscapeHeader() {
           opacity: opacityAnimation,
         }]}
         >
-          <Text style={[TextStyles.textBold, {
+          <Text style={[TextStyles.textMonoBold, {
             color: colorValues.primary,
             fontSize: 49,
           }]}
