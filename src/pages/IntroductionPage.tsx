@@ -80,7 +80,6 @@ function IntroductionPage() {
     >
       <View style={[[{
         backgroundColor: colorValues.background,
-        height: 100,
         flexDirection: 'column',
         justifyContent: 'center',
         paddingHorizontal: 10,
@@ -101,7 +100,7 @@ function IntroductionPage() {
           >
             {' Clockwise'}
           </Text>
-          , a no-nonsense Pomodoro timer designed to help you focus.
+          , a Pomodoro timer designed to help you focus.
 
         </Text>
       </View>
