@@ -94,8 +94,10 @@ function ImportSettingsPane() {
 
   function handlePress(item: SettingsOptionProps) {
     if (item.title === 'Include task data') {
+      handleHaptic('selection');
       setIncludeTaskData(!includeTaskData);
     } else if (item.title === 'Overwrite task data') {
+      handleHaptic('selection');
       setOverwriteTasks(!overwriteTasks);
     } else if (item.title === 'Export settings') {
       exportData(includeTaskData);
