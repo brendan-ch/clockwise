@@ -6,6 +6,10 @@ import {
   AnonymousPro_700Bold,
   AnonymousPro_700Bold_Italic,
 } from '@expo-google-fonts/anonymous-pro';
+import {
+  PublicSans_300Light,
+  PublicSans_400Regular,
+} from '@expo-google-fonts/public-sans';
 import { Audio } from 'expo-av';
 import * as Linking from 'expo-linking';
 import React, { useEffect, useState } from 'react';
@@ -334,6 +338,8 @@ export default function App() {
     AnonymousPro_400Regular_Italic,
     AnonymousPro_700Bold,
     AnonymousPro_700Bold_Italic,
+    PublicSans_300Light,
+    PublicSans_400Regular,
   });
 
   useEffect(() => {
