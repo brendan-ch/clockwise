@@ -4,6 +4,8 @@ env:
   PRIVACY_POLICY_LINK: ${{ secrets.PRIVACY_POLICY_LINK }}
   GITHUB_LINK: ${{ secrets.REPO_LINK }}
   GITHUB_PROFILE_LINK: ${{ secrets.PROFILE_LINK }}
+  APP_STORE_LINK: ${{ secrets.APP_STORE_LINK }}
+  GOOGLE_PLAY_LINK: ${{ secrets.GOOGLE_PLAY_LINK }}
 
 # Controls when the workflow will run
 on:

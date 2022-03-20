@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   Platform,
-  StyleSheet, ViewStyle, Animated, TouchableOpacity, Text,
+  StyleSheet, ViewStyle, Animated, TouchableOpacity, Text, StyleProp,
 } from 'react-native';
 import useMouseAnimations from '../helpers/hooks/useMouseAnimations';
 import useTheme from '../helpers/hooks/useTheme';
@@ -12,10 +12,11 @@ interface Props {
    * Whether the setting is selected.
    */
   selected?: boolean,
-  style?: ViewStyle,
+  style?: StyleProp<ViewStyle>,
   text?: string,
   indicator?: string,
   onPress?: () => any,
+  isBottom?: boolean,
 }
 
 /**
@@ -24,15 +25,19 @@ interface Props {
  * @returns
  */
 function SettingsSelector({
-  selected, style, text, onPress, indicator,
+  selected, style, text, onPress, indicator, isBottom,
 }: Props) {
   const colors = useTheme();
 
   const { mouseHoverAnimation, onMouseEnter, onMouseLeave } = useMouseAnimations();
 
+  let textColor = isBottom ? colors.gray3 : colors.primary;
+  if (selected) {
+    textColor = colors.background;
+  }
   const textChild = (
     <Text style={[selected ? TextStyles.textBold : TextStyles.textRegular, {
-      color: selected ? colors.background : colors.primary,
+      color: textColor,
     }]}
     >
       {text}
@@ -92,6 +97,7 @@ SettingsSelector.defaultProps = {
   text: '',
   indicator: '',
   onPress: () => {},
+  isBottom: false,
 };
 
 const styles = StyleSheet.create({

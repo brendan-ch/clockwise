@@ -4,7 +4,6 @@ import React, {
 import {
   StyleSheet, Text, Animated, Platform,
 } from 'react-native';
-import Constants from 'expo-constants';
 import { Ionicons } from '@expo/vector-icons';
 import AppContext from '../../AppContext';
 import useTheme from '../helpers/hooks/useTheme';
@@ -12,13 +11,14 @@ import TextStyles from '../styles/Text';
 import ClickableText from './ClickableText';
 import ImageContext from '../../ImageContext';
 import handleOpenLink from '../helpers/handleOpenLink';
+import { GITHUB_LINK, GITHUB_PROFILE_LINK, PRIVACY_POLICY_LINK } from '../Constants';
 
 function LandscapeFooter() {
   const [hovering, setHovering] = useState(false);
 
-  const privacyPolicyLink = Constants.manifest?.extra?.privacyPolicyLink;
-  const githubLink = Constants.manifest?.extra?.githubLink;
-  const githubProfileLink = Constants.manifest?.extra?.githubProfileLink;
+  const privacyPolicyLink = PRIVACY_POLICY_LINK;
+  const githubLink = GITHUB_LINK;
+  const githubProfileLink = GITHUB_PROFILE_LINK;
 
   const opacityAnimation = useRef(new Animated.Value(1)).current;
   const colorValues = useTheme();

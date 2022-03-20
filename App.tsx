@@ -61,6 +61,7 @@ import { TIMER_SOUND } from './src/Assets';
 import RedirectPage from './src/pages/RedirectPage';
 import ImportSettingsPane from './src/overlays/settings/ImportSettings';
 import { REGIONS_WITH_12H_TIME } from './src/Constants';
+import AppBanner from './src/components/AppBanner';
 
 const MIN_25 = 1500000;
 
@@ -72,6 +73,11 @@ const prefix = Linking.createURL('/');
 
 export default function App() {
   const [imageInfo, setImageInfo] = useState<ImageInfo | undefined>();
+
+  const [displayBanner, setDisplayBanner] = useState(
+    Platform.OS === 'web'
+    && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent),
+  );
 
   const [
     keyboardShortcutManager, setKeyboardShortcutManager,
@@ -683,6 +689,11 @@ export default function App() {
             handleDeleteTask,
           }}
         >
+          {displayBanner ? (
+            <AppBanner
+              onDismiss={() => setDisplayBanner(false)}
+            />
+          ) : undefined}
           <NavigationContainer
             linking={linking}
           >
