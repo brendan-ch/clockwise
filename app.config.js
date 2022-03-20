@@ -44,5 +44,7 @@ export default {
     githubLink: process.env.GITHUB_LINK,
     githubProfileLink: process.env.GITHUB_PROFILE_LINK,
     prodBuild: process.env.PROD_BUILD,
+    appStoreLink: process.env.APP_STORE_LINK,
+    googlePlayLink: process.env.GOOGLE_PLAY_LINK,
   },
 };
