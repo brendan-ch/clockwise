@@ -45,7 +45,7 @@ if (Platform.OS === 'web') {
 
   bottomNavigator.push(
     {
-      title: 'Apps',
+      title: 'App',
       renderer: <Apps />,
     },
   );
