@@ -20,7 +20,7 @@ function Checkbox({ selected, keyboardSelected, disabled }: Props) {
     }]}
     >
       <Ionicons
-        name={selected ? 'checkbox' : 'checkbox-outline'}
+        name={selected ? 'checkbox' : 'square-outline'}
         color={disabled ? colors.gray3 : colors.primary}
         size={20}
       />

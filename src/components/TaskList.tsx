@@ -313,7 +313,7 @@ function TaskList({ setAtTop }: Props) {
     if (timerStopped && selected.includes(item.id) && context.mode === 'focus') {
       iconLeftDisplay = 'checkbox';
     } else if (timerStopped && context.mode === 'focus') {
-      iconLeftDisplay = 'checkbox-outline';
+      iconLeftDisplay = 'square-outline';
     }
 
     // Add keybind indicator
