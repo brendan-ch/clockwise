@@ -75,7 +75,8 @@ export default function App() {
   const [imageInfo, setImageInfo] = useState<ImageInfo | undefined>();
 
   const [displayBanner, setDisplayBanner] = useState(
-    /iPhone|iPad|iPod|Android/i.test(navigator.userAgent),
+    Platform.OS === 'web'
+    && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent),
   );
 
   const [
