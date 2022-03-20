@@ -99,6 +99,11 @@ function TaskList({ setAtTop }: Props) {
    * @param id
    */
   function handleSelect(id: number) {
+    // Haptic feedback
+    if (Platform.OS !== 'web') {
+      Haptics.selectionAsync();
+    }
+
     const newSelected = selected.slice();
     newSelected.push(id);
     setSelected(newSelected);
@@ -118,6 +123,11 @@ function TaskList({ setAtTop }: Props) {
    * @param id
    */
   function handleDeselect(id: number) {
+    // Haptic feedback
+    if (Platform.OS !== 'web') {
+      Haptics.selectionAsync();
+    }
+
     const newSelected = selected.slice();
     const index = newSelected.indexOf(id);
     newSelected.splice(index, 1);
