@@ -32,6 +32,7 @@ export default {
       'expo-document-picker',
       {
         appleTeamId: '4A9XHUS87Q',
+        iCloudContainerEnvironment: 'Production',
       },
     ],
   ],
