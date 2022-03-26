@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { AppState, Platform } from 'react-native';
+import { AppState, AppStateStatus, Platform } from 'react-native';
 
 /**
  * Hook that changes state every time the time changes (every minute).
@@ -8,6 +8,28 @@ import { AppState, Platform } from 'react-native';
 function useTimeUpdates() {
   const [now, setNow] = useState(new Date());
   const [timeout, setTimeoutInState] = useState<any>();
+
+  /**
+   * Based on the app state, update the current time.
+   * @param state
+   */
+  function updateCurrentTime(state: AppStateStatus) {
+    switch (state) {
+      case 'background':
+      case 'inactive':
+        // Stop updating (clear timeout)
+        clearTimeout(timeout);
+        break;
+      case 'active':
+        // Start updating again
+        // Changing `now` will cause useEffect hook to re-run
+        setNow(new Date());
+        break;
+      default:
+        // Do something
+        setNow(new Date());
+    }
+  }
 
   useEffect(() => {
     // Execute the callback every time `now` changes
@@ -28,29 +50,13 @@ function useTimeUpdates() {
 
     if (Platform.OS !== 'web') {
       // Listen to background state
-      AppState.addEventListener('change', (state) => {
-        switch (state) {
-          case 'background':
-          case 'inactive':
-            // Stop updating (clear timeout)
-            clearTimeout(timeout);
-            break;
-          case 'active':
-            // Start updating again
-            // Changing `now` will cause useEffect hook to re-run
-            setNow(new Date());
-            break;
-          default:
-            // Do something
-            setNow(new Date());
-        }
-      });
+      AppState.addEventListener('change', updateCurrentTime);
     }
 
     return () => {
       clearTimeout(timeout);
       if (Platform.OS !== 'web') {
-        AppState.removeEventListener('change', () => {});
+        AppState.removeEventListener('change', updateCurrentTime);
       }
     };
   }, [now]);

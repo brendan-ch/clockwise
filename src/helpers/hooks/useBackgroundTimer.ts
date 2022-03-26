@@ -79,10 +79,16 @@ function useBackgroundTimer() {
     context.startTimer(newTimeRemaining);
     context.setMode(mode === 'focus' ? 'focus' : 'break');
     context.setSelected(selected);
+  }
 
-    removeData(START);
-    removeData(TIMER_LENGTH);
-    removeData(MODE);
+  /**
+   * Remove timer data from storage.
+   */
+  async function removeTimerData() {
+    await removeData(START);
+    await removeData(TIMER_LENGTH);
+    await removeData(MODE);
+    await removeData(SELECTED);
   }
 
   useEffect(() => {
@@ -92,8 +98,10 @@ function useBackgroundTimer() {
 
     if (backgroundState === 'active') {
       // If state is active when timer state changes
-      setTimerFromStorage();
-      context.setTimerBackgrounded(false);
+      setTimerFromStorage()
+        // Ensure that data is removed
+        .then(() => removeTimerData())
+        .then(() => context.setTimerBackgrounded(false));
     } else if (context.timerLength
       && context.start
       // Workaround: AppState is bugged, sends active event when pulling down

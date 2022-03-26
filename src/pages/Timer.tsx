@@ -58,6 +58,7 @@ export default function TimerPage() {
     stopTimer,
     pauseTimer,
     setPageTitle,
+    timerBackgrounded,
   } = useContext(AppContext);
 
   const settings = useContext(SettingsContext);
@@ -203,6 +204,7 @@ export default function TimerPage() {
           onPausePress={() => pauseTimer()}
           onResetPress={() => stopTimer()}
           onResumePress={() => startTimer()}
+          // Disable button press if timer backgrounded
         />
       </View>
     );
@@ -308,12 +310,13 @@ export default function TimerPage() {
         >
           <ActionButtonBar
             style={styles.actionButtonBar}
-            state={timerState}
+            state={timerBackgrounded ? 'running' : timerState}
             onStartPress={() => startTimer()}
             onPausePress={() => pauseTimer()}
             onResetPress={() => stopTimer()}
             onResumePress={() => startTimer()}
             text={actionBarText}
+            disabled={timerBackgrounded}
           />
         </View>
       ) : undefined}
