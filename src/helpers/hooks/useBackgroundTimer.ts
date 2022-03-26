@@ -100,8 +100,8 @@ function useBackgroundTimer() {
       // If state is active when timer state changes
       setTimerFromStorage()
         // Ensure that data is removed
-        .then(() => removeTimerData());
-      context.setTimerBackgrounded(false);
+        .then(() => removeTimerData())
+        .then(() => context.setTimerBackgrounded(false));
     } else if (context.timerLength
       && context.start
       // Workaround: AppState is bugged, sends active event when pulling down
