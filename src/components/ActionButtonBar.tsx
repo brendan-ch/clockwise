@@ -15,6 +15,7 @@ interface Props {
   onPausePress?: () => any,
   onResumePress?: () => any,
   style?: StyleProp<ViewStyle>,
+  disabled?: boolean,
 }
 
 /**
@@ -29,6 +30,7 @@ function ActionButtonBar({
   onPausePress,
   onResumePress,
   style,
+  disabled,
 }: Props) {
   const colors = useTheme();
 
@@ -58,7 +60,7 @@ function ActionButtonBar({
             <ActionButton
               style={styles.bigActionButton}
               text={displayText}
-              onPress={method}
+              onPress={disabled ? undefined : method}
               haptics
             />
           ) : undefined}
@@ -66,20 +68,18 @@ function ActionButtonBar({
             <ActionButton
               style={styles.bigActionButton}
               text={displayText}
-              onPress={method}
+              onPress={disabled ? undefined : method}
               background
             />
           ) : undefined}
           {state === 'paused' ? (
             <ActionButton
               style={styles.smallActionButton}
-              onPress={onResetPress}
+              onPress={disabled ? undefined : onResetPress}
               isResetButton
             />
           ) : undefined}
         </View>
-        {/* {state === 'paused' ? (
-        ) : undefined} */}
       </View>
     </View>
   );
@@ -122,6 +122,7 @@ ActionButtonBar.defaultProps = {
   onPausePress: () => {},
   onResumePress: () => {},
   style: {},
+  disabled: false,
 };
 
 export default ActionButtonBar;
