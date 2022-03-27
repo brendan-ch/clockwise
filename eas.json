@@ -3,23 +3,24 @@
     "version": ">= 0.43.0"
   },
   "build": {
+    "base": {
+      "env": {
+        "EXPO_APPLE_TEAM_ID": "4A9XHUS87Q"
+      }
+    },
     "development": {
-      "ios": {
-        "simulator": true
-      },
+      "extends": "base",
+      "developmentClient": true,
+      "distribution": "internal",
       "releaseChannel": "development"
     },
     "preview": {
+      "extends": "base",
       "distribution": "internal",
-      "env": {
-        "EXPO_APPLE_TEAM_ID": "4A9XHUS87Q"
-      },
       "releaseChannel": "preview"
     },
     "production": {
-      "env": {
-        "EXPO_APPLE_TEAM_ID": "4A9XHUS87Q"
-      },
+      "extends": "base",
       "releaseChannel": "production"
     }
   },
