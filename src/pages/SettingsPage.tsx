@@ -148,7 +148,8 @@ function SettingsPage() {
   // Sync options with storage
   const { settingsData, handleChange } = useSettingsData(options);
 
-  const autoSetTheme = settingsData[7]?.value as boolean;
+  const subtractCount = Platform.OS === 'web' ? 1 : 0;
+  const autoSetTheme = settingsData[7 - subtractCount]?.value as boolean;
   const sections: Section[] = [
     {
       title: 'Timer',
@@ -158,12 +159,14 @@ function SettingsPage() {
     {
       title: 'Region',
       icon: 'location-outline',
-      data: settingsData.slice(6, 7),
+      data: Platform.OS === 'web' ? settingsData.slice(5, 6) : settingsData.slice(6, 7),
     },
     {
       title: 'Theme',
       icon: 'moon-outline',
-      data: autoSetTheme ? settingsData.slice(7, 8) : settingsData.slice(7, 9),
+      data: autoSetTheme
+        ? settingsData.slice(7 - subtractCount, 8 - subtractCount)
+        : settingsData.slice(7 - subtractCount, 9 - subtractCount),
     },
   ];
   // Overlay to display
