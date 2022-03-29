@@ -6,7 +6,7 @@ export default {
   slug: 'clockwise',
   scheme: 'clockwise',
   userInterfaceStyle: 'automatic',
-  version: '1.3.2',
+  version: '1.4.0',
   orientation: 'portrait',
   icon: './assets/icon.png',
   splash: {
@@ -20,7 +20,7 @@ export default {
   assetBundlePatterns: [
     '**/*',
   ],
-  runtimeVersion: '1.3.2(9)',
+  runtimeVersion: '1.4.0(9)',
   ios: {
     supportsTablet: true,
     bundleIdentifier: 'co.birb.session',
