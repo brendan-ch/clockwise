@@ -69,6 +69,7 @@ function IntroductionOverlay({ containerStyle }: Props) {
         flexDirection: 'column',
         justifyContent: 'center',
         paddingHorizontal: 10,
+        paddingVertical: 10,
       }]]}
       >
         <Text
