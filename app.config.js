@@ -28,13 +28,13 @@ export default {
     usesIcloudStorage: true,
   },
   plugins: [
+    'sentry-expo',
     [
       'expo-document-picker',
       {
         appleTeamId: '4A9XHUS87Q',
         iCloudContainerEnvironment: 'Production',
       },
-      'sentry-expo',
     ],
   ],
   android: {
