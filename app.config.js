@@ -37,6 +37,18 @@ export default {
       },
     ],
   ],
+  hooks: {
+    postPublish: [
+      {
+        file: 'sentry-expo/upload-sourcemaps',
+        config: {
+          organization: 'brendan-c',
+          project: 'clockwise',
+          authToken: process.env.SENTRY_AUTH_TOKEN,
+        },
+      },
+    ],
+  },
   android: {
     adaptiveIcon: {
       foregroundImage: './assets/adaptive-icon.png',
