@@ -68,5 +68,6 @@ export default {
     prodBuild: process.env.PROD_BUILD,
     appStoreLink: process.env.APP_STORE_LINK,
     googlePlayLink: process.env.GOOGLE_PLAY_LINK,
+    sentryDsn: process.env.SENTRY_DSN,
   },
 };
