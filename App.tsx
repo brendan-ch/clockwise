@@ -9,6 +9,7 @@ import {
 import { Audio } from 'expo-av';
 import * as Linking from 'expo-linking';
 import React, { useEffect, useState } from 'react';
+import * as Sentry from 'sentry-expo';
 import {
   ImageBackground, Platform, StyleSheet, useWindowDimensions, View,
 } from 'react-native';
@@ -60,8 +61,14 @@ import IntroductionPage from './src/pages/IntroductionPage';
 import { TIMER_SOUND } from './src/Assets';
 import RedirectPage from './src/pages/RedirectPage';
 import ImportSettingsPane from './src/overlays/settings/ImportSettings';
-import { REGIONS_WITH_12H_TIME } from './src/Constants';
+import { REGIONS_WITH_12H_TIME, SENTRY_DSN } from './src/Constants';
 import AppBanner from './src/components/AppBanner';
+
+Sentry.init({
+  dsn: SENTRY_DSN,
+  enableInExpoDevelopment: true,
+  debug: process.env.NODE_ENV === 'development',
+});
 
 const MIN_25 = 1500000;
 
