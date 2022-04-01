@@ -61,13 +61,15 @@ import IntroductionPage from './src/pages/IntroductionPage';
 import { TIMER_SOUND } from './src/Assets';
 import RedirectPage from './src/pages/RedirectPage';
 import ImportSettingsPane from './src/overlays/settings/ImportSettings';
-import { REGIONS_WITH_12H_TIME, SENTRY_DSN } from './src/Constants';
+import { REGIONS_WITH_12H_TIME, RELEASE_CODE, SENTRY_DSN } from './src/Constants';
 import AppBanner from './src/components/AppBanner';
 
 Sentry.init({
   dsn: SENTRY_DSN,
-  enableInExpoDevelopment: true,
+  enableInExpoDevelopment: false,
   debug: process.env.NODE_ENV === 'development',
+  enableAutoSessionTracking: true,
+  release: process.env.NODE_ENV === 'development' ? 'DEVELOPMENT' : RELEASE_CODE,
 });
 
 const MIN_25 = 1500000;
