@@ -6,6 +6,8 @@ env:
   GITHUB_PROFILE_LINK: ${{ secrets.PROFILE_LINK }}
   APP_STORE_LINK: ${{ secrets.APP_STORE_LINK }}
   GOOGLE_PLAY_LINK: ${{ secrets.GOOGLE_PLAY_LINK }}
+  SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
 # Controls when the workflow will run
 on:
