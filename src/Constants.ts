@@ -35,3 +35,5 @@ export const GOOGLE_PLAY_LINK = Constants.manifest?.extra?.googlePlayLink;
 export const PRIVACY_POLICY_LINK = Constants.manifest?.extra?.privacyPolicyLink;
 export const GITHUB_LINK = Constants.manifest?.extra?.githubLink;
 export const GITHUB_PROFILE_LINK = Constants.manifest?.extra?.githubProfileLink;
+
+export const SENTRY_DSN = Constants.manifest?.extra?.sentryDsn;
