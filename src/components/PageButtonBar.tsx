@@ -29,6 +29,7 @@ interface Props {
 
 /**
  * Component which contains the Focus and Break buttons.
+ * @deprecated Use the more flexible `SelectionBar` component instead.
  */
 function PageButtonBar({
   style, selected, onPressFocus, onPressBreak,
