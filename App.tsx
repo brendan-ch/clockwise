@@ -47,6 +47,9 @@ import {
   ENABLE_TIMER_ALERTS,
   ENABLE_TIMER_SOUND,
   FOCUS_TIME_MINUTES,
+  LONG_BREAK_ENABLED,
+  LONG_BREAK_INTERVAL,
+  LONG_BREAK_TIME_MINUTES,
   SUPPRESS_INTRODUCTION,
   _24_HOUR_TIME,
 } from './src/StorageKeys';
@@ -89,6 +92,10 @@ export default function App() {
   const [overlay, setOverlayState] = useState<Overlay>('none');
   const [mode, setMode] = useState<'focus' | 'break'>('focus');
 
+  // The current session number
+  // Used to determine whether to switch to long break or short break
+  const [currentSessionNum, setCurrentSessionNum] = useState(1);
+
   const [keyboardGroup, setKeyboardGroup] = useState<KeyboardShortcutGroup>('none');
 
   const setPageTitle = usePageTitle('Clockwise', timeRemaining, timerState);
@@ -106,6 +113,9 @@ export default function App() {
     [ENABLE_TIMER_ALERTS]: false,
     [FOCUS_TIME_MINUTES]: 25,
     [BREAK_TIME_MINUTES]: 5,
+    [LONG_BREAK_ENABLED]: true,
+    [LONG_BREAK_TIME_MINUTES]: 15,
+    [LONG_BREAK_INTERVAL]: 4,
     [ENABLE_BACKGROUND]: false,
     [AUTO_APPEARANCE]: true,
     [DARK_MODE]: false,
@@ -170,12 +180,20 @@ export default function App() {
   /**
    * Handle automatic timer starting.
    * @param newMode
+   * @param isLongBreak
    */
-  function handleAutoStart(newMode: 'focus' | 'break') {
+  function handleAutoStart(newMode: 'focus' | 'break', isLongBreak = false) {
     // Change the mode
     setMode(newMode);
     // Change the time remaining
-    const newTimeRemaining = settings[newMode === 'focus' ? FOCUS_TIME_MINUTES : BREAK_TIME_MINUTES] * 60 * 1000;
+    let timeKey = FOCUS_TIME_MINUTES;
+    if (newMode === 'break' && isLongBreak) {
+      timeKey = LONG_BREAK_TIME_MINUTES;
+    } else if (newMode === 'break') {
+      timeKey = BREAK_TIME_MINUTES;
+    }
+    // @ts-ignore
+    const newTimeRemaining = settings[timeKey] * 60 * 1000;
     setTimeRemaining(newTimeRemaining);
     // Clear the existing interval
     clearTimerInterval(timeout);
@@ -191,23 +209,28 @@ export default function App() {
 
   /**
    * Handle switching between break and focus modes.
+   * @param newMode
+   * @param isLongBreak
    */
-  function handleStateSwitch(newMode: 'focus' | 'break') {
+  function handleStateSwitch(newMode: 'focus' | 'break', isLongBreak = false) {
     clearTimerInterval(timeout);
     setTimerState('stopped');
     setMode(newMode);
     setTimerLength(undefined);
     setStart(undefined);
 
-    getAndSetTimerValue(newMode);
+    getAndSetTimerValue(newMode, isLongBreak);
   }
 
   /**
    * Set the time remaining based on AsyncStorage value.
    * @param mode
+   * @param isLongBreak
    */
-  function getAndSetTimerValue(newMode: 'focus' | 'break') {
-    const timerValueMinutes = newMode === 'focus' ? settings[FOCUS_TIME_MINUTES] : settings[BREAK_TIME_MINUTES];
+  function getAndSetTimerValue(newMode: 'focus' | 'break', isLongBreak = false) {
+    const timerValueMinutes = newMode === 'focus'
+      ? settings[FOCUS_TIME_MINUTES]
+      : settings[isLongBreak ? LONG_BREAK_TIME_MINUTES : BREAK_TIME_MINUTES];
     setTimeRemaining(timerValueMinutes * 60 * 1000);
   }
 
@@ -341,16 +364,26 @@ export default function App() {
       // Update actual sessions of selected tasks
       if (mode === 'focus') {
         bumpActualPomodoros();
+      } else {
+        // Bump number of total sessions
+        setCurrentSessionNum(currentSessionNum + 1);
       }
 
       // Call function depending on whether auto start is enabled
       getData(mode === 'focus' ? AUTO_START_BREAK : AUTO_START_FOCUS)
         .then((value) => {
+          // Check if long breaks enabled
+          const switchLongBreak = settings[LONG_BREAK_ENABLED]
+            && settings[LONG_BREAK_INTERVAL] % currentSessionNum === 0;
+
           if (value === '1') {
-            handleAutoStart(mode === 'focus' ? 'break' : 'focus');
+            handleAutoStart(
+              mode === 'focus' ? 'break' : 'focus',
+              switchLongBreak,
+            );
           } else {
             // Clear interval and set new state
-            handleStateSwitch(mode === 'focus' ? 'break' : 'focus');
+            handleStateSwitch(mode === 'focus' ? 'break' : 'focus', switchLongBreak);
           }
         });
 
@@ -528,6 +561,7 @@ export default function App() {
         setTimerBackgrounded,
         selected,
         setSelected,
+        currentSessionNum,
       }}
       >
         <ImageBackground
@@ -670,6 +704,7 @@ export default function App() {
       setTimerBackgrounded,
       selected,
       setSelected,
+      currentSessionNum,
     }}
     >
       <SettingsContext.Provider value={{
