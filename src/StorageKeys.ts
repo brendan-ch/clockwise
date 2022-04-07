@@ -2,6 +2,9 @@
 
 export const FOCUS_TIME_MINUTES = '@focusTimeMinutes';
 export const BREAK_TIME_MINUTES = '@breakTimeMinutes';
+export const LONG_BREAK_TIME_MINUTES = '@longBreakTimeMinutes';
+export const LONG_BREAK_INTERVAL = '@longBreakInterval';
+export const LONG_BREAK_ENABLED = '@longBreakEnabled';
 /**
  * @deprecated Use `AUTO_START_BREAK` and `AUTO_START_FOCUS` keys instead.
  */
