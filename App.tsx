@@ -22,7 +22,7 @@ import AppContext from './AppContext';
 import KeyboardShortcutManager from './src/helpers/keyboardShortcutManager';
 import TimerPage from './src/pages/Timer';
 import {
-  DefaultSettingsState, ImageInfo, KeyboardShortcutGroup, Overlay, TimerState,
+  DefaultSettingsState, ImageInfo, KeyboardShortcutGroup, Overlay, TimerMode, TimerState,
 } from './src/types';
 import SettingsPage from './src/pages/SettingsPage';
 import TextStyles from './src/styles/Text';
@@ -90,7 +90,7 @@ export default function App() {
   const [timerState, setTimerState] = useState<TimerState>('stopped');
   const [timeout, setTimeoutState] = useState<any>(undefined);
   const [overlay, setOverlayState] = useState<Overlay>('none');
-  const [mode, setMode] = useState<'focus' | 'break'>('focus');
+  const [mode, setMode] = useState<TimerMode>('focus');
 
   // The current session number
   // Used to determine whether to switch to long break or short break
@@ -182,12 +182,12 @@ export default function App() {
    * @param newMode
    * @param isLongBreak
    */
-  function handleAutoStart(newMode: 'focus' | 'break', isLongBreak = false) {
+  function handleAutoStart(newMode: TimerMode) {
     // Change the mode
     setMode(newMode);
     // Change the time remaining
     let timeKey = FOCUS_TIME_MINUTES;
-    if (newMode === 'break' && isLongBreak) {
+    if (newMode === 'longBreak') {
       timeKey = LONG_BREAK_TIME_MINUTES;
     } else if (newMode === 'break') {
       timeKey = BREAK_TIME_MINUTES;
@@ -212,14 +212,14 @@ export default function App() {
    * @param newMode
    * @param isLongBreak
    */
-  function handleStateSwitch(newMode: 'focus' | 'break', isLongBreak = false) {
+  function handleStateSwitch(newMode: TimerMode) {
     clearTimerInterval(timeout);
     setTimerState('stopped');
     setMode(newMode);
     setTimerLength(undefined);
     setStart(undefined);
 
-    getAndSetTimerValue(newMode, isLongBreak);
+    getAndSetTimerValue(newMode);
   }
 
   /**
@@ -227,10 +227,10 @@ export default function App() {
    * @param mode
    * @param isLongBreak
    */
-  function getAndSetTimerValue(newMode: 'focus' | 'break', isLongBreak = false) {
+  function getAndSetTimerValue(newMode: TimerMode) {
     const timerValueMinutes = newMode === 'focus'
       ? settings[FOCUS_TIME_MINUTES]
-      : settings[isLongBreak ? LONG_BREAK_TIME_MINUTES : BREAK_TIME_MINUTES];
+      : settings[BREAK_TIME_MINUTES];
     setTimeRemaining(timerValueMinutes * 60 * 1000);
   }
 
@@ -375,15 +375,20 @@ export default function App() {
           // Check if long breaks enabled
           const switchLongBreak = settings[LONG_BREAK_ENABLED]
             && settings[LONG_BREAK_INTERVAL] % currentSessionNum === 0;
+          let newMode: TimerMode = 'focus';
+          if (switchLongBreak && mode === 'focus') {
+            newMode = 'longBreak';
+          } else if (mode === 'focus') {
+            newMode = 'break';
+          }
 
           if (value === '1') {
             handleAutoStart(
-              mode === 'focus' ? 'break' : 'focus',
-              switchLongBreak,
+              newMode,
             );
           } else {
             // Clear interval and set new state
-            handleStateSwitch(mode === 'focus' ? 'break' : 'focus', switchLongBreak);
+            handleStateSwitch(newMode);
           }
         });
 

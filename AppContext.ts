@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import KeyboardShortcutManager from './src/helpers/keyboardShortcutManager';
 import {
-  KeyboardShortcutGroup, Overlay, TimerState,
+  KeyboardShortcutGroup, Overlay, TimerMode, TimerState,
 } from './src/types';
 
 interface DefaultAppState {
@@ -9,11 +9,11 @@ interface DefaultAppState {
   timeRemaining: number,
   timerState: TimerState,
   timeout?: number,
-  mode: 'focus' | 'break',
+  mode: TimerMode,
   /* eslint-disable-next-line */
-  setMode: (newMode: 'focus' | 'break') => any,
+  setMode: (newMode: TimerMode) => any,
   /* eslint-disable-next-line */
-  handleStateSwitch: (newMode: 'focus' | 'break', isLongBreak?: boolean) => any,
+  handleStateSwitch: (newMode: TimerMode) => any,
   /* eslint-disable-next-line */
   overlay: Overlay,
   setOverlay: Dispatch<SetStateAction<any>>,

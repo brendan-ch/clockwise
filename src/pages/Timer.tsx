@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import AppContext from '../../AppContext';
 import ActionButtonBar from '../components/ActionButtonBar';
-import PageButtonBar from '../components/PageButtonBar';
 import Timer from '../components/Timer';
 import calculateTimerDisplay from '../helpers/calculateTimer';
 import useTheme from '../helpers/hooks/useTheme';
@@ -27,7 +26,7 @@ import useTimeUpdates from '../helpers/hooks/useTimeUpdates';
 import calculateTime from '../helpers/calculateTime';
 import SettingsContext from '../../SettingsContext';
 import {
-  BREAK_TIME_MINUTES, FOCUS_TIME_MINUTES, LONG_BREAK_TIME_MINUTES, _24_HOUR_TIME,
+  BREAK_TIME_MINUTES, FOCUS_TIME_MINUTES, _24_HOUR_TIME,
 } from '../StorageKeys';
 import SelectionBar from '../components/SelectionBar';
 
@@ -121,9 +120,9 @@ export default function TimerPage() {
   useEffect(() => {
     // Update mode based on bar selection
     if (barSelection === 'long break') {
-      handleStateSwitch('break', true);
+      handleStateSwitch('longBreak');
     } else if (barSelection === 'short break') {
-      handleStateSwitch('break', false);
+      handleStateSwitch('break');
     } else {
       handleStateSwitch('focus');
     }
@@ -132,7 +131,7 @@ export default function TimerPage() {
   useEffect(() => {
     setPageTitle(mode === 'focus' ? 'Focus' : 'Break');
 
-    if (mode === 'break' && timeRemaining > settings[LONG_BREAK_TIME_MINUTES] * 60 * 1000) {
+    if (mode === 'longBreak') {
       // If long break
       // Set selection bar state
       setBarSelection('long break');
@@ -218,12 +217,19 @@ export default function TimerPage() {
           display={calculateTimerDisplay(timeRemaining)}
           style={styles.timer}
         />
-        <PageButtonBar
+        <SelectionBar
+          style={styles.pageButtonBar}
+          selected={barSelection}
+          // @ts-ignore
+          onSelect={(newSelection) => setBarSelection(newSelection)}
+          options={['focus', 'short break', 'long break']}
+        />
+        {/* <PageButtonBar
           selected={mode}
           style={styles.pageButtonBar}
           onPressFocus={() => handleStateSwitch('focus')}
           onPressBreak={() => handleStateSwitch('break')}
-        />
+        /> */}
         <ActionButtonBar
           style={styles.actionButtonBar}
           state={timerState}
