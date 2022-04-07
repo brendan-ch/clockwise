@@ -26,13 +26,19 @@ import TaskContext from '../../TaskContext';
 import useTimeUpdates from '../helpers/hooks/useTimeUpdates';
 import calculateTime from '../helpers/calculateTime';
 import SettingsContext from '../../SettingsContext';
-import { BREAK_TIME_MINUTES, FOCUS_TIME_MINUTES, _24_HOUR_TIME } from '../StorageKeys';
+import {
+  BREAK_TIME_MINUTES, FOCUS_TIME_MINUTES, LONG_BREAK_TIME_MINUTES, _24_HOUR_TIME,
+} from '../StorageKeys';
+import SelectionBar from '../components/SelectionBar';
 
 /**
  * Component that displays information about the timer.
  * @returns
  */
 export default function TimerPage() {
+  // Depending on selection, update timer state
+  const [barSelection, setBarSelection] = useState<'focus' | 'short break' | 'long break'>('focus');
+
   const [isAtTop, setAtTop] = useState(true);
   const colorValues = useTheme();
   const isLightMode = colorValues.primary === ColorValues.primary;
@@ -113,7 +119,28 @@ export default function TimerPage() {
   useUnsavedChanges();
 
   useEffect(() => {
+    // Update mode based on bar selection
+    if (barSelection === 'long break') {
+      handleStateSwitch('break', true);
+    } else if (barSelection === 'short break') {
+      handleStateSwitch('break', false);
+    } else {
+      handleStateSwitch('focus');
+    }
+  }, [barSelection]);
+
+  useEffect(() => {
     setPageTitle(mode === 'focus' ? 'Focus' : 'Break');
+
+    if (mode === 'break' && timeRemaining > settings[LONG_BREAK_TIME_MINUTES] * 60 * 1000) {
+      // If long break
+      // Set selection bar state
+      setBarSelection('long break');
+    } else if (mode === 'break') {
+      setBarSelection('short break');
+    } else {
+      setBarSelection('focus');
+    }
   }, [mode]);
 
   useEffect(() => {
@@ -290,12 +317,19 @@ export default function TimerPage() {
             display={calculateTimerDisplay(timeRemaining)}
             style={styles.timer}
           />
-          <PageButtonBar
+          <SelectionBar
+            selected={barSelection}
+            style={styles.pageButtonBar}
+            // @ts-ignore
+            onSelect={(newSelection) => setBarSelection(newSelection)}
+            options={['focus', 'short break', 'long break']}
+          />
+          {/* <PageButtonBar
             selected={mode}
             style={styles.pageButtonBar}
             onPressFocus={() => handleStateSwitch('focus')}
             onPressBreak={() => handleStateSwitch('break')}
-          />
+          /> */}
         </View>
         <View style={styles.middleContainer}>
           <TaskList
