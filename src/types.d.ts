@@ -17,6 +17,7 @@ import {
 
 type TimerState = 'running' | 'paused' | 'stopped';
 type Overlay = 'none' | 'settings' | 'command' | 'introduction';
+type TimerMode = 'focus' | 'break' | 'longBreak';
 
 type KeyboardShortcutGroup = 'timer' | 'settings' | 'input' | 'settingsPage' | 'none';
 
@@ -200,6 +201,7 @@ interface IntroductionBlockProps {
 
 export {
   TimerState,
+  TimerMode,
   RootStackParamList,
   Overlay,
   Section,
