@@ -228,9 +228,14 @@ export default function App() {
    * @param isLongBreak
    */
   function getAndSetTimerValue(newMode: TimerMode) {
-    const timerValueMinutes = newMode === 'focus'
-      ? settings[FOCUS_TIME_MINUTES]
-      : settings[BREAK_TIME_MINUTES];
+    let timeKey = FOCUS_TIME_MINUTES;
+    if (newMode === 'break') {
+      timeKey = BREAK_TIME_MINUTES;
+    } else if (newMode === 'longBreak') {
+      timeKey = LONG_BREAK_TIME_MINUTES;
+    }
+    // @ts-ignore
+    const timerValueMinutes = settings[timeKey];
     setTimeRemaining(timerValueMinutes * 60 * 1000);
   }
 
