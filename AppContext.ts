@@ -13,7 +13,7 @@ interface DefaultAppState {
   /* eslint-disable-next-line */
   setMode: (newMode: 'focus' | 'break') => any,
   /* eslint-disable-next-line */
-  handleStateSwitch: (newMode: 'focus' | 'break') => any,
+  handleStateSwitch: (newMode: 'focus' | 'break', isLongBreak?: boolean) => any,
   /* eslint-disable-next-line */
   overlay: Overlay,
   setOverlay: Dispatch<SetStateAction<any>>,
