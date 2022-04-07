@@ -27,7 +27,7 @@ export const REGIONS_WITH_12H_TIME = [
 // Export files from previous versions should always be compatible with new ones,
 // but files generated from newer versions can break compatibility with previous
 // versions.
-export const EXPORT_VERSION_NUM = 1;
+export const EXPORT_VERSION_NUM = 2;
 
 export const APP_STORE_LINK = Constants.manifest?.extra?.appStoreLink;
 export const GOOGLE_PLAY_LINK = Constants.manifest?.extra?.googlePlayLink;
