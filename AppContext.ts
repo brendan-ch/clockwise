@@ -32,6 +32,11 @@ interface DefaultAppState {
   setTimerBackgrounded: Dispatch<SetStateAction<boolean>>,
   selected: number[],
   setSelected: Dispatch<SetStateAction<number[]>>,
+  /**
+   * Tracks the number of sessions since app open.
+   */
+  currentSessionNum: number,
+  setCurrentSessionNum: Dispatch<SetStateAction<number>>,
 }
 
 const defaultAppState: DefaultAppState = {
@@ -55,6 +60,8 @@ const defaultAppState: DefaultAppState = {
   setTimerBackgrounded: () => {},
   selected: [],
   setSelected: () => {},
+  currentSessionNum: 0,
+  setCurrentSessionNum: () => {},
 };
 
 const AppContext = React.createContext(defaultAppState);
