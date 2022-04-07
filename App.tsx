@@ -65,6 +65,7 @@ import RedirectPage from './src/pages/RedirectPage';
 import ImportSettingsPane from './src/overlays/settings/ImportSettings';
 import { REGIONS_WITH_12H_TIME } from './src/Constants';
 import AppBanner from './src/components/AppBanner';
+import getTimeKey from './src/helpers/getTimeKey';
 
 const MIN_25 = 1500000;
 
@@ -186,12 +187,7 @@ export default function App() {
     // Change the mode
     setMode(newMode);
     // Change the time remaining
-    let timeKey = FOCUS_TIME_MINUTES;
-    if (newMode === 'longBreak') {
-      timeKey = LONG_BREAK_TIME_MINUTES;
-    } else if (newMode === 'break') {
-      timeKey = BREAK_TIME_MINUTES;
-    }
+    const timeKey = getTimeKey(newMode);
     // @ts-ignore
     const newTimeRemaining = settings[timeKey] * 60 * 1000;
     setTimeRemaining(newTimeRemaining);
@@ -228,12 +224,7 @@ export default function App() {
    * @param isLongBreak
    */
   function getAndSetTimerValue(newMode: TimerMode) {
-    let timeKey = FOCUS_TIME_MINUTES;
-    if (newMode === 'break') {
-      timeKey = BREAK_TIME_MINUTES;
-    } else if (newMode === 'longBreak') {
-      timeKey = LONG_BREAK_TIME_MINUTES;
-    }
+    const timeKey = getTimeKey(newMode);
     // @ts-ignore
     const timerValueMinutes = settings[timeKey];
     setTimeRemaining(timerValueMinutes * 60 * 1000);
@@ -442,11 +433,14 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    const timeKey = getTimeKey(mode);
+
     // Change timer display if timer is stopped
     // and timer setting changes
     if (timerState === 'stopped') {
       setTimeRemaining(
-        settings[mode === 'focus' ? FOCUS_TIME_MINUTES : BREAK_TIME_MINUTES] * 60 * 1000,
+        // @ts-ignore
+        settings[timeKey] * 60 * 1000,
       );
     }
   }, [settings, timerState]);
