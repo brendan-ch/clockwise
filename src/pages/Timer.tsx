@@ -250,12 +250,19 @@ export default function TimerPage() {
               display={calculateTimerDisplay(timeRemaining)}
               style={styles.timer}
             />
-            <PageButtonBar
+            <SelectionBar
+              selected={barSelection}
+              style={styles.pageButtonBar}
+              // @ts-ignore
+              onSelect={(newSelection) => setBarSelection(newSelection)}
+              options={['focus', 'short break', 'long break']}
+            />
+            {/* <PageButtonBar
               selected={mode}
               style={styles.pageButtonBar}
               onPressFocus={() => handleStateSwitch('focus')}
               onPressBreak={() => handleStateSwitch('break')}
-            />
+            /> */}
             <ActionButtonBar
               style={styles.actionButtonBar}
               state={timerState}
