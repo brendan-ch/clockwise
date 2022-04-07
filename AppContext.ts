@@ -36,7 +36,6 @@ interface DefaultAppState {
    * Tracks the number of sessions since app open.
    */
   currentSessionNum: number,
-  setCurrentSessionNum: Dispatch<SetStateAction<number>>,
 }
 
 const defaultAppState: DefaultAppState = {
@@ -61,7 +60,6 @@ const defaultAppState: DefaultAppState = {
   selected: [],
   setSelected: () => {},
   currentSessionNum: 0,
-  setCurrentSessionNum: () => {},
 };
 
 const AppContext = React.createContext(defaultAppState);
