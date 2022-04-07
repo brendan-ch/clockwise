@@ -243,7 +243,7 @@ function TaskList({ setAtTop }: Props) {
       const { keyboardShortcutManager } = context;
       if (!keyboardShortcutManager) return () => {};
 
-      if (context.timerState === 'stopped' || context.mode === 'break') {
+      if (context.timerState === 'stopped' || context.mode !== 'focus') {
         unsubMethods.push(keyboardShortcutManager.registerEvent({
           keys: ['a'],
           action: () => handleAddTask(),
