@@ -58,6 +58,7 @@ function SelectionButton({ highlighted, text, onPress }: ButtonProps) {
           buttonStyles.text,
           {
             color: highlighted ? colors.background : colors.gray3,
+            zIndex: 1,
           },
         ]}
       >
