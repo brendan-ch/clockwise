@@ -109,7 +109,7 @@ export default function TimerPage() {
     actionBarText = `${selected.length}/${tasks.length} tasks selected.\nEst. time finish: ${
       calculateTime(timeFinish, settings[_24_HOUR_TIME] ? '24h' : '12h')
     }`;
-  } else if (mode === 'break') {
+  } else if (mode === 'break' || mode === 'longBreak') {
     actionBarText = 'Use this time to plan your next session.';
   }
 
