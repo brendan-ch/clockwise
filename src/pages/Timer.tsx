@@ -172,6 +172,11 @@ export default function TimerPage() {
           }));
 
           unsubMethods.push(keyboardShortcutManager?.registerEvent({
+            keys: ['l'],
+            action: () => handleStateSwitch('longBreak'),
+          }));
+
+          unsubMethods.push(keyboardShortcutManager?.registerEvent({
             keys: ['r'],
             action: () => stopTimer(),
           }));
