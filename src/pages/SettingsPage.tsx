@@ -277,6 +277,7 @@ function SettingsPage() {
         ListHeaderComponent={AboveContent}
         ListFooterComponent={BelowContent}
         showsVerticalScrollIndicator={false}
+        keyboardDismissMode="interactive"
       />
       <Modal
         isVisible={overlay === 'notification'}
