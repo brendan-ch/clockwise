@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+// @ts-nocheck
+
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Platform,
   SectionList, StyleSheet, View,
@@ -169,6 +171,33 @@ function SettingsPage() {
   const [overlay, setOverlay] = useState<'none' | 'notification'>('none');
   const [selected, setSelected] = useState<string | undefined>(undefined);
 
+  const listRef = useRef<SectionList>();
+
+  /**
+   * Handle automatic scrolling in the settings page.
+   * @param to
+   * @param pos
+   * @returns
+   * @todo Support multiple section indices
+   */
+  function handleAutoScroll(to: string, pos = 0) {
+    const index = settingsData.findIndex((value) => value.title === to);
+    if (index < 4) return;
+
+    listRef?.current?.scrollToLocation({
+      sectionIndex: 0,
+      itemIndex: index,
+      viewPosition: pos,
+    });
+  }
+
+  // Handle auto scrolling
+  useEffect(() => {
+    if (selected) {
+      handleAutoScroll(selected, 0.3);
+    }
+  }, [selected]);
+
   const renderHeader = ({ section }: { section: Section }) => (
     <SettingsHeader
       title={section.title}
@@ -269,6 +298,7 @@ function SettingsPage() {
       }]}
     >
       <SectionList
+        ref={listRef}
         style={styles.sectionList}
         keyExtractor={(item) => item.title!}
         sections={sections}
@@ -278,6 +308,8 @@ function SettingsPage() {
         ListFooterComponent={BelowContent}
         showsVerticalScrollIndicator={false}
         keyboardDismissMode="interactive"
+        scrollToOverflowEnabled
+        overScrollMode="auto"
       />
       <Modal
         isVisible={overlay === 'notification'}
