@@ -66,6 +66,7 @@ import ImportSettingsPane from './src/overlays/settings/ImportSettings';
 import { REGIONS_WITH_12H_TIME } from './src/Constants';
 import AppBanner from './src/components/AppBanner';
 import getTimeKey from './src/helpers/getTimeKey';
+import BackgroundSettingsPane from './src/overlays/settings/BackgroundSettings';
 
 const MIN_25 = 1500000;
 
@@ -484,7 +485,8 @@ export default function App() {
     screens: {
       Timer: '',
       Settings: 'settings',
-      'Data Management': 'data-management',
+      'Data Management': 'settings/data-management',
+      Appearance: 'settings/appearance',
     },
   };
 
@@ -774,6 +776,13 @@ export default function App() {
                 <Stack.Screen
                   name="Data Management"
                   component={ImportSettingsPane}
+                  options={{
+                    ...headerOptions,
+                  }}
+                />
+                <Stack.Screen
+                  name="Appearance"
+                  component={BackgroundSettingsPane}
                   options={{
                     ...headerOptions,
                   }}
