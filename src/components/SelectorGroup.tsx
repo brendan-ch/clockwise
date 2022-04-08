@@ -2,7 +2,7 @@ import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
 import {
-  StyleSheet, View, Animated, FlatList,
+  StyleSheet, View, Animated, FlatList, Platform,
 } from 'react-native';
 import AppContext from '../../AppContext';
 import useTheme from '../helpers/hooks/useTheme';
@@ -206,7 +206,7 @@ function SelectorGroup({
     <SettingsOption
       onChange={item.onChange}
       selected={selected === item.title}
-      onSelect={() => setSelected(item.title)}
+      onSelect={Platform.OS !== 'web' ? () => setSelected(item.title) : undefined}
       onPress={() => {
         if (item.type === 'number' && selected === item.title) {
           setSelected(undefined);

@@ -243,7 +243,7 @@ function TaskList({ setAtTop }: Props) {
       const { keyboardShortcutManager } = context;
       if (!keyboardShortcutManager) return () => {};
 
-      if (context.timerState === 'stopped' || context.mode === 'break') {
+      if (context.timerState === 'stopped' || context.mode !== 'focus') {
         unsubMethods.push(keyboardShortcutManager.registerEvent({
           keys: ['a'],
           action: () => handleAddTask(),
@@ -400,7 +400,7 @@ function TaskList({ setAtTop }: Props) {
             : () => handleExpand(expandedTask === item.id ? -1 : item.id),
           onPressRight: () => setExpandedTask(expandedTask === item.id ? -1 : item.id),
           value: expandedTask === item.id ? 'chevron-down' : 'chevron-forward',
-          onChangeText: timerStopped || context.mode === 'break' ? (text) => handleChangeTask('title', text, item.id) : undefined,
+          onChangeText: timerStopped || context.mode !== 'focus' ? (text) => handleChangeTask('title', text, item.id) : undefined,
           onInputSelect: Platform.OS !== 'web' ? () => handleAutoScroll(item.id) : undefined,
           indicator: headerIndicator,
         })}
@@ -440,14 +440,14 @@ function TaskList({ setAtTop }: Props) {
         />
       )}
       {
-      ((timerStopped || context.mode === 'break') && tasks.length === 0)
+      ((timerStopped || context.mode !== 'focus') && tasks.length === 0)
       || (!timerStopped && selectedTasks.length === 0 && context.mode === 'focus') ? (
         <Text style={[TextStyles.textRegular, {
           color: colorValues.gray2,
           marginTop: 10,
         }]}
         >
-          {timerStopped || context.mode === 'break'
+          {timerStopped || context.mode !== 'focus'
             ? 'Add some tasks to keep track of them during your session.'
             : 'No tasks to display.'}
         </Text>

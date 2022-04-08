@@ -8,7 +8,13 @@ import useSettingsData from '../../helpers/hooks/useSettingsData';
 import {
   AUTO_START_BREAK,
   AUTO_START_FOCUS,
-  BREAK_TIME_MINUTES, ENABLE_TIMER_ALERTS, ENABLE_TIMER_SOUND, FOCUS_TIME_MINUTES,
+  BREAK_TIME_MINUTES,
+  ENABLE_TIMER_ALERTS,
+  ENABLE_TIMER_SOUND,
+  FOCUS_TIME_MINUTES,
+  LONG_BREAK_ENABLED,
+  LONG_BREAK_INTERVAL,
+  LONG_BREAK_TIME_MINUTES,
 } from '../../StorageKeys';
 import { SettingsOptionProps, Section, SettingsOptionPropsStatic } from '../../types';
 import { checkNotifications, requestNotifications } from '../../helpers/notification';
@@ -24,8 +30,34 @@ const options: SettingsOptionPropsStatic[] = [
   },
   {
     type: 'number',
-    title: 'Break time (minutes)',
+    title: 'Short break time (minutes)',
     storageKey: BREAK_TIME_MINUTES,
+  },
+  {
+    type: 'number',
+    title: 'Long break time (minutes)',
+    storageKey: LONG_BREAK_TIME_MINUTES,
+  },
+  {
+    type: 'toggle',
+    title: 'Automatically start breaks',
+    storageKey: AUTO_START_BREAK,
+  },
+  {
+    type: 'toggle',
+    title: 'Automatically start sessions',
+    storageKey: AUTO_START_FOCUS,
+  },
+  {
+    type: 'toggle',
+    title: 'Automatically switch to long breaks',
+    storageKey: LONG_BREAK_ENABLED,
+  },
+  {
+    type: 'number',
+    title: 'Interval between long breaks',
+    subtitle: 'Number of sessions before switching to a long break.',
+    storageKey: LONG_BREAK_INTERVAL,
   },
   {
     type: 'toggle',
@@ -57,16 +89,6 @@ const options: SettingsOptionPropsStatic[] = [
       return false;
     },
   },
-  {
-    type: 'toggle',
-    title: 'Automatically start breaks',
-    storageKey: AUTO_START_BREAK,
-  },
-  {
-    type: 'toggle',
-    title: 'Automatically start sessions',
-    storageKey: AUTO_START_FOCUS,
-  },
 ];
 
 /**
@@ -91,11 +113,17 @@ function TimerSettingsPane() {
 
   const { settingsData, handleChange } = useSettingsData(options);
 
+  const longBreaksEnabled = settingsData[5]?.value as boolean;
   const sections: Section[] = [
     {
       title: 'Timer',
-      icon: 'timer-outline',
-      data: settingsData.slice(0, 6),
+      icon: 'hourglass-outline',
+      data: settingsData.slice(0, longBreaksEnabled ? 7 : 6),
+    },
+    {
+      title: 'Sounds and alerts',
+      icon: 'notifications-outline',
+      data: settingsData.slice(7, options.length),
     },
   ];
   const [selected, setSelected] = useState<string | undefined>(undefined);
@@ -169,6 +197,7 @@ function TimerSettingsPane() {
       sections={sections}
       renderItem={renderItem}
       renderSectionHeader={renderHeader}
+      showsVerticalScrollIndicator={false}
     />
   );
 }

@@ -9,11 +9,15 @@ import {
   ENABLE_BACKGROUND,
   ENABLE_TIMER_ALERTS,
   FOCUS_TIME_MINUTES,
+  LONG_BREAK_ENABLED,
+  LONG_BREAK_INTERVAL,
+  LONG_BREAK_TIME_MINUTES,
   _24_HOUR_TIME,
 } from './StorageKeys';
 
 type TimerState = 'running' | 'paused' | 'stopped';
 type Overlay = 'none' | 'settings' | 'command' | 'introduction';
+type TimerMode = 'focus' | 'break' | 'longBreak';
 
 type KeyboardShortcutGroup = 'timer' | 'settings' | 'input' | 'settingsPage' | 'none';
 
@@ -164,6 +168,9 @@ interface DefaultSettingsState {
   [ENABLE_TIMER_ALERTS]: boolean,
   [FOCUS_TIME_MINUTES]: number,
   [BREAK_TIME_MINUTES]: number,
+  [LONG_BREAK_ENABLED]: boolean,
+  [LONG_BREAK_INTERVAL]: number,
+  [LONG_BREAK_TIME_MINUTES]: number,
   [ENABLE_BACKGROUND]: boolean,
   [AUTO_APPEARANCE]: boolean,
   [DARK_MODE]: boolean,
@@ -194,6 +201,7 @@ interface IntroductionBlockProps {
 
 export {
   TimerState,
+  TimerMode,
   RootStackParamList,
   Overlay,
   Section,

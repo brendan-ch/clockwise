@@ -8,6 +8,14 @@
         "EXPO_APPLE_TEAM_ID": "4A9XHUS87Q"
       }
     },
+    "simulator": {
+      "extends": "base",
+      "developmentClient": true,
+      "ios": {
+        "simulator": true
+      },
+      "releaseChannel": "development"
+    },
     "development": {
       "extends": "base",
       "developmentClient": true,

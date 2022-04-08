@@ -198,6 +198,7 @@ function SettingsOption({
           selected={selected}
           onChange={onChange}
           onDeselect={onDeselect}
+          onSelect={onSelect}
           keyboardSelected={keyboardSelected}
         />
       ) : undefined}

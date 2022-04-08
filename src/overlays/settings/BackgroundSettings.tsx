@@ -13,6 +13,8 @@ import {
 } from '../../StorageKeys';
 import { SettingsOptionProps, Section, SettingsOptionPropsStatic } from '../../types';
 import useKeyboardSelect from '../../helpers/hooks/useKeyboardSelect';
+import useWindowSize from '../../helpers/hooks/useWindowSize';
+import useTheme from '../../helpers/hooks/useTheme';
 
 // Store all static option data in here
 // Make it easier to find and filter settings
@@ -44,14 +46,11 @@ const options: SettingsOptionPropsStatic[] = [
  */
 function BackgroundSettingsPane() {
   const { settingsData, handleChange } = useSettingsData(options);
+  const windowSize = useWindowSize();
+  const colors = useTheme();
 
   const autoSetTheme = settingsData[2]?.value as boolean;
   const sections: Section[] = [
-    {
-      title: 'Background',
-      icon: 'image-outline',
-      data: settingsData.slice(0, 1),
-    },
     {
       title: 'Region',
       icon: 'location-outline',
@@ -63,6 +62,14 @@ function BackgroundSettingsPane() {
       data: autoSetTheme ? settingsData.slice(2, 3) : settingsData.slice(2, 4),
     },
   ];
+  if (windowSize === 'landscape') {
+    sections.unshift({
+      title: 'Background',
+      icon: 'image-outline',
+      data: settingsData.slice(0, 1),
+    });
+  }
+
   const [selected, setSelected] = useState<string | undefined>(undefined);
 
   const {
@@ -135,6 +142,10 @@ function BackgroundSettingsPane() {
       sections={sections}
       renderItem={renderItem}
       renderSectionHeader={renderHeader}
+      style={{
+        backgroundColor: colors.background,
+        paddingHorizontal: windowSize === 'landscape' ? 0 : 10,
+      }}
     />
   );
 }

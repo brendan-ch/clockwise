@@ -6,6 +6,9 @@ import {
   ENABLE_BACKGROUND,
   ENABLE_TIMER_ALERTS,
   FOCUS_TIME_MINUTES,
+  LONG_BREAK_ENABLED,
+  LONG_BREAK_INTERVAL,
+  LONG_BREAK_TIME_MINUTES,
   _24_HOUR_TIME,
 } from './src/StorageKeys';
 import { DefaultSettingsState } from './src/types';
@@ -18,6 +21,9 @@ const defaultSettingsState: DefaultSettingsState = {
   [AUTO_APPEARANCE]: true,
   [DARK_MODE]: false,
   [_24_HOUR_TIME]: true,
+  [LONG_BREAK_ENABLED]: true,
+  [LONG_BREAK_INTERVAL]: 4,
+  [LONG_BREAK_TIME_MINUTES]: 15,
 };
 
 const SettingsContext = React.createContext(defaultSettingsState);

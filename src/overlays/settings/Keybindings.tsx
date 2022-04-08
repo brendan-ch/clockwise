@@ -21,10 +21,15 @@ const options: SettingsOptionProps[] = [
     // identifier: 'focusView',
   },
   {
-    title: 'Break mode',
+    title: 'Short break mode',
     value: 'B',
     type: 'text',
     // identifier: 'breakView',
+  },
+  {
+    title: 'Long break mode',
+    value: 'L',
+    type: 'text',
   },
   {
     title: 'Start/pause timer',
@@ -85,18 +90,17 @@ const sections: Section[] = [
   {
     title: 'Timer',
     icon: 'timer-outline',
-    data: options.slice(1, 5),
+    data: options.slice(1, 6),
   },
   {
     title: 'Task management',
     icon: 'checkbox',
-    data: options.slice(5, 11),
+    data: options.slice(6, 11),
   },
 ];
 
 /**
  * Component that lets users view the available keybindings.
- * @todo Re-enable keybindings for navigation after `useKeyboardSelect` hook is implemented
  */
 function Keybindings() {
   // Name of the storage key selected out of options

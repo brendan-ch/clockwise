@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import AppContext from '../../AppContext';
 import ActionButtonBar from '../components/ActionButtonBar';
-import PageButtonBar from '../components/PageButtonBar';
 import Timer from '../components/Timer';
 import calculateTimerDisplay from '../helpers/calculateTimer';
 import useTheme from '../helpers/hooks/useTheme';
@@ -26,13 +25,19 @@ import TaskContext from '../../TaskContext';
 import useTimeUpdates from '../helpers/hooks/useTimeUpdates';
 import calculateTime from '../helpers/calculateTime';
 import SettingsContext from '../../SettingsContext';
-import { BREAK_TIME_MINUTES, FOCUS_TIME_MINUTES, _24_HOUR_TIME } from '../StorageKeys';
+import {
+  BREAK_TIME_MINUTES, FOCUS_TIME_MINUTES, _24_HOUR_TIME,
+} from '../StorageKeys';
+import SelectionBar from '../components/SelectionBar';
 
 /**
  * Component that displays information about the timer.
  * @returns
  */
 export default function TimerPage() {
+  // Depending on selection, update timer state
+  const [barSelection, setBarSelection] = useState<'focus' | 'short break' | 'long break'>('focus');
+
   const [isAtTop, setAtTop] = useState(true);
   const colorValues = useTheme();
   const isLightMode = colorValues.primary === ColorValues.primary;
@@ -59,6 +64,7 @@ export default function TimerPage() {
     pauseTimer,
     setPageTitle,
     timerBackgrounded,
+    currentSessionNum,
   } = useContext(AppContext);
 
   const settings = useContext(SettingsContext);
@@ -74,6 +80,22 @@ export default function TimerPage() {
       duration: 600,
       useNativeDriver: true,
     }).start();
+  }
+
+  /**
+   * Handle selection of a timer option.
+   * @param selection
+   */
+  function handleSelect(selection: 'focus' | 'short break' | 'long break') {
+    if (selection === 'short break') {
+      handleStateSwitch('break');
+    } else if (selection === 'long break') {
+      handleStateSwitch('longBreak');
+    } else {
+      handleStateSwitch('focus');
+    }
+
+    setBarSelection(selection);
   }
 
   // Calculate finish time, based on provide est. sessions data
@@ -101,10 +123,10 @@ export default function TimerPage() {
   ) {
     actionBarText = `Select some tasks ${size === 'portrait' ? 'above' : 'on the right'} to work on during your session.`;
   } else if (mode === 'focus' && timerState === 'stopped') {
-    actionBarText = `${selected.length}/${tasks.length} tasks selected.\nEst. time finish: ${
+    actionBarText = `Session #${currentSessionNum} — ${selected.length}/${tasks.length} tasks selected\nEst. time finish: ${
       calculateTime(timeFinish, settings[_24_HOUR_TIME] ? '24h' : '12h')
     }`;
-  } else if (mode === 'break') {
+  } else if (mode === 'break' || mode === 'longBreak') {
     actionBarText = 'Use this time to plan your next session.';
   }
 
@@ -114,6 +136,16 @@ export default function TimerPage() {
 
   useEffect(() => {
     setPageTitle(mode === 'focus' ? 'Focus' : 'Break');
+
+    if (mode === 'longBreak') {
+      // If long break
+      // Set selection bar state
+      setBarSelection('long break');
+    } else if (mode === 'break') {
+      setBarSelection('short break');
+    } else {
+      setBarSelection('focus');
+    }
   }, [mode]);
 
   useEffect(() => {
@@ -143,6 +175,11 @@ export default function TimerPage() {
           unsubMethods.push(keyboardShortcutManager?.registerEvent({
             keys: ['b'],
             action: () => handleStateSwitch('break'),
+          }));
+
+          unsubMethods.push(keyboardShortcutManager?.registerEvent({
+            keys: ['l'],
+            action: () => handleStateSwitch('longBreak'),
           }));
 
           unsubMethods.push(keyboardShortcutManager?.registerEvent({
@@ -191,12 +228,19 @@ export default function TimerPage() {
           display={calculateTimerDisplay(timeRemaining)}
           style={styles.timer}
         />
-        <PageButtonBar
+        <SelectionBar
+          style={styles.pageButtonBar}
+          selected={barSelection}
+          // @ts-ignore
+          onSelect={(newSelection) => handleSelect(newSelection)}
+          options={['focus', 'short break', 'long break']}
+        />
+        {/* <PageButtonBar
           selected={mode}
           style={styles.pageButtonBar}
           onPressFocus={() => handleStateSwitch('focus')}
           onPressBreak={() => handleStateSwitch('break')}
-        />
+        /> */}
         <ActionButtonBar
           style={styles.actionButtonBar}
           state={timerState}
@@ -223,12 +267,19 @@ export default function TimerPage() {
               display={calculateTimerDisplay(timeRemaining)}
               style={styles.timer}
             />
-            <PageButtonBar
+            <SelectionBar
+              selected={barSelection}
+              style={styles.pageButtonBar}
+              // @ts-ignore
+              onSelect={(newSelection) => handleSelect(newSelection)}
+              options={['focus', 'short break', 'long break']}
+            />
+            {/* <PageButtonBar
               selected={mode}
               style={styles.pageButtonBar}
               onPressFocus={() => handleStateSwitch('focus')}
               onPressBreak={() => handleStateSwitch('break')}
-            />
+            /> */}
             <ActionButtonBar
               style={styles.actionButtonBar}
               state={timerState}
@@ -290,12 +341,19 @@ export default function TimerPage() {
             display={calculateTimerDisplay(timeRemaining)}
             style={styles.timer}
           />
-          <PageButtonBar
+          <SelectionBar
+            selected={barSelection}
+            style={styles.pageButtonBar}
+            // @ts-ignore
+            onSelect={(newSelection) => handleSelect(newSelection)}
+            options={['focus', 'short break', 'long break']}
+          />
+          {/* <PageButtonBar
             selected={mode}
             style={styles.pageButtonBar}
             onPressFocus={() => handleStateSwitch('focus')}
             onPressBreak={() => handleStateSwitch('break')}
-          />
+          /> */}
         </View>
         <View style={styles.middleContainer}>
           <TaskList

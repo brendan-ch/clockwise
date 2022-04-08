@@ -22,7 +22,7 @@ import AppContext from './AppContext';
 import KeyboardShortcutManager from './src/helpers/keyboardShortcutManager';
 import TimerPage from './src/pages/Timer';
 import {
-  DefaultSettingsState, ImageInfo, KeyboardShortcutGroup, Overlay, TimerState,
+  DefaultSettingsState, ImageInfo, KeyboardShortcutGroup, Overlay, TimerMode, TimerState,
 } from './src/types';
 import SettingsPage from './src/pages/SettingsPage';
 import TextStyles from './src/styles/Text';
@@ -47,6 +47,9 @@ import {
   ENABLE_TIMER_ALERTS,
   ENABLE_TIMER_SOUND,
   FOCUS_TIME_MINUTES,
+  LONG_BREAK_ENABLED,
+  LONG_BREAK_INTERVAL,
+  LONG_BREAK_TIME_MINUTES,
   SUPPRESS_INTRODUCTION,
   _24_HOUR_TIME,
 } from './src/StorageKeys';
@@ -62,6 +65,8 @@ import RedirectPage from './src/pages/RedirectPage';
 import ImportSettingsPane from './src/overlays/settings/ImportSettings';
 import { REGIONS_WITH_12H_TIME } from './src/Constants';
 import AppBanner from './src/components/AppBanner';
+import getTimeKey from './src/helpers/getTimeKey';
+import BackgroundSettingsPane from './src/overlays/settings/BackgroundSettings';
 
 const MIN_25 = 1500000;
 
@@ -87,7 +92,11 @@ export default function App() {
   const [timerState, setTimerState] = useState<TimerState>('stopped');
   const [timeout, setTimeoutState] = useState<any>(undefined);
   const [overlay, setOverlayState] = useState<Overlay>('none');
-  const [mode, setMode] = useState<'focus' | 'break'>('focus');
+  const [mode, setMode] = useState<TimerMode>('focus');
+
+  // The current session number
+  // Used to determine whether to switch to long break or short break
+  const [currentSessionNum, setCurrentSessionNum] = useState(1);
 
   const [keyboardGroup, setKeyboardGroup] = useState<KeyboardShortcutGroup>('none');
 
@@ -106,6 +115,9 @@ export default function App() {
     [ENABLE_TIMER_ALERTS]: false,
     [FOCUS_TIME_MINUTES]: 25,
     [BREAK_TIME_MINUTES]: 5,
+    [LONG_BREAK_ENABLED]: true,
+    [LONG_BREAK_TIME_MINUTES]: 15,
+    [LONG_BREAK_INTERVAL]: 4,
     [ENABLE_BACKGROUND]: false,
     [AUTO_APPEARANCE]: true,
     [DARK_MODE]: false,
@@ -170,12 +182,15 @@ export default function App() {
   /**
    * Handle automatic timer starting.
    * @param newMode
+   * @param isLongBreak
    */
-  function handleAutoStart(newMode: 'focus' | 'break') {
+  function handleAutoStart(newMode: TimerMode) {
     // Change the mode
     setMode(newMode);
     // Change the time remaining
-    const newTimeRemaining = settings[newMode === 'focus' ? FOCUS_TIME_MINUTES : BREAK_TIME_MINUTES] * 60 * 1000;
+    const timeKey = getTimeKey(newMode);
+    // @ts-ignore
+    const newTimeRemaining = settings[timeKey] * 60 * 1000;
     setTimeRemaining(newTimeRemaining);
     // Clear the existing interval
     clearTimerInterval(timeout);
@@ -191,8 +206,10 @@ export default function App() {
 
   /**
    * Handle switching between break and focus modes.
+   * @param newMode
+   * @param isLongBreak
    */
-  function handleStateSwitch(newMode: 'focus' | 'break') {
+  function handleStateSwitch(newMode: TimerMode) {
     clearTimerInterval(timeout);
     setTimerState('stopped');
     setMode(newMode);
@@ -205,9 +222,12 @@ export default function App() {
   /**
    * Set the time remaining based on AsyncStorage value.
    * @param mode
+   * @param isLongBreak
    */
-  function getAndSetTimerValue(newMode: 'focus' | 'break') {
-    const timerValueMinutes = newMode === 'focus' ? settings[FOCUS_TIME_MINUTES] : settings[BREAK_TIME_MINUTES];
+  function getAndSetTimerValue(newMode: TimerMode) {
+    const timeKey = getTimeKey(newMode);
+    // @ts-ignore
+    const timerValueMinutes = settings[timeKey];
     setTimeRemaining(timerValueMinutes * 60 * 1000);
   }
 
@@ -341,16 +361,31 @@ export default function App() {
       // Update actual sessions of selected tasks
       if (mode === 'focus') {
         bumpActualPomodoros();
+      } else {
+        // Bump number of total sessions
+        setCurrentSessionNum(currentSessionNum + 1);
       }
 
       // Call function depending on whether auto start is enabled
       getData(mode === 'focus' ? AUTO_START_BREAK : AUTO_START_FOCUS)
         .then((value) => {
+          // Check if long breaks enabled
+          const switchLongBreak = settings[LONG_BREAK_ENABLED]
+            && currentSessionNum % settings[LONG_BREAK_INTERVAL] === 0;
+          let newMode: TimerMode = 'focus';
+          if (switchLongBreak && mode === 'focus') {
+            newMode = 'longBreak';
+          } else if (mode === 'focus') {
+            newMode = 'break';
+          }
+
           if (value === '1') {
-            handleAutoStart(mode === 'focus' ? 'break' : 'focus');
+            handleAutoStart(
+              newMode,
+            );
           } else {
             // Clear interval and set new state
-            handleStateSwitch(mode === 'focus' ? 'break' : 'focus');
+            handleStateSwitch(newMode);
           }
         });
 
@@ -399,11 +434,14 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    const timeKey = getTimeKey(mode);
+
     // Change timer display if timer is stopped
     // and timer setting changes
     if (timerState === 'stopped') {
       setTimeRemaining(
-        settings[mode === 'focus' ? FOCUS_TIME_MINUTES : BREAK_TIME_MINUTES] * 60 * 1000,
+        // @ts-ignore
+        settings[timeKey] * 60 * 1000,
       );
     }
   }, [settings, timerState]);
@@ -447,7 +485,8 @@ export default function App() {
     screens: {
       Timer: '',
       Settings: 'settings',
-      'Data Management': 'data-management',
+      'Data Management': 'settings/data-management',
+      Appearance: 'settings/appearance',
     },
   };
 
@@ -528,6 +567,8 @@ export default function App() {
         setTimerBackgrounded,
         selected,
         setSelected,
+        currentSessionNum,
+        setCurrentSessionNum,
       }}
       >
         <ImageBackground
@@ -670,6 +711,8 @@ export default function App() {
       setTimerBackgrounded,
       selected,
       setSelected,
+      currentSessionNum,
+      setCurrentSessionNum,
     }}
     >
       <SettingsContext.Provider value={{
@@ -735,6 +778,13 @@ export default function App() {
                 <Stack.Screen
                   name="Data Management"
                   component={ImportSettingsPane}
+                  options={{
+                    ...headerOptions,
+                  }}
+                />
+                <Stack.Screen
+                  name="Appearance"
+                  component={BackgroundSettingsPane}
                   options={{
                     ...headerOptions,
                   }}
