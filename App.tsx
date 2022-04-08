@@ -568,6 +568,7 @@ export default function App() {
         selected,
         setSelected,
         currentSessionNum,
+        setCurrentSessionNum,
       }}
       >
         <ImageBackground
@@ -711,6 +712,7 @@ export default function App() {
       selected,
       setSelected,
       currentSessionNum,
+      setCurrentSessionNum,
     }}
     >
       <SettingsContext.Provider value={{
