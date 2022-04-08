@@ -1,4 +1,6 @@
-import React, { useContext, useEffect } from 'react';
+// @ts-nocheck
+
+import React, { useContext, useEffect, useRef } from 'react';
 import { SectionList } from 'react-native';
 import AppContext from '../../../AppContext';
 // import AppContext from '../../../AppContext';
@@ -120,6 +122,41 @@ function Keybindings() {
     'title',
   );
 
+  const listRef = useRef<SectionList>();
+
+  /**
+   * Handle automatic scrolling for keyboard selections.
+   * @param to
+   */
+  function handleAutoScroll(to: string, pos = 0) {
+    // Search through sections to find the correct indices
+    let sectionIndex = -1;
+    let itemIndex = -1;
+
+    sections.forEach((section, sIndex) => {
+      section.data.forEach((item, iIndex) => {
+        if (item.title === to) {
+          sectionIndex = sIndex;
+          itemIndex = iIndex;
+        }
+      });
+    });
+
+    if (sectionIndex < 0 || itemIndex < 0) {
+      return;
+    }
+
+    listRef?.current?.scrollToLocation({
+      sectionIndex,
+      itemIndex,
+      viewPosition: pos,
+    });
+  }
+
+  useEffect(() => {
+    handleAutoScroll(keyboardSelected, 0.5);
+  }, [keyboardSelected]);
+
   useEffect(() => {
     if (keyboardGroup === 'settingsPage' && !keyboardSelected) {
       setKeyboardSelected(options[0].title);
@@ -139,6 +176,7 @@ function Keybindings() {
 
   return (
     <SectionList
+      ref={listRef}
       showsVerticalScrollIndicator={false}
       keyExtractor={(item) => item.title!}
       sections={sections}
