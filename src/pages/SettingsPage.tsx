@@ -157,7 +157,7 @@ function SettingsPage() {
     {
       title: 'Timer',
       icon: 'timer-outline',
-      data: settingsData.slice(0, settingsData[5].value as boolean ? 7 : 6),
+      data: settingsData.slice(0, settingsData[5]?.value ? 7 : 6),
     },
     {
       title: 'Sounds and alerts',
