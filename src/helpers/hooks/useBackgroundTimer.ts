@@ -4,7 +4,7 @@ import {
 import { AppState, Platform } from 'react-native';
 import AppContext from '../../../AppContext';
 import {
-  MODE, SELECTED, START, TIMER_LENGTH,
+  MODE, SELECTED, SESSION_NUM, START, TIMER_LENGTH,
 } from '../../StorageKeys';
 import { getData, removeData, storeData } from '../storage';
 /**
@@ -53,6 +53,7 @@ function useBackgroundTimer() {
     storeData(TIMER_LENGTH, `${timerLength}`);
     storeData(MODE, context.mode);
     storeData(SELECTED, JSON.stringify(context.selected));
+    storeData(SESSION_NUM, `${context.currentSessionNum}`);
 
     // Pause the timer
     context.pauseTimer();
@@ -68,8 +69,9 @@ function useBackgroundTimer() {
     const newTimerLengthRaw = await getData(TIMER_LENGTH);
     const mode = await getData(MODE);
     const selectedRaw = await getData(SELECTED);
+    const sessionNum = await getData(SESSION_NUM);
 
-    if (!newStartRaw || !newTimerLengthRaw || !mode || !selectedRaw) return;
+    if (!newStartRaw || !newTimerLengthRaw || !mode || !selectedRaw || !sessionNum) return;
     if (!(mode === 'focus' || mode === 'break' || mode === 'longBreak')) {
       return;
     }
@@ -78,10 +80,12 @@ function useBackgroundTimer() {
     const newTimerLength = Number(newTimerLengthRaw);
     const newTimeRemaining = (newStart + newTimerLength) - Date.now();
     const selected = JSON.parse(selectedRaw);
+    const newSessionNum = Number(sessionNum);
 
     context.startTimer(newTimeRemaining);
     context.setMode(mode);
     context.setSelected(selected);
+    context.setCurrentSessionNum(newSessionNum);
   }
 
   /**
@@ -92,6 +96,7 @@ function useBackgroundTimer() {
     await removeData(TIMER_LENGTH);
     await removeData(MODE);
     await removeData(SELECTED);
+    await removeData(SESSION_NUM);
   }
 
   useEffect(() => {
