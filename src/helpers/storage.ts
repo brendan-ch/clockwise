@@ -81,7 +81,7 @@ async function prefillSettings() {
   const defaultSettings = {
     [BREAK_TIME_MINUTES]: '5',
     [FOCUS_TIME_MINUTES]: '25',
-    [LONG_BREAK_TIME_MINUTES]: '25',
+    [LONG_BREAK_TIME_MINUTES]: '15',
     [LONG_BREAK_ENABLED]: '1',
     [LONG_BREAK_INTERVAL]: '4',
     [ENABLE_BACKGROUND]: '1',
