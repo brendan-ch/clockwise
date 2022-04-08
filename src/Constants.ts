@@ -23,6 +23,10 @@ export const REGIONS_WITH_12H_TIME = [
   'US',
 ];
 
+// Version and revision numbers
+// Increment revision number on publish to Expo/web
+export const RELEASE_CODE = 'v1.4.0-1';
+
 // This is added to export files to indicate compatibility with future versions
 // Export files from previous versions should always be compatible with new ones,
 // but files generated from newer versions can break compatibility with previous
