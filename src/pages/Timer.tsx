@@ -65,6 +65,7 @@ export default function TimerPage() {
     setPageTitle,
     timerBackgrounded,
     currentSessionNum,
+    setTimeRemaining,
   } = useContext(AppContext);
 
   const settings = useContext(SettingsContext);
@@ -248,6 +249,9 @@ export default function TimerPage() {
           onPausePress={() => pauseTimer()}
           onResetPress={() => stopTimer()}
           onResumePress={() => startTimer()}
+          onSkipPress={() => {
+            setTimeRemaining(-1);
+          }}
           // Disable button press if timer backgrounded
         />
       </View>
@@ -288,6 +292,9 @@ export default function TimerPage() {
               onResetPress={() => stopTimer()}
               onResumePress={() => startTimer()}
               text={actionBarText}
+              onSkipPress={() => {
+                setTimeRemaining(-1);
+              }}
             />
           </View>
         </View>
@@ -375,6 +382,9 @@ export default function TimerPage() {
             onResumePress={() => startTimer()}
             text={actionBarText}
             disabled={timerBackgrounded}
+            onSkipPress={() => {
+              setTimeRemaining(-1);
+            }}
           />
         </View>
       ) : undefined}
