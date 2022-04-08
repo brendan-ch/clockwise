@@ -189,6 +189,13 @@ export default function TimerPage() {
             action: () => stopTimer(),
           }));
 
+          if (timerState === 'running') {
+            unsubMethods.push(keyboardShortcutManager?.registerEvent({
+              keys: ['s'],
+              action: () => handleFastForward(),
+            }));
+          }
+
           return () => {
             unsubMethods.forEach((method) => {
               if (method) {
