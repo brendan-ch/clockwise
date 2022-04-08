@@ -18,11 +18,11 @@ import handleHaptic from '../helpers/handleHaptic';
 interface Props {
   style?: StyleProp<ViewStyle>,
   onPress?: () => any,
-  isResetButton?: boolean,
+  isIconButton?: boolean,
   /**
    * Text displayed on the button.
    */
-  text?: string,
+  value?: string,
   /**
    * Determines whether haptic feedback is enabled.
    */
@@ -44,7 +44,7 @@ interface Props {
  * @returns
  */
 function ActionButton({
-  style, onPress, text, isResetButton, haptics, background,
+  style, onPress, value, isIconButton, haptics, background,
 }: Props) {
   const colorValues = useTheme();
 
@@ -147,9 +147,10 @@ function ActionButton({
           opacity: fadeAnimation,
         }]}
         >
-          {isResetButton ? (
+          {isIconButton ? (
             <Ionicons
-              name="refresh-outline"
+              // @ts-ignore
+              name={value}
               color={colorValues.primary}
               size={30}
             />
@@ -158,15 +159,16 @@ function ActionButton({
               color: colorValues.primary,
             }]}
             >
-              {text}
+              {value}
 
             </Text>
           )}
         </Animated.View>
         {/* if not being pressed */}
-        {isResetButton ? (
+        {isIconButton ? (
           <AnimatedIonicons
-            name="refresh-outline"
+            // @ts-ignore
+            name={value}
             color={colorValues.background}
             style={{
               opacity: fadeAnimation.interpolate({
@@ -189,7 +191,7 @@ function ActionButton({
             },
           ]}
           >
-            {text}
+            {value}
           </Animated.Text>
         )}
       </Pressable>
@@ -225,8 +227,8 @@ const styles = StyleSheet.create({
 ActionButton.defaultProps = {
   style: {},
   onPress: () => {},
-  text: '',
-  isResetButton: false,
+  value: '',
+  isIconButton: false,
   haptics: false,
   background: false,
   // willUpdateBackground: false,

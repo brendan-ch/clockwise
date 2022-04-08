@@ -59,7 +59,7 @@ function ActionButtonBar({
           {state === 'stopped' || state === 'paused' ? (
             <ActionButton
               style={styles.bigActionButton}
-              text={displayText}
+              value={displayText}
               onPress={disabled ? undefined : method}
               haptics
             />
@@ -67,16 +67,18 @@ function ActionButtonBar({
           {state === 'running' ? (
             <ActionButton
               style={styles.bigActionButton}
-              text={displayText}
+              value={displayText}
               onPress={disabled ? undefined : method}
               background
             />
           ) : undefined}
-          {state === 'paused' ? (
+          {state === 'paused' || state === 'running' ? (
             <ActionButton
               style={styles.smallActionButton}
               onPress={disabled ? undefined : onResetPress}
-              isResetButton
+              isIconButton
+              value={state === 'paused' ? 'refresh-outline' : 'play-forward-outline'}
+              background={state === 'running'}
             />
           ) : undefined}
         </View>
