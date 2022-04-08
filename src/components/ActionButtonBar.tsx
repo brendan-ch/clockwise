@@ -14,6 +14,7 @@ interface Props {
   onResetPress?: () => any,
   onPausePress?: () => any,
   onResumePress?: () => any,
+  onSkipPress?: () => any,
   style?: StyleProp<ViewStyle>,
   disabled?: boolean,
 }
@@ -29,6 +30,7 @@ function ActionButtonBar({
   onResetPress,
   onPausePress,
   onResumePress,
+  onSkipPress,
   style,
   disabled,
 }: Props) {
@@ -44,6 +46,8 @@ function ActionButtonBar({
     displayText = 'resume';
     method = onResumePress;
   }
+
+  const sideButtonMethod = state === 'running' ? onSkipPress : onResetPress;
 
   return (
     <View style={[style, styles.container]}>
@@ -75,7 +79,7 @@ function ActionButtonBar({
           {state === 'paused' || state === 'running' ? (
             <ActionButton
               style={styles.smallActionButton}
-              onPress={disabled ? undefined : onResetPress}
+              onPress={disabled || !sideButtonMethod ? undefined : sideButtonMethod}
               isIconButton
               value={state === 'paused' ? 'refresh-outline' : 'play-forward-outline'}
               background={state === 'running'}
@@ -123,6 +127,7 @@ ActionButtonBar.defaultProps = {
   onResetPress: () => {},
   onPausePress: () => {},
   onResumePress: () => {},
+  onSkipPress: () => {},
   style: {},
   disabled: false,
 };
