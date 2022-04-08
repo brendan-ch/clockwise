@@ -44,6 +44,11 @@ const options: SettingsOptionProps[] = [
     // identifier: 'resetTimer',
   },
   {
+    title: 'Fast-forward to next session',
+    value: 'S',
+    type: 'text',
+  },
+  {
     title: 'Add task',
     value: 'A, +, =',
     type: 'text',
@@ -62,22 +67,22 @@ const options: SettingsOptionProps[] = [
     // identifier: 'editEstimatedSessions',
   },
   {
-    title: 'Select task',
-    value: 'S',
-    type: 'text',
-    // identifier: 'selectTask',
-  },
-  {
     title: 'Delete task',
     value: 'Backspace',
     type: 'text',
     // identifier: 'deleteTask',
   },
   {
+    title: 'Select task',
+    value: 'Cmd/Ctrl + Enter',
+    type: 'text',
+    subtitle: 'Only works when timer is stopped and in focus mode.',
+  },
+  {
     title: 'Complete task',
     value: 'Cmd/Ctrl + Enter',
     type: 'text',
-    // identifier: 'completeTask',
+    subtitle: 'Only works when timer is running and in focus mode.',
   },
 ];
 
@@ -90,12 +95,12 @@ const sections: Section[] = [
   {
     title: 'Timer',
     icon: 'timer-outline',
-    data: options.slice(1, 6),
+    data: options.slice(1, 7),
   },
   {
     title: 'Task management',
     icon: 'checkbox',
-    data: options.slice(6, 11),
+    data: options.slice(7, options.length),
   },
 ];
 
