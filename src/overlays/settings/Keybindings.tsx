@@ -101,7 +101,6 @@ const sections: Section[] = [
 
 /**
  * Component that lets users view the available keybindings.
- * @todo Re-enable keybindings for navigation after `useKeyboardSelect` hook is implemented
  */
 function Keybindings() {
   // Name of the storage key selected out of options
