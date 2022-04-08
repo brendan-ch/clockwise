@@ -40,6 +40,16 @@ const options: SettingsOptionPropsStatic[] = [
   },
   {
     type: 'toggle',
+    title: 'Automatically start breaks',
+    storageKey: AUTO_START_BREAK,
+  },
+  {
+    type: 'toggle',
+    title: 'Automatically start sessions',
+    storageKey: AUTO_START_FOCUS,
+  },
+  {
+    type: 'toggle',
     title: 'Automatically switch to long breaks',
     storageKey: LONG_BREAK_ENABLED,
   },
@@ -79,16 +89,6 @@ const options: SettingsOptionPropsStatic[] = [
       return false;
     },
   },
-  {
-    type: 'toggle',
-    title: 'Automatically start breaks',
-    storageKey: AUTO_START_BREAK,
-  },
-  {
-    type: 'toggle',
-    title: 'Automatically start sessions',
-    storageKey: AUTO_START_FOCUS,
-  },
 ];
 
 /**
@@ -113,16 +113,17 @@ function TimerSettingsPane() {
 
   const { settingsData, handleChange } = useSettingsData(options);
 
+  const longBreaksEnabled = settingsData[5]?.value as boolean;
   const sections: Section[] = [
     {
       title: 'Timer',
       icon: 'hourglass-outline',
-      data: settingsData.slice(0, 5),
+      data: settingsData.slice(0, longBreaksEnabled ? 7 : 6),
     },
     {
-      title: 'Miscellaneous',
-      icon: 'settings-outline',
-      data: settingsData.slice(5, options.length),
+      title: 'Sounds and alerts',
+      icon: 'notifications-outline',
+      data: settingsData.slice(7, options.length),
     },
   ];
   const [selected, setSelected] = useState<string | undefined>(undefined);
