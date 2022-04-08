@@ -11,15 +11,15 @@ import { checkNotifications, requestNotifications } from '../helpers/notificatio
 import useSettingsData from '../helpers/hooks/useSettingsData';
 import useTheme from '../helpers/hooks/useTheme';
 import {
-  AUTO_APPEARANCE,
   AUTO_START_BREAK,
   AUTO_START_FOCUS,
   BREAK_TIME_MINUTES,
-  DARK_MODE,
   ENABLE_TIMER_ALERTS,
   ENABLE_TIMER_SOUND,
   FOCUS_TIME_MINUTES,
-  _24_HOUR_TIME,
+  LONG_BREAK_ENABLED,
+  LONG_BREAK_INTERVAL,
+  LONG_BREAK_TIME_MINUTES,
 } from '../StorageKeys';
 import { Section, SettingsOptionProps, SettingsOptionPropsStatic } from '../types';
 import NotificationOverlay from '../components/NotificationOverlay';
@@ -39,18 +39,24 @@ const options: SettingsOptionPropsStatic[] = [
   },
   {
     type: 'number',
-    title: 'Break time (minutes)',
+    title: 'Short break time (minutes)',
     storageKey: BREAK_TIME_MINUTES,
   },
   {
-    type: 'toggle',
-    title: 'Timer sound',
-    storageKey: ENABLE_TIMER_SOUND,
+    type: 'number',
+    title: 'Long break time (minutes)',
+    storageKey: LONG_BREAK_TIME_MINUTES,
   },
   {
     type: 'toggle',
-    title: 'Timer alerts',
-    storageKey: ENABLE_TIMER_ALERTS,
+    title: 'Automatically switch to long breaks',
+    storageKey: LONG_BREAK_ENABLED,
+  },
+  {
+    type: 'number',
+    title: 'Interval between long breaks',
+    subtitle: 'Number of sessions before switching to a long break.',
+    storageKey: LONG_BREAK_INTERVAL,
   },
   {
     type: 'toggle',
@@ -64,25 +70,30 @@ const options: SettingsOptionPropsStatic[] = [
   },
   {
     type: 'toggle',
-    title: '24-hour time',
-    storageKey: _24_HOUR_TIME,
+    title: 'Timer sound',
+    storageKey: ENABLE_TIMER_SOUND,
   },
   {
     type: 'toggle',
-    title: 'Automatically set theme',
-    storageKey: AUTO_APPEARANCE,
+    title: 'Timer alerts',
+    storageKey: ENABLE_TIMER_ALERTS,
   },
-  {
-    type: 'toggle',
-    title: 'Enable dark mode',
-    storageKey: DARK_MODE,
-  },
+  // {
+  //   type: 'toggle',
+  //   title: '24-hour time',
+  //   storageKey: _24_HOUR_TIME,
+  // },
+  // {
+  //   type: 'toggle',
+  //   title: 'Automatically set theme',
+  //   storageKey: AUTO_APPEARANCE,
+  // },
+  // {
+  //   type: 'toggle',
+  //   title: 'Enable dark mode',
+  //   storageKey: DARK_MODE,
+  // },
 ];
-
-// Remove timer alerts
-if (Platform.OS === 'web') {
-  options.splice(3, 1);
-}
 
 /**
  * Component containing content for the settings page for mobile.
@@ -96,6 +107,15 @@ function SettingsPage() {
   const navigation = useNavigation();
 
   const pages: SettingsOptionProps[] = [
+    {
+      type: 'icon',
+      title: 'Appearance',
+      onPress: () => {
+        // @ts-ignore
+        navigation.navigate('Appearance');
+      },
+      value: 'chevron-forward-outline',
+    },
     {
       type: 'icon',
       title: 'Data Management',
@@ -148,25 +168,16 @@ function SettingsPage() {
   // Sync options with storage
   const { settingsData, handleChange } = useSettingsData(options);
 
-  const subtractCount = Platform.OS === 'web' ? 1 : 0;
-  const autoSetTheme = settingsData[7 - subtractCount]?.value as boolean;
   const sections: Section[] = [
     {
       title: 'Timer',
       icon: 'timer-outline',
-      data: Platform.OS === 'web' ? settingsData.slice(0, 5) : settingsData.slice(0, 6),
+      data: settingsData.slice(0, 7),
     },
     {
-      title: 'Region',
-      icon: 'location-outline',
-      data: Platform.OS === 'web' ? settingsData.slice(5, 6) : settingsData.slice(6, 7),
-    },
-    {
-      title: 'Theme',
-      icon: 'moon-outline',
-      data: autoSetTheme
-        ? settingsData.slice(7 - subtractCount, 8 - subtractCount)
-        : settingsData.slice(7 - subtractCount, 9 - subtractCount),
+      title: 'Sounds and alerts',
+      icon: 'notifications-outline',
+      data: settingsData.slice(7, settingsData.length - (Platform.OS === 'web' ? 1 : 0)),
     },
   ];
   // Overlay to display
