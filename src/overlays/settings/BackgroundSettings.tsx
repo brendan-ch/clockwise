@@ -14,6 +14,7 @@ import {
 import { SettingsOptionProps, Section, SettingsOptionPropsStatic } from '../../types';
 import useKeyboardSelect from '../../helpers/hooks/useKeyboardSelect';
 import useWindowSize from '../../helpers/hooks/useWindowSize';
+import useTheme from '../../helpers/hooks/useTheme';
 
 // Store all static option data in here
 // Make it easier to find and filter settings
@@ -46,6 +47,7 @@ const options: SettingsOptionPropsStatic[] = [
 function BackgroundSettingsPane() {
   const { settingsData, handleChange } = useSettingsData(options);
   const windowSize = useWindowSize();
+  const colors = useTheme();
 
   const autoSetTheme = settingsData[2]?.value as boolean;
   const sections: Section[] = [
@@ -140,6 +142,10 @@ function BackgroundSettingsPane() {
       sections={sections}
       renderItem={renderItem}
       renderSectionHeader={renderHeader}
+      style={{
+        backgroundColor: colors.background,
+        paddingHorizontal: windowSize === 'landscape' ? 0 : 10,
+      }}
     />
   );
 }
