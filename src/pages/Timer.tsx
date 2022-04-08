@@ -29,6 +29,7 @@ import {
   BREAK_TIME_MINUTES, FOCUS_TIME_MINUTES, _24_HOUR_TIME,
 } from '../StorageKeys';
 import SelectionBar from '../components/SelectionBar';
+import handleHaptic from '../helpers/handleHaptic';
 
 /**
  * Component that displays information about the timer.
@@ -216,6 +217,15 @@ export default function TimerPage() {
     }
   }
 
+  /**
+   * Handle pressing of the fast forward button.
+   */
+  function handleFastForward() {
+    // Haptic feedback
+    handleHaptic('impact');
+    setTimeRemaining(-1);
+  }
+
   // Set breakpoints
   // Small window view
   if (size === 'small') {
@@ -249,9 +259,7 @@ export default function TimerPage() {
           onPausePress={() => pauseTimer()}
           onResetPress={() => stopTimer()}
           onResumePress={() => startTimer()}
-          onSkipPress={() => {
-            setTimeRemaining(-1);
-          }}
+          onSkipPress={() => handleFastForward()}
           // Disable button press if timer backgrounded
         />
       </View>
@@ -292,9 +300,7 @@ export default function TimerPage() {
               onResetPress={() => stopTimer()}
               onResumePress={() => startTimer()}
               text={actionBarText}
-              onSkipPress={() => {
-                setTimeRemaining(-1);
-              }}
+              onSkipPress={() => handleFastForward()}
             />
           </View>
         </View>
@@ -382,9 +388,7 @@ export default function TimerPage() {
             onResumePress={() => startTimer()}
             text={actionBarText}
             disabled={timerBackgrounded}
-            onSkipPress={() => {
-              setTimeRemaining(-1);
-            }}
+            onSkipPress={() => handleFastForward()}
           />
         </View>
       ) : undefined}
