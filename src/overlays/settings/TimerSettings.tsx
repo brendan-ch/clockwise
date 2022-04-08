@@ -1,4 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+// @ts-nocheck
+
+import React, {
+  useContext, useEffect, useRef, useState,
+} from 'react';
 import { Platform, SectionList } from 'react-native';
 import AppContext from '../../../AppContext';
 import renderHeader from '../../helpers/renderers/renderHeader';
@@ -151,6 +155,44 @@ function TimerSettingsPane() {
     setSelected(key);
   }
 
+  const listRef = useRef<SectionList>();
+
+  /**
+   * Handle automatic scrolling for keyboard selections.
+   * @param to
+   * @param pos
+   */
+  function handleAutoScroll(to: string, pos = 0) {
+    // Search through sections to find the correct indices
+    let sectionIndex = -1;
+    let itemIndex = -1;
+
+    sections.forEach((section, sIndex) => {
+      section.data.forEach((item, iIndex) => {
+        if (item.title === to) {
+          sectionIndex = sIndex;
+          itemIndex = iIndex;
+        }
+      });
+    });
+
+    if (sectionIndex < 0 || itemIndex < 0) {
+      return;
+    }
+
+    listRef?.current?.scrollToLocation({
+      sectionIndex,
+      itemIndex,
+      viewPosition: pos,
+    });
+  }
+
+  useEffect(() => {
+    if (keyboardSelected) {
+      handleAutoScroll(keyboardSelected, 0.5);
+    }
+  }, [keyboardSelected]);
+
   useEffect(() => {
     if (keyboardGroup === 'settingsPage' && !keyboardSelected) {
       setKeyboardSelected(options[0].title);
@@ -193,6 +235,7 @@ function TimerSettingsPane() {
 
   return (
     <SectionList
+      ref={listRef}
       keyExtractor={(item) => item.title!}
       sections={sections}
       renderItem={renderItem}
