@@ -81,6 +81,22 @@ export default function TimerPage() {
     }).start();
   }
 
+  /**
+   * Handle selection of a timer option.
+   * @param selection
+   */
+  function handleSelect(selection: 'focus' | 'short break' | 'long break') {
+    if (selection === 'short break') {
+      handleStateSwitch('break');
+    } else if (selection === 'long break') {
+      handleStateSwitch('longBreak');
+    } else {
+      handleStateSwitch('focus');
+    }
+
+    setBarSelection(selection);
+  }
+
   // Calculate finish time, based on provide est. sessions data
   // Get the task w/ the longest number of sessions
   let max = 0;
@@ -116,17 +132,6 @@ export default function TimerPage() {
   useBackgroundTimer();
   useTimerNotification();
   useUnsavedChanges();
-
-  useEffect(() => {
-    // Update mode based on bar selection
-    if (barSelection === 'long break') {
-      handleStateSwitch('longBreak');
-    } else if (barSelection === 'short break') {
-      handleStateSwitch('break');
-    } else {
-      handleStateSwitch('focus');
-    }
-  }, [barSelection]);
 
   useEffect(() => {
     setPageTitle(mode === 'focus' ? 'Focus' : 'Break');
@@ -226,7 +231,7 @@ export default function TimerPage() {
           style={styles.pageButtonBar}
           selected={barSelection}
           // @ts-ignore
-          onSelect={(newSelection) => setBarSelection(newSelection)}
+          onSelect={(newSelection) => handleSelect(newSelection)}
           options={['focus', 'short break', 'long break']}
         />
         {/* <PageButtonBar
@@ -265,7 +270,7 @@ export default function TimerPage() {
               selected={barSelection}
               style={styles.pageButtonBar}
               // @ts-ignore
-              onSelect={(newSelection) => setBarSelection(newSelection)}
+              onSelect={(newSelection) => handleSelect(newSelection)}
               options={['focus', 'short break', 'long break']}
             />
             {/* <PageButtonBar
@@ -339,7 +344,7 @@ export default function TimerPage() {
             selected={barSelection}
             style={styles.pageButtonBar}
             // @ts-ignore
-            onSelect={(newSelection) => setBarSelection(newSelection)}
+            onSelect={(newSelection) => handleSelect(newSelection)}
             options={['focus', 'short break', 'long break']}
           />
           {/* <PageButtonBar
