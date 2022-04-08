@@ -370,7 +370,7 @@ export default function App() {
         .then((value) => {
           // Check if long breaks enabled
           const switchLongBreak = settings[LONG_BREAK_ENABLED]
-            && settings[LONG_BREAK_INTERVAL] % currentSessionNum === 0;
+            && currentSessionNum % settings[LONG_BREAK_INTERVAL] === 0;
           let newMode: TimerMode = 'focus';
           if (switchLongBreak && mode === 'focus') {
             newMode = 'longBreak';
