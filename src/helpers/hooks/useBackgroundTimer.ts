@@ -70,6 +70,9 @@ function useBackgroundTimer() {
     const selectedRaw = await getData(SELECTED);
 
     if (!newStartRaw || !newTimerLengthRaw || !mode || !selectedRaw) return;
+    if (!(mode === 'focus' || mode === 'break' || mode === 'longBreak')) {
+      return;
+    }
 
     const newStart = Number(newStartRaw);
     const newTimerLength = Number(newTimerLengthRaw);
@@ -77,7 +80,7 @@ function useBackgroundTimer() {
     const selected = JSON.parse(selectedRaw);
 
     context.startTimer(newTimeRemaining);
-    context.setMode(mode === 'focus' ? 'focus' : 'break');
+    context.setMode(mode);
     context.setSelected(selected);
   }
 
