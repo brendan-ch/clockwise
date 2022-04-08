@@ -49,6 +49,16 @@ const options: SettingsOptionPropsStatic[] = [
   },
   {
     type: 'toggle',
+    title: 'Automatically start breaks',
+    storageKey: AUTO_START_BREAK,
+  },
+  {
+    type: 'toggle',
+    title: 'Automatically start sessions',
+    storageKey: AUTO_START_FOCUS,
+  },
+  {
+    type: 'toggle',
     title: 'Automatically switch to long breaks',
     storageKey: LONG_BREAK_ENABLED,
   },
@@ -60,16 +70,6 @@ const options: SettingsOptionPropsStatic[] = [
   },
   {
     type: 'toggle',
-    title: 'Automatically start breaks',
-    storageKey: AUTO_START_BREAK,
-  },
-  {
-    type: 'toggle',
-    title: 'Automatically start sessions',
-    storageKey: AUTO_START_FOCUS,
-  },
-  {
-    type: 'toggle',
     title: 'Timer sound',
     storageKey: ENABLE_TIMER_SOUND,
   },
@@ -78,21 +78,6 @@ const options: SettingsOptionPropsStatic[] = [
     title: 'Timer alerts',
     storageKey: ENABLE_TIMER_ALERTS,
   },
-  // {
-  //   type: 'toggle',
-  //   title: '24-hour time',
-  //   storageKey: _24_HOUR_TIME,
-  // },
-  // {
-  //   type: 'toggle',
-  //   title: 'Automatically set theme',
-  //   storageKey: AUTO_APPEARANCE,
-  // },
-  // {
-  //   type: 'toggle',
-  //   title: 'Enable dark mode',
-  //   storageKey: DARK_MODE,
-  // },
 ];
 
 /**
@@ -172,7 +157,7 @@ function SettingsPage() {
     {
       title: 'Timer',
       icon: 'timer-outline',
-      data: settingsData.slice(0, 7),
+      data: settingsData.slice(0, settingsData[5].value as boolean ? 7 : 6),
     },
     {
       title: 'Sounds and alerts',
