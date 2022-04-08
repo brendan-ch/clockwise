@@ -14,6 +14,7 @@ interface Props {
   onResetPress?: () => any,
   onPausePress?: () => any,
   onResumePress?: () => any,
+  onSkipPress?: () => any,
   style?: StyleProp<ViewStyle>,
   disabled?: boolean,
 }
@@ -29,6 +30,7 @@ function ActionButtonBar({
   onResetPress,
   onPausePress,
   onResumePress,
+  onSkipPress,
   style,
   disabled,
 }: Props) {
@@ -45,6 +47,8 @@ function ActionButtonBar({
     method = onResumePress;
   }
 
+  const sideButtonMethod = state === 'running' ? onSkipPress : onResetPress;
+
   return (
     <View style={[style, styles.container]}>
       <Text style={[TextStyles.textItalic, styles.text, {
@@ -59,7 +63,7 @@ function ActionButtonBar({
           {state === 'stopped' || state === 'paused' ? (
             <ActionButton
               style={styles.bigActionButton}
-              text={displayText}
+              value={displayText}
               onPress={disabled ? undefined : method}
               haptics
             />
@@ -67,16 +71,18 @@ function ActionButtonBar({
           {state === 'running' ? (
             <ActionButton
               style={styles.bigActionButton}
-              text={displayText}
+              value={displayText}
               onPress={disabled ? undefined : method}
               background
             />
           ) : undefined}
-          {state === 'paused' ? (
+          {state === 'paused' || state === 'running' ? (
             <ActionButton
               style={styles.smallActionButton}
-              onPress={disabled ? undefined : onResetPress}
-              isResetButton
+              onPress={disabled || !sideButtonMethod ? undefined : sideButtonMethod}
+              isIconButton
+              value={state === 'paused' ? 'refresh-outline' : 'play-forward-outline'}
+              background={state === 'running'}
             />
           ) : undefined}
         </View>
@@ -121,6 +127,7 @@ ActionButtonBar.defaultProps = {
   onResetPress: () => {},
   onPausePress: () => {},
   onResumePress: () => {},
+  onSkipPress: () => {},
   style: {},
   disabled: false,
 };

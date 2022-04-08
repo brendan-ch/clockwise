@@ -352,7 +352,7 @@ function TaskList({ setAtTop }: Props) {
         ]}
         headerKeybindings={{
           title: 'header',
-          pressLeft: context.timerState === 'stopped' || context.mode === 'break' ? [['s']] : undefined,
+          pressLeft: context.timerState === 'stopped' || context.mode === 'break' ? [['Meta', 'Enter'], ['Control', 'Enter']] : undefined,
           pressInput: [['Enter']],
         }}
         data={[

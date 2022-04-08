@@ -29,6 +29,7 @@ import {
   BREAK_TIME_MINUTES, FOCUS_TIME_MINUTES, _24_HOUR_TIME,
 } from '../StorageKeys';
 import SelectionBar from '../components/SelectionBar';
+import handleHaptic from '../helpers/handleHaptic';
 
 /**
  * Component that displays information about the timer.
@@ -65,6 +66,7 @@ export default function TimerPage() {
     setPageTitle,
     timerBackgrounded,
     currentSessionNum,
+    setTimeRemaining,
   } = useContext(AppContext);
 
   const settings = useContext(SettingsContext);
@@ -187,6 +189,13 @@ export default function TimerPage() {
             action: () => stopTimer(),
           }));
 
+          if (timerState === 'running') {
+            unsubMethods.push(keyboardShortcutManager?.registerEvent({
+              keys: ['s'],
+              action: () => handleFastForward(),
+            }));
+          }
+
           return () => {
             unsubMethods.forEach((method) => {
               if (method) {
@@ -213,6 +222,15 @@ export default function TimerPage() {
     } else {
       startTimer();
     }
+  }
+
+  /**
+   * Handle pressing of the fast forward button.
+   */
+  function handleFastForward() {
+    // Haptic feedback
+    handleHaptic('impact');
+    setTimeRemaining(-1);
   }
 
   // Set breakpoints
@@ -248,6 +266,7 @@ export default function TimerPage() {
           onPausePress={() => pauseTimer()}
           onResetPress={() => stopTimer()}
           onResumePress={() => startTimer()}
+          onSkipPress={() => handleFastForward()}
           // Disable button press if timer backgrounded
         />
       </View>
@@ -288,6 +307,7 @@ export default function TimerPage() {
               onResetPress={() => stopTimer()}
               onResumePress={() => startTimer()}
               text={actionBarText}
+              onSkipPress={() => handleFastForward()}
             />
           </View>
         </View>
@@ -375,6 +395,7 @@ export default function TimerPage() {
             onResumePress={() => startTimer()}
             text={actionBarText}
             disabled={timerBackgrounded}
+            onSkipPress={() => handleFastForward()}
           />
         </View>
       ) : undefined}
