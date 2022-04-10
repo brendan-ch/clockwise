@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   FlatList, StyleSheet, Text, View,
 } from 'react-native';
+import AppContext from '../../../AppContext';
 import AppIcon from '../../components/badges/AppIcon';
 import ClickableText from '../../components/ClickableText';
 import SettingsOption from '../../components/SettingsOption';
@@ -12,6 +13,7 @@ import {
   GITHUB_PROFILE_LINK,
 } from '../../Constants';
 import handleOpenLink from '../../helpers/handleOpenLink';
+import useKeyboardSelect from '../../helpers/hooks/useKeyboardSelect';
 import useTheme from '../../helpers/hooks/useTheme';
 import useWindowSize from '../../helpers/hooks/useWindowSize';
 import TextStyles from '../../styles/Text';
@@ -23,6 +25,10 @@ interface TextWithLink {
 }
 
 const textLinks: TextWithLink[] = [
+  {
+    text: 'Created by Brendan C.',
+    link: GITHUB_PROFILE_LINK,
+  },
   {
     text: `Version ${RELEASE_CODE}`,
   },
@@ -57,6 +63,17 @@ const buttons: SettingsOptionProps[] = [
 function AboutPane() {
   const colors = useTheme();
   const windowSize = useWindowSize();
+  const { keyboardGroup, keyboardShortcutManager } = useContext(AppContext);
+
+  const { keyboardSelected, setKeyboardSelected } = useKeyboardSelect('settingsPage', buttons, 'title');
+
+  useEffect(() => {
+    if (keyboardGroup === 'settingsPage' && !keyboardSelected) {
+      setKeyboardSelected(buttons[0].title);
+    } else if (keyboardGroup === 'settings') {
+      setKeyboardSelected(undefined);
+    }
+  }, [keyboardShortcutManager, keyboardGroup]);
 
   const listHeader = (
     <View
@@ -70,16 +87,22 @@ function AboutPane() {
         style={[TextStyles.textBold, {
           fontSize: 49,
           color: colors.primary,
+          marginBottom: 10,
         }]}
       >
         clockwise
       </Text>
-      {textLinks.map((value) => (value.link !== undefined ? (
+      {textLinks.map((value, index) => (value.link !== undefined ? (
         <ClickableText
           text={value.text}
             // @ts-ignore
           onPress={() => handleOpenLink(value.link)}
-          style={TextStyles.textRegular}
+          style={[TextStyles.textRegular, {
+            color: colors.primary,
+            marginBottom: 10,
+          }]}
+          /* eslint-disable-next-line */
+          key={index}
         />
       ) : (
         <Text style={[TextStyles.textRegular, {
@@ -97,6 +120,7 @@ function AboutPane() {
     <SettingsOption
       /* eslint-disable react/jsx-props-no-spreading */
       {...item}
+      keyboardSelected={keyboardSelected === item.title}
     />
   );
 
