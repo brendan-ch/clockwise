@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import {
   Animated,
   Platform,
@@ -46,11 +46,18 @@ interface Props {
 function ActionButton({
   style, onPress, value, isIconButton, haptics, background,
 }: Props) {
+  const [backgroundState, setBackgroundState] = useState(background || false);
   const colorValues = useTheme();
 
   const mouseHoverAnimation = useRef(new Animated.Value(0)).current;
   const fadeAnimation = useRef(new Animated.Value(background ? 1 : 0)).current;
-  const AnimatedIonicons = Animated.createAnimatedComponent(Ionicons);
+  // const AnimatedIonicons = Animated.createAnimatedComponent(Ionicons);
+
+  useEffect(() => {
+    if (background !== undefined) {
+      setBackgroundState(background);
+    }
+  }, [background]);
 
   function onPressOut() {
     if (!background) {
@@ -59,6 +66,8 @@ function ActionButton({
         duration: 1,
         useNativeDriver: true,
       }).start();
+
+      setBackgroundState(false);
     }
   }
 
@@ -78,6 +87,10 @@ function ActionButton({
       duration: 1,
       useNativeDriver: true,
     }).start();
+
+    if (!background) {
+      setBackgroundState(true);
+    }
   }
 
   function onMouseEnter() {
@@ -166,18 +179,24 @@ function ActionButton({
         </Animated.View>
         {/* if not being pressed */}
         {isIconButton ? (
-          <AnimatedIonicons
+          <Ionicons
             // @ts-ignore
             name={value}
-            color={colorValues.background}
-            style={{
-              opacity: fadeAnimation.interpolate({
-                inputRange: [0, 1],
-                outputRange: [1, 0],
-              }),
-              fontSize: 30,
-            }}
+            color={backgroundState ? colorValues.primary : colorValues.background}
+            size={30}
           />
+          // <AnimatedIonicons
+          //   // @ts-ignore
+          //   name={value}
+          //   color={colorValues.background}
+          //   style={{
+          //     opacity: fadeAnimation.interpolate({
+          //       inputRange: [0, 1],
+          //       outputRange: [1, 0],
+          //     }),
+          //   }}
+          //   size={30}
+          // />
         ) : (
           <Animated.Text style={[
             TextStyles.textBold,
