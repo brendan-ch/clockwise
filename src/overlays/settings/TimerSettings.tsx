@@ -210,7 +210,9 @@ function TimerSettingsPane() {
     }
   }, [keyboardShortcutManager, keyboardGroup]);
 
-  const renderItem = ({ item, index }: { item: SettingsOptionProps, index: number }) => {
+  const renderItem = (
+    { item, index, section }: { item: SettingsOptionProps, index: number, section: Section },
+  ) => {
     let indicator = keyboardSelected === item.title ? '→ to select' : undefined;
     if (selected === item.title) {
       indicator = 'Enter to save';
@@ -232,9 +234,9 @@ function TimerSettingsPane() {
         onDeselect={() => handleSelectAndResetKeyboard()}
         keyboardSelected={keyboardSelected === item.title}
         onChange={async (newData: any) => {
-          if (options[index].validator) {
+          if (section.data[index].validator) {
             // @ts-ignore
-            const result = await options[index].validator(newData);
+            const result = await section.data[index].validator(newData);
             if (!result) return;
           }
 
