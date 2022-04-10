@@ -1,6 +1,8 @@
 // @ts-nocheck
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  useContext, useEffect, useRef, useState,
+} from 'react';
 import {
   Platform,
   SectionList, StyleSheet, View,
@@ -28,6 +30,7 @@ import NotificationOverlay from '../components/NotificationOverlay';
 import ClickableText from '../components/ClickableText';
 import TextStyles from '../styles/Text';
 import { clearAll } from '../helpers/storage';
+import AppContext from '../../AppContext';
 
 // Store all static option data in here
 // Make it easier to find and filter settings
@@ -87,6 +90,8 @@ function SettingsPage() {
   const colorValues = useTheme();
 
   const navigation = useNavigation();
+
+  const { setCurrentSessionNum } = useContext(AppContext);
 
   const pages: SettingsOptionProps[] = [
     {
@@ -155,6 +160,15 @@ function SettingsPage() {
       return false;
     };
   }
+
+  options.filter(
+    (value) => value.storageKey === LONG_BREAK_INTERVAL,
+  )[0].validator = async () => {
+    // Reset session count
+    setCurrentSessionNum(1);
+
+    return true;
+  };
 
   // Sync options with storage
   const { settingsData, handleChange } = useSettingsData(options);
