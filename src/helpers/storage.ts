@@ -86,7 +86,13 @@ async function prefillSettings() {
     [LONG_BREAK_INTERVAL]: '4',
     [ENABLE_BACKGROUND]: '1',
     [AUTO_APPEARANCE]: '1',
+    [DARK_MODE]: '0',
     [_24_HOUR_TIME]: !(region && REGIONS_WITH_12H_TIME.includes(region)) ? '1' : '0',
+    [TASKS]: '[]',
+    [ENABLE_TIMER_SOUND]: '0',
+    [ENABLE_TIMER_ALERTS]: '0',
+    [AUTO_START_BREAK]: '0',
+    [AUTO_START_FOCUS]: '0',
   };
 
   await Promise.all(Object.keys(defaultSettings).map(async (key) => {
