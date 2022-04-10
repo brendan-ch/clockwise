@@ -268,6 +268,7 @@ function SettingsPage() {
     <View
       style={{
         marginTop: 10,
+        marginBottom: 10,
         alignItems: 'center',
       }}
     >
@@ -281,22 +282,6 @@ function SettingsPage() {
           onPress={() => clearAll()}
         />
       ) : undefined}
-      <ClickableText
-        text="Privacy Policy"
-        style={[TextStyles.textRegular, {
-          color: colorValues.gray3,
-          marginBottom: 10,
-        }]}
-        onPress={privacyPolicyLink ? () => handleOpenLink(privacyPolicyLink) : undefined}
-      />
-      <ClickableText
-        text="Licenses"
-        style={[TextStyles.textRegular, {
-          color: colorValues.gray3,
-          marginBottom: 30,
-        }]}
-        onPress={githubLink ? () => handleOpenLink(githubLink) : undefined}
-      />
     </View>
   );
 
