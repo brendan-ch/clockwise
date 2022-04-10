@@ -28,8 +28,6 @@ import NotificationOverlay from '../components/NotificationOverlay';
 import ClickableText from '../components/ClickableText';
 import TextStyles from '../styles/Text';
 import { clearAll } from '../helpers/storage';
-import handleOpenLink from '../helpers/handleOpenLink';
-import { GITHUB_LINK, PRIVACY_POLICY_LINK } from '../Constants';
 
 // Store all static option data in here
 // Make it easier to find and filter settings
@@ -87,9 +85,6 @@ const options: SettingsOptionPropsStatic[] = [
  */
 function SettingsPage() {
   const colorValues = useTheme();
-
-  const privacyPolicyLink = PRIVACY_POLICY_LINK;
-  const githubLink = GITHUB_LINK;
 
   const navigation = useNavigation();
 
