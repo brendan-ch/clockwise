@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import {
-  FlatList, StyleSheet, Text, View,
+  FlatList, Platform, StyleSheet, Text, View,
 } from 'react-native';
 import AppContext from '../../../AppContext';
 import AppIcon from '../../components/badges/AppIcon';
@@ -11,6 +11,8 @@ import {
   PRIVACY_POLICY_LINK,
   GITHUB_LINK,
   GITHUB_PROFILE_LINK,
+  APP_STORE_LINK,
+  GOOGLE_PLAY_LINK,
 } from '../../Constants';
 import handleOpenLink from '../../helpers/handleOpenLink';
 import useKeyboardSelect from '../../helpers/hooks/useKeyboardSelect';
@@ -50,12 +52,16 @@ const buttons: SettingsOptionProps[] = [
     type: 'icon',
     onPress: () => handleOpenLink(GITHUB_LINK),
   },
-  {
+];
+
+if (Platform.OS !== 'web') {
+  buttons.push({
     title: 'Leave a Review',
     value: 'chevron-forward-outline',
     type: 'icon',
-  },
-];
+    onPress: () => handleOpenLink(Platform.OS === 'ios' ? `${APP_STORE_LINK}?action=write-review` : GOOGLE_PLAY_LINK),
+  });
+}
 
 /**
  * Settings page that displays information about the app.
@@ -105,10 +111,13 @@ function AboutPane() {
           key={index}
         />
       ) : (
-        <Text style={[TextStyles.textRegular, {
-          color: colors.primary,
-          marginBottom: 10,
-        }]}
+        <Text
+          style={[TextStyles.textRegular, {
+            color: colors.primary,
+            marginBottom: 10,
+          }]}
+          /* eslint-disable-next-line */
+          key={index}
         >
           {value.text}
         </Text>
@@ -121,6 +130,7 @@ function AboutPane() {
       /* eslint-disable react/jsx-props-no-spreading */
       {...item}
       keyboardSelected={keyboardSelected === item.title}
+      indicator={keyboardSelected === item.title ? '→ to select' : undefined}
     />
   );
 
