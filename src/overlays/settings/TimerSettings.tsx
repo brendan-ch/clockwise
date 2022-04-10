@@ -99,6 +99,8 @@ const options: SettingsOptionPropsStatic[] = [
  * Timer settings content in the settings overlay.
  */
 function TimerSettingsPane() {
+  const { setCurrentSessionNum } = useContext(AppContext);
+
   // Assign some keys here
   // Apparently asynchronous reassignments are allowed
   checkNotifications()
@@ -114,6 +116,13 @@ function TimerSettingsPane() {
         option.subtitle = !value.granted ? text : undefined;
       }
     });
+
+  options[6].validator = () => {
+    // Reset session count
+    setCurrentSessionNum(1);
+
+    return true;
+  };
 
   const { settingsData, handleChange } = useSettingsData(options);
 

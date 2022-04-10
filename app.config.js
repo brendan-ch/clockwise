@@ -28,7 +28,6 @@ export default {
     usesIcloudStorage: true,
   },
   plugins: [
-    'sentry-expo',
     [
       'expo-document-picker',
       {

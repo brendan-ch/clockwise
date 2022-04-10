@@ -65,7 +65,6 @@ export default function TimerPage() {
     pauseTimer,
     setPageTitle,
     timerBackgrounded,
-    currentSessionNum,
     setTimeRemaining,
   } = useContext(AppContext);
 
@@ -125,7 +124,7 @@ export default function TimerPage() {
   ) {
     actionBarText = `Select some tasks ${size === 'portrait' ? 'above' : 'on the right'} to work on during your session.`;
   } else if (mode === 'focus' && timerState === 'stopped') {
-    actionBarText = `Session #${currentSessionNum} — ${selected.length}/${tasks.length} tasks selected\nEst. time finish: ${
+    actionBarText = `${selected.length}/${tasks.length} tasks selected\nEst. time finish: ${
       calculateTime(timeFinish, settings[_24_HOUR_TIME] ? '24h' : '12h')
     }`;
   } else if (mode === 'break' || mode === 'longBreak') {
