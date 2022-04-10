@@ -112,6 +112,15 @@ function SettingsPage() {
       },
       value: 'chevron-forward-outline',
     },
+    {
+      type: 'icon',
+      title: 'About',
+      onPress: () => {
+        // @ts-ignore
+        navigation.navigate('About');
+      },
+      value: 'chevron-forward-outline',
+    },
   ];
 
   checkNotifications()
