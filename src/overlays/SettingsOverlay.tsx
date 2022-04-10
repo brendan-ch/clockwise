@@ -27,11 +27,18 @@ interface SettingsNavigatorObject {
   renderer: JSX.Element,
 }
 
+const About = React.lazy(() => import('./settings/About'));
+
 /**
  * Panes that appears at the bottom of the navigator.
  * Should be used for non-interactive pages.
  */
-const bottomNavigator: SettingsNavigatorObject[] = [];
+const bottomNavigator: SettingsNavigatorObject[] = [
+  {
+    title: 'About',
+    renderer: <About />,
+  },
+];
 
 if (Platform.OS === 'web') {
   const Keybindings = React.lazy(() => import('./settings/Keybindings'));

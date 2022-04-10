@@ -11,14 +11,15 @@ import TextStyles from '../styles/Text';
 import ClickableText from './ClickableText';
 import ImageContext from '../../ImageContext';
 import handleOpenLink from '../helpers/handleOpenLink';
-import { GITHUB_LINK, GITHUB_PROFILE_LINK, PRIVACY_POLICY_LINK } from '../Constants';
+import {
+  GITHUB_LINK, PRIVACY_POLICY_LINK, RELEASE_CODE,
+} from '../Constants';
 
 function LandscapeFooter() {
   const [hovering, setHovering] = useState(false);
 
   const privacyPolicyLink = PRIVACY_POLICY_LINK;
   const githubLink = GITHUB_LINK;
-  const githubProfileLink = GITHUB_PROFILE_LINK;
 
   const opacityAnimation = useRef(new Animated.Value(1)).current;
   const colorValues = useTheme();
@@ -71,21 +72,6 @@ function LandscapeFooter() {
             {' | '}
           </Text>
         ) : undefined}
-        {Platform.OS === 'web'
-          ? (
-            <Text>
-              {'Created by '}
-              <ClickableText
-                text="Brendan C."
-                onPress={githubProfileLink ? () => handleOpenLink(githubProfileLink) : undefined}
-                style={[TextStyles.textRegular, {
-                  color: colorValues.gray3,
-                }]}
-              />
-              {' | '}
-            </Text>
-          )
-          : undefined}
         <ClickableText
           text="Licenses"
           onPress={githubLink ? () => handleOpenLink(githubLink) : undefined}
@@ -101,6 +87,9 @@ function LandscapeFooter() {
             color: colorValues.gray3,
           }]}
         />
+        {' | '}
+        v
+        {RELEASE_CODE}
       </Text>
     </Animated.View>
   );

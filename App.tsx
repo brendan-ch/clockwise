@@ -67,6 +67,7 @@ import { REGIONS_WITH_12H_TIME } from './src/Constants';
 import AppBanner from './src/components/AppBanner';
 import getTimeKey from './src/helpers/getTimeKey';
 import BackgroundSettingsPane from './src/overlays/settings/BackgroundSettings';
+import AboutPane from './src/overlays/settings/About';
 
 const MIN_25 = 1500000;
 
@@ -785,6 +786,13 @@ export default function App() {
                 <Stack.Screen
                   name="Appearance"
                   component={BackgroundSettingsPane}
+                  options={{
+                    ...headerOptions,
+                  }}
+                />
+                <Stack.Screen
+                  name="About"
+                  component={AboutPane}
                   options={{
                     ...headerOptions,
                   }}

@@ -202,6 +202,8 @@ function ImportSettingsPane() {
       value = overwriteTasks;
     }
 
+    const indicator = keyboardSelected === item.title ? '→ to select' : undefined;
+
     return (
       <SettingsOption
         /* eslint-disable react/jsx-props-no-spreading */
@@ -212,7 +214,7 @@ function ImportSettingsPane() {
         onSelect={() => handlePress(item)}
         onChange={() => handlePress(item)}
         keyboardSelected={keyboardSelected === item.title}
-        indicator={keyboardSelected === item.title ? '↑↓' : undefined}
+        indicator={indicator}
       />
     );
   };

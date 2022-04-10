@@ -103,38 +103,44 @@ function BackgroundSettingsPane() {
     }
   }, [keyboardShortcutManager, keyboardGroup]);
 
-  const renderItem = ({ item, index }: { item: SettingsOptionProps, index: number }) => (
-    <SettingsOption
+  const renderItem = ({ item, index }: { item: SettingsOptionProps, index: number }) => {
+    let indicator = keyboardSelected === item.title ? '→ to select' : undefined;
+    if (selected === item.title) {
+      indicator = 'Enter to save';
+    }
+    return (
+      <SettingsOption
       /* eslint-disable react/jsx-props-no-spreading */
-      {...item}
-      selected={selected === item.title}
-      onPress={() => {
-        if (item.type === 'number') {
-          handleSelectAndResetKeyboard(item.title);
-        } else {
-          handleSelectAndResetKeyboard();
-        }
-      }}
-      onSelect={() => handleSelectAndResetKeyboard(item.title)}
-      onDeselect={() => handleSelectAndResetKeyboard()}
-      keyboardSelected={keyboardSelected === item.title}
-      onChange={async (newData: any) => {
-        if (options[index].validator) {
+        {...item}
+        selected={selected === item.title}
+        onPress={() => {
+          if (item.type === 'number') {
+            handleSelectAndResetKeyboard(item.title);
+          } else {
+            handleSelectAndResetKeyboard();
+          }
+        }}
+        onSelect={() => handleSelectAndResetKeyboard(item.title)}
+        onDeselect={() => handleSelectAndResetKeyboard()}
+        keyboardSelected={keyboardSelected === item.title}
+        onChange={async (newData: any) => {
+          if (options[index].validator) {
           // @ts-ignore
-          const result = await options[index].validator(newData);
-          if (!result) return;
-        }
+            const result = await options[index].validator(newData);
+            if (!result) return;
+          }
 
-        const i = options.findIndex((option) => option.title === item.title);
+          const i = options.findIndex((option) => option.title === item.title);
 
-        handleChange(
-          i,
-          newData,
-        );
-      }}
-      indicator={keyboardSelected === item.title ? '↑↓' : undefined}
-    />
-  );
+          handleChange(
+            i,
+            newData,
+          );
+        }}
+        indicator={indicator}
+      />
+    );
+  };
 
   return (
     <SectionList
