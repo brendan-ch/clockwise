@@ -223,7 +223,9 @@ function SettingsPage() {
     />
   );
 
-  const renderItem = ({ item, index }: { item: SettingsOptionProps, index: number }) => (
+  const renderItem = (
+    { item, index, section }: { item: SettingsOptionProps, index: number, section: Section },
+  ) => (
     <SettingsOption
       /* eslint-disable react/jsx-props-no-spreading */
       {...item}
@@ -238,9 +240,9 @@ function SettingsPage() {
       onDeselect={() => setSelected(undefined)}
       selected={selected === item.title}
       onChange={async (newData: any) => {
-        if (options[index].validator) {
+        if (section.data[index].validator) {
           // @ts-ignore
-          const result = await options[index].validator();
+          const result = await section.data[index].validator();
 
           if (!result) return;
         }

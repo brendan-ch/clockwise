@@ -17,7 +17,7 @@ import {
   LONG_BREAK_TIME_MINUTES,
   SUPPRESS_INTRODUCTION, TASKS, _24_HOUR_TIME,
 } from '../StorageKeys';
-import { getData, removeData, storeData } from './storage';
+import { getData, storeData } from './storage';
 import { Task } from '../types';
 import generateTaskId from './generateId';
 import { EXPORT_VERSION_NUM } from '../Constants';
@@ -138,9 +138,6 @@ async function importData(overwriteTasks: boolean = false) {
         }
       } else if (parsed[key]) {
         await storeData(key, parsed[key]);
-      } else if (key !== TASKS || overwriteTasks) {
-        // Remove data key from storage
-        await removeData(key);
       }
     }));
   } catch (e) {
