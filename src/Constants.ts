@@ -37,5 +37,8 @@ export const APP_STORE_LINK = Constants.manifest?.extra?.appStoreLink;
 export const GOOGLE_PLAY_LINK = Constants.manifest?.extra?.googlePlayLink;
 
 export const PRIVACY_POLICY_LINK = Constants.manifest?.extra?.privacyPolicyLink;
+/**
+ * @todo Change this to open source licenses link
+ */
 export const GITHUB_LINK = Constants.manifest?.extra?.githubLink;
 export const GITHUB_PROFILE_LINK = Constants.manifest?.extra?.githubProfileLink;
