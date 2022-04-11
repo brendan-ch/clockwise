@@ -170,6 +170,7 @@ function TimerSettingsPane() {
    * Handle automatic scrolling for keyboard selections.
    * @param to
    * @param pos
+   * @todo remove linear search requirement
    */
   function handleAutoScroll(to: string, pos = 0) {
     // Search through sections to find the correct indices
@@ -195,6 +196,16 @@ function TimerSettingsPane() {
       viewPosition: pos,
     });
   }
+
+  useEffect(() => {
+    if (Platform.OS !== 'web') {
+      // Check which selected item
+      if (options.findIndex((value) => value.title === selected) > 4) {
+        // Scroll to the item
+        handleAutoScroll(selected, 0.2);
+      }
+    }
+  }, [selected]);
 
   useEffect(() => {
     if (keyboardSelected) {
@@ -259,6 +270,7 @@ function TimerSettingsPane() {
       renderItem={renderItem}
       renderSectionHeader={renderHeader}
       showsVerticalScrollIndicator={false}
+      scrollToOverflowEnabled
     />
   );
 }
