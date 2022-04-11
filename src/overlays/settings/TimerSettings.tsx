@@ -224,8 +224,12 @@ function TimerSettingsPane() {
   const renderItem = (
     { item, index, section }: { item: SettingsOptionProps, index: number, section: Section },
   ) => {
-    let indicator = keyboardSelected === item.title ? '→ to select' : undefined;
-    if (selected === item.title) {
+    let indicator;
+    if (Platform.OS !== 'web') {
+      indicator = undefined;
+    } else if (keyboardSelected === item.title) {
+      indicator = '→ to select';
+    } else if (selected === item.title) {
       indicator = 'Enter to save';
     }
 
