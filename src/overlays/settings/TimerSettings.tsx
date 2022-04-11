@@ -227,10 +227,10 @@ function TimerSettingsPane() {
     let indicator;
     if (Platform.OS !== 'web') {
       indicator = undefined;
-    } else if (keyboardSelected === item.title) {
-      indicator = '→ to select';
     } else if (selected === item.title) {
       indicator = 'Enter to save';
+    } else if (keyboardSelected === item.title) {
+      indicator = '→ to select';
     }
 
     return (
