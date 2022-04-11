@@ -119,7 +119,7 @@ function TimerSettingsPane() {
 
   options[6].validator = () => {
     // Reset session count
-    setCurrentSessionNum(1);
+    setCurrentSessionNum(0);
 
     return true;
   };

@@ -165,7 +165,7 @@ function SettingsPage() {
     (value) => value.storageKey === LONG_BREAK_INTERVAL,
   )[0].validator = async () => {
     // Reset session count
-    setCurrentSessionNum(1);
+    setCurrentSessionNum(0);
 
     return true;
   };

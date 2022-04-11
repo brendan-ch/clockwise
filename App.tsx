@@ -97,7 +97,7 @@ export default function App() {
 
   // The current session number
   // Used to determine whether to switch to long break or short break
-  const [currentSessionNum, setCurrentSessionNum] = useState(1);
+  const [currentSessionNum, setCurrentSessionNum] = useState(0);
 
   const [keyboardGroup, setKeyboardGroup] = useState<KeyboardShortcutGroup>('none');
 
@@ -359,12 +359,13 @@ export default function App() {
 
   useEffect(() => {
     if (timeRemaining < 0) {
+      const bumped = currentSessionNum + 1;
+
       // Update actual sessions of selected tasks
       if (mode === 'focus') {
         bumpActualPomodoros();
-      } else {
         // Bump number of total sessions
-        setCurrentSessionNum(currentSessionNum + 1);
+        setCurrentSessionNum(bumped);
       }
 
       // Call function depending on whether auto start is enabled
@@ -372,7 +373,7 @@ export default function App() {
         .then((value) => {
           // Check if long breaks enabled
           const switchLongBreak = settings[LONG_BREAK_ENABLED]
-            && currentSessionNum % settings[LONG_BREAK_INTERVAL] === 0;
+            && bumped % settings[LONG_BREAK_INTERVAL] === 0;
           let newMode: TimerMode = 'focus';
           if (switchLongBreak && mode === 'focus') {
             newMode = 'longBreak';
