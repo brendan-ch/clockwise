@@ -119,7 +119,7 @@ function TimerSettingsPane() {
 
   options[6].validator = () => {
     // Reset session count
-    setCurrentSessionNum(1);
+    setCurrentSessionNum(0);
 
     return true;
   };
@@ -170,6 +170,7 @@ function TimerSettingsPane() {
    * Handle automatic scrolling for keyboard selections.
    * @param to
    * @param pos
+   * @todo remove linear search requirement
    */
   function handleAutoScroll(to: string, pos = 0) {
     // Search through sections to find the correct indices
@@ -197,6 +198,16 @@ function TimerSettingsPane() {
   }
 
   useEffect(() => {
+    if (Platform.OS !== 'web') {
+      // Check which selected item
+      if (options.findIndex((value) => value.title === selected) > 4) {
+        // Scroll to the item
+        handleAutoScroll(selected, 0.2);
+      }
+    }
+  }, [selected]);
+
+  useEffect(() => {
     if (keyboardSelected) {
       handleAutoScroll(keyboardSelected, 0.5);
     }
@@ -213,9 +224,13 @@ function TimerSettingsPane() {
   const renderItem = (
     { item, index, section }: { item: SettingsOptionProps, index: number, section: Section },
   ) => {
-    let indicator = keyboardSelected === item.title ? '→ to select' : undefined;
-    if (selected === item.title) {
+    let indicator;
+    if (Platform.OS !== 'web') {
+      indicator = undefined;
+    } else if (selected === item.title) {
       indicator = 'Enter to save';
+    } else if (keyboardSelected === item.title) {
+      indicator = '→ to select';
     }
 
     return (
@@ -259,6 +274,7 @@ function TimerSettingsPane() {
       renderItem={renderItem}
       renderSectionHeader={renderHeader}
       showsVerticalScrollIndicator={false}
+      scrollToOverflowEnabled
     />
   );
 }
