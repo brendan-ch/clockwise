@@ -26,7 +26,11 @@ import useTimeUpdates from '../helpers/hooks/useTimeUpdates';
 import calculateTime from '../helpers/calculateTime';
 import SettingsContext from '../../SettingsContext';
 import {
-  BREAK_TIME_MINUTES, FOCUS_TIME_MINUTES, _24_HOUR_TIME,
+  BREAK_TIME_MINUTES,
+  FOCUS_TIME_MINUTES,
+  LONG_BREAK_INTERVAL,
+  LONG_BREAK_TIME_MINUTES,
+  _24_HOUR_TIME,
 } from '../StorageKeys';
 import SelectionBar from '../components/SelectionBar';
 import handleHaptic from '../helpers/handleHaptic';
@@ -66,6 +70,7 @@ export default function TimerPage() {
     setPageTitle,
     timerBackgrounded,
     setTimeRemaining,
+    currentSessionNum,
   } = useContext(AppContext);
 
   const settings = useContext(SettingsContext);
@@ -106,13 +111,34 @@ export default function TimerPage() {
     const task = tasks.find((value) => value.id === id);
     const actual = task?.actualPomodoros ? task.actualPomodoros : 0;
     if (task?.estPomodoros && max < task.estPomodoros - actual) {
+      // Set number of sessions to account for
       max = task.estPomodoros - actual;
     }
   });
+
+  // Number of sessions until long break
+  const numSessionsUntilLongBreak = settings[LONG_BREAK_INTERVAL]
+    - ((currentSessionNum) % settings[LONG_BREAK_INTERVAL]);
+
+  const numSessionsAfterLongBreak = max - numSessionsUntilLongBreak;
+  // Number of long breaks to account for
+  const numLongBreaks = numSessionsAfterLongBreak >= 0
+    ? Math.floor(numSessionsAfterLongBreak / settings[LONG_BREAK_INTERVAL]) + 1
+    : 0;
+
+  // Check if long break is next
+  const subtractLongBreak = (max + currentSessionNum) % settings[LONG_BREAK_INTERVAL] === 0;
+
   const timeFinish = new Date(
     now.getTime() + (
-      ((settings[FOCUS_TIME_MINUTES] + settings[BREAK_TIME_MINUTES]) * 60 * 1000 * max)
-      - (max === 0 ? 0 : settings[BREAK_TIME_MINUTES] * 60 * 1000)
+      // Total time of focus-break sessions - extra break session
+      ((settings[FOCUS_TIME_MINUTES] * max)
+      + (settings[BREAK_TIME_MINUTES] * (max - numLongBreaks))
+      + (settings[LONG_BREAK_TIME_MINUTES] * numLongBreaks))
+      * 60 * 1000
+      - (max === 0
+        ? 0
+        : settings[subtractLongBreak ? LONG_BREAK_TIME_MINUTES : BREAK_TIME_MINUTES] * 60 * 1000)
     ),
   );
 
