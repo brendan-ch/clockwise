@@ -28,6 +28,7 @@ import SettingsContext from '../../SettingsContext';
 import {
   BREAK_TIME_MINUTES,
   FOCUS_TIME_MINUTES,
+  LONG_BREAK_ENABLED,
   LONG_BREAK_INTERVAL,
   LONG_BREAK_TIME_MINUTES,
   _24_HOUR_TIME,
@@ -130,7 +131,7 @@ export default function TimerPage() {
   const subtractLongBreak = (max + currentSessionNum) % settings[LONG_BREAK_INTERVAL] === 0;
 
   const timeFinish = new Date(
-    now.getTime() + (
+    now.getTime() + (settings[LONG_BREAK_ENABLED] ? (
       // Total time of focus-break sessions - extra break session
       ((settings[FOCUS_TIME_MINUTES] * max)
       + (settings[BREAK_TIME_MINUTES] * (max - numLongBreaks))
@@ -139,7 +140,14 @@ export default function TimerPage() {
       - (max === 0
         ? 0
         : settings[subtractLongBreak ? LONG_BREAK_TIME_MINUTES : BREAK_TIME_MINUTES] * 60 * 1000)
-    ),
+    ) : (
+      ((settings[FOCUS_TIME_MINUTES] * max)
+      + (settings[BREAK_TIME_MINUTES] * max))
+      * 60 * 1000
+      - (max === 0
+        ? 0
+        : settings[BREAK_TIME_MINUTES] * 60 * 1000)
+    )),
   );
 
   let actionBarText;
