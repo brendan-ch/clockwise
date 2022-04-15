@@ -242,8 +242,12 @@ function SettingsOption({
       ) : undefined}
       {type === 'selection'
         && typeof selectionOptions === 'object'
-        && typeof value === 'string' ? (
+        && typeof value === 'string'
+        ? (
           <SelectionBar
+            buttonStyle={{
+              paddingHorizontal: 5,
+            }}
             options={selectionOptions}
             selected={value}
             onSelect={onChange ? (newSelected) => onChange(newSelected) : undefined}
