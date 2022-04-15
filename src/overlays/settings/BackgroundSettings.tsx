@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { SectionList } from 'react-native';
+import { Platform, SectionList } from 'react-native';
 import AppContext from '../../../AppContext';
 import renderHeader from '../../helpers/renderers/renderHeader';
 import SettingsOption from '../../components/SettingsOption';
@@ -90,9 +90,9 @@ function BackgroundSettingsPane() {
    * Clear keyboardSelected, and call setSelected.
    */
   function handleSelectAndResetKeyboard(key?: string) {
-    // if (keyboardSelected !== key) {
-    //   setKeyboardSelected(undefined);
-    // }
+    if (key && keyboardSelected !== key && Platform.OS === 'web') {
+      setKeyboardSelected(key);
+    }
 
     // Set keyboard group to input
     setKeyboardGroup(key ? 'input' : 'settingsPage');

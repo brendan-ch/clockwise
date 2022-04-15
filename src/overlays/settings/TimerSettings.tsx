@@ -158,11 +158,9 @@ function TimerSettingsPane() {
    * Clear keyboardSelected, and call setSelected.
    */
   function handleSelectAndResetKeyboard(key?: string) {
-    // if (!key) {
-    //   setKeyboardSelected();
-    // } else if (keyboardSelected !== key) {
-    //   setKeyboardSelected(undefined);
-    // }
+    if (key && keyboardSelected !== key && Platform.OS === 'web') {
+      setKeyboardSelected(key);
+    }
 
     setKeyboardGroup(key ? 'input' : 'settingsPage');
     setSelected(key);
@@ -203,8 +201,9 @@ function TimerSettingsPane() {
 
   useEffect(() => {
     if (Platform.OS !== 'web') {
+      const i = options.findIndex((value) => value.title === selected);
       // Check which selected item
-      if (options.findIndex((value) => value.title === selected) > 4) {
+      if (i > 4) {
         // Scroll to the item
         handleAutoScroll(selected, 0.2);
       }
@@ -212,7 +211,7 @@ function TimerSettingsPane() {
   }, [selected]);
 
   useEffect(() => {
-    if (keyboardSelected) {
+    if (keyboardSelected && Platform.OS === 'web') {
       handleAutoScroll(keyboardSelected, 0.5);
     }
   }, [keyboardSelected]);
