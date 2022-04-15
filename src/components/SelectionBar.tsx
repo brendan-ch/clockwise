@@ -10,10 +10,11 @@ interface ButtonProps {
   text: string,
   onPress?: () => any,
   style?: StyleProp<ViewStyle>,
+  keyboardSelected?: boolean,
 }
 
 function SelectionButton({
-  highlighted, text, onPress, style,
+  highlighted, text, onPress, style, keyboardSelected,
 }: ButtonProps) {
   const highlightAnimation = useRef(new Animated.Value(0)).current;
   const colors = useTheme();
@@ -62,6 +63,7 @@ function SelectionButton({
           {
             color: highlighted ? colors.background : colors.gray3,
             zIndex: 1,
+            textDecorationLine: keyboardSelected ? 'underline' : 'none',
           },
         ]}
       >
@@ -97,10 +99,15 @@ SelectionButton.defaultProps = {
   highlighted: false,
   onPress: () => {},
   style: {},
+  keyboardSelected: false,
 };
 
 interface Props {
   selected: string,
+  /**
+   * Whether or not to underline the text in the button.
+   */
+  keyboardSelected?: boolean,
   options: string[],
   /* eslint-disable-next-line */
   onSelect?: (option: string) => any,
@@ -113,7 +120,7 @@ interface Props {
  * @returns
  */
 function SelectionBar({
-  selected, options, onSelect, style, buttonStyle,
+  selected, options, onSelect, style, buttonStyle, keyboardSelected,
 }: Props) {
   return (
     <View style={[styles.container, style]}>
@@ -125,6 +132,7 @@ function SelectionBar({
           text={option}
           onPress={onSelect ? () => onSelect(option) : undefined}
           style={buttonStyle}
+          keyboardSelected={keyboardSelected && selected === option}
         />
       ))}
     </View>
@@ -142,6 +150,7 @@ SelectionBar.defaultProps = {
   onSelect: () => {},
   style: {},
   buttonStyle: {},
+  keyboardSelected: undefined,
 };
 
 export default SelectionBar;
