@@ -279,6 +279,9 @@ function SettingsOption({
             buttonStyle={{
               paddingHorizontal: 5,
             }}
+            style={{
+              maxWidth: 200,
+            }}
             options={selectionOptions}
             selected={value}
             keyboardSelected={selected}
