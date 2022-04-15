@@ -61,7 +61,7 @@ function SettingsOption({
        * @todo Move this logic up to the timer settings page
        * or task list.
        */
-      if (onSelect && type === 'number') {
+      if (onSelect && (type === 'number' || type === 'selection')) {
         unsubMethods.push(keyboardShortcutManager?.registerEvent({
           keys: ['ArrowRight'],
           action: () => onSelect(),
@@ -250,6 +250,7 @@ function SettingsOption({
             }}
             options={selectionOptions}
             selected={value}
+            keyboardSelected={selected}
             onSelect={onChange ? (newSelected) => onChange(newSelected) : undefined}
           />
         ) : undefined}
