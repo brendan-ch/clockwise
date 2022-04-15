@@ -53,7 +53,7 @@ function SettingsOption({
   }
 
   useEffect(() => {
-    if (keyboardSelected && keyboardGroup === 'settingsPage') {
+    if (keyboardSelected && (keyboardGroup === 'settingsPage' || keyboardGroup === 'input')) {
       // Register keyboard shortcut to select item
       const unsubMethods: ((() => any) | undefined)[] = [];
 
@@ -61,7 +61,7 @@ function SettingsOption({
        * @todo Move this logic up to the timer settings page
        * or task list.
        */
-      if (onSelect && (type === 'number' || type === 'selection')) {
+      if (onSelect && !selected && (type === 'number' || type === 'selection')) {
         unsubMethods.push(keyboardShortcutManager?.registerEvent({
           keys: ['ArrowRight'],
           action: () => onSelect(),
@@ -75,6 +75,37 @@ function SettingsOption({
         unsubMethods.push(keyboardShortcutManager?.registerEvent({
           keys: ['ArrowRight'],
           action: () => onPress(),
+        }));
+      }
+
+      // Register keybinds for selection change
+      if (selected
+        && onDeselect
+        && selectionOptions
+        && type === 'selection'
+        && onChange
+        && keyboardGroup === 'input') {
+        const i = selectionOptions.findIndex((option) => value === option);
+
+        unsubMethods.push(keyboardShortcutManager?.registerEvent({
+          keys: ['ArrowRight'],
+          action: () => onChange(
+            selectionOptions[
+              i + 1 < selectionOptions.length ? i + 1 : i
+            ],
+          ),
+        }));
+        unsubMethods.push(keyboardShortcutManager?.registerEvent({
+          keys: ['ArrowLeft'],
+          action: () => onChange(
+            selectionOptions[
+              i - 1 > -1 ? i - 1 : i
+            ],
+          ),
+        }));
+        unsubMethods.push(keyboardShortcutManager?.registerEvent({
+          keys: ['Enter'],
+          action: () => onDeselect(),
         }));
       }
 
