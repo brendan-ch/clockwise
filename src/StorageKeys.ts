@@ -15,8 +15,12 @@ export const ENABLE_BACKGROUND_TIMER = '@enableBackgroundTimer';
 export const ENABLE_TIMER_ALERTS = '@enableTimerAlerts';
 export const ENABLE_TIMER_SOUND = '@enableTimerSound';
 export const ENABLE_BACKGROUND = '@enableBackground';
+
 export const AUTO_APPEARANCE = '@autoAppearance';
 export const DARK_MODE = '@darkMode';
+
+export const THEME = '@theme';
+
 export const SUPPRESS_INTRODUCTION = '@suppressIntroduction';
 export const _24_HOUR_TIME = '@24h';
 export const AUTO_START_BREAK = '@autoStartBreak';
@@ -28,3 +32,5 @@ export const TIMER_LENGTH = '@timerLength';
 export const MODE = '@mode';
 export const SELECTED = '@selectedTasks';
 export const SESSION_NUM = '@sessionNum';
+
+export const EXPORT_VERSION_KEY = '@exportVersionNum';
