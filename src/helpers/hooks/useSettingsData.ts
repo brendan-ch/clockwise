@@ -21,7 +21,7 @@ function useSettingsData(options: SettingsOptionPropsStatic[]) {
    * a matching item at index.
    * @param data
    */
-  async function handleChange(key: string | number, data: number | boolean) {
+  async function handleChange(key: string | number, data: number | boolean | string) {
     // Haptic feedback
     if (typeof data === 'boolean') {
       handleHaptic('selection');
@@ -55,6 +55,8 @@ function useSettingsData(options: SettingsOptionPropsStatic[]) {
       convertedData = `${data}`;
     } else if (typeof data === 'boolean') {
       convertedData = data ? '1' : '0';
+    } else if (typeof data === 'string') {
+      convertedData = data;
     } else {
       return;
     }
@@ -80,7 +82,7 @@ function useSettingsData(options: SettingsOptionPropsStatic[]) {
 
     await Promise.all(options.map(async (option) => {
       const data = await getData(option.storageKey);
-      let convertedData: number | boolean;
+      let convertedData: number | boolean | string;
 
       switch (option.type) {
         case 'number':
@@ -92,6 +94,10 @@ function useSettingsData(options: SettingsOptionPropsStatic[]) {
           // Convert numbers 0/1 to boolean
           convertedData = data === '1';
 
+          break;
+        case 'selection':
+          // Read data as string
+          convertedData = data !== null ? data : '';
           break;
         default:
           // Populate with value of 0
