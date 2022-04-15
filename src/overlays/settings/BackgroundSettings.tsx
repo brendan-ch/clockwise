@@ -9,6 +9,7 @@ import {
   AUTO_APPEARANCE,
   DARK_MODE,
   ENABLE_BACKGROUND,
+  // THEME,
   _24_HOUR_TIME,
 } from '../../StorageKeys';
 import { SettingsOptionProps, Section, SettingsOptionPropsStatic } from '../../types';
@@ -59,7 +60,7 @@ function BackgroundSettingsPane() {
     {
       title: 'Theme',
       icon: 'moon-outline',
-      data: autoSetTheme ? settingsData.slice(2, 3) : settingsData.slice(2, 4),
+      data: autoSetTheme ? settingsData.slice(2, 3) : settingsData.slice(2, 2),
     },
   ];
   if (windowSize === 'landscape') {
@@ -75,11 +76,12 @@ function BackgroundSettingsPane() {
   const {
     keyboardShortcutManager,
     keyboardGroup,
+    setKeyboardGroup,
   } = useContext(AppContext);
 
   // Set keyboard selected by storage key
   const { keyboardSelected, setKeyboardSelected } = useKeyboardSelect(
-    keyboardGroup,
+    'settingsPage',
     options,
     'title',
   );
@@ -88,10 +90,12 @@ function BackgroundSettingsPane() {
    * Clear keyboardSelected, and call setSelected.
    */
   function handleSelectAndResetKeyboard(key?: string) {
-    if (keyboardSelected !== key) {
-      setKeyboardSelected(undefined);
-    }
+    // if (keyboardSelected !== key) {
+    //   setKeyboardSelected(undefined);
+    // }
 
+    // Set keyboard group to input
+    setKeyboardGroup(key ? 'input' : 'settingsPage');
     setSelected(key);
   }
 

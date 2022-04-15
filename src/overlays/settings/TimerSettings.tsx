@@ -144,11 +144,12 @@ function TimerSettingsPane() {
   const {
     keyboardShortcutManager,
     keyboardGroup,
+    setKeyboardGroup,
   } = useContext(AppContext);
 
   // Set keyboard selected by storage key
   const { keyboardSelected, setKeyboardSelected } = useKeyboardSelect(
-    keyboardGroup,
+    'settingsPage',
     options,
     'title',
   );
@@ -157,10 +158,13 @@ function TimerSettingsPane() {
    * Clear keyboardSelected, and call setSelected.
    */
   function handleSelectAndResetKeyboard(key?: string) {
-    if (keyboardSelected !== key) {
-      setKeyboardSelected(undefined);
-    }
+    // if (!key) {
+    //   setKeyboardSelected();
+    // } else if (keyboardSelected !== key) {
+    //   setKeyboardSelected(undefined);
+    // }
 
+    setKeyboardGroup(key ? 'input' : 'settingsPage');
     setSelected(key);
   }
 
