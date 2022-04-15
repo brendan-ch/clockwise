@@ -9,9 +9,12 @@ interface ButtonProps {
   highlighted?: boolean,
   text: string,
   onPress?: () => any,
+  style?: StyleProp<ViewStyle>,
 }
 
-function SelectionButton({ highlighted, text, onPress }: ButtonProps) {
+function SelectionButton({
+  highlighted, text, onPress, style,
+}: ButtonProps) {
   const highlightAnimation = useRef(new Animated.Value(0)).current;
   const colors = useTheme();
 
@@ -36,7 +39,7 @@ function SelectionButton({ highlighted, text, onPress }: ButtonProps) {
 
   return (
     <Pressable
-      style={[buttonStyles.container]}
+      style={[buttonStyles.container, style]}
       onPress={onPress}
     >
       <View
@@ -93,6 +96,7 @@ const buttonStyles = StyleSheet.create({
 SelectionButton.defaultProps = {
   highlighted: false,
   onPress: () => {},
+  style: {},
 };
 
 interface Props {
@@ -101,6 +105,7 @@ interface Props {
   /* eslint-disable-next-line */
   onSelect?: (option: string) => any,
   style?: StyleProp<ViewStyle>,
+  buttonStyle?: StyleProp<ViewStyle>,
 }
 
 /**
@@ -108,7 +113,7 @@ interface Props {
  * @returns
  */
 function SelectionBar({
-  selected, options, onSelect, style,
+  selected, options, onSelect, style, buttonStyle,
 }: Props) {
   return (
     <View style={[styles.container, style]}>
@@ -119,6 +124,7 @@ function SelectionBar({
           highlighted={selected === option}
           text={option}
           onPress={onSelect ? () => onSelect(option) : undefined}
+          style={buttonStyle}
         />
       ))}
     </View>
@@ -135,6 +141,7 @@ const styles = StyleSheet.create({
 SelectionBar.defaultProps = {
   onSelect: () => {},
   style: {},
+  buttonStyle: {},
 };
 
 export default SelectionBar;
