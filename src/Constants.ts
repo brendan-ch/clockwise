@@ -31,7 +31,7 @@ export const RELEASE_CODE = '1.4.0-3';
 // Export files from previous versions should always be compatible with new ones,
 // but files generated from newer versions can break compatibility with previous
 // versions.
-export const EXPORT_VERSION_NUM = 2;
+export const EXPORT_VERSION_NUM = 3;
 
 export const APP_STORE_LINK = Constants.manifest?.extra?.appStoreLink;
 export const GOOGLE_PLAY_LINK = Constants.manifest?.extra?.googlePlayLink;
