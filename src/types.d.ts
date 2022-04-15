@@ -184,7 +184,7 @@ interface DefaultSettingsState {
   [DARK_MODE]: boolean,
   [_24_HOUR_TIME]: boolean,
   /* eslint-disable-next-line */
-  setSetting?: (key: string, value: number | boolean) => any,
+  setSetting?: (key: string, value: number | boolean | string) => any,
   /* eslint-disable-next-line */
   setSettings?: (settings: any) => any,
 }
