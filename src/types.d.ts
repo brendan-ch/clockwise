@@ -33,9 +33,12 @@ interface SettingsOptionProps {
   /**
    * Indicates type of option displayed and value passed.
    */
-  type: 'number' | 'text' | 'toggle' | 'icon',
+  type: 'number' | 'text' | 'toggle' | 'icon' | 'selection',
   /**
    * Value for the provided `type`.
+   * For types `number` and `toggle`, this reflects the respective datatype.
+   * For type `selection`, this is the selected option as a string.
+   * for types `text` and `icon`, this is what to display on the right.
    */
   value?: boolean | number | string,
   /**
@@ -43,6 +46,11 @@ interface SettingsOptionProps {
    */
   /* eslint-disable-next-line */
   onChange?: (data: any) => any,
+  /**
+   * If type is `selected`, this is the array of options to display to the user.
+   * Otherwise has no effect.
+   */
+  selectionOptions?: string[],
   /**
    * Title to display for the settings component. If `onChangeText` is provided,
    * this acts as the value for the input component.
