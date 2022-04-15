@@ -18,11 +18,13 @@ import TextStyles from '../styles/Text';
 import Checkbox from './Checkbox';
 import NumberBox from './NumberBox';
 import { SettingsOptionProps } from '../types';
+import SelectionBar from './SelectionBar';
 
 function SettingsOption({
   type,
   onPress,
   onPressRight,
+  selectionOptions,
   title,
   value,
   selected,
@@ -238,6 +240,15 @@ function SettingsOption({
           />
         </Pressable>
       ) : undefined}
+      {type === 'selection'
+        && typeof selectionOptions === 'object'
+        && typeof value === 'string' ? (
+          <SelectionBar
+            options={selectionOptions}
+            selected={value}
+            onSelect={onChange ? (newSelected) => onChange(newSelected) : undefined}
+          />
+        ) : undefined}
     </View>
   );
 
