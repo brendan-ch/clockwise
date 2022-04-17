@@ -32,7 +32,7 @@ import useTheme from './src/helpers/hooks/useTheme';
 import SettingsOverlay from './src/overlays/SettingsOverlay';
 import LandscapeHeader from './src/components/LandscapeHeader';
 import LandscapeFooter from './src/components/LandscapeFooter';
-import { getData, prefillSettings } from './src/helpers/storage';
+import { getData, prefillSettings, storeData } from './src/helpers/storage';
 import usePageTitle from './src/helpers/hooks/usePageTitle';
 
 /* eslint-disable-next-line */
@@ -46,6 +46,7 @@ import {
   ENABLE_BACKGROUND,
   ENABLE_TIMER_ALERTS,
   ENABLE_TIMER_SOUND,
+  EXPORT_VERSION_KEY,
   FOCUS_TIME_MINUTES,
   LONG_BREAK_ENABLED,
   LONG_BREAK_INTERVAL,
@@ -63,7 +64,7 @@ import IntroductionPage from './src/pages/IntroductionPage';
 import { TIMER_SOUND } from './src/Assets';
 import RedirectPage from './src/pages/RedirectPage';
 import ImportSettingsPane from './src/overlays/settings/ImportSettings';
-import { REGIONS_WITH_12H_TIME } from './src/Constants';
+import { EXPORT_VERSION_NUM, REGIONS_WITH_12H_TIME } from './src/Constants';
 import AppBanner from './src/components/AppBanner';
 import getTimeKey from './src/helpers/getTimeKey';
 import BackgroundSettingsPane from './src/overlays/settings/BackgroundSettings';
@@ -290,7 +291,7 @@ export default function App() {
    * @param key
    * @param value
    */
-  function setSetting(key: string, value: boolean | number) {
+  function setSetting(key: string, value: boolean | number | string) {
     setSettings({
       ...settings,
       [key]: value,
@@ -429,7 +430,9 @@ export default function App() {
   useEffect(() => {
     // Timer and app initialiation
     loadTimerSound();
+    // @unnameduser95 Add data migration here
     prefillSettings()
+      .then(() => storeData(EXPORT_VERSION_KEY, `${EXPORT_VERSION_NUM}`))
       .then(() => {
         initializeSettingsData();
       });

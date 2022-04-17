@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { SectionList } from 'react-native';
+import { Platform, SectionList } from 'react-native';
 import AppContext from '../../../AppContext';
 import renderHeader from '../../helpers/renderers/renderHeader';
 import SettingsOption from '../../components/SettingsOption';
@@ -9,6 +9,7 @@ import {
   AUTO_APPEARANCE,
   DARK_MODE,
   ENABLE_BACKGROUND,
+  // THEME,
   _24_HOUR_TIME,
 } from '../../StorageKeys';
 import { SettingsOptionProps, Section, SettingsOptionPropsStatic } from '../../types';
@@ -39,6 +40,12 @@ const options: SettingsOptionPropsStatic[] = [
     title: 'Enable dark mode',
     storageKey: DARK_MODE,
   },
+  // {
+  //   type: 'selection',
+  //   title: 'Theme',
+  //   selectionOptions: ['light', 'dark', 'auto'],
+  //   storageKey: THEME,
+  // },
 ];
 
 /**
@@ -75,11 +82,12 @@ function BackgroundSettingsPane() {
   const {
     keyboardShortcutManager,
     keyboardGroup,
+    setKeyboardGroup,
   } = useContext(AppContext);
 
   // Set keyboard selected by storage key
   const { keyboardSelected, setKeyboardSelected } = useKeyboardSelect(
-    keyboardGroup,
+    'settingsPage',
     options,
     'title',
   );
@@ -88,20 +96,26 @@ function BackgroundSettingsPane() {
    * Clear keyboardSelected, and call setSelected.
    */
   function handleSelectAndResetKeyboard(key?: string) {
-    if (keyboardSelected !== key) {
-      setKeyboardSelected(undefined);
-    }
+    // if (key && keyboardSelected !== key && Platform.OS === 'web') {
+    //   setKeyboardSelected(key);
+    // }
 
+    // Set keyboard group to input
+    setKeyboardGroup(key ? 'input' : 'settingsPage');
     setSelected(key);
   }
 
   useEffect(() => {
+    if (Platform.OS !== 'web') return;
+
     if (keyboardGroup === 'settingsPage' && !keyboardSelected) {
       setKeyboardSelected(options[0].title);
     } else if (keyboardGroup === 'settings') {
       setKeyboardSelected(undefined);
+    } else if (keyboardGroup === 'input' && selected) {
+      setKeyboardSelected(selected);
     }
-  }, [keyboardShortcutManager, keyboardGroup]);
+  }, [keyboardShortcutManager, keyboardGroup, selected]);
 
   const renderItem = ({ item, index }: { item: SettingsOptionProps, index: number }) => {
     let indicator = keyboardSelected === item.title ? '→ to select' : undefined;

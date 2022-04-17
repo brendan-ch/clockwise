@@ -9,9 +9,13 @@ interface ButtonProps {
   highlighted?: boolean,
   text: string,
   onPress?: () => any,
+  style?: StyleProp<ViewStyle>,
+  keyboardSelected?: boolean,
 }
 
-function SelectionButton({ highlighted, text, onPress }: ButtonProps) {
+function SelectionButton({
+  highlighted, text, onPress, style, keyboardSelected,
+}: ButtonProps) {
   const highlightAnimation = useRef(new Animated.Value(0)).current;
   const colors = useTheme();
 
@@ -36,7 +40,7 @@ function SelectionButton({ highlighted, text, onPress }: ButtonProps) {
 
   return (
     <Pressable
-      style={[buttonStyles.container]}
+      style={[buttonStyles.container, style]}
       onPress={onPress}
     >
       <View
@@ -59,6 +63,7 @@ function SelectionButton({ highlighted, text, onPress }: ButtonProps) {
           {
             color: highlighted ? colors.background : colors.gray3,
             zIndex: 1,
+            textDecorationLine: keyboardSelected ? 'underline' : 'none',
           },
         ]}
       >
@@ -93,14 +98,21 @@ const buttonStyles = StyleSheet.create({
 SelectionButton.defaultProps = {
   highlighted: false,
   onPress: () => {},
+  style: {},
+  keyboardSelected: false,
 };
 
 interface Props {
   selected: string,
+  /**
+   * Whether or not to underline the text in the button.
+   */
+  keyboardSelected?: boolean,
   options: string[],
   /* eslint-disable-next-line */
   onSelect?: (option: string) => any,
   style?: StyleProp<ViewStyle>,
+  buttonStyle?: StyleProp<ViewStyle>,
 }
 
 /**
@@ -108,7 +120,7 @@ interface Props {
  * @returns
  */
 function SelectionBar({
-  selected, options, onSelect, style,
+  selected, options, onSelect, style, buttonStyle, keyboardSelected,
 }: Props) {
   return (
     <View style={[styles.container, style]}>
@@ -119,6 +131,8 @@ function SelectionBar({
           highlighted={selected === option}
           text={option}
           onPress={onSelect ? () => onSelect(option) : undefined}
+          style={buttonStyle}
+          keyboardSelected={keyboardSelected && selected === option}
         />
       ))}
     </View>
@@ -135,6 +149,8 @@ const styles = StyleSheet.create({
 SelectionBar.defaultProps = {
   onSelect: () => {},
   style: {},
+  buttonStyle: {},
+  keyboardSelected: undefined,
 };
 
 export default SelectionBar;
