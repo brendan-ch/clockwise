@@ -158,9 +158,9 @@ function TimerSettingsPane() {
    * Clear keyboardSelected, and call setSelected.
    */
   function handleSelectAndResetKeyboard(key?: string) {
-    if (key && keyboardSelected !== key && Platform.OS === 'web') {
-      setKeyboardSelected(key);
-    }
+    // if (keyboardSelected !== key) {
+    //   setKeyboardSelected(undefined);
+    // }
 
     setKeyboardGroup(key ? 'input' : 'settingsPage');
     setSelected(key);
@@ -217,12 +217,17 @@ function TimerSettingsPane() {
   }, [keyboardSelected]);
 
   useEffect(() => {
+    if (Platform.OS !== 'web') return;
+
     if (keyboardGroup === 'settingsPage' && !keyboardSelected) {
       setKeyboardSelected(options[0].title);
     } else if (keyboardGroup === 'settings') {
       setKeyboardSelected(undefined);
+    } else if (keyboardGroup === 'input' && selected) {
+      // Assume that something has been selected
+      setKeyboardSelected(selected);
     }
-  }, [keyboardShortcutManager, keyboardGroup]);
+  }, [keyboardShortcutManager, keyboardGroup, selected]);
 
   const renderItem = (
     { item, index, section }: { item: SettingsOptionProps, index: number, section: Section },
