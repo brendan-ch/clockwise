@@ -40,6 +40,12 @@ const options: SettingsOptionPropsStatic[] = [
     title: 'Enable dark mode',
     storageKey: DARK_MODE,
   },
+  // {
+  //   type: 'selection',
+  //   title: 'Theme',
+  //   selectionOptions: ['light', 'dark', 'auto'],
+  //   storageKey: THEME,
+  // },
 ];
 
 /**
@@ -60,7 +66,7 @@ function BackgroundSettingsPane() {
     {
       title: 'Theme',
       icon: 'moon-outline',
-      data: autoSetTheme ? settingsData.slice(2, 3) : settingsData.slice(2, 2),
+      data: autoSetTheme ? settingsData.slice(2, 3) : settingsData.slice(2, 4),
     },
   ];
   if (windowSize === 'landscape') {
@@ -90,9 +96,9 @@ function BackgroundSettingsPane() {
    * Clear keyboardSelected, and call setSelected.
    */
   function handleSelectAndResetKeyboard(key?: string) {
-    if (key && keyboardSelected !== key && Platform.OS === 'web') {
-      setKeyboardSelected(key);
-    }
+    // if (key && keyboardSelected !== key && Platform.OS === 'web') {
+    //   setKeyboardSelected(key);
+    // }
 
     // Set keyboard group to input
     setKeyboardGroup(key ? 'input' : 'settingsPage');
@@ -100,12 +106,16 @@ function BackgroundSettingsPane() {
   }
 
   useEffect(() => {
+    if (Platform.OS !== 'web') return;
+
     if (keyboardGroup === 'settingsPage' && !keyboardSelected) {
       setKeyboardSelected(options[0].title);
     } else if (keyboardGroup === 'settings') {
       setKeyboardSelected(undefined);
+    } else if (keyboardGroup === 'input' && selected) {
+      setKeyboardSelected(selected);
     }
-  }, [keyboardShortcutManager, keyboardGroup]);
+  }, [keyboardShortcutManager, keyboardGroup, selected]);
 
   const renderItem = ({ item, index }: { item: SettingsOptionProps, index: number }) => {
     let indicator = keyboardSelected === item.title ? '→ to select' : undefined;
