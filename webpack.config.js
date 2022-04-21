@@ -39,7 +39,7 @@ module.exports = async function (env, argv) {
       // Run rm -rf on unnecessary fonts
       config.plugins.push(
         new HookShellScriptPlugin({
-          afterEmit: ["find ./web-build/fonts -not \\( -name 'Ionicons*' -o -name 'AnonymousPro*' \\) -delete"],
+          afterEmit: ["find ./web-build/fonts -not \\( -name 'Ionicons*' -o -name 'AnonymousPro*' -o -name './web-build/fonts' \\) -delete"],
         }),
       );
     }
