@@ -6526,6 +6526,11 @@ hmac-drbg@^1.0.1:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.1"
 
+hook-shell-script-webpack-plugin@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/hook-shell-script-webpack-plugin/-/hook-shell-script-webpack-plugin-0.1.4.tgz#a6b16b7aa15e70f66511367b78a9ab23a1fec84f"
+  integrity sha512-LDv0JiHW9GqYpMJuvn9DuNkGbuzOegEo/M2IJTDsJWZjHF+XlJyeXHq2lVf75m6GkSFKQKFMCk7nbqNUSio4mQ==
+
 hsl-regex@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/hsl-regex/-/hsl-regex-1.0.0.tgz#d49330c789ed819e276a4c0d272dffa30b18fe6e"
