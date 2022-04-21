@@ -5,10 +5,7 @@ export const BREAK_TIME_MINUTES = '@breakTimeMinutes';
 export const LONG_BREAK_TIME_MINUTES = '@longBreakTimeMinutes';
 export const LONG_BREAK_INTERVAL = '@longBreakInterval';
 export const LONG_BREAK_ENABLED = '@longBreakEnabled';
-/**
- * @deprecated Use `AUTO_START_BREAK` and `AUTO_START_FOCUS` keys instead.
- */
-export const AUTO_START_TIMERS = '@autoStartTimers';
+
 export const TASKS = '@tasks';
 
 export const ENABLE_BACKGROUND_TIMER = '@enableBackgroundTimer';

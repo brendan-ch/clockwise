@@ -15,10 +15,22 @@ import {
   _24_HOUR_TIME,
 } from './StorageKeys';
 
+/**
+ * State of the timer.
+ */
 type TimerState = 'running' | 'paused' | 'stopped';
+/**
+ * Determines which overlay to display.
+ */
 type Overlay = 'none' | 'settings' | 'command' | 'introduction';
+/**
+ * Timer mode to display on the timer page.
+ */
 type TimerMode = 'focus' | 'break' | 'longBreak';
 
+/**
+ * Keyboard shortcut group - determines which set of keybindings are registered.
+ */
 type KeyboardShortcutGroup = 'timer' | 'settings' | 'input' | 'settingsPage' | 'none';
 
 /**
@@ -152,23 +164,59 @@ interface SettingsOptionPropsStatic extends SettingsOptionProps {
   validator?: (data: any) => Promise<boolean>,
 }
 
+/**
+ * Represents a section on a settings panel.
+ */
 interface Section {
+  /**
+   * Title of the section - should be representative of the data stored in the section.
+   */
   title: string,
+  /**
+   * Ionicons icon to display to the left of the title.
+   */
   icon?: string,
+  /**
+   * Data to display underneath the section.
+   */
   data: any[],
 }
 
+/**
+ * Represents a task as stored in local storage.
+ */
 interface Task {
+  /**
+   * Title of the task.
+   */
   title: string,
+  /**
+   * Number of estimated sessions the task will take.
+   */
   estPomodoros: number,
+  /**
+   * Number of actual sessions tracked. This value is bumped when the timer switches state
+   * from focus to break (when the timer hits `0:00`).
+   */
   actualPomodoros?: number,
+  /**
+   * Locally generated ID of the task.
+   */
   id: number,
+  /**
+   * This key links the task to an item in a third-party service
+   * (e.g. Notion or Todoist). When a user completes a task, the app will
+   * mark it as complete on the respective service.
+   */
   syncData: {
     notion?: {
       id: string,
       completionProp: string,
     },
   },
+  /**
+   * This key marks the task as completed.
+   */
   completed?: boolean,
 }
 
@@ -183,27 +231,73 @@ interface DefaultSettingsState {
   [AUTO_APPEARANCE]: boolean,
   [DARK_MODE]: boolean,
   [_24_HOUR_TIME]: boolean,
+  /**
+   * Update a setting in the settings state.
+   * @param key The settings key to update.
+   * @param value The value to write to the settings key.
+   */
   /* eslint-disable-next-line */
-  setSetting?: (key: string, value: number | boolean | string) => any,
+  setSetting?: (key: string, value: number | boolean | string) => void,
+  /**
+   * Overwrite the entire `DefaultSettingsState` object in the state.
+   * @param settings
+   */
   /* eslint-disable-next-line */
-  setSettings?: (settings: any) => any,
+  setSettings?: (settings: DefaultSettingsState) => any,
 }
 
+/**
+ * Represents a background image.
+ */
 interface ImageInfo {
+  /**
+   * The URI to load the image from.
+   */
   uri: string,
+  /**
+   * The author of the image.
+   */
   author: string,
+  /**
+   * The user-friendly link to the image.
+   */
   link: string,
 }
 
+/**
+ * Represents the default state of the `Image` context.
+ */
 interface DefaultImageState {
+  /**
+   * Represents the background image information.
+   * If undefined, then no image is set.
+   */
   imageInfo?: ImageInfo,
 }
 
+/**
+ * Represents an introduction block.
+ */
 interface IntroductionBlockProps {
+  /**
+   * Title to display below the image.
+   */
   title: string,
+  /**
+   * All children components are rendered below the title.
+   */
   children: ReactChild,
+  /**
+   * Styling of the block.
+   */
   style?: StyleProp<ViewStyle>,
+  /**
+   * Styling of the image.
+   */
   imageStyle?: StyleProp<ImageStyle>,
+  /**
+   * The image to display on the introduction block.
+   */
   image?: ImageSourcePropType,
 }
 
