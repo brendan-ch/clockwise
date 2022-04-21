@@ -1,6 +1,8 @@
 const createExpoWebpackConfigAsync = require('@expo/webpack-config');
 const path = require('path');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
+const HookShellScriptPlugin = require('hook-shell-script-webpack-plugin');
+const os = require('os');
 
 /* eslint-disable-next-line */
 module.exports = async function (env, argv) {
@@ -32,6 +34,15 @@ module.exports = async function (env, argv) {
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
       }),
     );
+
+    if (os.platform() !== 'win32') {
+      // Run rm -rf on unnecessary fonts
+      config.plugins.push(
+        new HookShellScriptPlugin({
+          afterEmit: ["find ./web-build/fonts -type f -not \\( -name 'Ionicons*' -o -name 'AnonymousPro*' \\) -delete"],
+        }),
+      );
+    }
   }
 
   return config;
