@@ -290,6 +290,8 @@ export default function App() {
    * Update a setting in the settings state.
    * @param key
    * @param value
+   *
+   * @todo Validate that key exists before setting.
    */
   function setSetting(key: string, value: boolean | number | string) {
     setSettings({
