@@ -9,7 +9,7 @@ import { exportData } from '../helpers/dataManagement';
 import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
 
-export default function RedirectPage() {
+export default function NewSiteMessage() {
   const colors = useTheme();
 
   return (

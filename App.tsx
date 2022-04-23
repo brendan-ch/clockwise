@@ -62,13 +62,14 @@ import ImageContext from './ImageContext';
 import IntroductionOverlay from './src/overlays/IntroductionOverlay';
 import IntroductionPage from './src/pages/IntroductionPage';
 import { TIMER_SOUND } from './src/Assets';
-import RedirectPage from './src/pages/RedirectPage';
+import NewSiteMessage from './src/pages/NewSiteMessage';
 import ImportSettingsPane from './src/overlays/settings/ImportSettings';
 import { EXPORT_VERSION_NUM, REGIONS_WITH_12H_TIME } from './src/Constants';
 import AppBanner from './src/components/AppBanner';
 import getTimeKey from './src/helpers/getTimeKey';
 import BackgroundSettingsPane from './src/overlays/settings/BackgroundSettings';
 import AboutPane from './src/overlays/settings/About';
+import RedirectPage from './src/components/RedirectPage';
 
 const MIN_25 = 1500000;
 
@@ -429,6 +430,7 @@ export default function App() {
     setShortcutsInitialized(true);
   }, []);
 
+  // App + data setup, redirects
   useEffect(() => {
     // Timer and app initialiation
     loadTimerSound();
@@ -467,6 +469,7 @@ export default function App() {
     }
   }, [imageInfo, windowSize, settings[ENABLE_BACKGROUND]]);
 
+  // Handle setting the introduction
   useEffect(() => {
     function setIntroduction() {
       getData(SUPPRESS_INTRODUCTION)
@@ -494,6 +497,7 @@ export default function App() {
       Settings: 'settings',
       'Data Management': 'settings/data-management',
       Appearance: 'settings/appearance',
+      About: 'settings/about',
     },
   };
 
@@ -530,6 +534,17 @@ export default function App() {
     />
   );
 
+  // Check for URL path that isn't in config
+  if (Platform.OS === 'web'
+    && window.location.pathname !== '/'
+    && !Object.values(config.screens).includes(window.location.pathname.substring(1))
+  ) {
+    // Render a redirect page
+    return (
+      <RedirectPage />
+    );
+  }
+
   if (!shortcutsInitialized && (Platform.OS === 'web' || !fontsLoaded)) {
     return (
       <AppLoading />
@@ -541,7 +556,7 @@ export default function App() {
   ) {
     // Present redirect page
     return (
-      <RedirectPage />
+      <NewSiteMessage />
     );
   }
 
