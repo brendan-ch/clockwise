@@ -1,6 +1,5 @@
 import React from 'react';
 import { Text } from 'react-native';
-import Constants from 'expo-constants';
 
 import ClickableText from '../../components/ClickableText';
 import { IntroductionBlockProps } from '../../types';
@@ -8,15 +7,13 @@ import useTheme from './useTheme';
 import TextStyles from '../../styles/Text';
 import { NO_ADS_IMAGE, SETTINGS_IMAGE, TASKS_IMAGE } from '../../Assets';
 import handleOpenLink from '../handleOpenLink';
-
-/* eslint-disable global-require */
+import getBaseURL from '../getBaseURL';
 
 /**
  * Hook that returns introduction data.
  */
 function useIntroductionData(): IntroductionBlockProps[] {
   const colorValues = useTheme();
-  const privacyPolicyLink = Constants.manifest?.extra?.privacyPolicyLink;
 
   const blocks: IntroductionBlockProps[] = [
     {
@@ -65,7 +62,7 @@ function useIntroductionData(): IntroductionBlockProps[] {
           {'Your data stays on your device. See the '}
           <ClickableText
             text="Privacy Policy"
-            onPress={() => handleOpenLink(privacyPolicyLink)}
+            onPress={() => handleOpenLink(`${getBaseURL()}/privacy`)}
             style={[TextStyles.textRegular, {
               color: colorValues.gray3,
             }]}

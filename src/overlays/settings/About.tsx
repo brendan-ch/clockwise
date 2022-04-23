@@ -8,18 +8,19 @@ import ClickableText from '../../components/ClickableText';
 import SettingsOption from '../../components/SettingsOption';
 import {
   RELEASE_CODE,
-  PRIVACY_POLICY_LINK,
-  GITHUB_LINK,
   GITHUB_PROFILE_LINK,
   APP_STORE_LINK,
   GOOGLE_PLAY_LINK,
 } from '../../Constants';
+import getBaseURL from '../../helpers/getBaseURL';
 import handleOpenLink from '../../helpers/handleOpenLink';
 import useKeyboardSelect from '../../helpers/hooks/useKeyboardSelect';
 import useTheme from '../../helpers/hooks/useTheme';
 import useWindowSize from '../../helpers/hooks/useWindowSize';
 import TextStyles from '../../styles/Text';
 import { SettingsOptionProps } from '../../types';
+
+const baseUrl = getBaseURL();
 
 interface TextWithLink {
   text: string,
@@ -44,13 +45,13 @@ const buttons: SettingsOptionProps[] = [
     title: 'Privacy Policy',
     value: 'chevron-forward-outline',
     type: 'icon',
-    onPress: () => handleOpenLink(PRIVACY_POLICY_LINK),
+    onPress: () => handleOpenLink(`${baseUrl}/privacy`),
   },
   {
     title: 'Open Source Licenses',
     value: 'chevron-forward-outline',
     type: 'icon',
-    onPress: () => handleOpenLink(GITHUB_LINK),
+    onPress: () => handleOpenLink(`${baseUrl}/licenses`),
   },
 ];
 
