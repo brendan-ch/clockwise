@@ -69,7 +69,7 @@ import AppBanner from './src/components/AppBanner';
 import getTimeKey from './src/helpers/getTimeKey';
 import BackgroundSettingsPane from './src/overlays/settings/BackgroundSettings';
 import AboutPane from './src/overlays/settings/About';
-import RedirectPage from './src/components/RedirectPage';
+import RedirectPage from './src/pages/RedirectPage';
 
 const MIN_25 = 1500000;
 
