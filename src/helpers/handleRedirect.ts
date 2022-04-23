@@ -16,8 +16,8 @@ function handleRedirect() {
     case '/licenses':
       handleOpenLink(GITHUB_LINK, false);
       break;
-    // case '/support':
     default:
+      handleOpenLink('/', false);
       break;
   }
 }
