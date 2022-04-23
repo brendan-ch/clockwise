@@ -498,6 +498,7 @@ export default function App() {
       'Data Management': 'settings/data-management',
       Appearance: 'settings/appearance',
       About: 'settings/about',
+      Introduction: 'introduction',
     },
   };
 
