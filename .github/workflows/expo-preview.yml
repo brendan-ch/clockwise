@@ -40,7 +40,7 @@ jobs:
       
       # Add Expo action
       - name: Use Expo
-        uses: expo/expo-github-action@v6
+        uses: expo/expo-github-action@v7
         with:
           token: ${{ secrets.EXPO_TOKEN }}
           packager: yarn
