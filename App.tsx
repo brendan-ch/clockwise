@@ -545,7 +545,7 @@ export default function App() {
     );
   }
 
-  if (!shortcutsInitialized && (Platform.OS === 'web' || !fontsLoaded)) {
+  if (!(shortcutsInitialized && (Platform.OS === 'web' || fontsLoaded))) {
     return (
       <AppLoading />
     );
