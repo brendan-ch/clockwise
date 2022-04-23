@@ -42,3 +42,5 @@ export const PRIVACY_POLICY_LINK = Constants.manifest?.extra?.privacyPolicyLink;
  */
 export const GITHUB_LINK = Constants.manifest?.extra?.githubLink;
 export const GITHUB_PROFILE_LINK = Constants.manifest?.extra?.githubProfileLink;
+
+export const SUPPORT_LINK = Constants.manifest?.extra?.supportLink;

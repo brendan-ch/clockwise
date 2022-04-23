@@ -55,5 +55,6 @@ export default {
     prodBuild: process.env.PROD_BUILD,
     appStoreLink: process.env.APP_STORE_LINK,
     googlePlayLink: process.env.GOOGLE_PLAY_LINK,
+    supportLink: process.env.SUPPORT_LINK,
   },
 };
