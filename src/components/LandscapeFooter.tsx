@@ -12,14 +12,16 @@ import ClickableText from './ClickableText';
 import ImageContext from '../../ImageContext';
 import handleOpenLink from '../helpers/handleOpenLink';
 import {
-  GITHUB_LINK, PRIVACY_POLICY_LINK, RELEASE_CODE,
+  RELEASE_CODE,
 } from '../Constants';
+import getBaseURL from '../helpers/getBaseURL';
 
 function LandscapeFooter() {
   const [hovering, setHovering] = useState(false);
 
-  const privacyPolicyLink = PRIVACY_POLICY_LINK;
-  const githubLink = GITHUB_LINK;
+  const baseUrl = getBaseURL();
+  const privacyPolicyLink = `${baseUrl}/privacy`;
+  const githubLink = `${baseUrl}/licenses`;
 
   const opacityAnimation = useRef(new Animated.Value(1)).current;
   const colorValues = useTheme();
