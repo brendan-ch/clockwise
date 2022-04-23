@@ -31,7 +31,7 @@ function RedirectPage() {
             color: colors.primary,
           }]}
         >
-          Redirecting you to the intended page...
+          Redirecting you to the correct page...
 
         </Text>
       </View>
