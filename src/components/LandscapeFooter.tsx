@@ -16,10 +16,10 @@ import {
 } from '../Constants';
 import getBaseURL from '../helpers/getBaseURL';
 
+const baseUrl = getBaseURL();
+
 function LandscapeFooter() {
   const [hovering, setHovering] = useState(false);
-
-  const baseUrl = getBaseURL();
   const privacyPolicyLink = `${baseUrl}/privacy`;
   const githubLink = `${baseUrl}/licenses`;
 
