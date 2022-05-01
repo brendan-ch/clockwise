@@ -1,14 +1,6 @@
 # Run expo publish --release-channel preview
 name: Expo preview deployment
 
-env:
-  PRIVACY_POLICY_LINK: ${{ secrets.PRIVACY_POLICY_LINK }}
-  GITHUB_LINK: ${{ secrets.REPO_LINK }}
-  GITHUB_PROFILE_LINK: ${{ secrets.PROFILE_LINK }}
-  APP_STORE_LINK: ${{ secrets.APP_STORE_LINK }}
-  GOOGLE_PLAY_LINK: ${{ secrets.GOOGLE_PLAY_LINK }}
-  SUPPORT_LINK: ${{ secrets.SUPPORT_LINK }}
-
 # Controls when the workflow will run
 on:
   # Run on pull request/push to master
@@ -20,17 +12,12 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
+  publish:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Check for environment variables
-        if: ${{ env.PRIVACY_POLICY_LINK == '' || env.GITHUB_LINK == '' || env.GITHUB_PROFILE_LINK == '' || env.APP_STORE_LINK == '' || env.GOOGLE_PLAY_LINK == '' || env.SUPPORT_LINK == '' }}
-        run: exit 1
-
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Git checkout
         uses: actions/checkout@v2
@@ -58,3 +45,10 @@ jobs:
       # Run expo publish
       - name: Run expo publish
         run: expo publish --release-channel preview
+        env:
+          PRIVACY_POLICY_LINK: ${{ secrets.PRIVACY_POLICY_LINK }}
+          GITHUB_LINK: ${{ secrets.REPO_LINK }}
+          GITHUB_PROFILE_LINK: ${{ secrets.PROFILE_LINK }}
+          APP_STORE_LINK: ${{ secrets.APP_STORE_LINK }}
+          GOOGLE_PLAY_LINK: ${{ secrets.GOOGLE_PLAY_LINK }}
+          SUPPORT_LINK: ${{ secrets.SUPPORT_LINK }}
