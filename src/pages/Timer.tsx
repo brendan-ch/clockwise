@@ -378,12 +378,14 @@ export default function TimerPage() {
   }
 
   // Mobile view
-  return (
-    <Pressable
-      style={[styles.container, {
-        backgroundColor: colorValues.background,
-      }]}
-      onPress={() => Keyboard.dismiss()}
+  const children = (
+    <View style={{
+      flex: 1,
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: colorValues.background,
+    }}
     >
       <Animated.View style={[styles.contentContainer, {
         opacity: fadeIn,
@@ -401,12 +403,6 @@ export default function TimerPage() {
             onSelect={(newSelection) => handleSelect(newSelection)}
             options={['focus', 'short break', 'long break']}
           />
-          {/* <PageButtonBar
-            selected={mode}
-            style={styles.pageButtonBar}
-            onPressFocus={() => handleStateSwitch('focus')}
-            onPressBreak={() => handleStateSwitch('break')}
-          /> */}
         </View>
         <View style={styles.middleContainer}>
           <TaskList
@@ -433,6 +429,21 @@ export default function TimerPage() {
         </View>
       ) : undefined}
       <StatusBar style={isLightMode ? 'dark' : 'light'} />
+    </View>
+  );
+
+  if (Platform.OS === 'web') {
+    return children;
+  }
+
+  return (
+    <Pressable
+      style={[styles.container, {
+        backgroundColor: colorValues.background,
+      }]}
+      onPress={() => Keyboard.dismiss()}
+    >
+      {children}
     </Pressable>
   );
 }
