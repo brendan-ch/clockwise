@@ -56,7 +56,7 @@ function SelectionButton({
         />
       </View>
       <Text
-        maxFontSizeMultiplier={1.1}
+        maxFontSizeMultiplier={1.0}
         style={[
           TextStyles.textRegular,
           buttonStyles.text,
