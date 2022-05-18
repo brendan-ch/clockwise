@@ -130,6 +130,7 @@ function AboutPane() {
     <SettingsOption
       /* eslint-disable react/jsx-props-no-spreading */
       {...item}
+      multilineTitle
       keyboardSelected={keyboardSelected === item.title}
       indicator={keyboardSelected === item.title ? '→ to select' : undefined}
     />

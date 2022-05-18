@@ -124,6 +124,7 @@ function BackgroundSettingsPane() {
     }
     return (
       <SettingsOption
+        multilineTitle
       /* eslint-disable react/jsx-props-no-spreading */
         {...item}
         selected={selected === item.title}

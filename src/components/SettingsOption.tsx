@@ -36,7 +36,10 @@ function SettingsOption({
   onInputSelect,
   onSelect,
   style,
-  titleStyle, disabled, keyboardSelected, onChangeText, inputSelected, subtitle, indicator,
+  titleStyle,
+  disabled,
+  keyboardSelected,
+  onChangeText, inputSelected, subtitle, indicator, multilineTitle,
 }: SettingsOptionProps) {
   const colors = useTheme();
   const {
@@ -189,8 +192,8 @@ function SettingsOption({
             style={[TextStyles.textRegular, {
               color: colors.primary,
             }, titleStyle]}
-            numberOfLines={1}
-            ellipsizeMode="tail"
+            numberOfLines={multilineTitle ? 2 : 1}
+            ellipsizeMode={multilineTitle ? undefined : 'tail'}
           >
             {title}
           </Text>
