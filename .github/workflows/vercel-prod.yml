@@ -7,6 +7,7 @@ env:
   APP_STORE_LINK: ${{ secrets.APP_STORE_LINK }}
   GOOGLE_PLAY_LINK: ${{ secrets.GOOGLE_PLAY_LINK }}
   SUPPORT_LINK: ${{ secrets.SUPPORT_LINK }}
+  PROD_BUILD: ${{ secrets.PROD_BUILD }}
 
 # Controls when the workflow will run
 on:
