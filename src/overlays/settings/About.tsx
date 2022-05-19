@@ -91,6 +91,7 @@ function AboutPane() {
         height={200}
       />
       <Text
+        maxFontSizeMultiplier={1.35}
         style={[TextStyles.textBold, {
           fontSize: 49,
           color: colors.primary,
@@ -113,6 +114,7 @@ function AboutPane() {
         />
       ) : (
         <Text
+          maxFontSizeMultiplier={1.35}
           style={[TextStyles.textRegular, {
             color: colors.primary,
             marginBottom: 10,

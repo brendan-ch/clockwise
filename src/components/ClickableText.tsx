@@ -18,6 +18,7 @@ function ClickableText({ style, onPress, text }: Props) {
 
   return (
     <Text
+      maxFontSizeMultiplier={1.35}
       style={[style, {
         textDecorationLine: hovering ? 'underline' : 'none',
       }]}

@@ -22,18 +22,22 @@ function NotificationOverlay({ onClose }: Props) {
       backgroundColor: colors.background,
     }]}
     >
-      <Text style={[TextStyles.textBold, styles.headerText, {
-        marginBottom: 5,
-        color: colors.primary,
-      }]}
+      <Text
+        style={[TextStyles.textBold, styles.headerText, {
+          marginBottom: 5,
+          color: colors.primary,
+        }]}
+        maxFontSizeMultiplier={1.5}
       >
         Notifications are disabled
 
       </Text>
-      <Text style={[TextStyles.textItalic, {
-        color: colors.primary,
-        marginBottom: 5,
-      }]}
+      <Text
+        style={[TextStyles.textItalic, {
+          color: colors.primary,
+          marginBottom: 5,
+        }]}
+        maxFontSizeMultiplier={1.5}
       >
         Turn on app notifications to enable timer alerts.
         {Platform.OS === 'ios' ? ' You may change this later by going to Settings → Notifications → Clockwise.' : undefined}
