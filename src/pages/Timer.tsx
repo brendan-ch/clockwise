@@ -462,7 +462,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     height: '85%',
-    width: 268,
+    width: 280,
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 30,
@@ -473,7 +473,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   topContainer: {
-    width: 280,
+    width: '100%',
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
@@ -523,10 +523,10 @@ const styles = StyleSheet.create({
   },
   pageButtonBar: {
     height: 31,
-    width: 268,
+    width: '100%',
   },
   actionButtonBar: {
     // height: 134,
-    width: 268,
+    width: 280,
   },
 });
