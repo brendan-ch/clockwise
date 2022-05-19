@@ -415,6 +415,11 @@ export default function TimerPage() {
           backgroundColor: colorValues.background,
         }]}
         >
+          <View
+            style={{
+              height: 20,
+            }}
+          />
           <ActionButtonBar
             style={styles.actionButtonBar}
             state={timerBackgrounded ? 'running' : timerState}
@@ -475,10 +480,12 @@ const styles = StyleSheet.create({
   bottomContainer: {
     width: '100%',
     position: 'absolute',
-    height: 200,
+    // height: 200,
     bottom: 0,
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    paddingBottom: 60,
+    alignItems: 'center',
     zIndex: 1,
   },
   middleContainer: {
@@ -519,7 +526,7 @@ const styles = StyleSheet.create({
     width: 268,
   },
   actionButtonBar: {
-    height: 134,
+    // height: 134,
     width: 268,
   },
 });
