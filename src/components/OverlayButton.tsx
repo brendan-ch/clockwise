@@ -22,9 +22,11 @@ export default function OverlayButton({ text, onPress, primary }: ButtonProps) {
       }]}
       onPress={() => onPress()}
     >
-      <Text style={[TextStyles.textRegular, {
-        color: primary ? colors.background : colors.primary,
-      }]}
+      <Text
+        style={[TextStyles.textRegular, {
+          color: primary ? colors.background : colors.primary,
+        }]}
+        maxFontSizeMultiplier={1.35}
       >
         {text}
       </Text>

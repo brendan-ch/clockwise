@@ -20,9 +20,11 @@ function useIntroductionData(): IntroductionBlockProps[] {
       title: 'Set up your tasks',
       image: TASKS_IMAGE,
       children: (
-        <Text style={[TextStyles.textRegular, {
-          color: colorValues.primary,
-        }]}
+        <Text
+          style={[TextStyles.textRegular, {
+            color: colorValues.primary,
+          }]}
+          maxFontSizeMultiplier={1.35}
         >
           Select tasks to work on during each session, so you never lose track of them.
           {'\n\n'}
@@ -42,6 +44,7 @@ function useIntroductionData(): IntroductionBlockProps[] {
       image: SETTINGS_IMAGE,
       children: (
         <Text
+          maxFontSizeMultiplier={1.35}
           style={[TextStyles.textRegular, {
             color: colorValues.primary,
           }]}
@@ -55,9 +58,11 @@ function useIntroductionData(): IntroductionBlockProps[] {
       title: 'No ads or tracking',
       image: NO_ADS_IMAGE,
       children: (
-        <Text style={[TextStyles.textRegular, {
-          color: colorValues.primary,
-        }]}
+        <Text
+          maxFontSizeMultiplier={1.35}
+          style={[TextStyles.textRegular, {
+            color: colorValues.primary,
+          }]}
         >
           {'Your data stays on your device. See the '}
           <ClickableText

@@ -227,6 +227,7 @@ function SettingsPage() {
     { item, index, section }: { item: SettingsOptionProps, index: number, section: Section },
   ) => (
     <SettingsOption
+      multilineTitle
       /* eslint-disable react/jsx-props-no-spreading */
       {...item}
       onPress={() => {

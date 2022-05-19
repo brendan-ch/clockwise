@@ -51,12 +51,13 @@ function ActionButtonBar({
 
   return (
     <View style={[style, styles.container]}>
-      <Text style={[TextStyles.textItalic, styles.text, {
-        color: colors.gray2,
-      }]}
+      <Text
+        style={[TextStyles.textItalic, styles.text, {
+          color: colors.gray2,
+        }]}
+        maxFontSizeMultiplier={1.35}
       >
         {text}
-
       </Text>
       <View style={styles.buttonContainer}>
         <View style={styles.resumeResetContainer}>

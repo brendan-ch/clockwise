@@ -168,9 +168,11 @@ function ActionButton({
               size={30}
             />
           ) : (
-            <Text style={[TextStyles.textBold, styles.text, {
-              color: colorValues.primary,
-            }]}
+            <Text
+              style={[TextStyles.textBold, styles.text, {
+                color: colorValues.primary,
+              }]}
+              maxFontSizeMultiplier={1.35}
             >
               {value}
 
@@ -198,17 +200,19 @@ function ActionButton({
           //   size={30}
           // />
         ) : (
-          <Animated.Text style={[
-            TextStyles.textBold,
-            styles.text,
-            {
-              opacity: fadeAnimation.interpolate({
-                inputRange: [0, 1],
-                outputRange: [1, 0],
-              }),
-              color: colorValues.background,
-            },
-          ]}
+          <Animated.Text
+            maxFontSizeMultiplier={1.35}
+            style={[
+              TextStyles.textBold,
+              styles.text,
+              {
+                opacity: fadeAnimation.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [1, 0],
+                }),
+                color: colorValues.background,
+              },
+            ]}
           >
             {value}
           </Animated.Text>

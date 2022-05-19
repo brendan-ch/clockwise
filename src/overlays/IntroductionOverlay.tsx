@@ -73,6 +73,7 @@ function IntroductionOverlay({ containerStyle }: Props) {
       }]]}
       >
         <Text
+          maxFontSizeMultiplier={1.35}
           style={[TextStyles.textRegular, {
             fontSize: 23,
             color: colorValues.gray3,
@@ -80,6 +81,7 @@ function IntroductionOverlay({ containerStyle }: Props) {
         >
           Welcome to
           <Text
+            maxFontSizeMultiplier={1.35}
             style={[TextStyles.textBold, {
               fontSize: 23,
               color: colorValues.primary,

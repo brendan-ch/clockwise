@@ -442,10 +442,12 @@ function TaskList({ setAtTop }: Props) {
       {
       ((timerStopped || context.mode !== 'focus') && tasks.length === 0)
       || (!timerStopped && selectedTasks.length === 0 && context.mode === 'focus') ? (
-        <Text style={[TextStyles.textRegular, {
-          color: colorValues.gray2,
-          marginTop: 10,
-        }]}
+        <Text
+          style={[TextStyles.textRegular, {
+            color: colorValues.gray2,
+            marginTop: 10,
+          }]}
+          maxFontSizeMultiplier={1.35}
         >
           {timerStopped || context.mode !== 'focus'
             ? 'Add some tasks to keep track of them during your session.'

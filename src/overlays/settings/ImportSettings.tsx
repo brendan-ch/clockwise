@@ -206,6 +206,7 @@ function ImportSettingsPane() {
 
     return (
       <SettingsOption
+        multilineTitle
         /* eslint-disable react/jsx-props-no-spreading */
         {...item}
         subtitle={item.title === 'Import settings' ? importError : item.subtitle}

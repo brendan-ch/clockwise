@@ -20,9 +20,11 @@ function IntroductionBlock({
           // resizeMode="center"
         />
       ) : undefined}
-      <Text style={[TextStyles.textBold, {
-        color: colorValues.primary,
-      }]}
+      <Text
+        style={[TextStyles.textBold, {
+          color: colorValues.primary,
+        }]}
+        maxFontSizeMultiplier={1.35}
       >
         {title}
       </Text>

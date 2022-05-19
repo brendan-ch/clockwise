@@ -69,6 +69,10 @@ interface SettingsOptionProps {
    */
   title?: string,
   /**
+   * Whether the title can have multiple lines.
+   */
+  multilineTitle?: boolean,
+  /**
    * Subtitle to display below the title.
    */
   subtitle?: string,

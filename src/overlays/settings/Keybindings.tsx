@@ -167,6 +167,7 @@ function Keybindings() {
 
   const renderItem = ({ item }: { item: SettingsOptionProps }) => (
     <SettingsOption
+      multilineTitle
       /* eslint-disable react/jsx-props-no-spreading */
       {...item}
       keyboardSelected={keyboardSelected === item.title}

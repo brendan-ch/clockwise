@@ -36,7 +36,10 @@ function SettingsOption({
   onInputSelect,
   onSelect,
   style,
-  titleStyle, disabled, keyboardSelected, onChangeText, inputSelected, subtitle, indicator,
+  titleStyle,
+  disabled,
+  keyboardSelected,
+  onChangeText, inputSelected, subtitle, indicator, multilineTitle,
 }: SettingsOptionProps) {
   const colors = useTheme();
   const {
@@ -181,21 +184,24 @@ function SettingsOption({
             ref={ref}
             onBlur={onInputBlur ? () => onInputBlur() : undefined}
             onFocus={onInputSelect ? () => onInputSelect() : undefined}
+            maxFontSizeMultiplier={1.35}
           />
         </View>
       ) : (
         <View style={[styles.titleContainer]}>
           <Text
+            maxFontSizeMultiplier={1.35}
             style={[TextStyles.textRegular, {
               color: colors.primary,
             }, titleStyle]}
-            numberOfLines={1}
-            ellipsizeMode="tail"
+            numberOfLines={multilineTitle ? 2 : 1}
+            ellipsizeMode={multilineTitle ? undefined : 'tail'}
           >
             {title}
           </Text>
           {subtitle ? (
             <Text
+              maxFontSizeMultiplier={1.35}
               style={[TextStyles.textItalic, {
                 color: colors.primary,
                 fontSize: 10,
@@ -210,6 +216,7 @@ function SettingsOption({
       {/* Display right side subtitle as indicator */}
       {indicator ? (
         <Text
+          maxFontSizeMultiplier={1.35}
           style={[TextStyles.textRegular, {
             color: colors.gray3,
             marginLeft: 3,

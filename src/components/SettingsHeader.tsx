@@ -31,9 +31,11 @@ function SettingsHeader({ title, icon }: Props) {
           marginRight: 10,
         }}
       />
-      <Text style={[TextStyles.textBold, {
-        color: colors.primary,
-      }]}
+      <Text
+        style={[TextStyles.textBold, {
+          color: colors.primary,
+        }]}
+        maxFontSizeMultiplier={1.35}
       >
         {title}
       </Text>

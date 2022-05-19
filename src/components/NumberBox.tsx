@@ -37,6 +37,7 @@ function NumberBox({
   return (
     // @ts-ignore
     <TextInput
+      maxFontSizeMultiplier={1.35}
       caretHidden
       style={[styles.container, TextStyles.textRegular, {
         backgroundColor: colors.gray5,
