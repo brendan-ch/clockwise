@@ -168,9 +168,11 @@ function ActionButton({
               size={30}
             />
           ) : (
-            <Text style={[TextStyles.textBold, styles.text, {
-              color: colorValues.primary,
-            }]}
+            <Text
+              style={[TextStyles.textBold, styles.text, {
+                color: colorValues.primary,
+              }]}
+              maxFontSizeMultiplier={1.35}
             >
               {value}
 
