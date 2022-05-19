@@ -44,6 +44,8 @@ export default function TimerPage() {
   // Depending on selection, update timer state
   const [barSelection, setBarSelection] = useState<'focus' | 'short break' | 'long break'>('focus');
 
+  // const { width } = useWindowDimensions();
+
   const [isAtTop, setAtTop] = useState(true);
   const colorValues = useTheme();
   const isLightMode = colorValues.primary === ColorValues.primary;
@@ -280,7 +282,9 @@ export default function TimerPage() {
           style={styles.timer}
         />
         <SelectionBar
-          style={styles.pageButtonBar}
+          style={[styles.pageButtonBar, {
+            width: 268,
+          }]}
           selected={barSelection}
           // @ts-ignore
           onSelect={(newSelection) => handleSelect(newSelection)}
@@ -321,7 +325,9 @@ export default function TimerPage() {
             />
             <SelectionBar
               selected={barSelection}
-              style={styles.pageButtonBar}
+              style={[styles.pageButtonBar, {
+                width: 268,
+              }]}
               // @ts-ignore
               onSelect={(newSelection) => handleSelect(newSelection)}
               options={['focus', 'short break', 'long break']}
@@ -333,7 +339,9 @@ export default function TimerPage() {
               onPressBreak={() => handleStateSwitch('break')}
             /> */}
             <ActionButtonBar
-              style={styles.actionButtonBar}
+              style={[styles.actionButtonBar, {
+                height: 134,
+              }]}
               state={timerState}
               onStartPress={() => startTimer()}
               onPausePress={() => pauseTimer()}
@@ -389,6 +397,7 @@ export default function TimerPage() {
     >
       <Animated.View style={[styles.contentContainer, {
         opacity: fadeIn,
+        // width: width - 80,
       }]}
       >
         <View style={styles.topContainer}>
@@ -421,7 +430,9 @@ export default function TimerPage() {
             }}
           />
           <ActionButtonBar
-            style={styles.actionButtonBar}
+            style={[styles.actionButtonBar, {
+              // width: width - 80,
+            }]}
             state={timerBackgrounded ? 'running' : timerState}
             onStartPress={() => startTimer()}
             onPausePress={() => pauseTimer()}
@@ -462,7 +473,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     height: '85%',
-    width: 280,
+    width: 268,
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 30,
@@ -523,10 +534,10 @@ const styles = StyleSheet.create({
   },
   pageButtonBar: {
     height: 31,
-    width: '100%',
+    width: 268,
   },
   actionButtonBar: {
     // height: 134,
-    width: 280,
+    width: 268,
   },
 });
