@@ -1,4 +1,4 @@
-# Run the `eas-prod` workflow, then run `eas submit` after it finishes
+# Run `eas submit` for the latest build
 name: EAS Submit
 
 env:
@@ -14,11 +14,12 @@ env:
   GOOGLE_SERVICE_ACC_PRIVATE_KEY: ${{ secrets.GOOGLE_SERVICE_ACC_PRIVATE_KEY }}
 
 on:
-  pull_request:
-    branches: [ main ]
+  # pull_request:
+  #   branches: [ main ]
 
   # Run manually
   workflow_dispatch:
+  workflow_call:
 
 jobs:
   # Run `eas-prod` workflow
@@ -39,28 +40,17 @@ jobs:
           cache: 'yarn'
           node-version: 16.x
 
-      - name: Write service account key file
-        uses: DamianReeves/write-file-action@v1.0
+      - name: Setup Expo and EAS
+        uses: expo/expo-github-action@v7
         with:
-          path: ${{ github.workspace }}/keys/service-account-key.json
-          contents: |
-            \"${{ env.GOOGLE_SERVICE_ACC_PRIVATE_KEY }}\"}
-          write-mode: append
+          token: ${{ secrets.EXPO_TOKEN }}
+          eas-version: latest
+          packager: yarn
+      - name: Install dependencies
+        run: yarn install
 
-      - name: Test if it worked?
-        run: cat keys/service-account-key.json
+      - name: Submit to Google Play
+        run: eas submit -p android --latest --profile production --non-interactive
 
-      # - name: Setup Expo and EAS
-      #   uses: expo/expo-github-action@v7
-      #   with:
-      #     token: ${{ secrets.EXPO_TOKEN }}
-      #     eas-version: latest
-      #     packager: yarn
-      # - name: Install dependencies
-      #   run: yarn install
-
-      # - name: Submit to Google Play
-      #   run: eas submit -p android --latest --profile production --non-interactive
-
-      # - name: Submit to App Store
-      #   run: eas submit --platform ios --non-interactive
+      - name: Submit to App Store
+        run: eas submit -p ios --latest --profile production --non-interactive
