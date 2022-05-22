@@ -39,7 +39,7 @@ jobs:
           node-version: 16.x
 
       - name: Write service account key file
-        uses: DamianReeves/write-file-action@v1
+        uses: DamianReeves/write-file-action@v1.0
         with:
           path: ${{ github.workspace }}/keys/service-account-key.json
           contents: |
