@@ -21,7 +21,28 @@ on:
   workflow_call:
 
 jobs:
-  submit:
+  submit-app-store:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          cache: 'yarn'
+          node-version: 16.x
+
+      - name: Setup Expo and EAS
+        uses: expo/expo-github-action@v7
+        with:
+          token: ${{ secrets.EXPO_TOKEN }}
+          eas-version: latest
+          packager: yarn
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Submit to App Store
+        run: eas submit -p ios --latest --profile production --non-interactive
+
+  submit-google-play:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -41,6 +62,3 @@ jobs:
 
       - name: Submit to Google Play
         run: eas submit -p android --latest --profile production --non-interactive
-
-      - name: Submit to App Store
-        run: eas submit -p ios --latest --profile production --non-interactive
