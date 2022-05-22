@@ -6,7 +6,7 @@ export default {
   slug: 'clockwise',
   scheme: 'clockwise',
   userInterfaceStyle: 'automatic',
-  version: '1.4.2',
+  version: '1.4.1',
   orientation: 'portrait',
   icon: './assets/icon.png',
   splash: {
