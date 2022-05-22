@@ -1,0 +1,50 @@
+# Run `eas build --profile preview`
+# This workflow will stay running until both builds complete
+name: EAS Build Preview
+
+env:
+  PRIVACY_POLICY_LINK: ${{ secrets.PRIVACY_POLICY_LINK }}
+  GITHUB_LINK: ${{ secrets.REPO_LINK }}
+  GITHUB_PROFILE_LINK: ${{ secrets.PROFILE_LINK }}
+  APP_STORE_LINK: ${{ secrets.APP_STORE_LINK }}
+  GOOGLE_PLAY_LINK: ${{ secrets.GOOGLE_PLAY_LINK }}
+  SUPPORT_LINK: ${{ secrets.SUPPORT_LINK }}
+  PROD_BUILD: ${{ secrets.PROD_BUILD }}
+
+  # Pass in additional variables relating to ASC
+  # EXPO_ASC_API_KEY_PATH: ${{ secrets.EXPO_ASC_API_KEY_PATH }}
+  # EXPO_ASC_KEY_ID: ${{ secrets.EXPO_ASC_KEY_ID }}
+  # EXPO_ASC_ISSUER_ID: ${{ secrets.EXPO_ASC_ISSUER_ID }}
+  # EXPO_APPLE_TEAM_ID: ${{ secrets.EXPO_APPLE_TEAM_ID }}
+  # EXPO_APPLE_TEAM_TYPE: ${{ secrets.EXPO_APPLE_TEAM_TYPE }}
+  # EXPO_APP_SPECIFIC_PASSWORD: ${{ secrets.EXPO_APPLE_APP_SPECIFIC_PASSWORD }}
+
+on:
+  # Run when pull request is opened
+  # pull_request:
+    # types: [ opened, reopened ]
+    # branches: [ development, main ]
+
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  build:
+    name: Install and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+          cache: 'yarn'
+      - name: Setup Expo and EAS
+        uses: expo/expo-github-action@v7
+        with:
+          token: ${{ secrets.EXPO_TOKEN }}
+          packager: yarn
+          eas-version: latest
+      - name: Install dependencies
+        run: yarn install
+      - name: Build on EAS
+        run: eas build --profile preview --platform all --non-interactive
