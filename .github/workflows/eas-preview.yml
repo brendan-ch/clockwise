@@ -1,4 +1,5 @@
 # Run `eas build --profile preview`
+# This workflow will stay running until both builds complete
 name: EAS Build Preview
 
 env:
@@ -20,11 +21,12 @@ env:
 
 on:
   # Run when pull request is opened
-  pull_request:
-    types: [ opened, reopened ]
-    branches: [ development, main ]
+  # pull_request:
+    # types: [ opened, reopened ]
+    # branches: [ development, main ]
 
   workflow_dispatch:
+  workflow_call:
 
 jobs:
   build:
@@ -41,8 +43,6 @@ jobs:
         with:
           token: ${{ secrets.EXPO_TOKEN }}
           packager: yarn
-          expo-cache: true
-          expo-version: 5.3.0
           eas-version: latest
       - name: Install dependencies
         run: yarn install
