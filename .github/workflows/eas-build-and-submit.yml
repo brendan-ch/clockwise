@@ -21,17 +21,13 @@ on:
 
 jobs:
   # Run `eas-prod` workflow
-  build:
+  build-and-submit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
       - name: Run `eas-prod` workflow
-        uses: ./.github/workflows/eas-prod
+        uses: ./.github/workflows/eas-prod.yml
 
-  submit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
       - name: Run `eas-submit` workflow
-        uses: ./.github/workflows/eas-submit
+        uses: ./.github/workflows/eas-submit.yml
