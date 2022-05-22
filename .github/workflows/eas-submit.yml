@@ -14,8 +14,8 @@ env:
   GOOGLE_SERVICE_ACC_PRIVATE_KEY: ${{ secrets.GOOGLE_SERVICE_ACC_PRIVATE_KEY }}
 
 on:
-  # pull_request:
-  #   branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
   # Run manually
   workflow_dispatch:
