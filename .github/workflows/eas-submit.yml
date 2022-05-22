@@ -13,6 +13,9 @@ env:
   EXPO_APP_SPECIFIC_PASSWORD: ${{ secrets.EXPO_APPLE_APP_SPECIFIC_PASSWORD }}
 
 on:
+  pull_request:
+    branches: [ main ]
+
   # Run manually
   workflow_dispatch:
 
