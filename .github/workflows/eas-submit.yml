@@ -11,6 +11,7 @@ env:
   PROD_BUILD: ${{ secrets.PROD_BUILD }}
 
   EXPO_APP_SPECIFIC_PASSWORD: ${{ secrets.EXPO_APPLE_APP_SPECIFIC_PASSWORD }}
+  GOOGLE_SERVICE_ACC_PRIVATE_KEY: ${{ secrets.GOOGLE_SERVICE_ACC_PRIVATE_KEY }}
 
 on:
   pull_request:
@@ -43,7 +44,7 @@ jobs:
         with:
           path: ${{ github.workspace }}/keys/service-account-key.json
           contents: |
-            echo "\"${{ secrets.GOOGLE_SERVICE_ACC_PRIVATE_KEY }}\"}"
+            \"${{ env.GOOGLE_SERVICE_ACC_PRIVATE_KEY }}\"}
           write-mode: append
 
       - name: Test if it worked?
