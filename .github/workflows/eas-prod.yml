@@ -12,7 +12,7 @@ env:
   PROD_BUILD: ${{ secrets.PROD_BUILD }}
 
   # Pass in additional variables relating to ASC
-  EXPO_APP_SPECIFIC_PASSWORD: ${{ secrets.EXPO_APPLE_APP_SPECIFIC_PASSWORD }}
+  # EXPO_APP_SPECIFIC_PASSWORD: ${{ secrets.EXPO_APPLE_APP_SPECIFIC_PASSWORD }}
 
 on:
   # Run when pull request is opened
