@@ -1,0 +1,37 @@
+# Run `eas build` and `eas submit
+name: EAS Build and Submit
+
+env:
+  PRIVACY_POLICY_LINK: ${{ secrets.PRIVACY_POLICY_LINK }}
+  GITHUB_LINK: ${{ secrets.REPO_LINK }}
+  GITHUB_PROFILE_LINK: ${{ secrets.PROFILE_LINK }}
+  APP_STORE_LINK: ${{ secrets.APP_STORE_LINK }}
+  GOOGLE_PLAY_LINK: ${{ secrets.GOOGLE_PLAY_LINK }}
+  SUPPORT_LINK: ${{ secrets.SUPPORT_LINK }}
+  PROD_BUILD: ${{ secrets.PROD_BUILD }}
+
+  EXPO_APP_SPECIFIC_PASSWORD: ${{ secrets.EXPO_APPLE_APP_SPECIFIC_PASSWORD }}
+
+on:
+  pull_request:
+    branches: [ main ]
+
+  # Run manually
+  workflow_dispatch:
+
+jobs:
+  # Run `eas-prod` workflow
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run `eas-prod` workflow
+        uses: ./.github/workflows/eas-prod
+
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run `eas-submit` workflow
+        uses: ./.github/workflows/eas-submit

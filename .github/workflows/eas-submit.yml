@@ -11,26 +11,16 @@ env:
   PROD_BUILD: ${{ secrets.PROD_BUILD }}
 
   EXPO_APP_SPECIFIC_PASSWORD: ${{ secrets.EXPO_APPLE_APP_SPECIFIC_PASSWORD }}
-  GOOGLE_SERVICE_ACC_PRIVATE_KEY: ${{ secrets.GOOGLE_SERVICE_ACC_PRIVATE_KEY }}
 
 on:
-  pull_request:
-    branches: [ main ]
+  # pull_request:
+  #   branches: [ main ]
 
   # Run manually
   workflow_dispatch:
   workflow_call:
 
 jobs:
-  # Run `eas-prod` workflow
-  # build:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-
-  #     - name: Run `eas-prod` workflow
-  #       uses: ./.github/workflows/eas-prod
-
   submit:
     runs-on: ubuntu-latest
     steps:
