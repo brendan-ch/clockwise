@@ -1,0 +1,60 @@
+# Run the `eas-prod` workflow, then run `eas submit` after it finishes
+name: EAS Submit
+
+env:
+  PRIVACY_POLICY_LINK: ${{ secrets.PRIVACY_POLICY_LINK }}
+  GITHUB_LINK: ${{ secrets.REPO_LINK }}
+  GITHUB_PROFILE_LINK: ${{ secrets.PROFILE_LINK }}
+  APP_STORE_LINK: ${{ secrets.APP_STORE_LINK }}
+  GOOGLE_PLAY_LINK: ${{ secrets.GOOGLE_PLAY_LINK }}
+  SUPPORT_LINK: ${{ secrets.SUPPORT_LINK }}
+  PROD_BUILD: ${{ secrets.PROD_BUILD }}
+
+  EXPO_APP_SPECIFIC_PASSWORD: ${{ secrets.EXPO_APPLE_APP_SPECIFIC_PASSWORD }}
+
+on:
+  # Run manually
+  workflow_dispatch:
+
+jobs:
+  # Run `eas-prod` workflow
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run `eas-prod` workflow
+        uses: ./.github/workflows/eas-prod
+
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          cache: 'yarn'
+          node-version: 16.x
+
+      - name: Write service account key file
+        uses: DamianReeves/write-file-action@v1
+        with:
+          path: ${{ github.workspace }}/keys/service-account-key.json
+          contents: |
+            echo "\"${{ secrets.GOOGLE_SERVICE_ACC_PRIVATE_KEY }}\"}"
+          write-mode: append
+
+      - name: Test if it worked?
+        run: cat keys/service-account-key.json
+
+      # - name: Setup Expo and EAS
+      #   uses: expo/expo-github-action@v7
+      #   with:
+      #     token: ${{ secrets.EXPO_TOKEN }}
+      #     eas-version: latest
+      #     packager: yarn
+      # - name: Install dependencies
+      #   run: yarn install
+
+      # - name: Submit to Google Play
+      #   run: eas submit -p android --latest --profile production --non-interactive
+
+      # - name: Submit to App Store
+      #   run: eas submit --platform ios --non-interactive
