@@ -20,11 +20,11 @@ export default {
   assetBundlePatterns: [
     '**/*',
   ],
-  runtimeVersion: '1.4.2(11)',
+  runtimeVersion: '1.4.1(10)',
   ios: {
     supportsTablet: true,
     bundleIdentifier: 'co.birb.session',
-    buildNumber: '11',
+    buildNumber: '10',
     usesIcloudStorage: true,
   },
   plugins: [
@@ -43,7 +43,7 @@ export default {
     },
     package: 'co.birb.session',
     softwareKeyboardLayoutMode: 'pan',
-    versionCode: 11,
+    versionCode: 10,
   },
   web: {
     favicon: './assets/favicon.png',
