@@ -283,7 +283,7 @@ export default function TimerPage() {
         />
         <SelectionBar
           style={[styles.pageButtonBar, {
-            width: 275,
+            width: 268,
           }]}
           selected={barSelection}
           // @ts-ignore
@@ -407,7 +407,9 @@ export default function TimerPage() {
           />
           <SelectionBar
             selected={barSelection}
-            style={styles.pageButtonBar}
+            style={[styles.pageButtonBar, {
+              width: 275,
+            }]}
             // @ts-ignore
             onSelect={(newSelection) => handleSelect(newSelection)}
             options={['focus', 'short break', 'long break']}
