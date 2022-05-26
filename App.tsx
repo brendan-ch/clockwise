@@ -22,7 +22,7 @@ import AppContext from './AppContext';
 import KeyboardShortcutManager from './src/helpers/keyboardShortcutManager';
 import TimerPage from './src/pages/Timer';
 import {
-  DefaultSettingsState, ImageInfo, KeyboardShortcutGroup, Overlay, TimerMode, TimerState,
+  DefaultSettingsState, ImageInfo, KeyboardShortcutGroup, Overlay, TimerMode,
 } from './src/types';
 import SettingsPage from './src/pages/SettingsPage';
 import TextStyles from './src/styles/Text';
@@ -70,8 +70,7 @@ import getTimeKey from './src/helpers/getTimeKey';
 import BackgroundSettingsPane from './src/overlays/settings/BackgroundSettings';
 import AboutPane from './src/overlays/settings/About';
 import RedirectPage from './src/pages/RedirectPage';
-
-const MIN_25 = 1500000;
+import useTimer from './src/helpers/hooks/useTimer';
 
 // Create the stack navigator
 const Stack = createNativeStackNavigator();
@@ -91,25 +90,17 @@ export default function App() {
     keyboardShortcutManager, setKeyboardShortcutManager,
   ] = useState<KeyboardShortcutManager | undefined>(undefined);
   const [shortcutsInitialized, setShortcutsInitialized] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState(MIN_25);
-  const [timerState, setTimerState] = useState<TimerState>('stopped');
-  const [timeout, setTimeoutState] = useState<any>(undefined);
+  // const [timeRemaining, setTimeRemaining] = useState(MIN_25);
+  // const [timerState, setTimerState] = useState<TimerState>('stopped');
+  // const [timeout, setTimeoutState] = useState<any>(undefined);
   const [overlay, setOverlayState] = useState<Overlay>('none');
-  const [mode, setMode] = useState<TimerMode>('focus');
+  // const [mode, setMode] = useState<TimerMode>('focus');
 
   // The current session number
   // Used to determine whether to switch to long break or short break
   const [currentSessionNum, setCurrentSessionNum] = useState(0);
 
   const [keyboardGroup, setKeyboardGroup] = useState<KeyboardShortcutGroup>('none');
-
-  const setPageTitle = usePageTitle('Clockwise', timeRemaining, timerState);
-
-  // Use for background timer handling
-  // Date in milliseconds timer was started on
-  const [start, setStart] = useState<number | undefined>(undefined);
-  const [timerLength, setTimerLength] = useState<number | undefined>(undefined);
-  const [timerBackgrounded, setTimerBackgrounded] = useState(false);
 
   const [sound, setSound] = useState<Audio.Sound | undefined>();
 
@@ -126,6 +117,32 @@ export default function App() {
     [DARK_MODE]: false,
     [_24_HOUR_TIME]: !(Localization.region && REGIONS_WITH_12H_TIME.includes(Localization.region)),
   });
+
+  const {
+    state,
+    methods,
+  } = useTimer(settings);
+  const {
+    timeRemaining,
+    timerState,
+    mode,
+    start,
+    timerLength,
+    timerBackgrounded,
+    timeout,
+  } = state;
+  const {
+    setTimeRemaining,
+    handleAutoStart,
+    handleStateSwitch,
+    startTimer,
+    pauseTimer,
+    stopTimer,
+    setTimerBackgrounded,
+    setMode,
+  } = methods;
+
+  const setPageTitle = usePageTitle('Clockwise', timeRemaining, timerState);
 
   // Track selected task IDs
   // const [selected, setSelected] = useState<number[]>([]);
@@ -172,119 +189,6 @@ export default function App() {
     }
 
     setOverlayState(newOverlay);
-  }
-  /**
-   * Clear the timer and set timeout state to undefined.
-   * @param passedInterval The interval to clear.
-   */
-  function clearTimerInterval(passedInterval: any) {
-    clearInterval(passedInterval);
-    // setTimeoutState(undefined);
-  }
-
-  /**
-   * Handle automatic timer starting.
-   * @param newMode
-   * @param isLongBreak
-   */
-  function handleAutoStart(newMode: TimerMode) {
-    // Change the mode
-    setMode(newMode);
-    // Change the time remaining
-    const timeKey = getTimeKey(newMode);
-    // @ts-ignore
-    const newTimeRemaining = settings[timeKey] * 60 * 1000;
-    setTimeRemaining(newTimeRemaining);
-    // Clear the existing interval
-    clearTimerInterval(timeout);
-    // Create a new timeout with said time remaining
-    const newStart = Date.now();
-    setStart(newStart);
-
-    setTimerLength(newTimeRemaining);
-    const newTimeout = setInterval(() => updateTimeRemaining(newStart, newTimeRemaining), 100);
-
-    setTimeoutState(newTimeout);
-  }
-
-  /**
-   * Handle switching between break and focus modes.
-   * @param newMode
-   * @param isLongBreak
-   */
-  function handleStateSwitch(newMode: TimerMode) {
-    clearTimerInterval(timeout);
-    setTimerState('stopped');
-    setMode(newMode);
-    setTimerLength(undefined);
-    setStart(undefined);
-
-    getAndSetTimerValue(newMode);
-  }
-
-  /**
-   * Set the time remaining based on AsyncStorage value.
-   * @param mode
-   * @param isLongBreak
-   */
-  function getAndSetTimerValue(newMode: TimerMode) {
-    const timeKey = getTimeKey(newMode);
-    // @ts-ignore
-    const timerValueMinutes = settings[timeKey];
-    setTimeRemaining(timerValueMinutes * 60 * 1000);
-  }
-
-  /**
-   * Set an interval that updates the timer.
-   * @param customTimeRemaining Pass a time value here to skip to a value not specified in state.
-   */
-  function startTimer(customTimeRemaining?: number) {
-    if (timerState === 'running') return;
-    setTimerState('running');
-
-    const newStart = Date.now();
-    setStart(newStart);
-
-    setTimerLength(customTimeRemaining || timeRemaining);
-    const newTimeout = setInterval(() => updateTimeRemaining(newStart, customTimeRemaining), 100);
-
-    setTimeoutState(newTimeout);
-  }
-
-  /**
-   * Pause the timer.
-   */
-  function pauseTimer() {
-    clearTimerInterval(timeout);
-    setStart(undefined);
-    setTimerLength(undefined);
-    setTimerState('paused');
-  }
-
-  /**
-   * Stop the timer.
-   */
-  async function stopTimer() {
-    clearTimerInterval(timeout);
-    setTimerState('stopped');
-    setStart(undefined);
-    setTimerLength(undefined);
-    getAndSetTimerValue(mode);
-  }
-
-  /**
-   * Clear the timer updating interval.
-   */
-
-  /**
-   * Update the time remaining in the state.
-   * @param interval
-   */
-  function updateTimeRemaining(newStart: number, customTimeRemaining?: number) {
-    // Set actual time based on delta
-    const delta = Date.now() - newStart;
-
-    setTimeRemaining((customTimeRemaining || timeRemaining) - delta);
   }
 
   /**
@@ -361,6 +265,7 @@ export default function App() {
     AnonymousPro_700Bold_Italic,
   });
 
+  // Reset the timer when time reaches 0
   useEffect(() => {
     if (timeRemaining < 0) {
       const bumped = currentSessionNum + 1;
