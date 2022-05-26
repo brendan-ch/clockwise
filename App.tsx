@@ -20,7 +20,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AppContext from './AppContext';
 import TimerPage from './src/pages/Timer';
 import {
-  DefaultSettingsState, KeyboardShortcutGroup, Overlay, TimerMode,
+  KeyboardShortcutGroup, Overlay, TimerMode,
 } from './src/types';
 import SettingsPage from './src/pages/SettingsPage';
 import TextStyles from './src/styles/Text';
@@ -30,7 +30,7 @@ import useTheme from './src/helpers/hooks/useTheme';
 import SettingsOverlay from './src/overlays/SettingsOverlay';
 import LandscapeHeader from './src/components/LandscapeHeader';
 import LandscapeFooter from './src/components/LandscapeFooter';
-import { getData, prefillSettings, storeData } from './src/helpers/storage';
+import { getData } from './src/helpers/storage';
 import usePageTitle from './src/helpers/hooks/usePageTitle';
 
 /* eslint-disable-next-line */
@@ -39,7 +39,6 @@ import {
   AUTO_START_BREAK,
   AUTO_START_FOCUS,
   ENABLE_TIMER_SOUND,
-  EXPORT_VERSION_KEY,
   LONG_BREAK_ENABLED,
   LONG_BREAK_INTERVAL,
   SUPPRESS_INTRODUCTION,
@@ -53,7 +52,6 @@ import IntroductionPage from './src/pages/IntroductionPage';
 import { TIMER_SOUND } from './src/Assets';
 import NewSiteMessage from './src/pages/NewSiteMessage';
 import ImportSettingsPane from './src/overlays/settings/ImportSettings';
-import { EXPORT_VERSION_NUM } from './src/Constants';
 import AppBanner from './src/components/AppBanner';
 import getTimeKey from './src/helpers/getTimeKey';
 import BackgroundSettingsPane from './src/overlays/settings/BackgroundSettings';
@@ -167,34 +165,6 @@ export default function App() {
     setOverlayState(newOverlay);
   }
 
-  /**
-   * Load the settings data specified in the `settings` state.
-   */
-  async function initializeSettingsData() {
-    const temp: DefaultSettingsState = {
-      ...settings,
-    };
-
-    await Promise.all(Object.keys(settings).map(async (key) => {
-      // Load the data
-      const data = await getData(key);
-      if (!data) return;
-      // @ts-ignore
-      const type = typeof temp[key];
-
-      if (type === 'number') {
-        // Convert the data
-        // @ts-ignore
-        temp[key] = !Number.isNaN(Number(data)) ? Number(data) : temp[key];
-      } else if (type === 'boolean') {
-        // @ts-ignore
-        temp[key] = data === '1';
-      }
-    }));
-
-    setSettings(temp);
-  }
-
   // Hooks
   // Get theme
   const colorValues = useTheme(settings);
@@ -283,12 +253,6 @@ export default function App() {
   useEffect(() => {
     // Timer and app initialiation
     loadTimerSound();
-    // @unnameduser95 Add data migration here
-    prefillSettings()
-      .then(() => storeData(EXPORT_VERSION_KEY, `${EXPORT_VERSION_NUM}`))
-      .then(() => {
-        initializeSettingsData();
-      });
   }, []);
 
   useEffect(() => {

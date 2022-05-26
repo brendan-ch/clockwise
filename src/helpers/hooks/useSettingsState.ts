@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as Localization from 'expo-localization';
 
 import {
@@ -7,6 +7,7 @@ import {
   DARK_MODE,
   ENABLE_BACKGROUND,
   ENABLE_TIMER_ALERTS,
+  EXPORT_VERSION_KEY,
   FOCUS_TIME_MINUTES,
   LONG_BREAK_ENABLED,
   LONG_BREAK_INTERVAL,
@@ -14,7 +15,8 @@ import {
   _24_HOUR_TIME,
 } from '../../StorageKeys';
 import { DefaultSettingsState } from '../../types';
-import { REGIONS_WITH_12H_TIME } from '../../Constants';
+import { EXPORT_VERSION_NUM, REGIONS_WITH_12H_TIME } from '../../Constants';
+import { getData, prefillSettings, storeData } from '../storage';
 
 function useSettingsState() {
   // Initialize settings state here
@@ -44,6 +46,41 @@ function useSettingsState() {
       [key]: value,
     });
   }
+
+  /**
+   * Load the settings data specified in the `settings` state.
+   */
+  async function initializeSettingsData() {
+    const temp: DefaultSettingsState = {
+      ...settings,
+    };
+
+    await Promise.all(Object.keys(settings).map(async (key) => {
+      // Load the data
+      const data = await getData(key);
+      if (!data) return;
+      // @ts-ignore
+      const type = typeof temp[key];
+
+      if (type === 'number') {
+        // Convert the data
+        // @ts-ignore
+        temp[key] = !Number.isNaN(Number(data)) ? Number(data) : temp[key];
+      } else if (type === 'boolean') {
+        // @ts-ignore
+        temp[key] = data === '1';
+      }
+    }));
+
+    setSettings(temp);
+  }
+
+  useEffect(() => {
+    // To-do: add data migration
+    prefillSettings()
+      .then(() => storeData(EXPORT_VERSION_KEY, `${EXPORT_VERSION_NUM}`))
+      .then(() => initializeSettingsData());
+  }, []);
 
   return { settings, setSettings, setSetting };
 }
