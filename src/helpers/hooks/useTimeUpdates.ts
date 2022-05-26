@@ -3,7 +3,6 @@ import { AppState, AppStateStatus, Platform } from 'react-native';
 
 /**
  * Hook that changes state every time the time changes (every minute).
- * @param onUpdate
  */
 function useTimeUpdates() {
   const [now, setNow] = useState(new Date());
