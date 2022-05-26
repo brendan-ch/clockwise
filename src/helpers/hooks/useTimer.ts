@@ -33,8 +33,7 @@ function useTimer(settings: DefaultSettingsState) {
 
   /**
    * Set the time remaining based on AsyncStorage value.
-   * @param mode
-   * @param isLongBreak
+   * @param newMode
    */
   function getAndSetTimerValue(newMode: TimerMode) {
     const timeKey = getTimeKey(newMode);
@@ -76,7 +75,6 @@ function useTimer(settings: DefaultSettingsState) {
   /**
    * Handle automatic timer starting.
    * @param newMode
-   * @param isLongBreak
    */
   function handleAutoStart(newMode: TimerMode) {
     // Change the mode
@@ -118,7 +116,6 @@ function useTimer(settings: DefaultSettingsState) {
   /**
    * Handle switching between break and focus modes.
    * @param newMode
-   * @param isLongBreak
    */
   function handleStateSwitch(newMode: TimerMode) {
     clearTimerInterval(timeout);
