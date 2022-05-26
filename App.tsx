@@ -19,7 +19,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as Localization from 'expo-localization';
 
 import AppContext from './AppContext';
-import KeyboardShortcutManager from './src/helpers/keyboardShortcutManager';
 import TimerPage from './src/pages/Timer';
 import {
   DefaultSettingsState, ImageInfo, KeyboardShortcutGroup, Overlay, TimerMode,
@@ -71,6 +70,7 @@ import BackgroundSettingsPane from './src/overlays/settings/BackgroundSettings';
 import AboutPane from './src/overlays/settings/About';
 import RedirectPage from './src/pages/RedirectPage';
 import useTimer from './src/helpers/hooks/useTimer';
+import useKeyboardShortcutManager from './src/helpers/hooks/useKeyboardShortcutManager';
 
 // Create the stack navigator
 const Stack = createNativeStackNavigator();
@@ -85,10 +85,6 @@ export default function App() {
     Platform.OS === 'web'
     && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent),
   );
-
-  const [
-    keyboardShortcutManager, setKeyboardShortcutManager,
-  ] = useState<KeyboardShortcutManager | undefined>(undefined);
   const [shortcutsInitialized, setShortcutsInitialized] = useState(false);
   // const [timeRemaining, setTimeRemaining] = useState(MIN_25);
   // const [timerState, setTimerState] = useState<TimerState>('stopped');
@@ -143,6 +139,7 @@ export default function App() {
   } = methods;
 
   const setPageTitle = usePageTitle('Clockwise', timeRemaining, timerState);
+  const keyboardShortcutManager = useKeyboardShortcutManager();
 
   // Track selected task IDs
   // const [selected, setSelected] = useState<number[]>([]);
@@ -310,21 +307,19 @@ export default function App() {
     }
   }, [timeRemaining, sound]);
 
+  // Set global keyboard shortcuts
   useEffect(() => {
     // Initialize keyboard shortcuts on web
-    if (Platform.OS === 'web') {
-      const manager = new KeyboardShortcutManager();
-      setKeyboardShortcutManager(manager);
-
+    if (Platform.OS === 'web' && keyboardShortcutManager) {
       // Initialize overlay shortcuts
-      manager.registerEvent({
+      keyboardShortcutManager.registerEvent({
         keys: ['Meta', ','],
         action: () => {
           setOverlay('settings');
         },
       });
 
-      manager.registerEvent({
+      keyboardShortcutManager.registerEvent({
         keys: ['Control', ','],
         action: () => {
           setOverlay('settings');
@@ -333,7 +328,7 @@ export default function App() {
     }
 
     setShortcutsInitialized(true);
-  }, []);
+  }, [keyboardShortcutManager]);
 
   // App + data setup, redirects
   useEffect(() => {
