@@ -16,13 +16,11 @@ import AppLoading from 'expo-app-loading';
 import Modal from 'react-native-modal';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import * as Localization from 'expo-localization';
 
 import AppContext from './AppContext';
-import KeyboardShortcutManager from './src/helpers/keyboardShortcutManager';
 import TimerPage from './src/pages/Timer';
 import {
-  DefaultSettingsState, ImageInfo, KeyboardShortcutGroup, Overlay, TimerMode, TimerState,
+  KeyboardShortcutGroup, Overlay, TimerMode,
 } from './src/types';
 import SettingsPage from './src/pages/SettingsPage';
 import TextStyles from './src/styles/Text';
@@ -32,46 +30,37 @@ import useTheme from './src/helpers/hooks/useTheme';
 import SettingsOverlay from './src/overlays/SettingsOverlay';
 import LandscapeHeader from './src/components/LandscapeHeader';
 import LandscapeFooter from './src/components/LandscapeFooter';
-import { getData, prefillSettings, storeData } from './src/helpers/storage';
+import { getData } from './src/helpers/storage';
 import usePageTitle from './src/helpers/hooks/usePageTitle';
 
 /* eslint-disable-next-line */
 import * as serviceWorkerRegistration from './src/serviceWorkerRegistration';
 import {
-  AUTO_APPEARANCE,
   AUTO_START_BREAK,
   AUTO_START_FOCUS,
-  BREAK_TIME_MINUTES,
-  DARK_MODE,
-  ENABLE_BACKGROUND,
-  ENABLE_TIMER_ALERTS,
   ENABLE_TIMER_SOUND,
-  EXPORT_VERSION_KEY,
-  FOCUS_TIME_MINUTES,
   LONG_BREAK_ENABLED,
   LONG_BREAK_INTERVAL,
-  LONG_BREAK_TIME_MINUTES,
   SUPPRESS_INTRODUCTION,
-  _24_HOUR_TIME,
 } from './src/StorageKeys';
 import SettingsContext from './SettingsContext';
 import useTasks from './src/helpers/hooks/useTasks';
 import TaskContext from './TaskContext';
-import getBaseURL from './src/helpers/getBaseURL';
 import ImageContext from './ImageContext';
 import IntroductionOverlay from './src/overlays/IntroductionOverlay';
 import IntroductionPage from './src/pages/IntroductionPage';
 import { TIMER_SOUND } from './src/Assets';
 import NewSiteMessage from './src/pages/NewSiteMessage';
 import ImportSettingsPane from './src/overlays/settings/ImportSettings';
-import { EXPORT_VERSION_NUM, REGIONS_WITH_12H_TIME } from './src/Constants';
 import AppBanner from './src/components/AppBanner';
 import getTimeKey from './src/helpers/getTimeKey';
 import BackgroundSettingsPane from './src/overlays/settings/BackgroundSettings';
 import AboutPane from './src/overlays/settings/About';
 import RedirectPage from './src/pages/RedirectPage';
-
-const MIN_25 = 1500000;
+import useTimer from './src/helpers/hooks/useTimer';
+import useKeyboardShortcutManager from './src/helpers/hooks/useKeyboardShortcutManager';
+import useImageInfo from './src/helpers/hooks/useImageInfo';
+import useSettingsState from './src/helpers/hooks/useSettingsState';
 
 // Create the stack navigator
 const Stack = createNativeStackNavigator();
@@ -80,22 +69,16 @@ const Stack = createNativeStackNavigator();
 const prefix = Linking.createURL('/');
 
 export default function App() {
-  const [imageInfo, setImageInfo] = useState<ImageInfo | undefined>();
-
   const [displayBanner, setDisplayBanner] = useState(
     Platform.OS === 'web'
     && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent),
   );
-
-  const [
-    keyboardShortcutManager, setKeyboardShortcutManager,
-  ] = useState<KeyboardShortcutManager | undefined>(undefined);
   const [shortcutsInitialized, setShortcutsInitialized] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState(MIN_25);
-  const [timerState, setTimerState] = useState<TimerState>('stopped');
-  const [timeout, setTimeoutState] = useState<any>(undefined);
+  // const [timeRemaining, setTimeRemaining] = useState(MIN_25);
+  // const [timerState, setTimerState] = useState<TimerState>('stopped');
+  // const [timeout, setTimeoutState] = useState<any>(undefined);
   const [overlay, setOverlayState] = useState<Overlay>('none');
-  const [mode, setMode] = useState<TimerMode>('focus');
+  // const [mode, setMode] = useState<TimerMode>('focus');
 
   // The current session number
   // Used to determine whether to switch to long break or short break
@@ -103,29 +86,37 @@ export default function App() {
 
   const [keyboardGroup, setKeyboardGroup] = useState<KeyboardShortcutGroup>('none');
 
-  const setPageTitle = usePageTitle('Clockwise', timeRemaining, timerState);
-
-  // Use for background timer handling
-  // Date in milliseconds timer was started on
-  const [start, setStart] = useState<number | undefined>(undefined);
-  const [timerLength, setTimerLength] = useState<number | undefined>(undefined);
-  const [timerBackgrounded, setTimerBackgrounded] = useState(false);
-
   const [sound, setSound] = useState<Audio.Sound | undefined>();
 
-  // Initialize settings state here
-  const [settings, setSettings] = useState<DefaultSettingsState>({
-    [ENABLE_TIMER_ALERTS]: false,
-    [FOCUS_TIME_MINUTES]: 25,
-    [BREAK_TIME_MINUTES]: 5,
-    [LONG_BREAK_ENABLED]: true,
-    [LONG_BREAK_TIME_MINUTES]: 15,
-    [LONG_BREAK_INTERVAL]: 4,
-    [ENABLE_BACKGROUND]: false,
-    [AUTO_APPEARANCE]: true,
-    [DARK_MODE]: false,
-    [_24_HOUR_TIME]: !(Localization.region && REGIONS_WITH_12H_TIME.includes(Localization.region)),
-  });
+  const { settings, setSettings, setSetting } = useSettingsState();
+
+  const {
+    state,
+    methods,
+  } = useTimer(settings);
+  const {
+    timeRemaining,
+    timerState,
+    mode,
+    start,
+    timerLength,
+    timerBackgrounded,
+    timeout,
+  } = state;
+  const {
+    setTimeRemaining,
+    handleAutoStart,
+    handleStateSwitch,
+    startTimer,
+    pauseTimer,
+    stopTimer,
+    setTimerBackgrounded,
+    setMode,
+  } = methods;
+
+  const setPageTitle = usePageTitle('Clockwise', timeRemaining, timerState);
+  const keyboardShortcutManager = useKeyboardShortcutManager();
+  const imageInfo = useImageInfo(settings);
 
   // Track selected task IDs
   // const [selected, setSelected] = useState<number[]>([]);
@@ -173,177 +164,6 @@ export default function App() {
 
     setOverlayState(newOverlay);
   }
-  /**
-   * Clear the timer and set timeout state to undefined.
-   * @param passedInterval The interval to clear.
-   */
-  function clearTimerInterval(passedInterval: any) {
-    clearInterval(passedInterval);
-    // setTimeoutState(undefined);
-  }
-
-  /**
-   * Handle automatic timer starting.
-   * @param newMode
-   * @param isLongBreak
-   */
-  function handleAutoStart(newMode: TimerMode) {
-    // Change the mode
-    setMode(newMode);
-    // Change the time remaining
-    const timeKey = getTimeKey(newMode);
-    // @ts-ignore
-    const newTimeRemaining = settings[timeKey] * 60 * 1000;
-    setTimeRemaining(newTimeRemaining);
-    // Clear the existing interval
-    clearTimerInterval(timeout);
-    // Create a new timeout with said time remaining
-    const newStart = Date.now();
-    setStart(newStart);
-
-    setTimerLength(newTimeRemaining);
-    const newTimeout = setInterval(() => updateTimeRemaining(newStart, newTimeRemaining), 100);
-
-    setTimeoutState(newTimeout);
-  }
-
-  /**
-   * Handle switching between break and focus modes.
-   * @param newMode
-   * @param isLongBreak
-   */
-  function handleStateSwitch(newMode: TimerMode) {
-    clearTimerInterval(timeout);
-    setTimerState('stopped');
-    setMode(newMode);
-    setTimerLength(undefined);
-    setStart(undefined);
-
-    getAndSetTimerValue(newMode);
-  }
-
-  /**
-   * Set the time remaining based on AsyncStorage value.
-   * @param mode
-   * @param isLongBreak
-   */
-  function getAndSetTimerValue(newMode: TimerMode) {
-    const timeKey = getTimeKey(newMode);
-    // @ts-ignore
-    const timerValueMinutes = settings[timeKey];
-    setTimeRemaining(timerValueMinutes * 60 * 1000);
-  }
-
-  /**
-   * Set an interval that updates the timer.
-   * @param customTimeRemaining Pass a time value here to skip to a value not specified in state.
-   */
-  function startTimer(customTimeRemaining?: number) {
-    if (timerState === 'running') return;
-    setTimerState('running');
-
-    const newStart = Date.now();
-    setStart(newStart);
-
-    setTimerLength(customTimeRemaining || timeRemaining);
-    const newTimeout = setInterval(() => updateTimeRemaining(newStart, customTimeRemaining), 100);
-
-    setTimeoutState(newTimeout);
-  }
-
-  /**
-   * Pause the timer.
-   */
-  function pauseTimer() {
-    clearTimerInterval(timeout);
-    setStart(undefined);
-    setTimerLength(undefined);
-    setTimerState('paused');
-  }
-
-  /**
-   * Stop the timer.
-   */
-  async function stopTimer() {
-    clearTimerInterval(timeout);
-    setTimerState('stopped');
-    setStart(undefined);
-    setTimerLength(undefined);
-    getAndSetTimerValue(mode);
-  }
-
-  /**
-   * Clear the timer updating interval.
-   */
-
-  /**
-   * Update the time remaining in the state.
-   * @param interval
-   */
-  function updateTimeRemaining(newStart: number, customTimeRemaining?: number) {
-    // Set actual time based on delta
-    const delta = Date.now() - newStart;
-
-    setTimeRemaining((customTimeRemaining || timeRemaining) - delta);
-  }
-
-  /**
-   * Update a setting in the settings state.
-   * @param key
-   * @param value
-   *
-   * @todo Validate that key exists before setting.
-   */
-  function setSetting(key: string, value: boolean | number | string) {
-    setSettings({
-      ...settings,
-      [key]: value,
-    });
-  }
-
-  /**
-   * Load the settings data specified in the `settings` state.
-   */
-  async function initializeSettingsData() {
-    const temp: DefaultSettingsState = {
-      ...settings,
-    };
-
-    await Promise.all(Object.keys(settings).map(async (key) => {
-      // Load the data
-      const data = await getData(key);
-      if (!data) return;
-      // @ts-ignore
-      const type = typeof temp[key];
-
-      if (type === 'number') {
-        // Convert the data
-        // @ts-ignore
-        temp[key] = !Number.isNaN(Number(data)) ? Number(data) : temp[key];
-      } else if (type === 'boolean') {
-        // @ts-ignore
-        temp[key] = data === '1';
-      }
-    }));
-
-    setSettings(temp);
-  }
-
-  /**
-   * Attempt to load and set a background image.
-   */
-  async function setBackgroundImage() {
-    const res = await fetch(`${getBaseURL()}/api/getBackground`);
-    if (res.status === 200) {
-      const json = await res.json();
-
-      setImageInfo({
-        uri: json.uri,
-        author: json.author,
-        link: json.link,
-      });
-    }
-  }
 
   // Hooks
   // Get theme
@@ -361,6 +181,7 @@ export default function App() {
     AnonymousPro_700Bold_Italic,
   });
 
+  // Reset the timer when time reaches 0
   useEffect(() => {
     if (timeRemaining < 0) {
       const bumped = currentSessionNum + 1;
@@ -405,21 +226,19 @@ export default function App() {
     }
   }, [timeRemaining, sound]);
 
+  // Set global keyboard shortcuts
   useEffect(() => {
     // Initialize keyboard shortcuts on web
-    if (Platform.OS === 'web') {
-      const manager = new KeyboardShortcutManager();
-      setKeyboardShortcutManager(manager);
-
+    if (Platform.OS === 'web' && keyboardShortcutManager) {
       // Initialize overlay shortcuts
-      manager.registerEvent({
+      keyboardShortcutManager.registerEvent({
         keys: ['Meta', ','],
         action: () => {
           setOverlay('settings');
         },
       });
 
-      manager.registerEvent({
+      keyboardShortcutManager.registerEvent({
         keys: ['Control', ','],
         action: () => {
           setOverlay('settings');
@@ -428,18 +247,12 @@ export default function App() {
     }
 
     setShortcutsInitialized(true);
-  }, []);
+  }, [keyboardShortcutManager]);
 
   // App + data setup, redirects
   useEffect(() => {
     // Timer and app initialiation
     loadTimerSound();
-    // @unnameduser95 Add data migration here
-    prefillSettings()
-      .then(() => storeData(EXPORT_VERSION_KEY, `${EXPORT_VERSION_NUM}`))
-      .then(() => {
-        initializeSettingsData();
-      });
   }, []);
 
   useEffect(() => {
@@ -454,20 +267,6 @@ export default function App() {
       );
     }
   }, [settings, timerState]);
-
-  // Attempt to set background image
-  useEffect(() => {
-    if (!imageInfo && windowSize === 'landscape' && settings[ENABLE_BACKGROUND]) {
-      setBackgroundImage()
-        .catch(() => {
-          /* eslint-disable-next-line */
-          console.log('Unable to set background image.');
-        });
-    } else if (imageInfo && (windowSize !== 'landscape' || !settings[ENABLE_BACKGROUND])) {
-      // Remove image
-      setImageInfo(undefined);
-    }
-  }, [imageInfo, windowSize, settings[ENABLE_BACKGROUND]]);
 
   // Handle setting the introduction
   useEffect(() => {

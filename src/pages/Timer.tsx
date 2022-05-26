@@ -407,7 +407,9 @@ export default function TimerPage() {
           />
           <SelectionBar
             selected={barSelection}
-            style={styles.pageButtonBar}
+            style={[styles.pageButtonBar, {
+              width: 275,
+            }]}
             // @ts-ignore
             onSelect={(newSelection) => handleSelect(newSelection)}
             options={['focus', 'short break', 'long break']}
@@ -473,7 +475,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     height: '85%',
-    width: 268,
+    width: 275,
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 30,
