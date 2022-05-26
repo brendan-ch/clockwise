@@ -21,7 +21,7 @@ import * as Localization from 'expo-localization';
 import AppContext from './AppContext';
 import TimerPage from './src/pages/Timer';
 import {
-  DefaultSettingsState, ImageInfo, KeyboardShortcutGroup, Overlay, TimerMode,
+  DefaultSettingsState, KeyboardShortcutGroup, Overlay, TimerMode,
 } from './src/types';
 import SettingsPage from './src/pages/SettingsPage';
 import TextStyles from './src/styles/Text';
@@ -56,7 +56,6 @@ import {
 import SettingsContext from './SettingsContext';
 import useTasks from './src/helpers/hooks/useTasks';
 import TaskContext from './TaskContext';
-import getBaseURL from './src/helpers/getBaseURL';
 import ImageContext from './ImageContext';
 import IntroductionOverlay from './src/overlays/IntroductionOverlay';
 import IntroductionPage from './src/pages/IntroductionPage';
@@ -71,6 +70,7 @@ import AboutPane from './src/overlays/settings/About';
 import RedirectPage from './src/pages/RedirectPage';
 import useTimer from './src/helpers/hooks/useTimer';
 import useKeyboardShortcutManager from './src/helpers/hooks/useKeyboardShortcutManager';
+import useImageInfo from './src/helpers/hooks/useImageInfo';
 
 // Create the stack navigator
 const Stack = createNativeStackNavigator();
@@ -79,8 +79,6 @@ const Stack = createNativeStackNavigator();
 const prefix = Linking.createURL('/');
 
 export default function App() {
-  const [imageInfo, setImageInfo] = useState<ImageInfo | undefined>();
-
   const [displayBanner, setDisplayBanner] = useState(
     Platform.OS === 'web'
     && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent),
@@ -140,6 +138,7 @@ export default function App() {
 
   const setPageTitle = usePageTitle('Clockwise', timeRemaining, timerState);
   const keyboardShortcutManager = useKeyboardShortcutManager();
+  const imageInfo = useImageInfo(settings);
 
   // Track selected task IDs
   // const [selected, setSelected] = useState<number[]>([]);
@@ -228,22 +227,6 @@ export default function App() {
     }));
 
     setSettings(temp);
-  }
-
-  /**
-   * Attempt to load and set a background image.
-   */
-  async function setBackgroundImage() {
-    const res = await fetch(`${getBaseURL()}/api/getBackground`);
-    if (res.status === 200) {
-      const json = await res.json();
-
-      setImageInfo({
-        uri: json.uri,
-        author: json.author,
-        link: json.link,
-      });
-    }
   }
 
   // Hooks
@@ -354,20 +337,6 @@ export default function App() {
       );
     }
   }, [settings, timerState]);
-
-  // Attempt to set background image
-  useEffect(() => {
-    if (!imageInfo && windowSize === 'landscape' && settings[ENABLE_BACKGROUND]) {
-      setBackgroundImage()
-        .catch(() => {
-          /* eslint-disable-next-line */
-          console.log('Unable to set background image.');
-        });
-    } else if (imageInfo && (windowSize !== 'landscape' || !settings[ENABLE_BACKGROUND])) {
-      // Remove image
-      setImageInfo(undefined);
-    }
-  }, [imageInfo, windowSize, settings[ENABLE_BACKGROUND]]);
 
   // Handle setting the introduction
   useEffect(() => {
