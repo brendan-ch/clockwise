@@ -283,7 +283,7 @@ export default function TimerPage() {
         />
         <SelectionBar
           style={[styles.pageButtonBar, {
-            width: 268,
+            width: 275,
           }]}
           selected={barSelection}
           // @ts-ignore
