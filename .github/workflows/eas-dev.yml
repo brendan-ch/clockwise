@@ -1,0 +1,36 @@
+# Run `eas build --profile simulator`
+name: EAS Build Preview
+
+env:
+  PRIVACY_POLICY_LINK: ${{ secrets.PRIVACY_POLICY_LINK }}
+  GITHUB_LINK: ${{ secrets.REPO_LINK }}
+  GITHUB_PROFILE_LINK: ${{ secrets.PROFILE_LINK }}
+  APP_STORE_LINK: ${{ secrets.APP_STORE_LINK }}
+  GOOGLE_PLAY_LINK: ${{ secrets.GOOGLE_PLAY_LINK }}
+  SUPPORT_LINK: ${{ secrets.SUPPORT_LINK }}
+  PROD_BUILD: ${{ secrets.PROD_BUILD }}
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  build:
+    name: Install and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+          cache: 'yarn'
+      - name: Setup Expo and EAS
+        uses: expo/expo-github-action@v7
+        with:
+          token: ${{ secrets.EXPO_TOKEN }}
+          packager: yarn
+          eas-version: latest
+      - name: Install dependencies
+        run: yarn install
+      - name: Build on EAS
+        run: eas build --profile simulator --platform all --non-interactive
