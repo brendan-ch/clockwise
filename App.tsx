@@ -16,7 +16,6 @@ import AppLoading from 'expo-app-loading';
 import Modal from 'react-native-modal';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import * as Localization from 'expo-localization';
 
 import AppContext from './AppContext';
 import TimerPage from './src/pages/Timer';
@@ -37,21 +36,13 @@ import usePageTitle from './src/helpers/hooks/usePageTitle';
 /* eslint-disable-next-line */
 import * as serviceWorkerRegistration from './src/serviceWorkerRegistration';
 import {
-  AUTO_APPEARANCE,
   AUTO_START_BREAK,
   AUTO_START_FOCUS,
-  BREAK_TIME_MINUTES,
-  DARK_MODE,
-  ENABLE_BACKGROUND,
-  ENABLE_TIMER_ALERTS,
   ENABLE_TIMER_SOUND,
   EXPORT_VERSION_KEY,
-  FOCUS_TIME_MINUTES,
   LONG_BREAK_ENABLED,
   LONG_BREAK_INTERVAL,
-  LONG_BREAK_TIME_MINUTES,
   SUPPRESS_INTRODUCTION,
-  _24_HOUR_TIME,
 } from './src/StorageKeys';
 import SettingsContext from './SettingsContext';
 import useTasks from './src/helpers/hooks/useTasks';
@@ -62,7 +53,7 @@ import IntroductionPage from './src/pages/IntroductionPage';
 import { TIMER_SOUND } from './src/Assets';
 import NewSiteMessage from './src/pages/NewSiteMessage';
 import ImportSettingsPane from './src/overlays/settings/ImportSettings';
-import { EXPORT_VERSION_NUM, REGIONS_WITH_12H_TIME } from './src/Constants';
+import { EXPORT_VERSION_NUM } from './src/Constants';
 import AppBanner from './src/components/AppBanner';
 import getTimeKey from './src/helpers/getTimeKey';
 import BackgroundSettingsPane from './src/overlays/settings/BackgroundSettings';
@@ -71,6 +62,7 @@ import RedirectPage from './src/pages/RedirectPage';
 import useTimer from './src/helpers/hooks/useTimer';
 import useKeyboardShortcutManager from './src/helpers/hooks/useKeyboardShortcutManager';
 import useImageInfo from './src/helpers/hooks/useImageInfo';
+import useSettingsState from './src/helpers/hooks/useSettingsState';
 
 // Create the stack navigator
 const Stack = createNativeStackNavigator();
@@ -98,19 +90,7 @@ export default function App() {
 
   const [sound, setSound] = useState<Audio.Sound | undefined>();
 
-  // Initialize settings state here
-  const [settings, setSettings] = useState<DefaultSettingsState>({
-    [ENABLE_TIMER_ALERTS]: false,
-    [FOCUS_TIME_MINUTES]: 25,
-    [BREAK_TIME_MINUTES]: 5,
-    [LONG_BREAK_ENABLED]: true,
-    [LONG_BREAK_TIME_MINUTES]: 15,
-    [LONG_BREAK_INTERVAL]: 4,
-    [ENABLE_BACKGROUND]: false,
-    [AUTO_APPEARANCE]: true,
-    [DARK_MODE]: false,
-    [_24_HOUR_TIME]: !(Localization.region && REGIONS_WITH_12H_TIME.includes(Localization.region)),
-  });
+  const { settings, setSettings, setSetting } = useSettingsState();
 
   const {
     state,
@@ -185,20 +165,6 @@ export default function App() {
     }
 
     setOverlayState(newOverlay);
-  }
-
-  /**
-   * Update a setting in the settings state.
-   * @param key
-   * @param value
-   *
-   * @todo Validate that key exists before setting.
-   */
-  function setSetting(key: string, value: boolean | number | string) {
-    setSettings({
-      ...settings,
-      [key]: value,
-    });
   }
 
   /**
