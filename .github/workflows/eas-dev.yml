@@ -1,5 +1,5 @@
 # Run `eas build --profile simulator`
-name: EAS Build Preview
+name: EAS Build Simulator
 
 env:
   PRIVACY_POLICY_LINK: ${{ secrets.PRIVACY_POLICY_LINK }}
