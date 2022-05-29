@@ -2,11 +2,11 @@
 
 export default {
   name: 'Clockwise',
-  description: 'Pomodoro timer and task management - An app designed to help you focus.',
+  description: 'A Pomodoro timer designed to help you focus.',
   slug: 'clockwise',
   scheme: 'clockwise',
   userInterfaceStyle: 'automatic',
-  version: '1.4.1',
+  version: '1.4.2',
   orientation: 'portrait',
   icon: './assets/icon.png',
   splash: {
@@ -20,11 +20,11 @@ export default {
   assetBundlePatterns: [
     '**/*',
   ],
-  runtimeVersion: '1.4.1(10)',
+  runtimeVersion: '1.4.2(11)',
   ios: {
     supportsTablet: true,
     bundleIdentifier: 'co.birb.session',
-    buildNumber: '10',
+    buildNumber: '11',
     usesIcloudStorage: true,
   },
   plugins: [
@@ -43,7 +43,7 @@ export default {
     },
     package: 'co.birb.session',
     softwareKeyboardLayoutMode: 'pan',
-    versionCode: 10,
+    versionCode: 11,
   },
   web: {
     favicon: './assets/favicon.png',
