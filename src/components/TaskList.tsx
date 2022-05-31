@@ -49,6 +49,10 @@ function TaskList({ setAtTop }: Props) {
 
   // ID of expanded task
   const [expandedTask, setExpandedTask] = useState(-1);
+
+  // Match with task ID for `inputSelected` prop
+  const [inputSelectedTask, setInputSelectedTask] = useState(-1);
+
   const [deletionTimeout, setDeletionTimeout] = useState<TimeoutTracker | undefined>(undefined);
 
   const context = useContext(AppContext);
@@ -197,6 +201,12 @@ function TaskList({ setAtTop }: Props) {
   async function handleAddTaskAndExpand() {
     const id = await handleAddTask();
     handleExpand(id);
+
+    if (Platform.OS !== 'web') {
+      setTimeout(() => {
+        setInputSelectedTask(id);
+      }, 200);
+    }
   }
 
   const colorValues = useTheme();
@@ -411,6 +421,7 @@ function TaskList({ setAtTop }: Props) {
           onChangeText: timerStopped || context.mode !== 'focus' ? (text) => handleChangeTask('title', text, item.id) : undefined,
           onInputSelect: Platform.OS !== 'web' ? () => handleAutoScroll(item.id) : undefined,
           indicator: headerIndicator,
+          inputSelected: item.id === inputSelectedTask,
         })}
         onKeyboardShown={Platform.OS !== 'web' ? () => handleAutoScroll(item.id) : undefined}
       />

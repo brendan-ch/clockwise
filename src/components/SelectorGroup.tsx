@@ -48,7 +48,7 @@ function SelectorGroup({
   fadeInOnMount, activeKeyboardGroup, outsideData, keybindings, headerKeybindings, onKeyboardShown,
 }: Props) {
   const [selected, setSelected] = useState<string | undefined>(undefined);
-  const [headerInputSelected, setHeaderInputSelected] = useState(false);
+  const [headerInputSelected, setHeaderInputSelected] = useState(header.inputSelected || false);
 
   const expandedAnimation = useRef(new Animated.Value(0)).current;
   const opacityAnimation = useRef(new Animated.Value(0)).current;
@@ -59,6 +59,14 @@ function SelectorGroup({
     keyboardGroup,
     keyboardShortcutManager,
   } = useContext(AppContext);
+
+  useEffect(() => {
+    if (header.inputSelected) {
+      setHeaderInputSelected(true);
+    } else {
+      setHeaderInputSelected(false);
+    }
+  }, [header.inputSelected]);
 
   // Register keybinds for data
   useEffect(() => {
