@@ -205,7 +205,7 @@ function TaskList({ setAtTop }: Props) {
     if (Platform.OS !== 'web') {
       setTimeout(() => {
         setInputSelectedTask(id);
-      }, 200);
+      }, 150);
     }
   }
 
