@@ -191,6 +191,14 @@ function TaskList({ setAtTop }: Props) {
     }
   }
 
+  /**
+   * Call `handleAddTask`, and set the expanded task to that task.
+   */
+  async function handleAddTaskAndExpand() {
+    const id = await handleAddTask();
+    handleExpand(id);
+  }
+
   const colorValues = useTheme();
 
   // When timer state switches, clear completed tasks
@@ -246,17 +254,17 @@ function TaskList({ setAtTop }: Props) {
       if (context.timerState === 'stopped' || context.mode !== 'focus') {
         unsubMethods.push(keyboardShortcutManager.registerEvent({
           keys: ['a'],
-          action: () => handleAddTask(),
+          action: () => handleAddTaskAndExpand(),
         }));
 
         unsubMethods.push(keyboardShortcutManager.registerEvent({
           keys: ['+'],
-          action: () => handleAddTask(),
+          action: () => handleAddTaskAndExpand(),
         }));
 
         unsubMethods.push(keyboardShortcutManager.registerEvent({
           keys: ['='],
-          action: () => handleAddTask(),
+          action: () => handleAddTaskAndExpand(),
         }));
 
         for (let i = 0; i < 9; i += 1) {
@@ -427,8 +435,8 @@ function TaskList({ setAtTop }: Props) {
           type="icon"
           value="add"
           titleStyle={TextStyles.textBold}
-          onPress={() => handleAddTask()}
-          onPressRight={() => handleAddTask()}
+          onPress={() => handleAddTaskAndExpand()}
+          onPressRight={() => handleAddTaskAndExpand()}
           indicator={Platform.OS === 'web' ? 'A' : undefined}
         />
       )}

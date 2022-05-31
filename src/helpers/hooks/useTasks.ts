@@ -14,6 +14,7 @@ function useTasks() {
 
   /**
    * Add a new task to state.
+   * @returns The ID of the task.
    */
   async function handleAddTask() {
     const newId = await generateTaskId();
@@ -40,6 +41,8 @@ function useTasks() {
       ...tasks,
       newTask,
     ]);
+
+    return newId;
   }
 
   /**
