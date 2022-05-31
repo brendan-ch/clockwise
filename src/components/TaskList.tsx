@@ -49,6 +49,10 @@ function TaskList({ setAtTop }: Props) {
 
   // ID of expanded task
   const [expandedTask, setExpandedTask] = useState(-1);
+
+  // Match with task ID for `inputSelected` prop
+  const [inputSelectedTask, setInputSelectedTask] = useState(-1);
+
   const [deletionTimeout, setDeletionTimeout] = useState<TimeoutTracker | undefined>(undefined);
 
   const context = useContext(AppContext);
@@ -191,6 +195,20 @@ function TaskList({ setAtTop }: Props) {
     }
   }
 
+  /**
+   * Call `handleAddTask`, and set the expanded task to that task.
+   */
+  async function handleAddTaskAndExpand() {
+    const id = await handleAddTask();
+    handleExpand(id);
+
+    if (Platform.OS !== 'web') {
+      setTimeout(() => {
+        setInputSelectedTask(id);
+      }, 150);
+    }
+  }
+
   const colorValues = useTheme();
 
   // When timer state switches, clear completed tasks
@@ -246,17 +264,17 @@ function TaskList({ setAtTop }: Props) {
       if (context.timerState === 'stopped' || context.mode !== 'focus') {
         unsubMethods.push(keyboardShortcutManager.registerEvent({
           keys: ['a'],
-          action: () => handleAddTask(),
+          action: () => handleAddTaskAndExpand(),
         }));
 
         unsubMethods.push(keyboardShortcutManager.registerEvent({
           keys: ['+'],
-          action: () => handleAddTask(),
+          action: () => handleAddTaskAndExpand(),
         }));
 
         unsubMethods.push(keyboardShortcutManager.registerEvent({
           keys: ['='],
-          action: () => handleAddTask(),
+          action: () => handleAddTaskAndExpand(),
         }));
 
         for (let i = 0; i < 9; i += 1) {
@@ -403,6 +421,7 @@ function TaskList({ setAtTop }: Props) {
           onChangeText: timerStopped || context.mode !== 'focus' ? (text) => handleChangeTask('title', text, item.id) : undefined,
           onInputSelect: Platform.OS !== 'web' ? () => handleAutoScroll(item.id) : undefined,
           indicator: headerIndicator,
+          inputSelected: item.id === inputSelectedTask,
         })}
         onKeyboardShown={Platform.OS !== 'web' ? () => handleAutoScroll(item.id) : undefined}
       />
@@ -427,8 +446,8 @@ function TaskList({ setAtTop }: Props) {
           type="icon"
           value="add"
           titleStyle={TextStyles.textBold}
-          onPress={() => handleAddTask()}
-          onPressRight={() => handleAddTask()}
+          onPress={() => handleAddTaskAndExpand()}
+          onPressRight={() => handleAddTaskAndExpand()}
           indicator={Platform.OS === 'web' ? 'A' : undefined}
         />
       )}

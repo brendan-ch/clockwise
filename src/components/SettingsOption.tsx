@@ -185,6 +185,7 @@ function SettingsOption({
             onBlur={onInputBlur ? () => onInputBlur() : undefined}
             onFocus={onInputSelect ? () => onInputSelect() : undefined}
             maxFontSizeMultiplier={1.35}
+            selectTextOnFocus={title === 'New task'}
           />
         </View>
       ) : (
