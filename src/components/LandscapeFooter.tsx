@@ -21,7 +21,7 @@ const baseUrl = getBaseURL();
 function LandscapeFooter() {
   const [hovering, setHovering] = useState(false);
   const privacyPolicyLink = `${baseUrl}/privacy`;
-  const githubLink = `${baseUrl}/licenses`;
+  const githubLink = `${baseUrl}/github`;
 
   const opacityAnimation = useRef(new Animated.Value(1)).current;
   const colorValues = useTheme();
@@ -75,7 +75,7 @@ function LandscapeFooter() {
           </Text>
         ) : undefined}
         <ClickableText
-          text="Licenses"
+          text="GitHub"
           onPress={githubLink ? () => handleOpenLink(githubLink) : undefined}
           style={[TextStyles.textRegular, {
             color: colorValues.gray3,

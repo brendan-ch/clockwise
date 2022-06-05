@@ -53,6 +53,12 @@ const buttons: SettingsOptionProps[] = [
     type: 'icon',
     onPress: () => handleOpenLink(`${baseUrl}/licenses`),
   },
+  {
+    title: 'View on GitHub',
+    value: 'chevron-forward-outline',
+    type: 'icon',
+    onPress: () => handleOpenLink(`${baseUrl}/github`),
+  },
 ];
 
 if (Platform.OS !== 'web') {

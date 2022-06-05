@@ -25,7 +25,7 @@ export const REGIONS_WITH_12H_TIME = [
 
 // Version and revision numbers
 // Increment revision number on publish to Expo/web
-export const RELEASE_CODE = '1.4.2-2';
+export const RELEASE_CODE = '1.4.2-3';
 
 // This is added to export files to indicate compatibility with future versions
 // Export files from previous versions should always be compatible with new ones,
@@ -37,10 +37,8 @@ export const APP_STORE_LINK = Constants.manifest?.extra?.appStoreLink;
 export const GOOGLE_PLAY_LINK = Constants.manifest?.extra?.googlePlayLink;
 
 export const PRIVACY_POLICY_LINK = Constants.manifest?.extra?.privacyPolicyLink;
-/**
- * @todo Change this to open source licenses link
- */
 export const GITHUB_LINK = Constants.manifest?.extra?.githubLink;
 export const GITHUB_PROFILE_LINK = Constants.manifest?.extra?.githubProfileLink;
+export const LICENSES_LINK = Constants.manifest?.extra?.licensesLink;
 
 export const SUPPORT_LINK = Constants.manifest?.extra?.supportLink;
