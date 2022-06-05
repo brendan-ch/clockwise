@@ -56,5 +56,6 @@ export default {
     appStoreLink: process.env.APP_STORE_LINK,
     googlePlayLink: process.env.GOOGLE_PLAY_LINK,
     supportLink: process.env.SUPPORT_LINK,
+    licensesLink: process.env.LICENSES_LINK,
   },
 };
