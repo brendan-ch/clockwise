@@ -9,6 +9,7 @@ env:
   GOOGLE_PLAY_LINK: ${{ secrets.GOOGLE_PLAY_LINK }}
   SUPPORT_LINK: ${{ secrets.SUPPORT_LINK }}
   PROD_BUILD: ${{ secrets.PROD_BUILD }}
+  LICENSES_LINK: ${{ secrets.LICENSES_LINK }}
 
 on:
   workflow_dispatch:
