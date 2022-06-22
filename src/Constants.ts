@@ -42,3 +42,4 @@ export const GITHUB_PROFILE_LINK = Constants.manifest?.extra?.githubProfileLink;
 export const LICENSES_LINK = Constants.manifest?.extra?.licensesLink;
 
 export const SUPPORT_LINK = Constants.manifest?.extra?.supportLink;
+export const WHATS_NEW = Constants.manifest?.extra?.whatsNewLink;
