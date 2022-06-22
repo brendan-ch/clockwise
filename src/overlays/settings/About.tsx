@@ -54,6 +54,13 @@ const buttons: SettingsOptionProps[] = [
     onPress: () => handleOpenLink(`${baseUrl}/licenses`),
   },
   {
+    title: 'What\'s New',
+    value: 'chevron-forward-outline',
+    type: 'icon',
+    onPress: () => handleOpenLink(`${baseUrl}/whats-new`),
+
+  },
+  {
     title: 'View on GitHub',
     value: 'chevron-forward-outline',
     type: 'icon',

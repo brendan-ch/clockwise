@@ -57,5 +57,6 @@ export default {
     googlePlayLink: process.env.GOOGLE_PLAY_LINK,
     supportLink: process.env.SUPPORT_LINK,
     licensesLink: process.env.LICENSES_LINK,
+    whatsNewLink: process.env.WHATS_NEW,
   },
 };

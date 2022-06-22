@@ -1,6 +1,6 @@
 import { Platform } from 'react-native';
 import {
-  GITHUB_LINK, LICENSES_LINK, PRIVACY_POLICY_LINK, SUPPORT_LINK,
+  GITHUB_LINK, LICENSES_LINK, PRIVACY_POLICY_LINK, SUPPORT_LINK, WHATS_NEW,
 } from '../Constants';
 import handleOpenLink from './handleOpenLink';
 
@@ -23,6 +23,9 @@ function handleRedirect() {
       break;
     case '/licenses':
       handleOpenLink(LICENSES_LINK, false);
+      break;
+    case '/whats-new':
+      handleOpenLink(WHATS_NEW, false);
       break;
     default:
       handleOpenLink('/', false);
