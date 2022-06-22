@@ -10,6 +10,7 @@ env:
   SUPPORT_LINK: ${{ secrets.SUPPORT_LINK }}
   PROD_BUILD: ${{ secrets.PROD_BUILD }}
   LICENSES_LINK: ${{ secrets.LICENSES_LINK }}
+  WHATS_NEW: ${{ secrets.WHATS_NEW }}
 
 # Controls when the workflow will run
 on:

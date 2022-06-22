@@ -11,6 +11,7 @@ env:
   SUPPORT_LINK: ${{ secrets.SUPPORT_LINK }}
   PROD_BUILD: ${{ secrets.PROD_BUILD }}
   LICENSES_LINK: ${{ secrets.LICENSES_LINK }}
+  WHATS_NEW: ${{ secrets.WHATS_NEW }}
 
   # Pass in additional variables relating to ASC
   # EXPO_ASC_API_KEY_PATH: ${{ secrets.EXPO_ASC_API_KEY_PATH }}
