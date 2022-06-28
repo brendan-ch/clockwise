@@ -273,10 +273,7 @@ export default function TimerPage() {
   if (size === 'small') {
     // Center everything
     return (
-      <View style={[styles.container, {
-        backgroundColor: colorValues.background,
-      }]}
-      >
+      <View style={[styles.container]}>
         <Timer
           display={calculateTimerDisplay(timeRemaining)}
           style={styles.timer}
@@ -364,9 +361,7 @@ export default function TimerPage() {
     if (Platform.OS === 'web') {
       return (
         <View
-          style={[styles.container, {
-            backgroundColor: colorValues.background,
-          }]}
+          style={[styles.container]}
         >
           {children}
         </View>
@@ -469,9 +464,9 @@ export default function TimerPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.0)',
   },
   contentContainer: {
     height: '85%',

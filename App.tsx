@@ -401,15 +401,13 @@ export default function App() {
             backgroundColor: colorValues.background,
           }]}
           blurRadius={2}
-          loadingIndicatorSource={{
-            uri: '',
-          }}
         >
           <View style={[{
             flex: 1,
             width: '100%',
-            backgroundColor: colorValues.background,
-            opacity: imageInfo ? 0.9 : 1.0,
+            backgroundColor: imageInfo?.uri
+              ? colorValues.backgroundTranslucent
+              : colorValues.background,
           }]}
           >
             <SettingsContext.Provider value={{
