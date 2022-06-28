@@ -395,7 +395,7 @@ export default function App() {
       >
         <ImageBackground
           source={{
-            uri: 'https://images.unsplash.com/photo-1655032827680-1c5acdc6dea4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80',
+            uri: imageInfo?.uri,
           }}
           style={[styles.landscapeContainer, {
             backgroundColor: colorValues.background,
