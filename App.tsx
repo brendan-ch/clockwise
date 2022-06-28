@@ -397,9 +397,7 @@ export default function App() {
           source={{
             uri: imageInfo?.uri,
           }}
-          style={[styles.landscapeContainer, {
-            backgroundColor: colorValues.background,
-          }]}
+          style={[styles.landscapeContainer]}
           blurRadius={2}
           loadingIndicatorSource={{
             uri: '',
@@ -408,8 +406,7 @@ export default function App() {
           <View style={[{
             flex: 1,
             width: '100%',
-            backgroundColor: colorValues.background,
-            opacity: imageInfo ? 0.9 : 1.0,
+            backgroundColor: colorValues.backgroundTranslucent,
           }]}
           >
             <SettingsContext.Provider value={{
