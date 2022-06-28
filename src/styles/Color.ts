@@ -11,6 +11,7 @@ const ColorValues = {
   gray4: '#bdbdbd',
   gray5: '#c9c9c9',
   background: '#ffffff',
+  backgroundTranslucent: 'rgba(255, 255, 255, 0.9)',
 };
 
 export default ColorValues;

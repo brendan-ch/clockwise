@@ -13,6 +13,7 @@ interface Colors {
   gray4: string,
   gray5: string,
   background: string,
+  backgroundTranslucent: string,
 }
 
 /**
@@ -38,6 +39,7 @@ function useTheme(providedContext?: DefaultSettingsState): Colors {
       gray4: ColorValues.gray2,
       gray2: ColorValues.gray4,
       gray1: ColorValues.gray5,
+      backgroundTranslucent: 'rgba(0, 0, 0, 0.9)',
     };
   }
 
