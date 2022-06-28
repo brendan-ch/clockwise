@@ -395,18 +395,19 @@ export default function App() {
       >
         <ImageBackground
           source={{
-            uri: imageInfo?.uri,
+            uri: 'https://images.unsplash.com/photo-1655032827680-1c5acdc6dea4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80',
           }}
-          style={[styles.landscapeContainer]}
+          style={[styles.landscapeContainer, {
+            backgroundColor: colorValues.background,
+          }]}
           blurRadius={2}
-          loadingIndicatorSource={{
-            uri: '',
-          }}
         >
           <View style={[{
             flex: 1,
             width: '100%',
-            backgroundColor: colorValues.backgroundTranslucent,
+            backgroundColor: imageInfo?.uri
+              ? colorValues.backgroundTranslucent
+              : colorValues.background,
           }]}
           >
             <SettingsContext.Provider value={{
