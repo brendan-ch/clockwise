@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { TIMER_TIMEOUT } from '../../Constants';
 import { DefaultSettingsState, TimerMode, TimerState } from '../../types';
 import getTimeKey from '../getTimeKey';
 
@@ -108,7 +109,10 @@ function useTimer(settings: DefaultSettingsState) {
     setStart(newStart);
 
     setTimerLength(customTimeRemaining || timeRemaining);
-    const newTimeout = setInterval(() => updateTimeRemaining(newStart, customTimeRemaining), 100);
+    const newTimeout = setInterval(
+      () => updateTimeRemaining(newStart, customTimeRemaining),
+      TIMER_TIMEOUT,
+    );
 
     setTimeoutState(newTimeout);
   }
