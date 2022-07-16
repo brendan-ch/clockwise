@@ -43,3 +43,5 @@ export const LICENSES_LINK = Constants.manifest?.extra?.licensesLink;
 
 export const SUPPORT_LINK = Constants.manifest?.extra?.supportLink;
 export const WHATS_NEW = Constants.manifest?.extra?.whatsNewLink;
+
+export const SETTINGS_OPTION_HEIGHT = 50;

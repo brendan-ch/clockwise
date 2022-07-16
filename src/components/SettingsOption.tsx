@@ -19,6 +19,7 @@ import Checkbox from './Checkbox';
 import NumberBox from './NumberBox';
 import { SettingsOptionProps } from '../types';
 import SelectionBar from './SelectionBar';
+import { SETTINGS_OPTION_HEIGHT } from '../Constants';
 
 function SettingsOption({
   type,
@@ -317,7 +318,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: 50,
+    height: SETTINGS_OPTION_HEIGHT,
   },
   /**
    * Styling for the layout of the title and subtitle.
