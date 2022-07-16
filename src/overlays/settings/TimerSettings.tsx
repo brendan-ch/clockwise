@@ -23,6 +23,7 @@ import {
 import { SettingsOptionProps, Section, SettingsOptionPropsStatic } from '../../types';
 import { checkNotifications, requestNotifications } from '../../helpers/notification';
 import useKeyboardSelect from '../../helpers/hooks/useKeyboardSelect';
+import { SETTINGS_OPTION_HEIGHT } from '../../Constants';
 
 // Store all static option data in here
 // Make it easier to find and filter settings
@@ -286,6 +287,12 @@ function TimerSettingsPane() {
       renderSectionHeader={renderHeader}
       showsVerticalScrollIndicator={false}
       scrollToOverflowEnabled
+      getItemLayout={(_, index) => ({
+        // Item height
+        length: SETTINGS_OPTION_HEIGHT,
+        index,
+        offset: index * SETTINGS_OPTION_HEIGHT,
+      })}
     />
   );
 }

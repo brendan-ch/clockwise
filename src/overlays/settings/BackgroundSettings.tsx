@@ -16,6 +16,7 @@ import { SettingsOptionProps, Section, SettingsOptionPropsStatic } from '../../t
 import useKeyboardSelect from '../../helpers/hooks/useKeyboardSelect';
 import useWindowSize from '../../helpers/hooks/useWindowSize';
 import useTheme from '../../helpers/hooks/useTheme';
+import { SETTINGS_OPTION_HEIGHT } from '../../Constants';
 
 // Store all static option data in here
 // Make it easier to find and filter settings
@@ -167,6 +168,12 @@ function BackgroundSettingsPane() {
         backgroundColor: colors.background,
         paddingHorizontal: windowSize === 'landscape' ? 0 : 10,
       }}
+      getItemLayout={(_, index) => ({
+        // Item height
+        length: SETTINGS_OPTION_HEIGHT,
+        index,
+        offset: index * SETTINGS_OPTION_HEIGHT,
+      })}
     />
   );
 }

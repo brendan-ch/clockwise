@@ -5,6 +5,7 @@ import { SectionList } from 'react-native';
 import AppContext from '../../../AppContext';
 // import AppContext from '../../../AppContext';
 import SettingsOption from '../../components/SettingsOption';
+import { SETTINGS_OPTION_HEIGHT } from '../../Constants';
 import useKeyboardSelect from '../../helpers/hooks/useKeyboardSelect';
 import renderHeader from '../../helpers/renderers/renderHeader';
 import { Section, SettingsOptionProps } from '../../types';
@@ -183,6 +184,12 @@ function Keybindings() {
       sections={sections}
       renderSectionHeader={renderHeader}
       renderItem={renderItem}
+      getItemLayout={(_, index) => ({
+        // Item height
+        length: SETTINGS_OPTION_HEIGHT,
+        index,
+        offset: index * SETTINGS_OPTION_HEIGHT,
+      })}
     />
   );
 }
