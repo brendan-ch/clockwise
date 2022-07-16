@@ -135,11 +135,13 @@ function TimerSettingsPane() {
       title: 'Timer',
       icon: 'hourglass-outline',
       data: settingsData.slice(0, longBreaksEnabled ? 7 : 6),
+      offset: 0,
     },
     {
       title: 'Sounds and alerts',
       icon: 'notifications-outline',
       data: settingsData.slice(7, options.length),
+      offset: 7,
     },
   ];
   const [selected, setSelected] = useState<string | undefined>(undefined);
@@ -267,7 +269,8 @@ function TimerSettingsPane() {
             if (!result) return;
           }
 
-          const i = options.findIndex((value) => item.title === value.title);
+          // Get the actual index of the item
+          const i = section.offset + index;
           handleChange(
             i,
             newData,

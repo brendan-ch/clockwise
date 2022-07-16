@@ -115,11 +115,13 @@ function SettingsPage() {
       title: 'Timer',
       icon: 'timer-outline',
       data: settingsData.slice(0, settingsData[5]?.value ? 7 : 6),
+      offset: 0,
     },
     {
       title: 'Sounds and alerts',
       icon: 'notifications-outline',
       data: settingsData.slice(7, settingsData.length - (Platform.OS === 'web' ? 1 : 0)),
+      offset: 7,
     },
   ];
   // Overlay to display
@@ -185,7 +187,7 @@ function SettingsPage() {
           if (!result) return;
         }
 
-        const i = options.findIndex((value) => value.title === item.title);
+        const i = section.offset + index;
 
         handleChange(
           i,

@@ -63,11 +63,13 @@ function BackgroundSettingsPane() {
       title: 'Region',
       icon: 'location-outline',
       data: settingsData.slice(1, 2),
+      offset: 1,
     },
     {
       title: 'Theme',
       icon: 'moon-outline',
       data: autoSetTheme ? settingsData.slice(2, 3) : settingsData.slice(2, 4),
+      offset: 2,
     },
   ];
   if (windowSize === 'landscape') {
@@ -75,6 +77,7 @@ function BackgroundSettingsPane() {
       title: 'Background',
       icon: 'image-outline',
       data: settingsData.slice(0, 1),
+      offset: 0,
     });
   }
 
@@ -118,7 +121,11 @@ function BackgroundSettingsPane() {
     }
   }, [keyboardShortcutManager, keyboardGroup, selected]);
 
-  const renderItem = ({ item, index }: { item: SettingsOptionProps, index: number }) => {
+  const renderItem = ({
+    item,
+    index,
+    section,
+  }: { item: SettingsOptionProps, index: number, section: Section }) => {
     let indicator = keyboardSelected === item.title ? '→ to select' : undefined;
     if (selected === item.title) {
       indicator = 'Enter to save';
@@ -146,7 +153,7 @@ function BackgroundSettingsPane() {
             if (!result) return;
           }
 
-          const i = options.findIndex((option) => option.title === item.title);
+          const i = section.offset + index;
 
           handleChange(
             i,

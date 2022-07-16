@@ -29,6 +29,7 @@ function DebugSettingsPane() {
       title: 'Debugging',
       icon: 'bug-outline',
       data: options.slice(0, 1),
+      offset: 0,
     },
   ];
   // const [selected, setSelected] = useState<string | undefined>(undefined);

@@ -73,11 +73,13 @@ function ImportSettingsPane() {
       title: 'Export',
       icon: 'exit-outline',
       data: options.slice(0, 2),
+      offset: 0,
     },
     {
       title: 'Import',
       icon: 'enter-outline',
       data: options.slice(2, 4),
+      offset: 2,
     },
   ];
 

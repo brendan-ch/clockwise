@@ -184,6 +184,10 @@ interface Section {
    * Data to display underneath the section.
    */
   data: any[],
+  /**
+   * Starting index of the first element in the data array.
+   */
+  offset: number,
 }
 
 /**
