@@ -14,6 +14,7 @@ import { getData } from '../../helpers/storage';
 import { TASKS } from '../../StorageKeys';
 import { DefaultSettingsState, Section, SettingsOptionProps } from '../../types';
 import handleHaptic from '../../helpers/handleHaptic';
+import { SETTINGS_OPTION_HEIGHT } from '../../Constants';
 
 /**
  * Component that lets users view the available keybindings.
@@ -72,11 +73,13 @@ function ImportSettingsPane() {
       title: 'Export',
       icon: 'exit-outline',
       data: options.slice(0, 2),
+      offset: 0,
     },
     {
       title: 'Import',
       icon: 'enter-outline',
       data: options.slice(2, 4),
+      offset: 2,
     },
   ];
 
@@ -231,6 +234,12 @@ function ImportSettingsPane() {
         backgroundColor: colors.background,
         padding: 0,
       }}
+      getItemLayout={(_, index) => ({
+        // Item height
+        length: SETTINGS_OPTION_HEIGHT,
+        index,
+        offset: index * SETTINGS_OPTION_HEIGHT,
+      })}
     />
   ) : (
     <View
@@ -250,6 +259,12 @@ function ImportSettingsPane() {
           backgroundColor: colors.background,
           paddingHorizontal: 10,
         }}
+        getItemLayout={(_, index) => ({
+          // Item height
+          length: SETTINGS_OPTION_HEIGHT,
+          index,
+          offset: index * SETTINGS_OPTION_HEIGHT,
+        })}
       />
     </View>
   );

@@ -23,10 +23,13 @@ import {
 import { SettingsOptionProps, Section, SettingsOptionPropsStatic } from '../../types';
 import { checkNotifications, requestNotifications } from '../../helpers/notification';
 import useKeyboardSelect from '../../helpers/hooks/useKeyboardSelect';
+import { SETTINGS_OPTION_HEIGHT } from '../../Constants';
 
 // Store all static option data in here
 // Make it easier to find and filter settings
-const options: SettingsOptionPropsStatic[] = [
+export const LONG_BREAK_OPTION_INDEX = 2;
+export const TIMER_ALERTS_OPTION_INDEX = 8;
+export const options: SettingsOptionPropsStatic[] = [
   {
     type: 'number',
     title: 'Focus time (minutes)',
@@ -132,11 +135,13 @@ function TimerSettingsPane() {
       title: 'Timer',
       icon: 'hourglass-outline',
       data: settingsData.slice(0, longBreaksEnabled ? 7 : 6),
+      offset: 0,
     },
     {
       title: 'Sounds and alerts',
       icon: 'notifications-outline',
       data: settingsData.slice(7, options.length),
+      offset: 7,
     },
   ];
   const [selected, setSelected] = useState<string | undefined>(undefined);
@@ -264,7 +269,8 @@ function TimerSettingsPane() {
             if (!result) return;
           }
 
-          const i = options.findIndex((value) => item.title === value.title);
+          // Get the actual index of the item
+          const i = section.offset + index;
           handleChange(
             i,
             newData,
@@ -284,6 +290,12 @@ function TimerSettingsPane() {
       renderSectionHeader={renderHeader}
       showsVerticalScrollIndicator={false}
       scrollToOverflowEnabled
+      getItemLayout={(_, index) => ({
+        // Item height
+        length: SETTINGS_OPTION_HEIGHT,
+        index,
+        offset: index * SETTINGS_OPTION_HEIGHT,
+      })}
     />
   );
 }

@@ -11,6 +11,7 @@ import {
   GITHUB_PROFILE_LINK,
   APP_STORE_LINK,
   GOOGLE_PLAY_LINK,
+  SETTINGS_OPTION_HEIGHT,
 } from '../../Constants';
 import getBaseURL from '../../helpers/getBaseURL';
 import handleOpenLink from '../../helpers/handleOpenLink';
@@ -166,6 +167,12 @@ function AboutPane() {
         data={buttons}
         keyExtractor={(item) => item.title!}
         ListHeaderComponent={listHeader}
+        getItemLayout={(_, index) => ({
+          // Item height
+          length: SETTINGS_OPTION_HEIGHT,
+          index,
+          offset: index * SETTINGS_OPTION_HEIGHT,
+        })}
       />
     </View>
   );

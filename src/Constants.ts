@@ -25,7 +25,7 @@ export const REGIONS_WITH_12H_TIME = [
 
 // Version and revision numbers
 // Increment revision number on publish to Expo/web
-export const RELEASE_CODE = '1.4.2-6';
+export const RELEASE_CODE = '1.4.2-7';
 
 // This is added to export files to indicate compatibility with future versions
 // Export files from previous versions should always be compatible with new ones,
@@ -43,3 +43,5 @@ export const LICENSES_LINK = Constants.manifest?.extra?.licensesLink;
 
 export const SUPPORT_LINK = Constants.manifest?.extra?.supportLink;
 export const WHATS_NEW = Constants.manifest?.extra?.whatsNewLink;
+
+export const SETTINGS_OPTION_HEIGHT = 50;
