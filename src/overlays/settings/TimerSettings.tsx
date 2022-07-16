@@ -26,7 +26,9 @@ import useKeyboardSelect from '../../helpers/hooks/useKeyboardSelect';
 
 // Store all static option data in here
 // Make it easier to find and filter settings
-const options: SettingsOptionPropsStatic[] = [
+export const LONG_BREAK_OPTION_INDEX = 2;
+export const TIMER_ALERTS_OPTION_INDEX = 8;
+export const options: SettingsOptionPropsStatic[] = [
   {
     type: 'number',
     title: 'Focus time (minutes)',

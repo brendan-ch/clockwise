@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
@@ -15,73 +13,15 @@ import { checkNotifications, requestNotifications } from '../helpers/notificatio
 import useSettingsData from '../helpers/hooks/useSettingsData';
 import useTheme from '../helpers/hooks/useTheme';
 import {
-  AUTO_START_BREAK,
-  AUTO_START_FOCUS,
-  BREAK_TIME_MINUTES,
   ENABLE_TIMER_ALERTS,
-  ENABLE_TIMER_SOUND,
-  FOCUS_TIME_MINUTES,
-  LONG_BREAK_ENABLED,
-  LONG_BREAK_INTERVAL,
-  LONG_BREAK_TIME_MINUTES,
 } from '../StorageKeys';
-import { Section, SettingsOptionProps, SettingsOptionPropsStatic } from '../types';
+import { Section, SettingsOptionProps } from '../types';
 import NotificationOverlay from '../components/NotificationOverlay';
 import ClickableText from '../components/ClickableText';
 import TextStyles from '../styles/Text';
 import { clearAll } from '../helpers/storage';
 import AppContext from '../../AppContext';
-
-// Store all static option data in here
-// Make it easier to find and filter settings
-const options: SettingsOptionPropsStatic[] = [
-  {
-    type: 'number',
-    title: 'Focus time (minutes)',
-    storageKey: FOCUS_TIME_MINUTES,
-  },
-  {
-    type: 'number',
-    title: 'Short break time (minutes)',
-    storageKey: BREAK_TIME_MINUTES,
-  },
-  {
-    type: 'number',
-    title: 'Long break time (minutes)',
-    storageKey: LONG_BREAK_TIME_MINUTES,
-  },
-  {
-    type: 'toggle',
-    title: 'Automatically start breaks',
-    storageKey: AUTO_START_BREAK,
-  },
-  {
-    type: 'toggle',
-    title: 'Automatically start sessions',
-    storageKey: AUTO_START_FOCUS,
-  },
-  {
-    type: 'toggle',
-    title: 'Automatically switch to long breaks',
-    storageKey: LONG_BREAK_ENABLED,
-  },
-  {
-    type: 'number',
-    title: 'Interval between long breaks',
-    subtitle: 'Number of sessions before switching to a long break.',
-    storageKey: LONG_BREAK_INTERVAL,
-  },
-  {
-    type: 'toggle',
-    title: 'Timer sound',
-    storageKey: ENABLE_TIMER_SOUND,
-  },
-  {
-    type: 'toggle',
-    title: 'Timer alerts',
-    storageKey: ENABLE_TIMER_ALERTS,
-  },
-];
+import { LONG_BREAK_OPTION_INDEX, TIMER_ALERTS_OPTION_INDEX, options } from '../overlays/settings/TimerSettings';
 
 /**
  * Component containing content for the settings page for mobile.
@@ -135,9 +75,7 @@ function SettingsPage() {
 
   // Assign validator keys here
   if (Platform.OS !== 'web') {
-    options.filter(
-      (value) => value.storageKey === ENABLE_TIMER_ALERTS,
-    )[0].validator = async (data) => {
+    options[TIMER_ALERTS_OPTION_INDEX].validator = async (data) => {
       if (data === false) return true;
       // Check if permissions enabled
       const { granted, canAskAgain } = await checkNotifications();
@@ -161,9 +99,7 @@ function SettingsPage() {
     };
   }
 
-  options.filter(
-    (value) => value.storageKey === LONG_BREAK_INTERVAL,
-  )[0].validator = async () => {
+  options[LONG_BREAK_OPTION_INDEX].validator = async () => {
     // Reset session count
     setCurrentSessionNum(0);
 
@@ -303,6 +239,7 @@ function SettingsPage() {
         backgroundColor: colorValues.background,
       }]}
     >
+      {/* @ts-ignore */}
       <SectionList
         ref={listRef}
         style={styles.sectionList}
