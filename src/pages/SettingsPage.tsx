@@ -93,7 +93,7 @@ function SettingsPage() {
         return false;
       }
       // Display modal here explaining how to enable notifications
-      setOverlay('notification');
+      setNotificationOverlay(true);
 
       return false;
     };
@@ -122,7 +122,7 @@ function SettingsPage() {
     },
   ];
   // Overlay to display
-  const [overlay, setOverlay] = useState<'none' | 'notification'>('none');
+  const [notificationOverlay, setNotificationOverlay] = useState(false);
   const [selected, setSelected] = useState<string | undefined>(undefined);
 
   const listRef = useRef<SectionList>();
@@ -255,8 +255,8 @@ function SettingsPage() {
         overScrollMode="auto"
       />
       <Modal
-        isVisible={overlay === 'notification'}
-        onBackdropPress={() => setOverlay('none')}
+        isVisible={notificationOverlay}
+        onBackdropPress={() => setNotificationOverlay(false)}
         backdropOpacity={0.3}
         backdropColor={colorValues.primary}
         animationIn="fadeIn"
@@ -271,7 +271,7 @@ function SettingsPage() {
         }}
       >
         <NotificationOverlay
-          onClose={() => setOverlay('none')}
+          onClose={() => setNotificationOverlay(true)}
         />
       </Modal>
     </View>
