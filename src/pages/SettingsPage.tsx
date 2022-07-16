@@ -22,6 +22,7 @@ import TextStyles from '../styles/Text';
 import { clearAll } from '../helpers/storage';
 import AppContext from '../../AppContext';
 import { LONG_BREAK_OPTION_INDEX, TIMER_ALERTS_OPTION_INDEX, options } from '../overlays/settings/TimerSettings';
+import { SETTINGS_OPTION_HEIGHT } from '../Constants';
 
 /**
  * Component containing content for the settings page for mobile.
@@ -253,6 +254,12 @@ function SettingsPage() {
         keyboardDismissMode="interactive"
         scrollToOverflowEnabled
         overScrollMode="auto"
+        getItemLayout={(_, index) => ({
+          // Item height
+          length: SETTINGS_OPTION_HEIGHT,
+          index,
+          offset: index * SETTINGS_OPTION_HEIGHT,
+        })}
       />
       <Modal
         isVisible={notificationOverlay}
