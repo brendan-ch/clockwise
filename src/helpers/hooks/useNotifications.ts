@@ -68,6 +68,7 @@ function useNotifications() {
     const { granted } = await checkNotifications();
     if (!granted) return;
 
+    // Send notification to web/mobile
     if (os === 'web') {
       /* eslint-disable-next-line */
       const notif = new Notification(notification.title, {
@@ -78,6 +79,8 @@ function useNotifications() {
         content: {
           title: notification.title,
           body: notification.body,
+          vibrate: [0, 250, 250, 250],
+          sound: true,
         },
         trigger: null,
       });
@@ -100,6 +103,8 @@ function useNotifications() {
       content: {
         title: notification.title,
         body: notification.body,
+        vibrate: [0, 250, 250, 0],
+        sound: true,
       },
       trigger: notification.scheduledDate,
     });
