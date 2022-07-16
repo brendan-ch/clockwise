@@ -151,7 +151,7 @@ function SettingsPage() {
   // Handle auto scrolling
   useEffect(() => {
     if (selected) {
-      handleAutoScroll(selected, 0.3);
+      handleAutoScroll(selected, 0.2);
     }
   }, [selected]);
 
@@ -221,6 +221,7 @@ function SettingsPage() {
         marginTop: 10,
         marginBottom: 10,
         alignItems: 'center',
+        height: 100,
       }}
     >
       {process.env.NODE_ENV === 'development' ? (
