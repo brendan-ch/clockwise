@@ -366,6 +366,38 @@ export default function App() {
     );
   }
 
+  const DomainBanner = displayBanner ? (
+    (
+      <MessageBanner
+        onDismiss={() => {
+          setDisplayBanner(false);
+          storeData(SUPPRESS_DOMAIN_MESSAGE, '1');
+        }}
+        onClick={() => {
+          handleOpenLink('https://bchen.dev/doc/clockwise-migrate');
+        }}
+      >
+        <Text
+          style={[TextStyles.textRegular, {
+            color: colorValues.background,
+          }]}
+        >
+          The default domain for Clockwise is now
+          {' '}
+          <ClickableText
+            text="clockwise.bchen.dev"
+            onPress={() => handleOpenLink('https://clockwise.bchen.dev')}
+            style={[TextStyles.textBold, {
+              color: colorValues.background,
+            }]}
+          />
+          . The app will continue to be accessible from clockwise.sh until February 1st,
+          2023. Click this banner to learn more about migrating your data.
+        </Text>
+      </MessageBanner>
+    )
+  ) : undefined;
+
   // Do conditional rendering based on window size
   if (windowSize === 'small' || windowSize === 'landscape') {
     // Return just the timer (with context provider)
@@ -418,35 +450,7 @@ export default function App() {
               ...settings,
             }}
             >
-              {displayBanner ? (
-                <MessageBanner
-                  onDismiss={() => {
-                    setDisplayBanner(false);
-                    storeData(SUPPRESS_DOMAIN_MESSAGE, '1');
-                  }}
-                  onClick={() => {
-                    handleOpenLink('https://bchen.dev/doc/clockwise-migrate');
-                  }}
-                >
-                  <Text
-                    style={[TextStyles.textRegular, {
-                      color: colorValues.background,
-                    }]}
-                  >
-                    The default domain for Clockwise is now
-                    {' '}
-                    <ClickableText
-                      text="clockwise.bchen.dev"
-                      onPress={() => handleOpenLink('https://clockwise.bchen.dev')}
-                      style={[TextStyles.textBold, {
-                        color: colorValues.background,
-                      }]}
-                    />
-                    . The app will continue to be accessible from clockwise.sh until February 1st,
-                    2023. Click this banner to learn more about migrating your data.
-                  </Text>
-                </MessageBanner>
-              ) : undefined}
+              {DomainBanner}
               {windowSize === 'landscape' ? (
                 <LandscapeHeader />
               ) : undefined}
@@ -585,6 +589,7 @@ export default function App() {
             handleDeleteTask,
           }}
         >
+          {DomainBanner}
           <NavigationContainer
             linking={linking}
           >
