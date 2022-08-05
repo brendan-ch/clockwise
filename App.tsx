@@ -10,7 +10,7 @@ import { Audio } from 'expo-av';
 import * as Linking from 'expo-linking';
 import React, { useEffect, useState } from 'react';
 import {
-  ImageBackground, Platform, StyleSheet, useWindowDimensions, View,
+  ImageBackground, Platform, StyleSheet, Text, useWindowDimensions, View,
 } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import Modal from 'react-native-modal';
@@ -30,7 +30,7 @@ import useTheme from './src/helpers/hooks/useTheme';
 import SettingsOverlay from './src/overlays/SettingsOverlay';
 import LandscapeHeader from './src/components/LandscapeHeader';
 import LandscapeFooter from './src/components/LandscapeFooter';
-import { getData } from './src/helpers/storage';
+import { getData, storeData } from './src/helpers/storage';
 import usePageTitle from './src/helpers/hooks/usePageTitle';
 
 /* eslint-disable-next-line */
@@ -41,6 +41,7 @@ import {
   ENABLE_TIMER_SOUND,
   LONG_BREAK_ENABLED,
   LONG_BREAK_INTERVAL,
+  SUPPRESS_DOMAIN_MESSAGE,
   SUPPRESS_INTRODUCTION,
 } from './src/StorageKeys';
 import SettingsContext from './SettingsContext';
@@ -52,7 +53,6 @@ import IntroductionPage from './src/pages/IntroductionPage';
 import { TIMER_SOUND } from './src/Assets';
 import NewSiteMessage from './src/pages/NewSiteMessage';
 import ImportSettingsPane from './src/overlays/settings/ImportSettings';
-import AppBanner from './src/components/AppBanner';
 import getTimeKey from './src/helpers/getTimeKey';
 import BackgroundSettingsPane from './src/overlays/settings/BackgroundSettings';
 import AboutPane from './src/overlays/settings/About';
@@ -61,6 +61,9 @@ import useTimer from './src/helpers/hooks/useTimer';
 import useKeyboardShortcutManager from './src/helpers/hooks/useKeyboardShortcutManager';
 import useImageInfo from './src/helpers/hooks/useImageInfo';
 import useSettingsState from './src/helpers/hooks/useSettingsState';
+import MessageBanner from './src/components/MessageBanner';
+import ClickableText from './src/components/ClickableText';
+import handleOpenLink from './src/helpers/handleOpenLink';
 
 // Create the stack navigator
 const Stack = createNativeStackNavigator();
@@ -69,16 +72,10 @@ const Stack = createNativeStackNavigator();
 const prefix = Linking.createURL('/');
 
 export default function App() {
-  const [displayBanner, setDisplayBanner] = useState(
-    Platform.OS === 'web'
-    && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent),
-  );
+  const [displayBanner, setDisplayBanner] = useState(false);
+
   const [shortcutsInitialized, setShortcutsInitialized] = useState(false);
-  // const [timeRemaining, setTimeRemaining] = useState(MIN_25);
-  // const [timerState, setTimerState] = useState<TimerState>('stopped');
-  // const [timeout, setTimeoutState] = useState<any>(undefined);
   const [overlay, setOverlayState] = useState<Overlay>('none');
-  // const [mode, setMode] = useState<TimerMode>('focus');
 
   // The current session number
   // Used to determine whether to switch to long break or short break
@@ -253,6 +250,15 @@ export default function App() {
   useEffect(() => {
     // Timer and app initialiation
     loadTimerSound();
+
+    // Determine whether to set banner
+    getData(SUPPRESS_DOMAIN_MESSAGE)
+      .then((value) => {
+        if (value !== '1' && Platform.OS === 'web' && !window.location.host.includes('clockwise.bchen.dev')) {
+          // Set state to true
+          setDisplayBanner(true);
+        }
+      });
   }, []);
 
   useEffect(() => {
@@ -360,10 +366,40 @@ export default function App() {
     );
   }
 
+  const DomainBanner = displayBanner ? (
+    (
+      <MessageBanner
+        onDismiss={() => {
+          setDisplayBanner(false);
+          storeData(SUPPRESS_DOMAIN_MESSAGE, '1');
+        }}
+        onClick={() => {
+          handleOpenLink('https://bchen.dev/doc/clockwise-migrate');
+        }}
+      >
+        <Text
+          style={[TextStyles.textRegular, {
+            color: colorValues.background,
+          }]}
+        >
+          The default domain for Clockwise is now
+          {' '}
+          <ClickableText
+            text="clockwise.bchen.dev"
+            onPress={() => handleOpenLink('https://clockwise.bchen.dev')}
+            style={[TextStyles.textBold, {
+              color: colorValues.background,
+            }]}
+          />
+          . The app will continue to be accessible from clockwise.sh until February 1st,
+          2023. Click this banner to learn more about migrating your data.
+        </Text>
+      </MessageBanner>
+    )
+  ) : undefined;
+
   // Do conditional rendering based on window size
   if (windowSize === 'small' || windowSize === 'landscape') {
-    // const SettingsOverlay = React.lazy(() => import('./src/overlays/SettingsOverlay'));
-
     // Return just the timer (with context provider)
     return (
       <AppContext.Provider value={{
@@ -414,6 +450,7 @@ export default function App() {
               ...settings,
             }}
             >
+              {DomainBanner}
               {windowSize === 'landscape' ? (
                 <LandscapeHeader />
               ) : undefined}
@@ -552,11 +589,7 @@ export default function App() {
             handleDeleteTask,
           }}
         >
-          {displayBanner ? (
-            <AppBanner
-              onDismiss={() => setDisplayBanner(false)}
-            />
-          ) : undefined}
+          {DomainBanner}
           <NavigationContainer
             linking={linking}
           >
