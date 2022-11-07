@@ -441,9 +441,10 @@ export default function App() {
           <View style={[{
             flex: 1,
             width: '100%',
-            backgroundColor: imageInfo?.uri
-              ? colorValues.backgroundTranslucent
-              : colorValues.background,
+            backgroundColor: colorValues.background,
+            opacity: imageInfo?.uri
+              ? 0.9
+              : 1.0,
           }]}
           >
             <SettingsContext.Provider value={{
