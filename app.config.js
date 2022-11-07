@@ -58,5 +58,9 @@ export default {
     supportLink: process.env.SUPPORT_LINK,
     licensesLink: process.env.LICENSES_LINK,
     whatsNewLink: process.env.WHATS_NEW,
+
+    eas: {
+      projectId: '09da71e5-0293-4bfa-9835-ee84f9b2eabb',
+    },
   },
 };
