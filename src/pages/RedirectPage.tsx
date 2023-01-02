@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import {
   ActivityIndicator, StyleSheet, Text, View,
 } from 'react-native';
-import handleRedirect from '../helpers/handleRedirect';
 import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
 
@@ -14,7 +13,7 @@ function RedirectPage() {
   const colors = useTheme();
 
   useEffect(() => {
-    handleRedirect();
+    // handleRedirect();
   }, []);
 
   return (
