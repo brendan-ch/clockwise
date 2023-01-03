@@ -113,7 +113,6 @@ export default function App() {
   const setPageTitle = usePageTitle('Clockwise', timeRemaining, timerState);
   const keyboardShortcutManager = useKeyboardShortcutManager();
   const imageInfo = useImageInfo(settings);
-  const colors = useTheme();
 
   // Track selected task IDs
   // const [selected, setSelected] = useState<number[]>([]);
@@ -416,7 +415,7 @@ export default function App() {
         setSelected,
         currentSessionNum,
         setCurrentSessionNum,
-        colors,
+        colors: colorValues,
       }}
       >
         <ImageBackground
@@ -561,7 +560,7 @@ export default function App() {
       setSelected,
       currentSessionNum,
       setCurrentSessionNum,
-      colors,
+      colors: colorValues,
     }}
     >
       <SettingsContext.Provider value={{
