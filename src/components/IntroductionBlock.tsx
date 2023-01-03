@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Image, StyleSheet, Text, View,
 } from 'react-native';
-import useTheme from '../helpers/hooks/useTheme';
+import AppContext from '../../AppContext';
 import TextStyles from '../styles/Text';
 import { IntroductionBlockProps } from '../types';
 
 function IntroductionBlock({
   title, children, style, imageStyle, image,
 }: IntroductionBlockProps) {
-  const colorValues = useTheme();
+  const { colors } = useContext(AppContext);
 
   return (
     <View style={[styles.container, style]}>
@@ -22,7 +22,7 @@ function IntroductionBlock({
       ) : undefined}
       <Text
         style={[TextStyles.textBold, {
-          color: colorValues.primary,
+          color: colors.primary,
         }]}
         maxFontSizeMultiplier={1.35}
       >

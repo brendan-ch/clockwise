@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import {
   Text, View, Animated, StyleSheet, Pressable, Easing, StyleProp, ViewStyle,
 } from 'react-native';
-import useTheme from '../helpers/hooks/useTheme';
+import AppContext from '../../AppContext';
 import TextStyles from '../styles/Text';
 
 interface ButtonProps {
@@ -17,7 +17,7 @@ function SelectionButton({
   highlighted, text, onPress, style, keyboardSelected,
 }: ButtonProps) {
   const highlightAnimation = useRef(new Animated.Value(0)).current;
-  const colors = useTheme();
+  const { colors } = useContext(AppContext);
 
   useEffect(() => {
     // Change animation status

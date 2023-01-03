@@ -1,19 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Text } from 'react-native';
 
 import ClickableText from '../../components/ClickableText';
 import { IntroductionBlockProps } from '../../types';
-import useTheme from './useTheme';
 import TextStyles from '../../styles/Text';
 import { NO_ADS_IMAGE, SETTINGS_IMAGE, TASKS_IMAGE } from '../../Assets';
 import handleOpenLink from '../handleOpenLink';
 import getBaseURL from '../getBaseURL';
+import AppContext from '../../../AppContext';
 
 /**
  * Hook that returns introduction data.
  */
 function useIntroductionData(): IntroductionBlockProps[] {
-  const colorValues = useTheme();
+  const { colors } = useContext(AppContext);
 
   const blocks: IntroductionBlockProps[] = [
     {
@@ -22,7 +22,7 @@ function useIntroductionData(): IntroductionBlockProps[] {
       children: (
         <Text
           style={[TextStyles.textRegular, {
-            color: colorValues.primary,
+            color: colors.primary,
           }]}
           maxFontSizeMultiplier={1.35}
         >
@@ -33,7 +33,7 @@ function useIntroductionData(): IntroductionBlockProps[] {
             text="Learn more about the Pomodoro technique."
             onPress={() => handleOpenLink('https://en.wikipedia.org/wiki/Pomodoro_Technique')}
             style={[TextStyles.textRegular, {
-              color: colorValues.gray3,
+              color: colors.gray3,
             }]}
           />
         </Text>
@@ -46,7 +46,7 @@ function useIntroductionData(): IntroductionBlockProps[] {
         <Text
           maxFontSizeMultiplier={1.35}
           style={[TextStyles.textRegular, {
-            color: colorValues.primary,
+            color: colors.primary,
           }]}
         >
           Change timer settings, color theme, and more in the settings.
@@ -61,7 +61,7 @@ function useIntroductionData(): IntroductionBlockProps[] {
         <Text
           maxFontSizeMultiplier={1.35}
           style={[TextStyles.textRegular, {
-            color: colorValues.primary,
+            color: colors.primary,
           }]}
         >
           {'Your data stays on your device. See the '}
@@ -69,7 +69,7 @@ function useIntroductionData(): IntroductionBlockProps[] {
             text="Privacy Policy"
             onPress={() => handleOpenLink(`${getBaseURL()}/privacy`)}
             style={[TextStyles.textRegular, {
-              color: colorValues.gray3,
+              color: colors.gray3,
             }]}
           />
           {' for more information.'}

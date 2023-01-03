@@ -6,7 +6,6 @@ import {
 } from 'react-native';
 import AppContext from '../../AppContext';
 import IntroductionBlock from '../components/IntroductionBlock';
-import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
 import OverlayButtonBar from '../components/OverlayButtonBar';
 import { storeData } from '../helpers/storage';
@@ -28,9 +27,10 @@ function IntroductionOverlay({ containerStyle }: Props) {
     setOverlay,
     keyboardGroup,
     setPageTitle,
+    colors,
   } = useContext(AppContext);
 
-  const colorValues = useTheme();
+  const colorValues = colors;
 
   const blocks = useIntroductionData();
 

@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Platform,
   StyleSheet, ViewStyle, Animated, TouchableOpacity, Text, StyleProp,
 } from 'react-native';
+import AppContext from '../../AppContext';
 import useMouseAnimations from '../helpers/hooks/useMouseAnimations';
-import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
 
 interface Props {
@@ -27,7 +27,7 @@ interface Props {
 function SettingsSelector({
   selected, style, text, onPress, indicator, isBottom,
 }: Props) {
-  const colors = useTheme();
+  const { colors } = useContext(AppContext);
 
   const { mouseHoverAnimation, onMouseEnter, onMouseLeave } = useMouseAnimations();
 

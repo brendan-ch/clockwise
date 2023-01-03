@@ -14,7 +14,6 @@ import AppContext from '../../AppContext';
 import ActionButtonBar from '../components/ActionButtonBar';
 import Timer from '../components/Timer';
 import calculateTimerDisplay from '../helpers/calculateTimer';
-import useTheme from '../helpers/hooks/useTheme';
 import useWindowSize from '../helpers/hooks/useWindowSize';
 import TaskList from '../components/TaskList';
 import useBackgroundTimer from '../helpers/hooks/useBackgroundTimer';
@@ -47,17 +46,6 @@ export default function TimerPage() {
   // const { width } = useWindowDimensions();
 
   const [isAtTop, setAtTop] = useState(true);
-  const colorValues = useTheme();
-  const isLightMode = colorValues.primary === ColorValues.primary;
-
-  const now = useTimeUpdates();
-
-  const {
-    selected,
-    tasks,
-  } = useContext(TaskContext);
-
-  const size = useWindowSize();
   const {
     timeRemaining,
     timerState,
@@ -74,7 +62,19 @@ export default function TimerPage() {
     timerBackgrounded,
     setTimeRemaining,
     currentSessionNum,
+    colors,
   } = useContext(AppContext);
+  const colorValues = colors;
+  const isLightMode = colorValues.primary === ColorValues.primary;
+
+  const now = useTimeUpdates();
+
+  const {
+    selected,
+    tasks,
+  } = useContext(TaskContext);
+
+  const size = useWindowSize();
 
   const settings = useContext(SettingsContext);
 

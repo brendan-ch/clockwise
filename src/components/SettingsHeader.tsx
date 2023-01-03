@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet, Text, View } from 'react-native';
-import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
+import AppContext from '../../AppContext';
 
 interface Props {
   title?: string,
@@ -14,7 +14,7 @@ interface Props {
  * @param props
  */
 function SettingsHeader({ title, icon }: Props) {
-  const colors = useTheme();
+  const { colors } = useContext(AppContext);
 
   return (
     <View style={[styles.container, {
