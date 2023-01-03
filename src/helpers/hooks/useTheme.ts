@@ -13,20 +13,35 @@ import { Colors, DefaultSettingsState } from '../../types';
 function useTheme(providedContext?: DefaultSettingsState): Colors {
   // const colorScheme = useColorScheme();
   const [colorScheme, setColorScheme] = useState<ColorSchemeName>('light');
+  const [appState, setAppState] = useState<AppStateStatus>('active');
 
   useEffect(() => {
-    function changeColorScheme(state: AppStateStatus) {
-      if (state === 'active') {
-        // Update the color scheme
-        const newColorScheme = Appearance.getColorScheme();
-        setColorScheme(newColorScheme);
-      }
+    function changeAppState(state: AppStateStatus) {
+      setAppState(state);
     }
 
-    AppState.addEventListener('change', changeColorScheme);
+    AppState.addEventListener('change', changeAppState);
 
-    return () => AppState.removeEventListener('change', changeColorScheme);
+    return () => AppState.removeEventListener('change', changeAppState);
   }, []);
+
+  useEffect(() => {
+    function changeColorScheme(preferences: Appearance.AppearancePreferences) {
+      setColorScheme(preferences.colorScheme);
+    }
+
+    if (appState === 'active') {
+      // Get the new color scheme
+      setColorScheme(Appearance.getColorScheme());
+
+      // Set an event listener to change color scheme whenever active
+      Appearance.addChangeListener(changeColorScheme);
+
+      return () => Appearance.removeChangeListener(changeColorScheme);
+    }
+
+    return () => {};
+  }, [appState]);
 
   let context = useContext(SettingsContext);
   if (providedContext) {
