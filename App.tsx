@@ -56,7 +56,6 @@ import ImportSettingsPane from './src/overlays/settings/ImportSettings';
 import getTimeKey from './src/helpers/getTimeKey';
 import BackgroundSettingsPane from './src/overlays/settings/BackgroundSettings';
 import AboutPane from './src/overlays/settings/About';
-import RedirectPage from './src/pages/RedirectPage';
 import useTimer from './src/helpers/hooks/useTimer';
 import useKeyboardShortcutManager from './src/helpers/hooks/useKeyboardShortcutManager';
 import useImageInfo from './src/helpers/hooks/useImageInfo';
@@ -339,17 +338,6 @@ export default function App() {
       onClick={Platform.OS === 'web' ? () => setOverlay('none') : undefined}
     />
   );
-
-  // Check for URL path that isn't in config
-  if (Platform.OS === 'web'
-    && window.location.pathname !== '/'
-    && !Object.values(config.screens).includes(window.location.pathname.substring(1))
-  ) {
-    // Render a redirect page
-    return (
-      <RedirectPage />
-    );
-  }
 
   if (!(shortcutsInitialized && (Platform.OS === 'web' || fontsLoaded))) {
     return (

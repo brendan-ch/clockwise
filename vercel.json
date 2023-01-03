@@ -1,5 +1,24 @@
 {
-  "rewrites":  [
-    {"source": "/(.*)", "destination": "/"}
+  "redirects": [
+    {
+      "source": "/privacy",
+      "destination": "https://www.bchen.dev/doc/clockwise-privacy"
+    },
+    {
+      "source": "/github",
+      "destination": "https://github.com/brendan-ch/clockwise/"
+    },
+    {
+      "source": "/licenses",
+      "destination": "https://www.bchen.dev/doc/clockwise-licenses"
+    },
+    {
+      "source": "/whats-new",
+      "destination": "https://www.bchen.dev/doc/clockwise-whats-new"
+    },
+    {
+      "source": "/support",
+      "destination": "https://brendann.notion.site/Clockwise-Help-and-Support-43d794211e074c3eb1dd3a572c5dab04"
+    }
   ]
 }
