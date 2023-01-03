@@ -309,6 +309,17 @@ interface IntroductionBlockProps {
   image?: ImageSourcePropType,
 }
 
+interface Colors {
+  primary: string,
+  gray1: string,
+  gray2: string,
+  gray3: string,
+  gray4: string,
+  gray5: string,
+  background: string,
+  backgroundTranslucent: string,
+}
+
 export {
   TimerState,
   TimerMode,
@@ -323,4 +334,5 @@ export {
   DefaultImageState,
   ImageInfo,
   IntroductionBlockProps,
+  Colors,
 };
