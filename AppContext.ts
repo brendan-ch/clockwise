@@ -1,9 +1,12 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import KeyboardShortcutManager from './src/helpers/keyboardShortcutManager';
+import ColorValues from './src/styles/Color';
 import {
+  Colors,
   KeyboardShortcutGroup, Overlay, TimerMode, TimerState,
 } from './src/types';
 
+// TO-DO: nest everything inside objects
 interface DefaultAppState {
   keyboardShortcutManager?: KeyboardShortcutManager,
   timeRemaining: number,
@@ -37,6 +40,7 @@ interface DefaultAppState {
    */
   currentSessionNum: number,
   setCurrentSessionNum: Dispatch<SetStateAction<number>>,
+  colors: Colors,
 }
 
 const defaultAppState: DefaultAppState = {
@@ -62,6 +66,7 @@ const defaultAppState: DefaultAppState = {
   setSelected: () => {},
   currentSessionNum: 0,
   setCurrentSessionNum: () => {},
+  colors: ColorValues,
 };
 
 const AppContext = React.createContext(defaultAppState);
