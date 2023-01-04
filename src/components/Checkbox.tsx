@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
-import useTheme from '../helpers/hooks/useTheme';
+import AppContext from '../../AppContext';
 
 interface Props {
   selected?: boolean,
@@ -10,7 +10,7 @@ interface Props {
 }
 
 function Checkbox({ selected, keyboardSelected, disabled }: Props) {
-  const colors = useTheme();
+  const { colors } = useContext(AppContext);
 
   return (
     <View style={[styles.container, {

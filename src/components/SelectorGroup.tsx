@@ -5,7 +5,6 @@ import {
   StyleSheet, View, Animated, FlatList, Platform,
 } from 'react-native';
 import AppContext from '../../AppContext';
-import useTheme from '../helpers/hooks/useTheme';
 import { KeyboardShortcutGroup, SettingsOptionProps } from '../types';
 import SettingsOption from './SettingsOption';
 
@@ -53,12 +52,13 @@ function SelectorGroup({
   const expandedAnimation = useRef(new Animated.Value(0)).current;
   const opacityAnimation = useRef(new Animated.Value(0)).current;
 
-  const colorValues = useTheme();
-
   const {
     keyboardGroup,
     keyboardShortcutManager,
+    colors,
   } = useContext(AppContext);
+
+  const colorValues = colors;
 
   useEffect(() => {
     if (header.inputSelected) {

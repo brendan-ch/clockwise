@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import AppContext from '../../AppContext';
 import IntroductionBlock from '../components/IntroductionBlock';
-import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
 import OverlayButtonBar from '../components/OverlayButtonBar';
 import { IntroductionBlockProps } from '../types';
@@ -21,7 +20,6 @@ import useIntroductionData from '../helpers/hooks/useIntroductionData';
 
 function IntroductionPage() {
   const [index, setIndex] = useState(0);
-  const colorValues = useTheme();
 
   const { width } = useWindowDimensions();
 
@@ -29,7 +27,9 @@ function IntroductionPage() {
 
   const {
     setOverlay,
+    colors,
   } = useContext(AppContext);
+  const colorValues = colors;
 
   const blocks = useIntroductionData();
 

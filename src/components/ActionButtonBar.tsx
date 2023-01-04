@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   StyleProp, StyleSheet, Text, View, ViewStyle,
 } from 'react-native';
-import useTheme from '../helpers/hooks/useTheme';
+import AppContext from '../../AppContext';
 import TextStyles from '../styles/Text';
 import { TimerState } from '../types';
 import ActionButton from './ActionButton';
@@ -34,7 +34,7 @@ function ActionButtonBar({
   style,
   disabled,
 }: Props) {
-  const colors = useTheme();
+  const { colors } = useContext(AppContext);
 
   let displayText = 'start';
   let method = onStartPress;

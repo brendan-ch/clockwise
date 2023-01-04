@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Image, Pressable, StyleSheet, Text, View,
 } from 'react-native';
@@ -6,18 +6,18 @@ import {
   DARK_MODE_SCREENSHOT, LIGHT_MODE_SCREENSHOT,
 } from '../../Assets';
 import handleOpenLink from '../../helpers/handleOpenLink';
-import useTheme from '../../helpers/hooks/useTheme';
 import ColorValues from '../../styles/Color';
 import TextStyles from '../../styles/Text';
 import AppStoreBadge from '../../components/badges/AppStoreBadge';
 import GooglePlayBadge from '../../components/badges/GooglePlayBadge';
 import { APP_STORE_LINK, GOOGLE_PLAY_LINK } from '../../Constants';
+import AppContext from '../../../AppContext';
 
 /**
  * Settings pane that contains a link to the apps.
  */
 export default function AppsPane() {
-  const colors = useTheme();
+  const { colors } = useContext(AppContext);
 
   const textStyle = [TextStyles.textRegular, {
     color: colors.primary,

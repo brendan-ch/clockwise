@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   StyleSheet, Text, TouchableOpacity,
 } from 'react-native';
-import useTheme from '../helpers/hooks/useTheme';
+import AppContext from '../../AppContext';
 import TextStyles from '../styles/Text';
 
 interface ButtonProps {
@@ -12,7 +12,7 @@ interface ButtonProps {
 }
 
 export default function OverlayButton({ text, onPress, primary }: ButtonProps) {
-  const colors = useTheme();
+  const { colors } = useContext(AppContext);
 
   return (
     <TouchableOpacity

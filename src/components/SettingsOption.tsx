@@ -13,7 +13,6 @@ import {
   // ViewStyle,
 } from 'react-native';
 import AppContext from '../../AppContext';
-import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
 import Checkbox from './Checkbox';
 import NumberBox from './NumberBox';
@@ -42,10 +41,10 @@ function SettingsOption({
   keyboardSelected,
   onChangeText, inputSelected, subtitle, indicator, multilineTitle,
 }: SettingsOptionProps) {
-  const colors = useTheme();
   const {
     keyboardGroup,
     keyboardShortcutManager,
+    colors,
   } = useContext(AppContext);
 
   function handlePress() {

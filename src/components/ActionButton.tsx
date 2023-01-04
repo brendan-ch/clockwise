@@ -1,4 +1,6 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, {
+  useRef, useEffect, useState, useContext,
+} from 'react';
 import {
   Animated,
   Platform,
@@ -12,8 +14,8 @@ import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
 import ColorValues from '../styles/Color';
 import TextStyles from '../styles/Text';
-import useTheme from '../helpers/hooks/useTheme';
 import handleHaptic from '../helpers/handleHaptic';
+import AppContext from '../../AppContext';
 
 interface Props {
   style?: StyleProp<ViewStyle>,
@@ -47,7 +49,7 @@ function ActionButton({
   style, onPress, value, isIconButton, haptics, background,
 }: Props) {
   const [backgroundState, setBackgroundState] = useState(background || false);
-  const colorValues = useTheme();
+  const { colors } = useContext(AppContext);
 
   const mouseHoverAnimation = useRef(new Animated.Value(0)).current;
   const fadeAnimation = useRef(new Animated.Value(background ? 1 : 0)).current;
@@ -147,7 +149,7 @@ function ActionButton({
     >
       <Pressable
         style={[styles.container, {
-          backgroundColor: colorValues.primary,
+          backgroundColor: colors.primary,
         }]}
         onPressIn={() => onPressIn()}
         onPressOut={() => onPressOut()}
@@ -155,8 +157,8 @@ function ActionButton({
       >
         {/* Overlay component and set default opacity to 0 */}
         <Animated.View style={[styles.animatedContainer, {
-          backgroundColor: colorValues.background,
-          borderColor: colorValues.primary,
+          backgroundColor: colors.background,
+          borderColor: colors.primary,
           opacity: fadeAnimation,
         }]}
         >
@@ -164,13 +166,13 @@ function ActionButton({
             <Ionicons
               // @ts-ignore
               name={value}
-              color={colorValues.primary}
+              color={colors.primary}
               size={30}
             />
           ) : (
             <Text
               style={[TextStyles.textBold, styles.text, {
-                color: colorValues.primary,
+                color: colors.primary,
               }]}
               maxFontSizeMultiplier={1.35}
             >
@@ -184,13 +186,13 @@ function ActionButton({
           <Ionicons
             // @ts-ignore
             name={value}
-            color={backgroundState ? colorValues.primary : colorValues.background}
+            color={backgroundState ? colors.primary : colors.background}
             size={30}
           />
           // <AnimatedIonicons
           //   // @ts-ignore
           //   name={value}
-          //   color={colorValues.background}
+          //   color={colors.background}
           //   style={{
           //     opacity: fadeAnimation.interpolate({
           //       inputRange: [0, 1],
@@ -210,7 +212,7 @@ function ActionButton({
                   inputRange: [0, 1],
                   outputRange: [1, 0],
                 }),
-                color: colorValues.background,
+                color: colors.background,
               },
             ]}
           >

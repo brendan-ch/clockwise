@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Animated, Platform, StyleSheet, Text, TouchableOpacity,
 } from 'react-native';
+import AppContext from '../../AppContext';
 import useMouseAnimations from '../helpers/hooks/useMouseAnimations';
-import useTheme from '../helpers/hooks/useTheme';
 import ColorValues from '../styles/Color';
 import TextStyles from '../styles/Text';
 
@@ -19,17 +19,17 @@ interface Props {
  * @returns
  */
 function PageButton({ text, onPress, selected }: Props) {
-  const colorValues = useTheme();
+  const { colors } = useContext(AppContext);
 
   const { mouseHoverAnimation, onMouseEnter, onMouseLeave } = useMouseAnimations();
 
   const children = (
     <Text style={selected
       ? [TextStyles.textRegular, styles.textFilled, {
-        color: colorValues.background,
+        color: colors.background,
       }]
       : [TextStyles.textRegular, styles.text, {
-        color: colorValues.primary,
+        color: colors.primary,
       }]}
     >
       {text}
@@ -40,7 +40,7 @@ function PageButton({ text, onPress, selected }: Props) {
     return (
       <Animated.View
         style={[styles.container, {
-          borderColor: colorValues.primary,
+          borderColor: colors.primary,
           // @ts-ignore
           cursor: 'pointer',
           opacity: mouseHoverAnimation.interpolate({
@@ -60,7 +60,7 @@ function PageButton({ text, onPress, selected }: Props) {
   return (
     <TouchableOpacity
       style={[styles.container, {
-        borderColor: colorValues.primary,
+        borderColor: colors.primary,
       }]}
       onPress={onPress}
     >

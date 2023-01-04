@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   StyleProp, StyleSheet, Text, TextStyle, View, ViewStyle,
 } from 'react-native';
-import useTheme from '../helpers/hooks/useTheme';
+import AppContext from '../../AppContext';
 import TextStyles from '../styles/Text';
 
 interface Props {
@@ -16,13 +16,13 @@ interface Props {
  * @param param0
  */
 function Timer({ display, style, textStyle }: Props) {
-  const colorValues = useTheme();
+  const { colors } = useContext(AppContext);
 
   return (
     <View style={[style, styles.container]}>
       <Text
         style={[TextStyles.textBold, textStyle, styles.text, {
-          color: colorValues.primary,
+          color: colors.primary,
         }]}
         allowFontScaling={false}
       >

@@ -15,7 +15,6 @@ import {
 import { SettingsOptionProps, Section, SettingsOptionPropsStatic } from '../../types';
 import useKeyboardSelect from '../../helpers/hooks/useKeyboardSelect';
 import useWindowSize from '../../helpers/hooks/useWindowSize';
-import useTheme from '../../helpers/hooks/useTheme';
 import { SETTINGS_OPTION_HEIGHT } from '../../Constants';
 
 // Store all static option data in here
@@ -55,7 +54,6 @@ const options: SettingsOptionPropsStatic[] = [
 function BackgroundSettingsPane() {
   const { settingsData, handleChange } = useSettingsData(options);
   const windowSize = useWindowSize();
-  const colors = useTheme();
 
   const autoSetTheme = settingsData[2]?.value as boolean;
   const sections: Section[] = [
@@ -87,6 +85,7 @@ function BackgroundSettingsPane() {
     keyboardShortcutManager,
     keyboardGroup,
     setKeyboardGroup,
+    colors,
   } = useContext(AppContext);
 
   // Set keyboard selected by storage key

@@ -415,6 +415,7 @@ export default function App() {
         setSelected,
         currentSessionNum,
         setCurrentSessionNum,
+        colors: colorValues,
       }}
       >
         <ImageBackground
@@ -559,6 +560,7 @@ export default function App() {
       setSelected,
       currentSessionNum,
       setCurrentSessionNum,
+      colors: colorValues,
     }}
     >
       <SettingsContext.Provider value={{

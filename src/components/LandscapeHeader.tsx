@@ -6,8 +6,8 @@ import {
   Platform, Pressable, StyleSheet, Text, View, Animated,
 } from 'react-native';
 import AppContext from '../../AppContext';
-import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
+import { Colors } from '../types';
 
 /**
  * Props for the header button.
@@ -15,15 +15,16 @@ import TextStyles from '../styles/Text';
 interface Props {
   iconName?: string,
   onPress?: () => any,
+  colors: Colors,
 }
 
 /**
  * Render a header button.
  */
-function HeaderButton({ iconName, onPress }: Props) {
+function HeaderButton({ iconName, onPress, colors }: Props) {
   const [hovering, setHovering] = useState(false);
 
-  const colorValues = useTheme();
+  const colorValues = colors;
 
   return (
     <Pressable onPress={onPress}>
@@ -67,7 +68,7 @@ function LandscapeHeader() {
   const context = useContext(AppContext);
   const opacityAnimation = useRef(new Animated.Value(0)).current;
 
-  const colorValues = useTheme();
+  const colorValues = context.colors;
 
   useEffect(() => {
     if (context.timerState === 'running' && !hovering) {
@@ -139,6 +140,7 @@ function LandscapeHeader() {
         }]}
         >
           <HeaderButton
+            colors={colorValues}
             iconName="settings-outline"
             onPress={() => context.setOverlay('settings')}
           />

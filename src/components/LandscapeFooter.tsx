@@ -6,7 +6,6 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AppContext from '../../AppContext';
-import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
 import ClickableText from './ClickableText';
 import ImageContext from '../../ImageContext';
@@ -24,8 +23,8 @@ function LandscapeFooter() {
   const githubLink = `${baseUrl}/github`;
 
   const opacityAnimation = useRef(new Animated.Value(1)).current;
-  const colorValues = useTheme();
   const context = useContext(AppContext);
+  const colorValues = context.colors;
 
   const { imageInfo } = useContext(ImageContext);
 
