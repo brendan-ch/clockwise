@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {
-  useEffect, useContext, useRef, useState,
+  useEffect, useContext, useRef, useState, useCallback,
 } from 'react';
 import {
   Animated,
@@ -34,6 +34,8 @@ import {
 } from '../StorageKeys';
 import SelectionBar from '../components/SelectionBar';
 import handleHaptic from '../helpers/handleHaptic';
+
+const SELECTION_OPTIONS = ['focus', 'short break', 'long break'];
 
 /**
  * Component that displays information about the timer.
@@ -95,7 +97,7 @@ export default function TimerPage() {
    * Handle selection of a timer option.
    * @param selection
    */
-  function handleSelect(selection: 'focus' | 'short break' | 'long break') {
+  const handleSelect = useCallback((selection: 'focus' | 'short break' | 'long break') => {
     if (selection === 'short break') {
       handleStateSwitch('break');
     } else if (selection === 'long break') {
@@ -105,7 +107,7 @@ export default function TimerPage() {
     }
 
     setBarSelection(selection);
-  }
+  }, []);
 
   // Calculate finish time, based on provide est. sessions data
   // Get the task w/ the longest number of sessions
@@ -284,8 +286,8 @@ export default function TimerPage() {
           }]}
           selected={barSelection}
           // @ts-ignore
-          onSelect={(newSelection) => handleSelect(newSelection)}
-          options={['focus', 'short break', 'long break']}
+          onSelect={handleSelect}
+          options={SELECTION_OPTIONS}
         />
         {/* <PageButtonBar
           selected={mode}
@@ -322,12 +324,10 @@ export default function TimerPage() {
             />
             <SelectionBar
               selected={barSelection}
-              style={[styles.pageButtonBar, {
-                width: 268,
-              }]}
+              style={styles.pageButtonBar}
               // @ts-ignore
-              onSelect={(newSelection) => handleSelect(newSelection)}
-              options={['focus', 'short break', 'long break']}
+              onSelect={handleSelect}
+              options={SELECTION_OPTIONS}
             />
             {/* <PageButtonBar
               selected={mode}
@@ -406,8 +406,8 @@ export default function TimerPage() {
               width: 275,
             }]}
             // @ts-ignore
-            onSelect={(newSelection) => handleSelect(newSelection)}
-            options={['focus', 'short break', 'long break']}
+            onSelect={handleSelect}
+            options={SELECTION_OPTIONS}
           />
         </View>
         <View style={styles.middleContainer}>
