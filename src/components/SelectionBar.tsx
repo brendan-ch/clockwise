@@ -102,6 +102,8 @@ SelectionButton.defaultProps = {
   keyboardSelected: false,
 };
 
+const SelectionButtonMemoized = React.memo(SelectionButton);
+
 interface Props {
   selected: string,
   /**
@@ -125,7 +127,7 @@ function Component({
   return (
     <View style={[styles.container, style]}>
       {options.map((option, index) => (
-        <SelectionButton
+        <SelectionButtonMemoized
           /* eslint-disable-next-line */
           key={index}
           highlighted={selected === option}
