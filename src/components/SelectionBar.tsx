@@ -119,7 +119,7 @@ interface Props {
  * Bar that displays multiple options for selection.
  * @returns
  */
-function SelectionBar({
+function Component({
   selected, options, onSelect, style, buttonStyle, keyboardSelected,
 }: Props) {
   return (
@@ -146,11 +146,12 @@ const styles = StyleSheet.create({
   },
 });
 
-SelectionBar.defaultProps = {
+Component.defaultProps = {
   onSelect: () => {},
   style: {},
   buttonStyle: {},
   keyboardSelected: undefined,
 };
 
+const SelectionBar = React.memo(Component);
 export default SelectionBar;
