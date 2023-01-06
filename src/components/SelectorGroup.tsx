@@ -40,7 +40,7 @@ interface Props {
 /**
  * Component that can expand with additional SettingOption components.
  */
-function SelectorGroup({
+function Component({
   data,
   header,
   expanded,
@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
   },
 });
 
-SelectorGroup.defaultProps = {
+Component.defaultProps = {
   fadeInOnMount: false,
   activeKeyboardGroup: undefined,
   keybindings: [],
@@ -317,4 +317,5 @@ SelectorGroup.defaultProps = {
   onKeyboardShown: () => {},
 };
 
+const SelectorGroup = React.memo(Component);
 export default SelectorGroup;
