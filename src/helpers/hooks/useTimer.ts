@@ -1,4 +1,6 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import {
+  Dispatch, SetStateAction, useEffect, useState,
+} from 'react';
 import { DefaultSettingsState, TimerMode, TimerState } from '../../types';
 import getTimeKey from '../getTimeKey';
 
@@ -138,6 +140,17 @@ function useTimer(settings: DefaultSettingsState, timerStateObj: TimerStateObjec
 
     getAndSetTimerValue(newMode);
   }
+
+  useEffect(() => {
+    // Depending on the timer state, control the timer
+    if (timerState === 'running') {
+      startTimer();
+    } else if (timerState === 'paused') {
+      pauseTimer();
+    } else {
+      stopTimer();
+    }
+  }, [timerState]);
 
   return {
     state: {
