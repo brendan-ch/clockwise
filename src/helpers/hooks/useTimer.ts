@@ -1,17 +1,29 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { DefaultSettingsState, TimerMode, TimerState } from '../../types';
 import getTimeKey from '../getTimeKey';
 
 const MIN_25 = 1500000;
 
+interface TimerStateObject {
+  setTimerState: Dispatch<SetStateAction<TimerState>>,
+  timerState: TimerState,
+  mode: TimerMode,
+  setMode: Dispatch<SetStateAction<TimerMode>>,
+}
+
 /**
- * Timer state and handling. Meant to be used without context.
+ * Timer handling.
  */
-function useTimer(settings: DefaultSettingsState) {
+function useTimer(settings: DefaultSettingsState, timerStateObj: TimerStateObject) {
   const [timeRemaining, setTimeRemaining] = useState(MIN_25);
-  const [timerState, setTimerState] = useState<TimerState>('stopped');
   const [timeout, setTimeoutState] = useState<any>(undefined);
-  const [mode, setMode] = useState<TimerMode>('focus');
+
+  const {
+    timerState,
+    setTimerState,
+    mode,
+    setMode,
+  } = timerStateObj;
 
   // Use for background timer handling
   // Date in milliseconds timer was started on
@@ -129,9 +141,7 @@ function useTimer(settings: DefaultSettingsState) {
 
   return {
     state: {
-      mode,
       timeRemaining,
-      timerState,
       start,
       timerLength,
       timerBackgrounded,
@@ -145,7 +155,6 @@ function useTimer(settings: DefaultSettingsState) {
       pauseTimer,
       stopTimer,
       setTimerBackgrounded,
-      setMode,
     },
   };
 }
