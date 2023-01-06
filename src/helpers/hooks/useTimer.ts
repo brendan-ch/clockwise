@@ -164,9 +164,6 @@ function useTimer(settings: DefaultSettingsState, timerStateObj: TimerStateObjec
       setTimeRemaining,
       handleAutoStart,
       handleStateSwitch,
-      startTimer,
-      pauseTimer,
-      stopTimer,
       setTimerBackgrounded,
     },
   };
