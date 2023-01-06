@@ -15,7 +15,7 @@ interface DefaultAppState {
   // timeout?: number,
   mode: TimerMode,
   /* eslint-disable-next-line */
-  setMode: (newMode: TimerMode) => any,
+  setMode: Dispatch<SetStateAction<TimerMode>>,
   /* eslint-disable-next-line */
   handleStateSwitch: (newMode: TimerMode) => any,
   /* eslint-disable-next-line */
