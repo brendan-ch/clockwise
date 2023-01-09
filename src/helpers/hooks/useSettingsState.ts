@@ -7,6 +7,7 @@ import {
   DARK_MODE,
   ENABLE_BACKGROUND,
   ENABLE_TIMER_ALERTS,
+  ENABLE_TIMER_SOUND,
   EXPORT_VERSION_KEY,
   FOCUS_TIME_MINUTES,
   LONG_BREAK_ENABLED,
@@ -22,6 +23,7 @@ function useSettingsState() {
   // Initialize settings state here
   const [settings, setSettings] = useState<DefaultSettingsState>({
     [ENABLE_TIMER_ALERTS]: false,
+    [ENABLE_TIMER_SOUND]: false,
     [FOCUS_TIME_MINUTES]: 25,
     [BREAK_TIME_MINUTES]: 5,
     [LONG_BREAK_ENABLED]: true,

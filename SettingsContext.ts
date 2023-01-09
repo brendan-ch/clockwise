@@ -5,6 +5,7 @@ import {
   DARK_MODE,
   ENABLE_BACKGROUND,
   ENABLE_TIMER_ALERTS,
+  ENABLE_TIMER_SOUND,
   FOCUS_TIME_MINUTES,
   LONG_BREAK_ENABLED,
   LONG_BREAK_INTERVAL,
@@ -15,6 +16,7 @@ import { DefaultSettingsState } from './src/types';
 
 const defaultSettingsState: DefaultSettingsState = {
   [ENABLE_TIMER_ALERTS]: false,
+  [ENABLE_TIMER_SOUND]: false,
   [FOCUS_TIME_MINUTES]: 25,
   [BREAK_TIME_MINUTES]: 5,
   [ENABLE_BACKGROUND]: true,
