@@ -144,7 +144,7 @@ export default function App() {
    * Play the timer sound.
    */
   async function playTimerSound() {
-    await sound?.playAsync();
+    await sound?.playFromPositionAsync(0);
   }
 
   /**
@@ -213,12 +213,9 @@ export default function App() {
         });
 
       // Play the timer sound
-      getData(ENABLE_TIMER_SOUND)
-        .then((value) => {
-          if (value === '1') {
-            playTimerSound();
-          }
-        });
+      if (settings[ENABLE_TIMER_SOUND]) {
+        playTimerSound();
+      }
     }
   }, [timeRemaining, sound]);
 
@@ -259,6 +256,10 @@ export default function App() {
         }
       });
   }, []);
+
+  useEffect(() => (sound ? () => {
+    sound?.unloadAsync();
+  } : () => {}), [sound]);
 
   useEffect(() => {
     const timeKey = getTimeKey(mode);
