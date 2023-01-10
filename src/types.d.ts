@@ -8,6 +8,7 @@ import {
   DARK_MODE,
   ENABLE_BACKGROUND,
   ENABLE_TIMER_ALERTS,
+  ENABLE_TIMER_SOUND,
   FOCUS_TIME_MINUTES,
   LONG_BREAK_ENABLED,
   LONG_BREAK_INTERVAL,
@@ -230,6 +231,7 @@ interface Task {
 
 interface DefaultSettingsState {
   [ENABLE_TIMER_ALERTS]: boolean,
+  [ENABLE_TIMER_SOUND]: boolean,
   [FOCUS_TIME_MINUTES]: number,
   [BREAK_TIME_MINUTES]: number,
   [LONG_BREAK_ENABLED]: boolean,
