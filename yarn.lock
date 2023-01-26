@@ -6112,11 +6112,6 @@ expo-av@~11.2.3:
   dependencies:
     "@expo/config-plugins" "^4.0.14"
 
-expo-clipboard@~3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/expo-clipboard/-/expo-clipboard-3.0.1.tgz#c3a46b08bb376bc5b4a5ed75631e56f5e1075db8"
-  integrity sha512-y3gooHxfXpdlslS8GLTrXdWKGCr5hXLI+Y49PolbjUqBVh819+Z/T8bdskUf5YNxu/Bb0HG1yuHpHPe8XyvxSA==
-
 expo-constants@~13.1.0, expo-constants@~13.1.1:
   version "13.1.1"
   resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-13.1.1.tgz#78c26c760cc63cd5608bc4b51bd159d7339d8054"
@@ -6302,7 +6297,7 @@ expo-sharing@~10.2.0:
   resolved "https://registry.yarnpkg.com/expo-sharing/-/expo-sharing-10.2.0.tgz#527a143d7365998ab77cb44a84b81c793e51dc4e"
   integrity sha512-IM5L5gNHHgIKlxxxv/uXPyw+N9zeHQBdDxtFgrTBlEU+Sx4/PwtBIb9hHmFHR7Hz+hDK2nxFpEEuYlvapkNd0Q==
 
-expo-splash-screen@~0.15.0:
+expo-splash-screen@~0.15.0, expo-splash-screen@~0.15.1:
   version "0.15.1"
   resolved "https://registry.yarnpkg.com/expo-splash-screen/-/expo-splash-screen-0.15.1.tgz#bdfb2434bda7fb1cde97e029fc7a791d7b3e3125"
   integrity sha512-Yvz6p/ig+cQp9c1PLSm1YshpNJXRp/xtxajfwPq2kampf61zA+xnoMk+J6YcNeXeIlqHysj3ND2tMhEEQjM/ow==
