@@ -21,7 +21,7 @@ function MessageBanner({ onDismiss, children, onClick }: Props) {
     <Pressable
       style={[styles.container, {
         backgroundColor: colors.primary,
-        paddingTop: insets.top,
+        paddingTop: insets.top > 0 ? insets.top : 10,
       }]}
       onPress={onClick}
     >
