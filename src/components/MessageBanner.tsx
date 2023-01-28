@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 import {
   Pressable, StyleSheet,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AppContext from '../../AppContext';
 
 interface Props {
@@ -13,12 +14,14 @@ interface Props {
 }
 
 function MessageBanner({ onDismiss, children, onClick }: Props) {
+  const insets = useSafeAreaInsets();
   const { colors } = useContext(AppContext);
 
   return (
     <Pressable
       style={[styles.container, {
         backgroundColor: colors.primary,
+        paddingTop: insets.top > 0 ? insets.top : 10,
       }]}
       onPress={onClick}
     >

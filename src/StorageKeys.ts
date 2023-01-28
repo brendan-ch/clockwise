@@ -33,3 +33,4 @@ export const SESSION_NUM = '@sessionNum';
 export const EXPORT_VERSION_KEY = '@exportVersionNum';
 
 export const SUPPRESS_DOMAIN_MESSAGE = '@suppressDomainMessage';
+export const SUPPRESS_APP_EXPIRATION_MESSAGE = '@suppressAppExpirationMessage';
