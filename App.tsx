@@ -405,7 +405,7 @@ export default function App() {
         storeData(SUPPRESS_APP_EXPIRATION_MESSAGE, '1');
       }}
       onClick={() => {
-        handleOpenLink('https://bchen.dev/doc/clockwise-migrate');
+        handleOpenLink('https://bchen.dev/doc/clockwise-app');
       }}
     >
       <Text
