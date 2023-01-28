@@ -1,9 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Pressable, StyleSheet,
 } from 'react-native';
-import useTheme from '../helpers/hooks/useTheme';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import AppContext from '../../AppContext';
 
 interface Props {
   onDismiss?: () => any,
@@ -13,12 +14,14 @@ interface Props {
 }
 
 function MessageBanner({ onDismiss, children, onClick }: Props) {
-  const colors = useTheme();
+  const insets = useSafeAreaInsets();
+  const { colors } = useContext(AppContext);
 
   return (
     <Pressable
       style={[styles.container, {
         backgroundColor: colors.primary,
+        paddingTop: insets.top > 0 ? insets.top : 10,
       }]}
       onPress={onClick}
     >

@@ -11,7 +11,6 @@ import SettingsHeader from '../components/SettingsHeader';
 import SettingsOption from '../components/SettingsOption';
 import { checkNotifications, requestNotifications } from '../helpers/notification';
 import useSettingsData from '../helpers/hooks/useSettingsData';
-import useTheme from '../helpers/hooks/useTheme';
 import {
   ENABLE_TIMER_ALERTS,
 } from '../StorageKeys';
@@ -28,11 +27,10 @@ import { SETTINGS_OPTION_HEIGHT } from '../Constants';
  * Component containing content for the settings page for mobile.
  */
 function SettingsPage() {
-  const colorValues = useTheme();
-
   const navigation = useNavigation();
 
-  const { setCurrentSessionNum } = useContext(AppContext);
+  const { setCurrentSessionNum, colors } = useContext(AppContext);
+  const colorValues = colors;
 
   const pages: SettingsOptionProps[] = [
     {

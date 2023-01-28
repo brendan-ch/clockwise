@@ -27,6 +27,7 @@
         "react/function-component-definition": "off",
         "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx", ".d.ts"] }],
         "react/jsx-no-constructed-context-values": "off",
+        "react/destructuring-assignment": "off",
         "no-use-before-define": "off",
         "react/style-prop-object": [0],
         "react/no-unescaped-entities": [0],

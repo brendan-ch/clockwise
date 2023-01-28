@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Linking, Platform, StyleSheet, Text, View,
 } from 'react-native';
-import useTheme from '../helpers/hooks/useTheme';
+import AppContext from '../../AppContext';
 import TextStyles from '../styles/Text';
 import OverlayButtonBar from './OverlayButtonBar';
 
@@ -15,7 +15,7 @@ interface Props {
  * notification settings page of their respective OS.
  */
 function NotificationOverlay({ onClose }: Props) {
-  const colors = useTheme();
+  const { colors } = useContext(AppContext);
 
   return (
     <View style={[styles.container, {

@@ -1,9 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import {
   Platform,
   StyleSheet, TextInput,
 } from 'react-native';
-import useTheme from '../helpers/hooks/useTheme';
+import AppContext from '../../AppContext';
 import TextStyles from '../styles/Text';
 
 interface Props {
@@ -22,7 +22,7 @@ interface Props {
 function NumberBox({
   text, selected, onChange, keyboardSelected, onDeselect, onSelect,
 }: Props) {
-  const colors = useTheme();
+  const { colors } = useContext(AppContext);
 
   const ref = useRef<TextInput>();
 

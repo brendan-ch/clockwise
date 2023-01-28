@@ -21,9 +21,6 @@ Quick start (doesn't require Vercel account or MongoDB database):
 6. Run `npx serve web-build` to host the project locally
 
 ## Environment Variables
-- `PRIVACY_POLICY_LINK`: Links to the privacy policy.
-- `GITHUB_LINK`: Links to the open source licenses document.
-- `GITHUB_PROFILE_LINK`: Links to a GitHub profile.
 - `PROD_BUILD`: Link to the production build. This determines the API endpoint on mobile.
 - `APP_STORE_LINK`: Link to the App Store page for the app.
 - `GOOGLE_PLAY_LINK`: Link to the Google Play page for the app.

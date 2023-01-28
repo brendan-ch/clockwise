@@ -8,6 +8,7 @@ import {
   DARK_MODE,
   ENABLE_BACKGROUND,
   ENABLE_TIMER_ALERTS,
+  ENABLE_TIMER_SOUND,
   FOCUS_TIME_MINUTES,
   LONG_BREAK_ENABLED,
   LONG_BREAK_INTERVAL,
@@ -230,6 +231,7 @@ interface Task {
 
 interface DefaultSettingsState {
   [ENABLE_TIMER_ALERTS]: boolean,
+  [ENABLE_TIMER_SOUND]: boolean,
   [FOCUS_TIME_MINUTES]: number,
   [BREAK_TIME_MINUTES]: number,
   [LONG_BREAK_ENABLED]: boolean,
@@ -309,6 +311,17 @@ interface IntroductionBlockProps {
   image?: ImageSourcePropType,
 }
 
+interface Colors {
+  primary: string,
+  gray1: string,
+  gray2: string,
+  gray3: string,
+  gray4: string,
+  gray5: string,
+  background: string,
+  backgroundTranslucent: string,
+}
+
 export {
   TimerState,
   TimerMode,
@@ -323,4 +336,5 @@ export {
   DefaultImageState,
   ImageInfo,
   IntroductionBlockProps,
+  Colors,
 };

@@ -6,6 +6,9 @@
     "base": {
       "env": {
         "EXPO_APPLE_TEAM_ID": "4A9XHUS87Q"
+      },
+      "ios": {
+        "resourceClass": "m1-medium"
       }
     },
     "simulator": {

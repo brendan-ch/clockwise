@@ -7,7 +7,6 @@ import TaskContext from '../../../TaskContext';
 import SettingsOption from '../../components/SettingsOption';
 import { exportData, importData } from '../../helpers/dataManagement';
 import useKeyboardSelect from '../../helpers/hooks/useKeyboardSelect';
-import useTheme from '../../helpers/hooks/useTheme';
 import useWindowSize from '../../helpers/hooks/useWindowSize';
 import renderHeader from '../../helpers/renderers/renderHeader';
 import { getData } from '../../helpers/storage';
@@ -20,8 +19,6 @@ import { SETTINGS_OPTION_HEIGHT } from '../../Constants';
  * Component that lets users view the available keybindings.
  */
 function ImportSettingsPane() {
-  const colors = useTheme();
-
   const [includeTaskData, setIncludeTaskData] = useState(false);
   const [overwriteTasks, setOverwriteTasks] = useState(false);
 
@@ -88,7 +85,9 @@ function ImportSettingsPane() {
   const {
     keyboardShortcutManager,
     keyboardGroup,
+    colors,
   } = useContext(AppContext);
+
   const { keyboardSelected, setKeyboardSelected } = useKeyboardSelect(
     keyboardGroup,
     options,

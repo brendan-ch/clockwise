@@ -6,7 +6,6 @@ import {
 } from 'react-native';
 import AppContext from '../../AppContext';
 import SettingsSelector from '../components/SettingSelector';
-import useTheme from '../helpers/hooks/useTheme';
 
 /* eslint-disable react/no-array-index-key */
 
@@ -42,19 +41,11 @@ const bottomNavigator: SettingsNavigatorObject[] = [
 
 if (Platform.OS === 'web') {
   const Keybindings = React.lazy(() => import('./settings/Keybindings'));
-  const Apps = React.lazy(() => import('./settings/Apps'));
 
   bottomNavigator.push(
     {
       title: 'Keybindings',
       renderer: <Keybindings />,
-    },
-  );
-
-  bottomNavigator.push(
-    {
-      title: 'App',
-      renderer: <Apps />,
     },
   );
 }
@@ -99,7 +90,6 @@ interface Props {
  * Content for the settings modal.
  */
 function SettingsOverlay({ containerStyle }: Props) {
-  const { background } = useTheme();
   const {
     keyboardShortcutManager,
     setOverlay,
@@ -107,12 +97,14 @@ function SettingsOverlay({ containerStyle }: Props) {
     setKeyboardGroup,
     setPageTitle,
     mode,
+    colors,
   } = useContext(AppContext);
+  const { background } = colors;
 
   // Title of the selected settings navigator object.
   const [selected, setSelected] = useState('Timer');
 
-  const colorValues = useTheme();
+  const colorValues = colors;
 
   useEffect(() => {
     setPageTitle('Settings');

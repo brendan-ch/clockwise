@@ -6,7 +6,6 @@ import {
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import AppContext from '../../AppContext';
-import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
 import { Task } from '../types';
 import SelectorGroup from './SelectorGroup';
@@ -45,8 +44,7 @@ function TaskList({ setAtTop }: Props) {
     handleDeleteTask,
   } = useContext(TaskContext);
 
-  // const [tasks, setTasks] = useState<Task[]>([]);
-
+  const context = useContext(AppContext);
   // ID of expanded task
   const [expandedTask, setExpandedTask] = useState(-1);
 
@@ -54,8 +52,6 @@ function TaskList({ setAtTop }: Props) {
   const [inputSelectedTask, setInputSelectedTask] = useState(-1);
 
   const [deletionTimeout, setDeletionTimeout] = useState<TimeoutTracker | undefined>(undefined);
-
-  const context = useContext(AppContext);
 
   // Displayed tasks while timer is running
   // Keybind registration should refer to this array
@@ -209,7 +205,7 @@ function TaskList({ setAtTop }: Props) {
     }
   }
 
-  const colorValues = useTheme();
+  const colorValues = context.colors;
 
   // When timer state switches, clear completed tasks
   // and deselect them accordingly

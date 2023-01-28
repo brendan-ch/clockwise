@@ -1,8 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useLinkProps } from '@react-navigation/native';
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import useTheme from '../helpers/hooks/useTheme';
+import AppContext from '../../AppContext';
 
 interface HeaderButtonProps {
   iconName: string,
@@ -19,7 +19,7 @@ interface HeaderButtonProps {
 function HeaderButton({ iconName, to }: HeaderButtonProps) {
   const { onPress } = useLinkProps({ to });
 
-  const colorValues = useTheme();
+  const { colors } = useContext(AppContext);
 
   return (
     <TouchableOpacity
@@ -30,7 +30,7 @@ function HeaderButton({ iconName, to }: HeaderButtonProps) {
         // @ts-ignore
         name={iconName}
         size={22}
-        color={colorValues.primary}
+        color={colors.primary}
       />
     </TouchableOpacity>
   );

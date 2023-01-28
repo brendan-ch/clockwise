@@ -17,6 +17,7 @@ import Modal from 'react-native-modal';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AppContext from './AppContext';
 import TimerPage from './src/pages/Timer';
 import {
@@ -41,6 +42,7 @@ import {
   ENABLE_TIMER_SOUND,
   LONG_BREAK_ENABLED,
   LONG_BREAK_INTERVAL,
+  SUPPRESS_APP_EXPIRATION_MESSAGE,
   SUPPRESS_DOMAIN_MESSAGE,
   SUPPRESS_INTRODUCTION,
 } from './src/StorageKeys';
@@ -56,7 +58,6 @@ import ImportSettingsPane from './src/overlays/settings/ImportSettings';
 import getTimeKey from './src/helpers/getTimeKey';
 import BackgroundSettingsPane from './src/overlays/settings/BackgroundSettings';
 import AboutPane from './src/overlays/settings/About';
-import RedirectPage from './src/pages/RedirectPage';
 import useTimer from './src/helpers/hooks/useTimer';
 import useKeyboardShortcutManager from './src/helpers/hooks/useKeyboardShortcutManager';
 import useImageInfo from './src/helpers/hooks/useImageInfo';
@@ -73,6 +74,7 @@ const prefix = Linking.createURL('/');
 
 export default function App() {
   const [displayBanner, setDisplayBanner] = useState(false);
+  const [displayAppExpirationBanner, setDisplayAppExpirationBanner] = useState(false);
 
   const [shortcutsInitialized, setShortcutsInitialized] = useState(false);
   const [overlay, setOverlayState] = useState<Overlay>('none');
@@ -145,7 +147,7 @@ export default function App() {
    * Play the timer sound.
    */
   async function playTimerSound() {
-    await sound?.playAsync();
+    await sound?.playFromPositionAsync(0);
   }
 
   /**
@@ -214,12 +216,9 @@ export default function App() {
         });
 
       // Play the timer sound
-      getData(ENABLE_TIMER_SOUND)
-        .then((value) => {
-          if (value === '1') {
-            playTimerSound();
-          }
-        });
+      if (settings[ENABLE_TIMER_SOUND]) {
+        playTimerSound();
+      }
     }
   }, [timeRemaining, sound]);
 
@@ -259,7 +258,19 @@ export default function App() {
           setDisplayBanner(true);
         }
       });
+
+    getData(SUPPRESS_APP_EXPIRATION_MESSAGE)
+      .then((value) => {
+        if (value !== '1' && Platform.OS !== 'web') {
+          // Set state to true
+          setDisplayAppExpirationBanner(true);
+        }
+      });
   }, []);
+
+  useEffect(() => (sound ? () => {
+    sound?.unloadAsync();
+  } : () => {}), [sound]);
 
   useEffect(() => {
     const timeKey = getTimeKey(mode);
@@ -340,17 +351,6 @@ export default function App() {
     />
   );
 
-  // Check for URL path that isn't in config
-  if (Platform.OS === 'web'
-    && window.location.pathname !== '/'
-    && !Object.values(config.screens).includes(window.location.pathname.substring(1))
-  ) {
-    // Render a redirect page
-    return (
-      <RedirectPage />
-    );
-  }
-
   if (!(shortcutsInitialized && (Platform.OS === 'web' || fontsLoaded))) {
     return (
       <AppLoading />
@@ -398,14 +398,185 @@ export default function App() {
     )
   ) : undefined;
 
+  const AppMigrateBanner = displayAppExpirationBanner ? (
+    <MessageBanner
+      onDismiss={() => {
+        setDisplayAppExpirationBanner(false);
+        storeData(SUPPRESS_APP_EXPIRATION_MESSAGE, '1');
+      }}
+      onClick={() => {
+        handleOpenLink('https://bchen.dev/doc/clockwise-app');
+      }}
+    >
+      <Text
+        style={[TextStyles.textRegular, {
+          color: colorValues.background,
+        }]}
+      >
+        Starting February 7th, 2023, Clockwise will no longer be available for download from
+        {' '}
+        {Platform.OS === 'android' ? 'Google Play' : 'the App Store'}
+        . Click this message to learn more.
+      </Text>
+    </MessageBanner>
+  ) : undefined;
+
   // Do conditional rendering based on window size
   if (windowSize === 'small' || windowSize === 'landscape') {
     // Return just the timer (with context provider)
     return (
+      <SafeAreaProvider>
+        <AppContext.Provider value={{
+          keyboardShortcutManager,
+          timeRemaining,
+          setTimeRemaining,
+          timerState,
+          timeout,
+          overlay,
+          setOverlay,
+          keyboardGroup,
+          setKeyboardGroup,
+          mode,
+          setMode,
+          handleStateSwitch,
+          startTimer,
+          stopTimer,
+          pauseTimer,
+          setPageTitle,
+          start,
+          timerLength,
+          timerBackgrounded,
+          setTimerBackgrounded,
+          selected,
+          setSelected,
+          currentSessionNum,
+          setCurrentSessionNum,
+          colors: colorValues,
+        }}
+        >
+          <ImageBackground
+            source={{
+              uri: imageInfo?.uri,
+            }}
+            style={[styles.landscapeContainer, {
+              backgroundColor: colorValues.background,
+            }]}
+            blurRadius={2}
+          >
+            <View style={[{
+              flex: 1,
+              width: '100%',
+              backgroundColor: colorValues.background,
+              opacity: imageInfo?.uri
+                ? 0.9
+                : 1.0,
+            }]}
+            >
+              <SettingsContext.Provider value={{
+                ...settings,
+              }}
+              >
+                {DomainBanner}
+                {AppMigrateBanner}
+                {windowSize === 'landscape' ? (
+                  <LandscapeHeader />
+                ) : undefined}
+                <TaskContext.Provider
+                  value={{
+                    tasks,
+                    selected,
+                    setTasks,
+                    setSelected,
+                    handleAddTask,
+                    handleChangeTask,
+                    handleDeleteTask,
+                  }}
+                >
+                  <TimerPage />
+                </TaskContext.Provider>
+                {windowSize === 'landscape' ? (
+                  <ImageContext.Provider
+                    value={{
+                      imageInfo,
+                    }}
+                  >
+                    <LandscapeFooter />
+                  </ImageContext.Provider>
+                ) : undefined}
+              </SettingsContext.Provider>
+            </View>
+          </ImageBackground>
+          {windowSize === 'landscape' ? (
+            <SettingsContext.Provider value={{
+              ...settings,
+              setSetting,
+              setSettings,
+            }}
+            >
+              <TaskContext.Provider
+                value={{
+                  tasks,
+                  selected,
+                  setTasks,
+                  setSelected,
+                  handleAddTask,
+                  handleChangeTask,
+                  handleDeleteTask,
+                }}
+              >
+                <Modal
+                  isVisible={overlay === 'settings'}
+                  onBackdropPress={() => setOverlay('none')}
+                  backdropOpacity={0.3}
+                  backdropColor={colorValues.primary}
+                  animationIn="fadeIn"
+                  animationInTiming={20}
+                  animationOut="fadeOut"
+                  backdropTransitionInTiming={20}
+                  backdropTransitionOutTiming={20}
+                  customBackdrop={customBackdrop}
+                  animationOutTiming={20}
+                  style={{
+                    // alignSelf: 'center',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <SettingsOverlay />
+                </Modal>
+              </TaskContext.Provider>
+              <Modal
+                isVisible={overlay === 'introduction'}
+                onBackdropPress={() => setOverlay('none')}
+                backdropOpacity={0.3}
+                backdropColor={colorValues.primary}
+                animationIn="fadeIn"
+                animationInTiming={20}
+                animationOut="fadeOut"
+                animationOutTiming={20}
+                backdropTransitionInTiming={20}
+                backdropTransitionOutTiming={20}
+                customBackdrop={customBackdrop}
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <IntroductionOverlay />
+              </Modal>
+            </SettingsContext.Provider>
+          ) : undefined}
+        </AppContext.Provider>
+      </SafeAreaProvider>
+    );
+  }
+
+  // Otherwise return stack navigator
+  return (
+    <SafeAreaProvider>
       <AppContext.Provider value={{
         keyboardShortcutManager,
         timeRemaining,
-        setTimeRemaining,
         timerState,
         timeout,
         overlay,
@@ -419,6 +590,7 @@ export default function App() {
         stopTimer,
         pauseTimer,
         setPageTitle,
+        setTimeRemaining,
         start,
         timerLength,
         timerBackgrounded,
@@ -427,235 +599,94 @@ export default function App() {
         setSelected,
         currentSessionNum,
         setCurrentSessionNum,
+        colors: colorValues,
       }}
       >
-        <ImageBackground
-          source={{
-            uri: imageInfo?.uri,
-          }}
-          style={[styles.landscapeContainer, {
-            backgroundColor: colorValues.background,
-          }]}
-          blurRadius={2}
+        <SettingsContext.Provider value={{
+          ...settings,
+          setSetting,
+          setSettings,
+        }}
         >
-          <View style={[{
-            flex: 1,
-            width: '100%',
-            backgroundColor: colorValues.background,
-            opacity: imageInfo?.uri
-              ? 0.9
-              : 1.0,
-          }]}
-          >
-            <SettingsContext.Provider value={{
-              ...settings,
+          <TaskContext.Provider
+            value={{
+              tasks,
+              selected,
+              setTasks,
+              setSelected,
+              handleAddTask,
+              handleChangeTask,
+              handleDeleteTask,
             }}
-            >
-              {DomainBanner}
-              {windowSize === 'landscape' ? (
-                <LandscapeHeader />
-              ) : undefined}
-              <TaskContext.Provider
-                value={{
-                  tasks,
-                  selected,
-                  setTasks,
-                  setSelected,
-                  handleAddTask,
-                  handleChangeTask,
-                  handleDeleteTask,
-                }}
-              >
-                <TimerPage />
-              </TaskContext.Provider>
-              {windowSize === 'landscape' ? (
-                <ImageContext.Provider
-                  value={{
-                    imageInfo,
-                  }}
-                >
-                  <LandscapeFooter />
-                </ImageContext.Provider>
-              ) : undefined}
-            </SettingsContext.Provider>
-          </View>
-        </ImageBackground>
-        {windowSize === 'landscape' ? (
-          <SettingsContext.Provider value={{
-            ...settings,
-            setSetting,
-            setSettings,
-          }}
           >
-            <TaskContext.Provider
-              value={{
-                tasks,
-                selected,
-                setTasks,
-                setSelected,
-                handleAddTask,
-                handleChangeTask,
-                handleDeleteTask,
-              }}
+            {DomainBanner}
+            {AppMigrateBanner}
+            <NavigationContainer
+              linking={linking}
             >
-              <Modal
-                isVisible={overlay === 'settings'}
-                onBackdropPress={() => setOverlay('none')}
-                backdropOpacity={0.3}
-                backdropColor={colorValues.primary}
-                animationIn="fadeIn"
-                animationInTiming={20}
-                animationOut="fadeOut"
-                backdropTransitionInTiming={20}
-                backdropTransitionOutTiming={20}
-                customBackdrop={customBackdrop}
-                animationOutTiming={20}
-                style={{
-                // alignSelf: 'center',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <SettingsOverlay />
-              </Modal>
-            </TaskContext.Provider>
-            <Modal
-              isVisible={overlay === 'introduction'}
-              onBackdropPress={() => setOverlay('none')}
-              backdropOpacity={0.3}
-              backdropColor={colorValues.primary}
-              animationIn="fadeIn"
-              animationInTiming={20}
-              animationOut="fadeOut"
-              animationOutTiming={20}
-              backdropTransitionInTiming={20}
-              backdropTransitionOutTiming={20}
-              customBackdrop={customBackdrop}
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <IntroductionOverlay />
-            </Modal>
-          </SettingsContext.Provider>
-        ) : undefined}
+              {overlay === 'introduction' ? (
+                <Stack.Navigator>
+                  <Stack.Screen
+                    name="Introduction"
+                    component={IntroductionPage}
+                    options={{
+                      headerShown: false,
+                    }}
+                  />
+                </Stack.Navigator>
+              ) : (
+                <Stack.Navigator>
+                  <Stack.Screen
+                    name="Timer"
+                    component={TimerPage}
+                    options={{
+                      ...headerOptions,
+                      headerTitle: '',
+                      headerRight: () => HeaderButton({
+                        iconName: 'ellipsis-vertical',
+                        to: {
+                          screen: 'Settings',
+                          params: {},
+                        },
+                      }),
+                    }}
+                  />
+                  <Stack.Screen
+                    name="Settings"
+                    component={SettingsPage}
+                    options={{
+                      ...headerOptions,
+                      headerTitle: 'Settings',
+                    }}
+                  />
+                  <Stack.Screen
+                    name="Data Management"
+                    component={ImportSettingsPane}
+                    options={{
+                      ...headerOptions,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="Appearance"
+                    component={BackgroundSettingsPane}
+                    options={{
+                      ...headerOptions,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="About"
+                    component={AboutPane}
+                    options={{
+                      ...headerOptions,
+                    }}
+                  />
+                </Stack.Navigator>
+              )}
+            </NavigationContainer>
+          </TaskContext.Provider>
+        </SettingsContext.Provider>
       </AppContext.Provider>
-    );
-  }
-
-  // Otherwise return stack navigator
-  return (
-    <AppContext.Provider value={{
-      keyboardShortcutManager,
-      timeRemaining,
-      timerState,
-      timeout,
-      overlay,
-      setOverlay,
-      keyboardGroup,
-      setKeyboardGroup,
-      mode,
-      setMode,
-      handleStateSwitch,
-      startTimer,
-      stopTimer,
-      pauseTimer,
-      setPageTitle,
-      setTimeRemaining,
-      start,
-      timerLength,
-      timerBackgrounded,
-      setTimerBackgrounded,
-      selected,
-      setSelected,
-      currentSessionNum,
-      setCurrentSessionNum,
-    }}
-    >
-      <SettingsContext.Provider value={{
-        ...settings,
-        setSetting,
-        setSettings,
-      }}
-      >
-        <TaskContext.Provider
-          value={{
-            tasks,
-            selected,
-            setTasks,
-            setSelected,
-            handleAddTask,
-            handleChangeTask,
-            handleDeleteTask,
-          }}
-        >
-          {DomainBanner}
-          <NavigationContainer
-            linking={linking}
-          >
-            {overlay === 'introduction' ? (
-              <Stack.Navigator>
-                <Stack.Screen
-                  name="Introduction"
-                  component={IntroductionPage}
-                  options={{
-                    headerShown: false,
-                  }}
-                />
-              </Stack.Navigator>
-            ) : (
-              <Stack.Navigator>
-                <Stack.Screen
-                  name="Timer"
-                  component={TimerPage}
-                  options={{
-                    ...headerOptions,
-                    headerTitle: '',
-                    headerRight: () => HeaderButton({
-                      iconName: 'ellipsis-vertical',
-                      to: {
-                        screen: 'Settings',
-                        params: {},
-                      },
-                    }),
-                  }}
-                />
-                <Stack.Screen
-                  name="Settings"
-                  component={SettingsPage}
-                  options={{
-                    ...headerOptions,
-                    headerTitle: 'Settings',
-                  }}
-                />
-                <Stack.Screen
-                  name="Data Management"
-                  component={ImportSettingsPane}
-                  options={{
-                    ...headerOptions,
-                  }}
-                />
-                <Stack.Screen
-                  name="Appearance"
-                  component={BackgroundSettingsPane}
-                  options={{
-                    ...headerOptions,
-                  }}
-                />
-                <Stack.Screen
-                  name="About"
-                  component={AboutPane}
-                  options={{
-                    ...headerOptions,
-                  }}
-                />
-              </Stack.Navigator>
-            )}
-          </NavigationContainer>
-        </TaskContext.Provider>
-      </SettingsContext.Provider>
-    </AppContext.Provider>
+    </SafeAreaProvider>
   );
 }
 

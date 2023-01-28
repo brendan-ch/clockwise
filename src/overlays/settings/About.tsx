@@ -16,7 +16,6 @@ import {
 import getBaseURL from '../../helpers/getBaseURL';
 import handleOpenLink from '../../helpers/handleOpenLink';
 import useKeyboardSelect from '../../helpers/hooks/useKeyboardSelect';
-import useTheme from '../../helpers/hooks/useTheme';
 import useWindowSize from '../../helpers/hooks/useWindowSize';
 import TextStyles from '../../styles/Text';
 import { SettingsOptionProps } from '../../types';
@@ -82,9 +81,8 @@ if (Platform.OS !== 'web') {
  * Settings page that displays information about the app.
  */
 function AboutPane() {
-  const colors = useTheme();
   const windowSize = useWindowSize();
-  const { keyboardGroup, keyboardShortcutManager } = useContext(AppContext);
+  const { keyboardGroup, keyboardShortcutManager, colors } = useContext(AppContext);
 
   const { keyboardSelected, setKeyboardSelected } = useKeyboardSelect('settingsPage', buttons, 'title');
 

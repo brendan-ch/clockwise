@@ -1,16 +1,16 @@
 import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Linking, StyleSheet, Text, View,
 } from 'react-native';
+import AppContext from '../../AppContext';
 import ClickableText from '../components/ClickableText';
 import OverlayButton from '../components/OverlayButton';
 import { exportData } from '../helpers/dataManagement';
-import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
 
 export default function NewSiteMessage() {
-  const colors = useTheme();
+  const { colors } = useContext(AppContext);
 
   return (
     <View

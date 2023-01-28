@@ -1,12 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Platform,
   Pressable, StyleSheet, Text,
 } from 'react-native';
+import AppContext from '../../AppContext';
 import { APP_STORE_LINK, GOOGLE_PLAY_LINK } from '../Constants';
 import handleOpenLink from '../helpers/handleOpenLink';
-import useTheme from '../helpers/hooks/useTheme';
 import TextStyles from '../styles/Text';
 
 interface Props {
@@ -14,7 +14,7 @@ interface Props {
 }
 
 function AppBanner({ onDismiss }: Props) {
-  const colors = useTheme();
+  const { colors } = useContext(AppContext);
 
   let link: string | undefined;
   if (Platform.OS === 'web' && /iPhone|iPad|iPod/i.test(navigator.userAgent)) {

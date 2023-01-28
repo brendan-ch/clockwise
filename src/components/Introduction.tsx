@@ -1,9 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
-import React, { useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 import {
   View, Text, StyleProp, ViewStyle, StyleSheet, TouchableOpacity, Animated, ScrollView, Platform,
 } from 'react-native';
-import useTheme from '../helpers/hooks/useTheme';
+import AppContext from '../../AppContext';
 import ColorValues from '../styles/Color';
 import TextStyles from '../styles/Text';
 
@@ -36,7 +36,7 @@ DismissBar.defaultProps = {
 function Introduction({ onDismiss, style }: Props) {
   const fadeAnimation = useRef(new Animated.Value(1)).current;
 
-  const colorValues = useTheme();
+  const { colors } = useContext(AppContext);
 
   /**
    * Fade out the component, and call onDismiss.
@@ -58,7 +58,7 @@ function Introduction({ onDismiss, style }: Props) {
       style={[style, styles.container, {
         opacity: fadeAnimation,
         paddingTop: onDismiss ? 0 : 10,
-        borderColor: colorValues.gray5,
+        borderColor: colors.gray5,
       }]}
     >
       {onDismiss
@@ -67,14 +67,14 @@ function Introduction({ onDismiss, style }: Props) {
       <ScrollView>
         <Text
           style={[TextStyles.textBold, styles.text, {
-            color: colorValues.primary,
+            color: colors.primary,
           }]}
         >
           Clockwise: an app designed to help you focus
         </Text>
         <Text
           style={[TextStyles.textRegular, styles.text, {
-            color: colorValues.primary,
+            color: colors.primary,
           }]}
         >
           This is a simple Pomodoro timer to help you get things done quicker.
@@ -84,42 +84,42 @@ function Introduction({ onDismiss, style }: Props) {
           <View>
             <Text
               style={[TextStyles.textBold, styles.text, {
-                color: colorValues.primary,
+                color: colors.primary,
               }]}
             >
               Keyboard shortcuts:
             </Text>
             <Text
               style={[TextStyles.textRegular, styles.text, {
-                color: colorValues.primary,
+                color: colors.primary,
               }]}
             >
               1: switch to focus view
             </Text>
             <Text
               style={[TextStyles.textRegular, styles.text, {
-                color: colorValues.primary,
+                color: colors.primary,
               }]}
             >
               2: switch to break view
             </Text>
             <Text
               style={[TextStyles.textRegular, styles.text, {
-                color: colorValues.primary,
+                color: colors.primary,
               }]}
             >
               Space: start/pause the timer
             </Text>
             <Text
               style={[TextStyles.textRegular, styles.text, {
-                color: colorValues.primary,
+                color: colors.primary,
               }]}
             >
               R: reset the timer
             </Text>
             <Text
               style={[TextStyles.textRegular, styles.text, {
-                color: colorValues.primary,
+                color: colors.primary,
               }]}
             >
               ⌘/Ctrl + ,: open settings
