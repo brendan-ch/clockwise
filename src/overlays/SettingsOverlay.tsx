@@ -41,19 +41,11 @@ const bottomNavigator: SettingsNavigatorObject[] = [
 
 if (Platform.OS === 'web') {
   const Keybindings = React.lazy(() => import('./settings/Keybindings'));
-  const Apps = React.lazy(() => import('./settings/Apps'));
 
   bottomNavigator.push(
     {
       title: 'Keybindings',
       renderer: <Keybindings />,
-    },
-  );
-
-  bottomNavigator.push(
-    {
-      title: 'App',
-      renderer: <Apps />,
     },
   );
 }
