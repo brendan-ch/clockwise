@@ -1,5 +1,3 @@
-⚠️ Read about the future of Clockwise: https://www.bchen.dev/doc/clockwise-app
-
 # Clockwise
 An app designed to help you focus. Try it here: https://clockwise.bchen.dev
 
